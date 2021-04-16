@@ -13,6 +13,8 @@ namespace Animator.Engine.Base
         private readonly int propertyIndex;
         private bool isAnimated = false;
         private object animatedValue = null;
+        private bool isCoerced = false;
+        private object coercedValue = null;
 
         // Protected methods --------------------------------------------------
 
@@ -23,12 +25,6 @@ namespace Animator.Engine.Base
         internal BasePropertyValue(int propertyIndex)
         {
             this.propertyIndex = propertyIndex;
-        }
-
-        internal void SetAnimatedValue(object value)
-        {
-            isAnimated = true;
-            animatedValue = value;
         }
 
         internal void ClearAnimatedValue()
@@ -44,10 +40,43 @@ namespace Animator.Engine.Base
             get => ProvideBaseValue();
         }
 
+        internal object AnimatedValue
+        {
+            get => animatedValue;
+            set 
+            {
+                isAnimated = true;
+                animatedValue = value;
+            }
+        }
+
+        internal object CoercedValue
+        {
+            get => coercedValue;
+            set
+            {
+                isCoerced = true;
+                coercedValue = value;
+            }
+        }
+
+        internal object FinalBaseValue
+        {
+            get
+            {
+                if (isAnimated)
+                    return animatedValue;
+
+                return ProvideBaseValue();
+            }
+        }
+
         internal object EffectiveValue
         {
             get
             {
+                if (isCoerced)
+                    return coercedValue;
                 if (isAnimated)
                     return animatedValue;
 

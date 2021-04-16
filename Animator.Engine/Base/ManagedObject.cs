@@ -6,19 +6,21 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Base
 {
-    public class ValueChangedEventArgs : EventArgs
+    public class PropertyValueChangedEventArgs : EventArgs
     {
-        public ValueChangedEventArgs(object oldValue, object newValue)
+        public PropertyValueChangedEventArgs(ManagedProperty property, object oldValue, object newValue)
         {
+            Property = property;
             OldValue = oldValue;
             NewValue = newValue;
         }
 
+        public ManagedProperty Property { get; }
         public object OldValue { get; }
         public object NewValue { get; }
     }
 
-    public delegate void ValueChangedDelegate(object sender, ValueChangedEventArgs args);
+    public delegate void ValueChangedDelegate(object sender, PropertyValueChangedEventArgs args);
 
     public abstract class ManagedObject
     {
@@ -37,33 +39,67 @@ namespace Animator.Engine.Base
                 throw new ArgumentException($"Value of type {value.GetType().Name} cannot be assigned to property {property.OwnerClassType.Name}.{property.Name} of type {property.Type.Name}.");
         }
 
-        // Protected methods --------------------------------------------------
-
-        protected virtual object ProvideProperty(ManagedProperty property)
+        private (object, bool) InternalCoerceValue(ManagedProperty property)
         {
-            if (propertyValues.TryGetValue(property.GlobalIndex, out BasePropertyValue value))
+            if (property.Metadata.CoerceValueHandler != null)
             {
-                return value.EffectiveValue;
+                BasePropertyValue propertyValue = EnsurePropertyValue(property);
+
+                var oldValue = propertyValue.EffectiveValue;
+
+                var newValue = property.Metadata.CoerceValueHandler(this, propertyValue.FinalBaseValue);
+
+                if (newValue != oldValue)
+                    return (newValue, true);                
             }
 
-            return ManagedProperty.UnsetValue;
+            return (null, false);
+        }
+
+        private BasePropertyValue EnsurePropertyValue(ManagedProperty property)
+        {
+            if (!propertyValues.TryGetValue(property.GlobalIndex, out BasePropertyValue propertyValue))
+            {
+                propertyValue = new DirectPropertyValue(property.GlobalIndex, property.Metadata.DefaultValue);
+                propertyValues[property.GlobalIndex] = propertyValue;
+            }
+
+            return propertyValue;
+        }
+
+        // Protected methods --------------------------------------------------
+
+        protected virtual void OnPropertyValueChanged(ManagedProperty property, object oldValue, object newValue)
+        {
+            PropertyValueChanged?.Invoke(this, new PropertyValueChangedEventArgs(property, oldValue, newValue));
+        }
+
+        protected virtual void OnPropertyBaseValueChanged(ManagedProperty property, object oldValue, object newValue)
+        {
+            PropertyBaseValueChanged?.Invoke(this, new PropertyValueChangedEventArgs(property, oldValue, newValue));
         }
 
         // Internal methods ---------------------------------------------------
 
         internal void SetAnimatedValue(ManagedProperty property, object value)
         {
-            if (propertyValues.TryGetValue(property.GlobalIndex, out BasePropertyValue propertyValue))
+            var propertyValue = EnsurePropertyValue(property);
+            object oldValue = propertyValue.AnimatedValue;
+
+            if (oldValue != value)
             {
-                propertyValue.SetAnimatedValue(value);
+                propertyValue.AnimatedValue = value;
+
+                (object coercedValue, bool coerced) = InternalCoerceValue(property);
+
+                if (coerced && coercedValue != propertyValue.CoercedValue)
+                {
+
+
+                    if (oldValue != value)
+                        OnPropertyValueChanged(property, oldValue, value);
+                }
             }
-            else
-            {
-                propertyValue = new DirectPropertyValue(property.GlobalIndex, property.Metadata.DefaultValue);
-                propertyValue.SetAnimatedValue(value);
-            }
-             
-            // TODO notify about value change
         }
 
         // Public methods -----------------------------------------------------
@@ -80,7 +116,7 @@ namespace Animator.Engine.Base
 
         public object GetValue(ManagedProperty property)
         {
-            var result = ProvideProperty(property);
+            var result = ProvidePropertyValue(property);
 
             if (result == ManagedProperty.UnsetValue)
                 return null;
@@ -96,11 +132,15 @@ namespace Animator.Engine.Base
 
             propertyValues.TryGetValue(property.GlobalIndex, out currentValue);
 
-            var newValue = new DirectPropertyValue(property.GlobalIndex, value);
+            if (currentValue == null || currentValue.BaseValue != value)
+            {
+                var newValue = new DirectPropertyValue(property.GlobalIndex, value);
 
-            propertyValues[property.GlobalIndex] = newValue;
+                propertyValues[property.GlobalIndex] = newValue;
 
-            // TODO notify about base value change
+                OnPropertyBaseValueChanged(property, currentValue?.BaseValue, value);
+                OnPropertyValueChanged(property, currentValue?.BaseValue, value);
+            }
         }
 
         // Public properties --------------------------------------------------

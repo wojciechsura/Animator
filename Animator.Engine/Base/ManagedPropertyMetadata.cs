@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Base
 {
+    public delegate object CoerceValueDelegate(ManagedObject obj, object baseValue);
+
     public class ManagedPropertyMetadata
     {
         // Public methods -----------------------------------------------------
 
-        public ManagedPropertyMetadata(object defaultValue = null)
+        public ManagedPropertyMetadata(object defaultValue = null, CoerceValueDelegate coerceValueHandler = null)
         {
             DefaultValue = defaultValue;
+            CoerceValueHandler = coerceValueHandler;
         }
 
         // Public static properties -------------------------------------------
@@ -22,6 +25,6 @@ namespace Animator.Engine.Base
         // Public properties --------------------------------------------------
 
         public object DefaultValue { get; } = null;
-        public bool Inherited { get; init; } = false;
+        public CoerceValueDelegate CoerceValueHandler { get; }
     }
 }
