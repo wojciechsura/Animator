@@ -6,25 +6,31 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Base
 {
-    internal abstract class BasePropertyValue
+    internal class PropertyValue
     {
         // Private fields -----------------------------------------------------
 
         private readonly int propertyIndex;
+
+        private object baseValue = null;
+
         private bool isAnimated = false;
         private object animatedValue = null;
+
         private bool isCoerced = false;
         private object coercedValue = null;
 
-        // Protected methods --------------------------------------------------
-
-        protected abstract object ProvideBaseValue();
-
         // Internal methods ---------------------------------------------------
 
-        internal BasePropertyValue(int propertyIndex)
+        internal PropertyValue(int propertyIndex)
         {
             this.propertyIndex = propertyIndex;
+        }
+
+        internal PropertyValue(int propertyIndex, object value)
+            : this(propertyIndex)
+        {
+            baseValue = value;
         }
 
         internal void ClearAnimatedValue()
@@ -33,11 +39,27 @@ namespace Animator.Engine.Base
             animatedValue = null;
         }
 
+        internal void ClearCoercedValue()
+        {
+            isCoerced = false;
+            coercedValue = null;
+        }
+
+        internal void ResetModifiers()
+        {
+            ClearAnimatedValue();
+            ClearCoercedValue();
+        }
+
         // Internal properties ------------------------------------------------
 
         internal object BaseValue
         {
-            get => ProvideBaseValue();
+            get => baseValue;
+            set
+            {
+                baseValue = value;
+            }
         }
 
         internal object AnimatedValue
@@ -67,7 +89,7 @@ namespace Animator.Engine.Base
                 if (isAnimated)
                     return animatedValue;
 
-                return ProvideBaseValue();
+                return baseValue;
             }
         }
 
@@ -80,8 +102,12 @@ namespace Animator.Engine.Base
                 if (isAnimated)
                     return animatedValue;
 
-                return ProvideBaseValue();
+                return baseValue;
             }
         }
+
+        public bool IsCoerced => isCoerced;
+
+        public bool IsAnimated => isAnimated;
     }
 }

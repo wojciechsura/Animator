@@ -26,7 +26,7 @@ namespace Animator.Engine.Base
     {
         // Private fields -----------------------------------------------------
 
-        private readonly Dictionary<int, BasePropertyValue> propertyValues = new Dictionary<int, BasePropertyValue>();
+        private readonly Dictionary<int, PropertyValue> propertyValues = new Dictionary<int, PropertyValue>();
 
         // Private methods ----------------------------------------------------
 
@@ -43,28 +43,41 @@ namespace Animator.Engine.Base
         {
             if (property.Metadata.CoerceValueHandler != null)
             {
-                BasePropertyValue propertyValue = EnsurePropertyValue(property);
+                PropertyValue propertyValue = EnsurePropertyValue(property);
 
                 var oldValue = propertyValue.EffectiveValue;
 
                 var newValue = property.Metadata.CoerceValueHandler(this, propertyValue.FinalBaseValue);
 
                 if (newValue != oldValue)
-                    return (newValue, true);                
+                    return (newValue, true);
             }
 
             return (null, false);
         }
 
-        private BasePropertyValue EnsurePropertyValue(ManagedProperty property)
+        private PropertyValue EnsurePropertyValue(ManagedProperty property)
         {
-            if (!propertyValues.TryGetValue(property.GlobalIndex, out BasePropertyValue propertyValue))
+            if (!propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue))
             {
-                propertyValue = new DirectPropertyValue(property.GlobalIndex, property.Metadata.DefaultValue);
+                propertyValue = new PropertyValue(property.GlobalIndex, property.Metadata.DefaultValue);
                 propertyValues[property.GlobalIndex] = propertyValue;
             }
 
             return propertyValue;
+        }
+
+        private void CoerceAfterFinalBaseValueChanged(ManagedProperty property, PropertyValue propertyValue, object oldEffectiveValue)
+        {
+            (object coercedValue, bool coerced) = InternalCoerceValue(property);
+
+            if (coerced && coercedValue != propertyValue.CoercedValue)
+                propertyValue.CoercedValue = coercedValue;
+            else
+                propertyValue.ClearCoercedValue();
+
+            if (oldEffectiveValue != propertyValue.EffectiveValue)
+                OnPropertyValueChanged(property, oldEffectiveValue, propertyValue.EffectiveValue);
         }
 
         // Protected methods --------------------------------------------------
@@ -84,21 +97,14 @@ namespace Animator.Engine.Base
         internal void SetAnimatedValue(ManagedProperty property, object value)
         {
             var propertyValue = EnsurePropertyValue(property);
-            object oldValue = propertyValue.AnimatedValue;
 
-            if (oldValue != value)
+            if (!propertyValue.IsAnimated || propertyValue.AnimatedValue != value)
             {
+                var oldEffectiveValue = propertyValue.EffectiveValue;
+
                 propertyValue.AnimatedValue = value;
-
-                (object coercedValue, bool coerced) = InternalCoerceValue(property);
-
-                if (coerced && coercedValue != propertyValue.CoercedValue)
-                {
-
-
-                    if (oldValue != value)
-                        OnPropertyValueChanged(property, oldValue, value);
-                }
+                
+                CoerceAfterFinalBaseValueChanged(property, propertyValue, oldEffectiveValue);
             }
         }
 
@@ -109,6 +115,15 @@ namespace Animator.Engine.Base
 
         }
 
+        public void CoerceValue(ManagedProperty property)
+        {
+            var propertyValue = EnsurePropertyValue(property);
+
+            var oldEffectiveValue = propertyValue.EffectiveValue;
+
+            CoerceAfterFinalBaseValueChanged(property, propertyValue, oldEffectiveValue);
+        }
+
         public ManagedProperty GetProperty(string propertyName)
         {
             return ManagedProperty.ByTypeAndName(GetType(), propertyName);
@@ -116,30 +131,38 @@ namespace Animator.Engine.Base
 
         public object GetValue(ManagedProperty property)
         {
-            var result = ProvidePropertyValue(property);
+            if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue))
+                return propertyValue.EffectiveValue;
+            else
+                return property.Metadata.DefaultValue;
+        }
 
-            if (result == ManagedProperty.UnsetValue)
-                return null;
-
-            return result;
+        public object GetFinalBaseValue(ManagedProperty property)
+        {
+            if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue))
+                return propertyValue.FinalBaseValue;
+            else
+                return property.Metadata.DefaultValue;
         }
 
         public void SetValue(ManagedProperty property, object value)
         {
             ValidateValue(property, value);
 
-            BasePropertyValue currentValue;
+            var propertyValue = EnsurePropertyValue(property);
 
-            propertyValues.TryGetValue(property.GlobalIndex, out currentValue);
-
-            if (currentValue == null || currentValue.BaseValue != value)
+            if (propertyValue.BaseValue != value)
             {
-                var newValue = new DirectPropertyValue(property.GlobalIndex, value);
+                var oldBaseValue = propertyValue.BaseValue;
+                var oldEffectiveValue = propertyValue.EffectiveValue;
 
-                propertyValues[property.GlobalIndex] = newValue;
+                propertyValue.BaseValue = value;
+                propertyValue.ResetModifiers();
 
-                OnPropertyBaseValueChanged(property, currentValue?.BaseValue, value);
-                OnPropertyValueChanged(property, currentValue?.BaseValue, value);
+                OnPropertyBaseValueChanged(property, oldBaseValue, value);
+
+                // Coertion
+                CoerceAfterFinalBaseValueChanged(property, propertyValue, oldEffectiveValue);
             }
         }
 
