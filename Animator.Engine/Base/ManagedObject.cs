@@ -20,7 +20,19 @@ namespace Animator.Engine.Base
         public object NewValue { get; }
     }
 
-    public delegate void ValueChangedDelegate(object sender, PropertyValueChangedEventArgs args);
+    public delegate void PropertyValueChangedDelegate(object sender, PropertyValueChangedEventArgs args);
+
+    public class PropertyBaseValueInvalidatedEventArgs
+    {
+        public PropertyBaseValueInvalidatedEventArgs(ManagedProperty property)
+        {
+            Property = property;
+        }
+
+        public ManagedProperty Property { get; }
+    }
+
+    public delegate void PropertyBaseValueInvalidatedDelegate(object sender, PropertyBaseValueInvalidatedEventArgs args);
 
     public abstract class ManagedObject
     {
@@ -87,9 +99,9 @@ namespace Animator.Engine.Base
             PropertyValueChanged?.Invoke(this, new PropertyValueChangedEventArgs(property, oldValue, newValue));
         }
 
-        protected virtual void OnPropertyBaseValueChanged(ManagedProperty property, object oldValue, object newValue)
+        protected virtual void OnPropertyBaseValueInvalidated(ManagedProperty property)
         {
-            PropertyBaseValueChanged?.Invoke(this, new PropertyValueChangedEventArgs(property, oldValue, newValue));
+            PropertyBaseValueInvalidated?.Invoke(this, new PropertyBaseValueInvalidatedEventArgs(property));
         }
 
         // Internal methods ---------------------------------------------------
@@ -106,6 +118,21 @@ namespace Animator.Engine.Base
                 
                 CoerceAfterFinalBaseValueChanged(property, propertyValue, oldEffectiveValue);
             }
+        }
+
+        internal void ResetAnimatedValue(ManagedProperty property)
+        {
+            if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue) && propertyValue.IsAnimated)
+            {
+                var oldEffectiveValue = propertyValue.EffectiveValue;
+
+                propertyValue.ClearAnimatedValue();
+
+                CoerceAfterFinalBaseValueChanged(property, propertyValue, oldEffectiveValue);
+            }
+
+            // If there is no entry in PropertyValues for this value,
+            // there can be no animated value too, so there's nothing to do
         }
 
         // Public methods -----------------------------------------------------
@@ -159,17 +186,17 @@ namespace Animator.Engine.Base
                 propertyValue.BaseValue = value;
                 propertyValue.ResetModifiers();
 
-                OnPropertyBaseValueChanged(property, oldBaseValue, value);
-
                 // Coertion
                 CoerceAfterFinalBaseValueChanged(property, propertyValue, oldEffectiveValue);
+
+                OnPropertyBaseValueInvalidated(property);
             }
         }
 
         // Public properties --------------------------------------------------
 
-        public event ValueChangedDelegate PropertyValueChanged;
+        public event PropertyValueChangedDelegate PropertyValueChanged;
 
-        public event ValueChangedDelegate PropertyBaseValueChanged;
+        public event PropertyBaseValueInvalidatedDelegate PropertyBaseValueInvalidated;
     }
 }
