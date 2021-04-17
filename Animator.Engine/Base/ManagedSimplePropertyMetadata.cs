@@ -8,11 +8,11 @@ namespace Animator.Engine.Base
 {
     public delegate object CoerceValueDelegate(ManagedObject obj, object baseValue);
 
-    public class ManagedPropertyMetadata
+    public class ManagedSimplePropertyMetadata
     {
         // Public methods -----------------------------------------------------
 
-        public ManagedPropertyMetadata(object defaultValue = null, CoerceValueDelegate coerceValueHandler = null)
+        public ManagedSimplePropertyMetadata(object defaultValue = null, CoerceValueDelegate coerceValueHandler = null)
         {
             DefaultValue = defaultValue;
             CoerceValueHandler = coerceValueHandler;
@@ -20,7 +20,7 @@ namespace Animator.Engine.Base
 
         // Public static properties -------------------------------------------
 
-        public static ManagedPropertyMetadata Default { get; } = new ManagedPropertyMetadata();
+        public static ManagedSimplePropertyMetadata Default { get; } = new ManagedSimplePropertyMetadata();
 
         // Public properties --------------------------------------------------
 

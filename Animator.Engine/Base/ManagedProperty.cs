@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Base
 {
-    public sealed class ManagedProperty
+    public class ManagedProperty
     {
         // Private types ------------------------------------------------------
 
@@ -49,12 +51,16 @@ namespace Animator.Engine.Base
 
         private static readonly Regex nameRegex = new Regex("^[a-zA-Z_][a-zA-Z_0-9]*$");
 
+        private static readonly Type[] supportedTypes = new[]
+        {
+            typeof(int), typeof(double), typeof(Point), typeof(PointF), typeof(string)
+        };
+
         // Private fields -----------------------------------------------------
 
         private readonly Type ownerClassType;
         private readonly string name;
         private readonly Type type;
-        private readonly ManagedPropertyMetadata metadata;
         private readonly int globalIndex;
 
         // Private static methods ---------------------------------------------
@@ -73,20 +79,35 @@ namespace Animator.Engine.Base
             return null;
         }
 
-        // Private methods ----------------------------------------------------
-
-        private ManagedProperty(Type ownerClassType, string name, Type type, ManagedPropertyMetadata metadata)
+        private static void ValidateDuplicatedName(Type ownerClassType, string name)
         {
-            this.ownerClassType = ownerClassType ?? throw new ArgumentNullException(nameof(ownerClassType));
-
-            if (!ValidatePropertyName(name))
-                throw new ArgumentException(nameof(name));
-
-            this.name = name;
-            this.type = type ?? throw new ArgumentNullException(nameof(type));
-            this.metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
-            this.globalIndex = nextAvailableGlobalIndex++;
+            if (FindWithInheritance(ownerClassType, name) != null)
+                throw new ArgumentException("Property already registered (possibly in base class)!", nameof(name));
         }
+
+        private static void ValidateInheritanceFromManagedObject(Type ownerClassType)
+        {
+            var parentType = ownerClassType;
+            while (parentType != typeof(ManagedObject) && parentType != typeof(object))
+                parentType = parentType.BaseType;
+
+            if (parentType != typeof(ManagedObject))
+                throw new ArgumentException("Owner class type must derive from ManagedObject!");
+        }
+
+        private static void ValidateListType(Type propertyType)
+        {
+            if (!propertyType.IsAssignableTo(typeof(IList)))
+                throw new ArgumentException("When registering a collection, property type must implement IList interface!");            
+        }
+
+        private static void ValidatePropertyType(Type propertyType)
+        {
+            if (!supportedTypes.Contains(propertyType))
+                throw new ArgumentException("Unsupported property type!");
+        }
+
+        // Private methods ----------------------------------------------------
 
         private bool ValidatePropertyName(string name)
         {
@@ -100,24 +121,50 @@ namespace Animator.Engine.Base
             return FindWithInheritance(ownerClassType, name);
         }
 
+        // Internal methods ---------------------------------------------------
+
+        internal ManagedProperty(Type ownerClassType, string name, Type type)
+        {
+            this.ownerClassType = ownerClassType ?? throw new ArgumentNullException(nameof(ownerClassType));
+
+            if (!ValidatePropertyName(name))
+                throw new ArgumentException(nameof(name));
+
+            this.name = name;
+            this.type = type ?? throw new ArgumentNullException(nameof(type));
+            this.globalIndex = nextAvailableGlobalIndex++;
+        }
+
         // Public static methods ----------------------------------------------
 
-        public static ManagedProperty Register(Type ownerClassType, string name, Type propertyType, ManagedPropertyMetadata metadata = null)
+        public static ManagedSimpleProperty Register(Type ownerClassType, string name, Type propertyType, ManagedSimplePropertyMetadata metadata = null)
         {
-            if (FindWithInheritance(ownerClassType, name) != null)
-                throw new ArgumentException("Property already registered (possibly in base class)!", nameof(name));
-
-            var parentType = ownerClassType;
-            while (parentType != typeof(ManagedObject) && parentType != typeof(object))
-                parentType = parentType.BaseType;
-
-            if (parentType != typeof(ManagedObject))
-                throw new ArgumentException("Owner class type must derive from ManagedObject!");
+            ValidateDuplicatedName(ownerClassType, name);
+            ValidateInheritanceFromManagedObject(ownerClassType);
+            ValidatePropertyType(propertyType);
 
             if (metadata == null)
-                metadata = ManagedPropertyMetadata.Default;
+                metadata = ManagedSimplePropertyMetadata.Default;
 
-            var prop = new ManagedProperty(ownerClassType, name, propertyType, metadata);
+            var prop = new ManagedSimpleProperty(ownerClassType, name, propertyType, metadata);
+
+            var propertyKey = new PropertyKey(ownerClassType, name);
+
+            propertyDefinitions[propertyKey] = prop;
+
+            return prop;
+        }
+
+        public static ManagedProperty RegisterCollection(Type ownerClassType, string name, Type propertyType, ManagedCollectionMetadata metadata = null)
+        {
+            ValidateDuplicatedName(ownerClassType, name);
+            ValidateInheritanceFromManagedObject(ownerClassType);
+            ValidateListType(propertyType);
+
+            if (metadata == null)
+                metadata = ManagedCollectionMetadata.DefaultFor(propertyType);
+
+            var prop = new ManagedCollectionProperty(ownerClassType, name, propertyType, metadata);
 
             var propertyKey = new PropertyKey(ownerClassType, name);
 
@@ -132,7 +179,6 @@ namespace Animator.Engine.Base
         public Type OwnerClassType => ownerClassType;
         public Type Type => type;
         public int GlobalIndex => globalIndex;
-        public ManagedPropertyMetadata Metadata => metadata;
 
         // Public static properties -------------------------------------------
 

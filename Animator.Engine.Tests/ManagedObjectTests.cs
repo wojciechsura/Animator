@@ -208,5 +208,21 @@ namespace Animator.Engine.Tests
 
             Assert.AreEqual(10, cls.Max10);
         }
+
+        [TestMethod]
+        public void ManagedCollectionAddItemsTest()
+        {
+            // Arrange
+
+            var cls = new SimpleCollectionPropertyClass();
+
+            // Act
+
+            cls.Collection.Add(44);
+
+            // Assert
+
+            Assert.AreEqual(44, cls.Collection[0]);
+        }
     }
 }
