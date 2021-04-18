@@ -51,11 +51,6 @@ namespace Animator.Engine.Base
 
         private static readonly Regex nameRegex = new Regex("^[a-zA-Z_][a-zA-Z_0-9]*$");
 
-        private static readonly Type[] supportedTypes = new[]
-        {
-            typeof(int), typeof(double), typeof(Point), typeof(PointF), typeof(string)
-        };
-
         // Private fields -----------------------------------------------------
 
         private readonly Type ownerClassType;
@@ -101,12 +96,6 @@ namespace Animator.Engine.Base
                 throw new ArgumentException("When registering a collection, property type must implement IList interface!");            
         }
 
-        private static void ValidatePropertyType(Type propertyType)
-        {
-            if (!supportedTypes.Contains(propertyType))
-                throw new ArgumentException("Unsupported property type!");
-        }
-
         // Private methods ----------------------------------------------------
 
         private bool ValidatePropertyName(string name)
@@ -141,7 +130,6 @@ namespace Animator.Engine.Base
         {
             ValidateDuplicatedName(ownerClassType, name);
             ValidateInheritanceFromManagedObject(ownerClassType);
-            ValidatePropertyType(propertyType);
 
             if (metadata == null)
                 metadata = ManagedSimplePropertyMetadata.Default;
