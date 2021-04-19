@@ -102,6 +102,104 @@ namespace Animator.Engine.Tests
             Assert.AreEqual(10, deserialized.Max10);
         }
 
+        [TestMethod]
+        public void NestedObjectDeserializationTest()
+        {
+            string xml = "<SimpleCompositeClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\">\r\n" +
+                "    <SimpleCompositeClass.NestedObject>\r\n" +
+                "        <SimplePropertyClass IntValue=\"42\" />\r\n" +
+                "    </SimpleCompositeClass.NestedObject>\r\n" +
+                "</SimpleCompositeClass>";
 
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            SimpleCompositeClass deserialized = (SimpleCompositeClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(deserialized);
+            Assert.IsNotNull(deserialized.NestedObject);
+            Assert.AreEqual(42, deserialized.NestedObject.IntValue);
+        }
+
+        [TestMethod]
+        public void ContentPropertyDeserializationTest()
+        {
+            string xml = "<SimpleCompositeClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\">\r\n" +
+                "    <SimplePropertyClass IntValue=\"42\" />\r\n" +
+                "</SimpleCompositeClass>";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            SimpleCompositeClass deserialized = (SimpleCompositeClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(deserialized);
+            Assert.IsNotNull(deserialized.NestedObject);
+            Assert.AreEqual(42, deserialized.NestedObject.IntValue);
+        }
+
+        [TestMethod]
+        public void CollectionDeserializationTest()
+        {
+            string xml = "<SimpleCollectionClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\">\r\n" +
+                "    <SimpleCollectionClass.Items>\r\n" +
+                "       <SimplePropertyClass IntValue=\"10\" />\r\n" +
+                "       <SimplePropertyClass IntValue=\"20\" />\r\n" +
+                "       <SimplePropertyClass IntValue=\"30\" />\r\n" +
+                "    </SimpleCollectionClass.Items>\r\n" +
+                "</SimpleCollectionClass>";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            SimpleCollectionClass deserialized = (SimpleCollectionClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(deserialized);
+            Assert.AreEqual(3, deserialized.Items.Count);
+            Assert.AreEqual(10, deserialized.Items[0].IntValue);
+        }
+
+        [TestMethod]
+        public void CollectionAsContentPropertyDeserializationTest()
+        {
+            string xml = "<SimpleCollectionClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\">\r\n" +
+                "   <SimplePropertyClass IntValue=\"10\" />\r\n" +
+                "   <SimplePropertyClass IntValue=\"20\" />\r\n" +
+                "   <SimplePropertyClass IntValue=\"30\" />\r\n" +
+                "</SimpleCollectionClass>";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            SimpleCollectionClass deserialized = (SimpleCollectionClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(deserialized);
+            Assert.AreEqual(3, deserialized.Items.Count);
+            Assert.AreEqual(10, deserialized.Items[0].IntValue);
+        }
     }
 }
