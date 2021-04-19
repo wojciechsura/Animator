@@ -14,6 +14,8 @@ namespace Animator.Engine.Tests.TestClasses
             get => (List<int>)GetValue(CollectionProperty);
         }
 
-        public static readonly ManagedProperty CollectionProperty = ManagedProperty.RegisterCollection(typeof(SimpleCoercedPropertyClass), nameof(CollectionProperty), typeof(List<int>));
+        public static readonly ManagedProperty CollectionProperty = ManagedProperty.RegisterCollection(typeof(SimpleCoercedPropertyClass), 
+            nameof(Collection), 
+            typeof(List<int>));
     }
 }
