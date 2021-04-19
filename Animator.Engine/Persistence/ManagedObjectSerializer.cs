@@ -1,5 +1,6 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Elements;
+using Animator.Engine.Persistence.Types;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -127,7 +128,7 @@ namespace Animator.Engine.Persistence
             {
                 if (propertyNode.ChildNodes.Count == 0)
                 {
-                    var content = TypeConverter.Deserialize(propertyNode.InnerText, property.Type);
+                    var content = TypeSerialization.Deserialize(propertyNode.InnerText, property.Type);
                     deserializedObject.SetValue(property, content);
 
                     propertiesSet.Add(property.Name);
@@ -185,7 +186,7 @@ namespace Animator.Engine.Persistence
                 // 4. Deserialize value
 
                 var value = attribute.Value;
-                object deserializedValue = TypeConverter.Deserialize(value, property.Type);
+                object deserializedValue = TypeSerialization.Deserialize(value, property.Type);
 
                 // 5. Set value to property and mark as set
 

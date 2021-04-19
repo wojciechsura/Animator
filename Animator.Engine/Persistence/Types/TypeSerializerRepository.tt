@@ -1,0 +1,207 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+
+/******************************************************************************
+*                                                                             *
+* This code was generated automatically from a template. Don't modify it,     *
+* because all your changes will be overwritten. Instead, if needed, modify    *
+* the template file (*.tt)                                                    *
+*                                                                             *
+******************************************************************************/
+
+using System;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using System.Drawing;
+using System.Collections.Generic;
+
+namespace Animator.Engine.Persistence.Types
+{
+    public class TypeSerializerRepository
+	{
+		// Private types ------------------------------------------------------------
+
+<# 
+var autoTypes = new[] { "byte", "sbyte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double" };
+var otherTypes = new[] { "string", "Color" };
+
+var pointTypes = new[] { "Point", "PointF" };
+var pointUnderlyingTypes = new[] { "int", "float" };
+var pointRegexes = new[] { "^[0-9]+;[0-9]+$", "^[0-9]+(\\\\.[0-9]+)?;[0-9]+(\\\\.[0-9]+)?$" };
+
+foreach (var type in autoTypes)
+{
+#>
+        private class <#= ToFirstUpper(type) #>Serializer : TypeSerializer
+		{
+			public override object Deserialize(string str) => <#= type #>.Parse(str);
+			public override string Serialize(object obj) => ((<#= type #>)obj).ToString(CultureInfo.InvariantCulture);
+		}
+
+<#
+}
+#>
+		private class StringSerializer : TypeSerializer
+		{
+			public override object Deserialize(string str) => str;
+			public override string Serialize(object obj) => (string)obj;
+		}
+
+		private class ColorSerializer : TypeSerializer
+		{
+			private readonly Regex rgbColorFormat = new Regex("^#[a-fA-F0-9]{6}$");
+			private readonly Regex rgbaColorFormat = new Regex("^#[a-fA-F0-9]{8}$");
+			private readonly Regex numRgbColorFormat = new Regex("^[0-9]{,3}(,[0-9]{,3}){2}$");
+			private readonly Regex numRgbaColorFormat = new Regex("^[0-9]{,3}(,[0-9]{,3}){3}$");
+
+			public override object Deserialize(string str)
+            {
+				if (String.IsNullOrEmpty(str))
+					throw new InvalidCastException($"Cannot convert empty string to color!");
+
+				if (Enum.TryParse(typeof(KnownColor), str, out object knownColor))
+					return Color.FromKnownColor((KnownColor)knownColor);
+
+				// Format #aabbcc
+				if (rgbColorFormat.IsMatch(str))
+                {
+					int r = Convert.ToInt32(str.Substring(1, 2), 16);
+					int g = Convert.ToInt32(str.Substring(3, 2), 16);
+					int b = Convert.ToInt32(str.Substring(5, 2), 16);
+
+					return Color.FromArgb(255, r, g, b);
+                }
+				
+				if (rgbaColorFormat.IsMatch(str))
+                {
+					int r = Convert.ToInt32(str.Substring(1, 2), 16);
+					int g = Convert.ToInt32(str.Substring(3, 2), 16);
+					int b = Convert.ToInt32(str.Substring(5, 2), 16);
+					int a = Convert.ToInt32(str.Substring(5, 2), 16);
+
+					return Color.FromArgb(a, r, g, b);
+				}
+
+				if (numRgbColorFormat.IsMatch(str))
+                {
+					string[] values = str.Split(',');
+
+					int r = Convert.ToInt32(values[0]);
+					int g = Convert.ToInt32(values[1]);
+					int b = Convert.ToInt32(values[2]);
+
+					if (r > 255 || g > 255 || b > 255)
+						throw new InvalidCastException($"Color constant values exceeds 255: {str}");
+
+					return Color.FromArgb(255, r, g, b);
+                }
+
+				if (numRgbaColorFormat.IsMatch(str))
+                {
+					string[] values = str.Split(',');
+
+					int r = Convert.ToInt32(values[0]);
+					int g = Convert.ToInt32(values[1]);
+					int b = Convert.ToInt32(values[2]);
+					int a = Convert.ToInt32(values[3]);
+
+					if (r > 255 || g > 255 || b > 255 || a > 255)
+						throw new InvalidCastException($"Color constant values exceeds 255: {str}");
+
+					return Color.FromArgb(255, r, g, b);
+
+				}
+
+				throw new InvalidCastException($"Invalid color format: {str}");
+			}
+
+            public override string Serialize(object obj)
+            {
+				var color = (Color)obj;
+
+				if (color.IsKnownColor)
+					return color.ToKnownColor().ToString();
+
+				if (color.A < 255)
+					return $"#{color.R:x2}{color.G:x2}{color.B:x2}";
+				else
+					return $"#{color.R:x2}{color.G:x2}{color.B:x2}{color.A:x2}";
+		    }
+        }	
+
+<#
+
+for (int i = 0; i < pointTypes.Length; i++)
+{
+#>
+        private class <#= ToFirstUpper(pointTypes[i]) #>Serializer : TypeSerializer
+		{
+			private readonly Regex pointRegex = new Regex("<#= pointRegexes[i] #>");
+
+			public override object Deserialize(string str)
+			{
+				if (pointRegex.IsMatch(str))
+				{
+					string[] values = str.Split(';');
+
+					var x = <#= pointUnderlyingTypes[i] #>.Parse(values[0], CultureInfo.InvariantCulture);
+					var y = <#= pointUnderlyingTypes[i] #>.Parse(values[1], CultureInfo.InvariantCulture);
+
+					return new <#= pointTypes[i] #>(x, y);
+				}
+
+				throw new InvalidCastException($"Unsupported point format: {str}");
+			}
+
+			public override string Serialize(object obj)
+			{
+				var point = (<#= pointTypes[i] #>)obj;
+
+				return $"{point.X.ToString(CultureInfo.InvariantCulture)};{point.Y.ToString(CultureInfo.InvariantCulture)}";
+			}
+		}
+
+<#
+}
+
+#>
+
+		// Private static fields -----------------------------------------------------
+
+		private static readonly Dictionary<Type, TypeSerializer> serializers = new();
+
+		// Static ctor ---------------------------------------------------------------
+
+		static TypeSerializerRepository()
+		{
+<#
+
+foreach (var type in autoTypes.Concat(pointTypes).Concat(otherTypes))
+{
+#>
+			serializers[typeof(<#= type #>)] = new <#= ToFirstUpper(type) #>Serializer();
+<#
+}
+#>
+		}
+
+		// Static methods -----------------------------------------------------------
+
+		public static bool Supports(Type type) => serializers.ContainsKey(type);
+
+		public static TypeSerializer GetSerializerFor(Type type) => serializers[type];
+	}
+}
+
+<#+
+
+public string ToFirstUpper(string str) 
+{
+	return $"{char.ToUpper(str[0])}{str.Substring(1)}";
+}
+
+#>
