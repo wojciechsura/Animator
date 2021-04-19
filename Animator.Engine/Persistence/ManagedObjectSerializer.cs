@@ -241,6 +241,7 @@ namespace Animator.Engine.Persistence
 
             try
             {
+                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(objType.TypeHandle);
                 deserializedObject = (ManagedObject)Activator.CreateInstance(objType);
             }
             catch
@@ -280,12 +281,11 @@ namespace Animator.Engine.Persistence
             {
                 if (options.DefaultNamespace != null)
                 {
-                    context.Namespaces[null] = options.DefaultNamespace;
                     context.Namespaces[String.Empty] = options.DefaultNamespace;
                 }
             }
 
-            return DeserializeElement(document.FirstChild, new DeserializationContext());
+            return DeserializeElement(document.FirstChild, context);
         }
     }
 }
