@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Animator", "Animator\Animat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Animator.Engine", "Animator.Engine\Animator.Engine.csproj", "{65D8978E-C11D-4852-823E-0C4389C28E25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Animator.Engine.Tests", "Animator.Engine.Tests\Animator.Engine.Tests.csproj", "{DA018247-7B8C-4A0F-AE4D-2D536C373201}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Animator.Engine.Tests", "Animator.Engine.Tests\Animator.Engine.Tests.csproj", "{DA018247-7B8C-4A0F-AE4D-2D536C373201}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Snippets", "Snippets", "{ACF15C4C-5215-4E27-9A2C-07988F3C2315}"
+	ProjectSection(SolutionItems) = preProject
+		Animator.snippet = Animator.snippet
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

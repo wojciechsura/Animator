@@ -1,0 +1,96 @@
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Managed collection</Title>
+      <Description>Creates a managed collection (Animator)</Description>
+      <Shortcut>mcol</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="CSharp"><![CDATA[#region $Name$ managed collection
+    
+public List<$PropType$> $Name$
+{
+    get => (List<$PropType$>)GetValue($Name$Property);
+}
+
+public static readonly ManagedProperty $Name$Property = ManagedProperty.RegisterCollection(typeof($ClassType$), 
+    nameof($Name$), 
+    typeof(List<$PropType$>));
+    
+#endregion]]></Code>
+      <Imports>
+        <Import>
+          <Namespace>Animator.Engine.Base</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>Name</ID>
+          <ToolTip>Name of managed collection.</ToolTip>
+          <Default>Value</Default>
+        </Literal>
+        <Literal>
+          <ID>ClassType</ID>
+          <ToolTip>Type of owning class.</ToolTip>
+          <Default>OwningClass</Default>
+        </Literal>
+        <Literal>
+          <ID>PropType</ID>
+          <ToolTip>Type of collection's element</ToolTip>
+          <Default>int</Default>
+        </Literal>
+      </Declarations>
+    </Snippet>
+  </CodeSnippet>
+  
+    <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Managed property</Title>
+      <Description>Creates a managed property (Animator)</Description>
+      <Shortcut>mprop</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="CSharp"><![CDATA[#region $Name$ managed property
+    
+public $PropType$ $Name$
+{
+    get => ($PropType$)GetValue($Name$Property);
+    set => SetValue($Name$Property, value);
+}
+
+public static readonly ManagedProperty $Name$Property = ManagedProperty.Register(typeof($ClassType$), 
+    nameof($Name$), 
+    typeof($PropType$), 
+    new ManagedSimplePropertyMetadata($DefaultValue$));
+    
+#endregion]]></Code>
+      <Imports>
+        <Import>
+          <Namespace>Animator.Engine.Base</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>Name</ID>
+          <ToolTip>Name of managed property.</ToolTip>
+          <Default>Value</Default>
+        </Literal>
+        <Literal>
+          <ID>ClassType</ID>
+          <ToolTip>Type of owning class.</ToolTip>
+          <Default>OwningClass</Default>
+        </Literal>
+        <Literal>
+          <ID>PropType</ID>
+          <ToolTip>Type of property</ToolTip>
+          <Default>int</Default>
+        </Literal>
+        <Literal>
+          <ID>DefaultValue</ID>
+          <ToolTip>Default value</ToolTip>
+          <Default>0</Default>
+        </Literal>
+      </Declarations>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
