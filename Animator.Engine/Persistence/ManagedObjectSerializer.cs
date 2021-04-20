@@ -1,6 +1,8 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Elements;
+using Animator.Engine.Exceptions;
 using Animator.Engine.Persistence.Types;
+using Animator.Engine.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -46,21 +48,21 @@ namespace Animator.Engine.Persistence
             string[] elements = namespaceDefinition.Split(';');
 
             if (elements.Length != 2)
-                throw new ArgumentException(nameof(namespaceDefinition), $"Invalid namespace definition: {namespaceDefinition}\r\nThere should be exactly two sections separated with semicolon (;).");
+                throw new ParseException($"Invalid namespace definition: {namespaceDefinition}\r\nThere should be exactly two sections separated with semicolon (;).");
 
             // Assembly
 
             if (!elements[0].StartsWith("assembly=") || elements[0].Length < 10)
-                throw new ArgumentException(nameof(namespaceDefinition), $"Invalid namespace definition: {namespaceDefinition}\r\nMissing or invalid assembly section!");
+                throw new ParseException($"Invalid namespace definition: {namespaceDefinition}\r\nMissing or invalid assembly section!");
 
             string assembly = elements[0].Substring(9);
 
             // Namespace
 
             if (!elements[1].StartsWith("namespace=") || elements[1].Length < 11)
-                throw new ArgumentException(nameof(namespaceDefinition), $"Invalid namespace definition: {namespaceDefinition}\r\nMissing or invalid namespace section!");
+                throw new ParseException($"Invalid namespace definition: {namespaceDefinition}\r\nMissing or invalid namespace section!");
 
-            string @namespace = elements[1].Substring(10);
+            string @namespace = elements[1][10..];
 
             return new NamespaceDefinition(assembly, @namespace);
         }
@@ -89,9 +91,11 @@ namespace Animator.Engine.Persistence
 
                     var property = deserializedObject.GetProperty(propertyName);
                     if (property == null)
-                        throw new InvalidOperationException($"Property {propertyName} not found on object of type {deserializedObject.GetType().Name}");
+                        throw new SerializerException($"Property {propertyName} not found on object of type {deserializedObject.GetType().Name}",
+                            node.FindXPath());
                     if (property.Metadata.NotSerializable)
-                        throw new InvalidOperationException($"Property {propertyName} on object {deserializedObject.GetType().Name} is not serializable!\r\nRemove it from input file.");
+                        throw new SerializerException($"Property {propertyName} on object {deserializedObject.GetType().Name} is not serializable!\r\nRemove it from input file.",
+                            node.FindXPath());
 
                     DeserializeObjectProperty(child, deserializedObject, property, context, propertiesSet);
                 }
@@ -101,13 +105,16 @@ namespace Animator.Engine.Persistence
 
                     var contentPropertyAttribute = deserializedObject.GetType().GetCustomAttribute<ContentPropertyAttribute>(true);
                     if (contentPropertyAttribute == null)
-                        throw new InvalidOperationException($"Type {deserializedObject.GetType().Name} does not have ContentProperty specified. You have to specify property explicitly.");
+                        throw new SerializerException($"Type {deserializedObject.GetType().Name} does not have ContentProperty specified. You have to specify property explicitly.",
+                            node.FindXPath());
 
                     var property = deserializedObject.GetProperty(contentPropertyAttribute.PropertyName);
                     if (property == null)
-                        throw new InvalidOperationException($"Managed property {contentPropertyAttribute.PropertyName} specified as ContentProperty on type {deserializedObject.GetType().Name} does not exist!");
+                        throw new SerializerException($"Managed property {contentPropertyAttribute.PropertyName} specified as ContentProperty on type {deserializedObject.GetType().Name} does not exist!",
+                            node.FindXPath());
                     if (property.Metadata.NotSerializable)
-                        throw new InvalidOperationException($"Property {contentPropertyAttribute.PropertyName} on object {deserializedObject.GetType().Name} is not serializable!\r\nThe data structure is ill-formed: content property should be serializable.");
+                        throw new SerializerException($"Property {contentPropertyAttribute.PropertyName} on object {deserializedObject.GetType().Name} is not serializable!\r\nThe data structure is ill-formed: content property should be serializable.",
+                            node.FindXPath());
 
                     // 1.2.2 Deserialize object
 
@@ -116,7 +123,8 @@ namespace Animator.Engine.Persistence
                     if (property is ManagedSimpleProperty simpleProperty)
                     {
                         if (propertiesSet.Contains(property.Name))
-                            throw new InvalidOperationException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}");
+                            throw new SerializerException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}",
+                                node.FindXPath());
 
                         deserializedObject.SetValue(simpleProperty, content);
                         propertiesSet.Add(String.Format(contentDecoration, property.Name));
@@ -124,7 +132,8 @@ namespace Animator.Engine.Persistence
                     else if (property is ManagedCollectionProperty collectionProperty)
                     {
                         if (propertiesSet.Contains(property.Name))
-                            throw new InvalidOperationException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}");
+                            throw new SerializerException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}",
+                                node.FindXPath());
 
                         IList list = (IList)deserializedObject.GetValue(property);
                         list.Add(content);
@@ -149,10 +158,12 @@ namespace Animator.Engine.Persistence
             HashSet<string> propertiesSet)
         {
             if (property.Metadata.NotSerializable)
-                throw new ArgumentException("Cannot deserialize non-serializable property!");
+                throw new SerializerException($"Cannot deserialize non-serializable property {property.Name}!",
+                    propertyNode.FindXPath());
 
             if (propertiesSet.Contains(property.Name) || propertiesSet.Contains(String.Format(contentDecoration, property.Name)))
-                throw new InvalidOperationException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}");
+                throw new SerializerException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}",
+                    propertyNode.FindXPath());
 
             if (property is ManagedSimpleProperty simpleProperty)
             {
@@ -171,7 +182,8 @@ namespace Animator.Engine.Persistence
                     propertiesSet.Add(property.Name);
                 }
                 else
-                    throw new InvalidOperationException($"Property {property.Name} on type {deserializedObject.GetType().Name} is a simple property, but is provided with multiple values.");
+                    throw new SerializerException($"Property {property.Name} on type {deserializedObject.GetType().Name} is a simple property, but is provided with multiple values.",
+                        propertyNode.FindXPath());
             }
             else if (property is ManagedCollectionProperty collectionProperty)
             {
@@ -208,16 +220,19 @@ namespace Animator.Engine.Persistence
                 // 2. Check if property hasn't been already set
 
                 if (propertiesSet.Contains(attribute.LocalName))
-                    throw new InvalidOperationException($"Property {attribute.LocalName} has been already set on type {deserializedObject.GetType().Name}");
+                    throw new SerializerException($"Property {attribute.LocalName} has been already set on type {deserializedObject.GetType().Name}",
+                        node.FindXPath());
 
                 // 3. Find property with appropriate name
 
                 ManagedProperty managedProperty = deserializedObject.GetProperty(attribute.LocalName);
 
                 if (managedProperty == null)
-                    throw new InvalidOperationException($"Property {attribute.LocalName} not found on object of type {deserializedObject.GetType().Name}");
+                    throw new SerializerException($"Property {attribute.LocalName} not found on object of type {deserializedObject.GetType().Name}",
+                        node.FindXPath());
                 if (managedProperty.Metadata.NotSerializable)
-                    throw new InvalidOperationException($"Property {attribute.LocalName} on object {deserializedObject.GetType().Name} is not serializable!\r\nRemove it from input file.");
+                    throw new SerializerException($"Property {attribute.LocalName} on object {deserializedObject.GetType().Name} is not serializable!\r\nRemove it from input file.",
+                        node.FindXPath());
 
                 if (managedProperty is ManagedSimpleProperty simpleProperty)
                 {
@@ -255,7 +270,8 @@ namespace Animator.Engine.Persistence
                         propertiesSet.Add(attribute.LocalName);
                     }
                     else
-                        throw new InvalidOperationException($"Property {attribute.LocalName} of {deserializedObject.GetType().Name} is a collection property, but its value is stored in attribute and no custom serializer is provided!");
+                        throw new SerializerException($"Property {attribute.LocalName} of {deserializedObject.GetType().Name} is a collection property, but its value is stored in attribute and no custom serializer is provided!",
+                            node.FindXPath());
                 }
                 else
                     throw new InvalidOperationException("Unsupported property type!");
@@ -290,18 +306,21 @@ namespace Animator.Engine.Persistence
                 }
 
             if (assembly == null)
-                throw new InvalidOperationException($"Cannot access assembly {namespaceDefinition.Assembly}\r\nMake sure, it is loaded or accessible to load.");
+                throw new SerializerException($"Cannot access assembly {namespaceDefinition.Assembly}\r\nMake sure, it is loaded or accessible to load.",
+                    node.FindXPath());
 
             string fullClassTypeName = String.Join('.', namespaceDefinition.Namespace, className);
             Type objType = assembly.GetType(fullClassTypeName, false);
 
             if (objType == null)
-                throw new InvalidOperationException($"Cannot find type {fullClassTypeName} in assembly {namespaceDefinition.Assembly}");
+                throw new SerializerException($"Cannot find type {fullClassTypeName} in assembly {namespaceDefinition.Assembly}",
+                    node.FindXPath());
 
             // 3. Make sure, that object derives from ManagedObject - only those are supported
 
             if (!objType.IsAssignableTo(typeof(ManagedObject)))
-                throw new InvalidOperationException($"Type {fullClassTypeName} does not derive from ManagedObject!");
+                throw new SerializerException($"Type {fullClassTypeName} does not derive from ManagedObject!",
+                    node.FindXPath());
 
             // 4. Try to instantiate object
 
@@ -318,7 +337,8 @@ namespace Animator.Engine.Persistence
             }
             catch
             {
-                throw new InvalidOperationException($"Type {fullClassTypeName} does not contain public, parameterless constructor!");
+                throw new SerializerException($"Type {fullClassTypeName} does not contain public, parameterless constructor!",
+                    node.FindXPath());
             }
 
             // 5. Load attributes
