@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Elements;
+using Animator.Engine.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Animator.Engine.Persistence
+namespace Animator.Engine.Elements.Persistence
 {
     public class AnimationSerializer
     {
