@@ -132,7 +132,7 @@ namespace Animator.Engine.Base
             ValidateInheritanceFromManagedObject(ownerClassType);
 
             if (metadata == null)
-                metadata = ManagedSimplePropertyMetadata.Default;
+                metadata = ManagedSimplePropertyMetadata.DefaultFor(propertyType);
 
             var prop = new ManagedSimpleProperty(ownerClassType, name, propertyType, metadata);
 

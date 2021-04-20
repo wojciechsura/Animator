@@ -201,5 +201,48 @@ namespace Animator.Engine.Tests
             Assert.AreEqual(3, deserialized.Items.Count);
             Assert.AreEqual(10, deserialized.Items[0].IntValue);
         }
+
+        [TestMethod]
+        public void CustomPropertySerializationTest()
+        {
+            string xml = "<CustomSerializedClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
+                "IntValue=\"-42\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            CustomSerializedClass deserialized = (CustomSerializedClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(deserialized);
+            Assert.AreEqual(42, deserialized.IntValue);
+        }
+
+        [TestMethod]
+        public void CustomCollectionSerializationTest()
+        {
+            string xml = "<CustomSerializedClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
+                "IntCollection=\"4,3,2,1\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            CustomSerializedClass deserialized = (CustomSerializedClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(deserialized);
+            Assert.AreEqual(4, deserialized.IntCollection.Count);
+            Assert.AreEqual(4, deserialized.IntCollection[0]);
+        }
     }
 }

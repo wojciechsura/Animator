@@ -10,21 +10,38 @@ namespace Animator.Engine.Base
 
     public class ManagedSimplePropertyMetadata
     {
+        // Private static fields ----------------------------------------------
+
+        private static readonly Dictionary<Type, ManagedSimplePropertyMetadata> defaultMetadata = new();
+
+        // Public static methods ----------------------------------------------
+
+        public static ManagedSimplePropertyMetadata DefaultFor(Type type)
+        {
+            if (!defaultMetadata.TryGetValue(type, out ManagedSimplePropertyMetadata metadata))
+            {
+                object defaultValue = type.IsValueType ? Activator.CreateInstance(type) : null;
+                metadata = new ManagedSimplePropertyMetadata(defaultValue);
+
+                defaultMetadata[type] = metadata;
+            }
+
+            return metadata;
+        }
+        
         // Public methods -----------------------------------------------------
 
-        public ManagedSimplePropertyMetadata(object defaultValue = null, CoerceValueDelegate coerceValueHandler = null)
+        public ManagedSimplePropertyMetadata(object defaultValue = null, CoerceValueDelegate coerceValueHandler = null, CustomPropertySerializer serializer = null)
         {
             DefaultValue = defaultValue;
             CoerceValueHandler = coerceValueHandler;
+            Serializer = serializer;
         }
-
-        // Public static properties -------------------------------------------
-
-        public static ManagedSimplePropertyMetadata Default { get; } = new ManagedSimplePropertyMetadata();
 
         // Public properties --------------------------------------------------
 
-        public object DefaultValue { get; } = null;
+        public object DefaultValue { get; }
         public CoerceValueDelegate CoerceValueHandler { get; }
+        public CustomPropertySerializer Serializer { get; }
     }
 }

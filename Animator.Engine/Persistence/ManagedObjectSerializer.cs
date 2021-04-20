@@ -28,12 +28,15 @@ namespace Animator.Engine.Persistence
 
         // Private methods ----------------------------------------------------
 
+        /// <summary>
+        /// Parses namespace from string into instance of NamespaceDefinition
+        /// </summary>        
+        /// <remarks>
+        /// Namespace must be in format: <code>assembly=A.B.C;namespace=X.Y.Z</code>,
+        /// whitespace- and case-sensitive.
+        /// </remarks>
         private NamespaceDefinition ParseNamespaceDefinition(string namespaceDefinition)
         {
-            // Required namespace definition format:
-            //
-            // assembly=A.B.C;namespace=X.Y.Z
-
             string[] elements = namespaceDefinition.Split(';');
 
             if (elements.Length != 2)
@@ -56,7 +59,16 @@ namespace Animator.Engine.Persistence
             return new NamespaceDefinition(assembly, @namespace);
         }
 
-        private void DeserializeChildren(XmlNode node, ManagedObject deserializedObject, DeserializationContext context, HashSet<string> propertiesSet)
+        /// <summary>
+        /// Deserializes child nodes of given node. Those may be
+        /// either properties stored in extended form, values
+        /// of content property, or contents of collection (if
+        /// deserialized node is one)
+        /// </summary>
+        private void DeserializeChildren(XmlNode node, 
+            ManagedObject deserializedObject, 
+            DeserializationContext context, 
+            HashSet<string> propertiesSet)
         {
             foreach (XmlNode child in node.ChildNodes)
             {
@@ -115,6 +127,11 @@ namespace Animator.Engine.Persistence
             }
         }
 
+        /// <summary>
+        /// Deserializes property node (eg. for &lt;Element&gt;, a property
+        /// node would be an &lt;Element.Property&gt;) into specific
+        /// deserialized object's property.
+        /// </summary>
         private void DeserializeObjectProperty(XmlNode propertyNode, 
             ManagedObject deserializedObject, 
             ManagedProperty property, 
@@ -159,11 +176,18 @@ namespace Animator.Engine.Persistence
                 throw new InvalidOperationException("Unsupported managed property!");
         }
 
-        private void DeserializeAttributes(XmlNode node, ManagedObject deserializedObject, DeserializationContext context, HashSet<string> propertiesSet)
+        /// <summary>
+        /// Deserialize attributes of given node into object's properties
+        /// </summary>
+        private void DeserializeAttributes(XmlNode node, 
+            ManagedObject deserializedObject, 
+            DeserializationContext context, 
+            HashSet<string> propertiesSet)
         {
             foreach (XmlAttribute attribute in node.Attributes)
             {
-                // 1. Omit xmlns definitions
+                // 1. Omit xmlns definitions, for some reason they are
+                // being treated as regular attributes too
 
                 if (attribute.Name == "xmlns" || attribute.Name.StartsWith("xmlns:"))
                     continue;
@@ -180,18 +204,46 @@ namespace Animator.Engine.Persistence
                 if (managedProperty == null)
                     throw new InvalidOperationException($"Property {attribute.LocalName} not found on object of type {deserializedObject.GetType().Name}");
 
-                if (!(managedProperty is ManagedSimpleProperty property))
-                    throw new InvalidOperationException($"Property {attribute.LocalName} of {deserializedObject.GetType().Name} is not a simple managed property!\r\nOnly simple managed properties may be set via XML attributes.");
+                if (managedProperty is ManagedSimpleProperty simpleProperty)
+                {
+                    // 3.1.1 Check for custom serializer
 
-                // 4. Deserialize value
+                    object value;
+                    if (simpleProperty.Metadata.Serializer != null)
+                    {
+                        value = simpleProperty.Metadata.Serializer.Deserialize(attribute.Value);
+                    }
+                    else
+                    {
+                        value = TypeSerialization.Deserialize(attribute.Value, simpleProperty.Type);
+                    }
 
-                var value = attribute.Value;
-                object deserializedValue = TypeSerialization.Deserialize(value, property.Type);
+                    // 4. Set value to property and mark as set
 
-                // 5. Set value to property and mark as set
+                    deserializedObject.SetValue(simpleProperty, value);
+                    propertiesSet.Add(attribute.LocalName);
+                }
+                else if (managedProperty is ManagedCollectionProperty collectionProperty)
+                {
+                    // 3.2.1 Check for custom serializer
 
-                deserializedObject.SetValue(property, deserializedValue);
-                propertiesSet.Add(attribute.LocalName);
+                    if (collectionProperty.Metadata.CustomSerializer != null)
+                    {
+                        IList value = collectionProperty.Metadata.CustomSerializer.Deserialize(attribute.Value);
+
+                        IList collection = (IList)deserializedObject.GetValue(collectionProperty);
+
+                        if (value != null)
+                            foreach (object obj in value)
+                                collection.Add(obj);
+
+                        propertiesSet.Add(attribute.LocalName);
+                    }
+                    else
+                        throw new InvalidOperationException($"Property {attribute.LocalName} of {deserializedObject.GetType().Name} is a collection property, but its value is stored in attribute and no custom serializer is provided!");
+                }
+                else
+                    throw new InvalidOperationException("Unsupported property type!");
             }
         }
 

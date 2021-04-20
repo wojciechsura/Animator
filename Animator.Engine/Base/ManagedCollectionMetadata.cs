@@ -8,14 +8,15 @@ namespace Animator.Engine.Base
 {
     public class ManagedCollectionMetadata
     {
-        private readonly Func<object> collectionInitializer;
-
-        public ManagedCollectionMetadata(Func<object> collectionInitializer)
+        public ManagedCollectionMetadata(Func<object> collectionInitializer, CustomCollectionSerializer customSerializer = null)
         {
-            this.collectionInitializer = collectionInitializer;
+            this.CollectionInitializer = collectionInitializer;
+            CustomSerializer = customSerializer;
         }
 
-        public Func<object> CollectionInitializer => collectionInitializer;
+        public Func<object> CollectionInitializer { get; }
+
+        public CustomCollectionSerializer CustomSerializer { get; }
 
         internal static ManagedCollectionMetadata DefaultFor(Type propertyType)
         {
