@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Base
 {
-    public class ManagedProperty
+    public abstract class ManagedProperty
     {
         // Private types ------------------------------------------------------
 
@@ -103,6 +103,10 @@ namespace Animator.Engine.Base
             return nameRegex.IsMatch(name);
         }
 
+        // Protected methods --------------------------------------------------
+
+        protected abstract BasePropertyMetadata ProvideBaseMetadata();
+
         // Internal static methods --------------------------------------------
 
         internal static ManagedProperty ByTypeAndName(Type ownerClassType, string name)
@@ -167,6 +171,8 @@ namespace Animator.Engine.Base
         public Type OwnerClassType => ownerClassType;
         public Type Type => type;
         public int GlobalIndex => globalIndex;
+
+        public BasePropertyMetadata Metadata => ProvideBaseMetadata();
 
         // Public static properties -------------------------------------------
 

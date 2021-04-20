@@ -19,7 +19,13 @@ namespace Animator.Engine.Persistence
 
         private class DeserializationContext
         {
+            public DeserializationContext(CustomActivator customActivator)
+            {
+                CustomActivator = customActivator;
+            }
+
             public Dictionary<string, NamespaceDefinition> Namespaces { get; } = new();
+            public CustomActivator CustomActivator { get; }
         }
 
         // Private constants --------------------------------------------------
@@ -84,6 +90,8 @@ namespace Animator.Engine.Persistence
                     var property = deserializedObject.GetProperty(propertyName);
                     if (property == null)
                         throw new InvalidOperationException($"Property {propertyName} not found on object of type {deserializedObject.GetType().Name}");
+                    if (property.Metadata.NotSerializable)
+                        throw new InvalidOperationException($"Property {propertyName} on object {deserializedObject.GetType().Name} is not serializable!\r\nRemove it from input file.");
 
                     DeserializeObjectProperty(child, deserializedObject, property, context, propertiesSet);
                 }
@@ -98,6 +106,8 @@ namespace Animator.Engine.Persistence
                     var property = deserializedObject.GetProperty(contentPropertyAttribute.PropertyName);
                     if (property == null)
                         throw new InvalidOperationException($"Managed property {contentPropertyAttribute.PropertyName} specified as ContentProperty on type {deserializedObject.GetType().Name} does not exist!");
+                    if (property.Metadata.NotSerializable)
+                        throw new InvalidOperationException($"Property {contentPropertyAttribute.PropertyName} on object {deserializedObject.GetType().Name} is not serializable!\r\nThe data structure is ill-formed: content property should be serializable.");
 
                     // 1.2.2 Deserialize object
 
@@ -138,6 +148,9 @@ namespace Animator.Engine.Persistence
             DeserializationContext context, 
             HashSet<string> propertiesSet)
         {
+            if (property.Metadata.NotSerializable)
+                throw new ArgumentException("Cannot deserialize non-serializable property!");
+
             if (propertiesSet.Contains(property.Name) || propertiesSet.Contains(String.Format(contentDecoration, property.Name)))
                 throw new InvalidOperationException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}");
 
@@ -203,6 +216,8 @@ namespace Animator.Engine.Persistence
 
                 if (managedProperty == null)
                     throw new InvalidOperationException($"Property {attribute.LocalName} not found on object of type {deserializedObject.GetType().Name}");
+                if (managedProperty.Metadata.NotSerializable)
+                    throw new InvalidOperationException($"Property {attribute.LocalName} on object {deserializedObject.GetType().Name} is not serializable!\r\nRemove it from input file.");
 
                 if (managedProperty is ManagedSimpleProperty simpleProperty)
                 {
@@ -295,7 +310,11 @@ namespace Animator.Engine.Persistence
             try
             {
                 System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(objType.TypeHandle);
-                deserializedObject = (ManagedObject)Activator.CreateInstance(objType);
+
+                if (context.CustomActivator != null)
+                    deserializedObject = (ManagedObject)context.CustomActivator.CreateInstance(objType);
+                else
+                    deserializedObject = (ManagedObject)Activator.CreateInstance(objType);
             }
             catch
             {
@@ -323,12 +342,12 @@ namespace Animator.Engine.Persistence
         {
             XmlDocument document = new XmlDocument();
             document.Load(filename);
-            return Deserialize(document);
+            return Deserialize(document, options);
         }
 
         public ManagedObject Deserialize(XmlDocument document, DeserializationOptions options = null)
         {
-            var context = new DeserializationContext();
+            var context = new DeserializationContext(options?.CustomActivator);
 
             if (options != null)
             {

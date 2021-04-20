@@ -8,7 +8,7 @@ namespace Animator.Engine.Base
 {
     public delegate object CoerceValueDelegate(ManagedObject obj, object baseValue);
 
-    public class ManagedSimplePropertyMetadata
+    public class ManagedSimplePropertyMetadata : BasePropertyMetadata
     {
         // Private static fields ----------------------------------------------
 

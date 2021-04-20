@@ -10,12 +10,14 @@ namespace Animator.Engine.Base
     {
         private readonly ManagedSimplePropertyMetadata metadata;
 
+        protected override BasePropertyMetadata ProvideBaseMetadata() => metadata;
+
         internal ManagedSimpleProperty(Type ownerClassType, string name, Type propertyType, ManagedSimplePropertyMetadata metadata)
             : base(ownerClassType, name, propertyType)
         {
             this.metadata = metadata;
         }
 
-        public ManagedSimplePropertyMetadata Metadata => metadata;
+        public new ManagedSimplePropertyMetadata Metadata => metadata;
     }
 }

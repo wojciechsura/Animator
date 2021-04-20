@@ -244,5 +244,29 @@ namespace Animator.Engine.Tests
             Assert.AreEqual(4, deserialized.IntCollection.Count);
             Assert.AreEqual(4, deserialized.IntCollection[0]);
         }
+
+        [TestMethod]
+        public void CustomActivatorDeserializationTest()
+        {
+            string xml = "<NontrivialCtorClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+            var options = new DeserializationOptions
+            {
+                CustomActivator = new NontrivialCtorCustomActivator()
+            };
+
+            // Act
+
+            NontrivialCtorClass deserialized = (NontrivialCtorClass)serializer.Deserialize(document, options);
+
+            // Assert
+
+            Assert.IsNotNull(deserialized);
+            Assert.AreEqual(deserialized.Value, 42);
+        }
     }
 }

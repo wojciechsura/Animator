@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Persistence
 {
-    public class DeserializationOptions
+    public abstract class CustomActivator
     {
-        public NamespaceDefinition DefaultNamespace { get; init; }
-        public CustomActivator CustomActivator { get; init; }
+        public abstract object CreateInstance(Type type);
     }
 }

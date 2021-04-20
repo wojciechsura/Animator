@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Base
 {
-    public class ManagedCollectionMetadata
+    public class ManagedCollectionMetadata : BasePropertyMetadata
     {
         public ManagedCollectionMetadata(Func<object> collectionInitializer, CustomCollectionSerializer customSerializer = null)
         {
