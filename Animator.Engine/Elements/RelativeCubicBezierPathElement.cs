@@ -1,4 +1,4 @@
-﻿using Animator.Engine.Base;
+using Animator.Engine.Base;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -6,9 +6,9 @@ namespace Animator.Engine.Elements
 {
     public class RelativeCubicBezierPathElement : PathElement
     {
-        // Protected methods --------------------------------------------------
+        // Internal methods ---------------------------------------------------
 
-        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
             RunningPoint point = new RunningPoint(start);
 
@@ -21,9 +21,7 @@ namespace Animator.Engine.Elements
             return (endPoint, controlPoint2);
         }
 
-        // Public methods -----------------------------------------------------
-
-        public override string ToPathString() => $"c {F(DeltaControlPoint1.X)} {F(DeltaControlPoint1.Y)} {F(DeltaControlPoint2.X)} {F(DeltaControlPoint2.Y)} {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
+        internal override string ToPathString() => $"c {F(DeltaControlPoint1.X)} {F(DeltaControlPoint1.Y)} {F(DeltaControlPoint2.X)} {F(DeltaControlPoint2.Y)} {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
         // Public properties --------------------------------------------------
 

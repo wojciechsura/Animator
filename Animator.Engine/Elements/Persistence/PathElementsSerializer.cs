@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements.Persistence
 {
-    public class PathElementsSerializer : CustomCollectionSerializer
+    internal class PathElementsSerializer : CustomCollectionSerializer
     {
         // Private constants --------------------------------------------------
 
@@ -319,6 +319,11 @@ namespace Animator.Engine.Elements.Persistence
             }
 
             return result;
+        }
+
+        public override bool CanSerialize(IList list)
+        {
+            return true;
         }
 
         public override string Serialize(IList list)

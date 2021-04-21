@@ -1,4 +1,4 @@
-﻿using Animator.Engine.Base;
+using Animator.Engine.Base;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -6,9 +6,9 @@ namespace Animator.Engine.Elements
 {
     public class RelativeArcPathElement : BaseArcPathElement
     {
-        // Protected methods --------------------------------------------------
+        // Internal methods ---------------------------------------------------
 
-        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
             RunningPoint point = new RunningPoint(start);
 
@@ -17,9 +17,7 @@ namespace Animator.Engine.Elements
             return (point.Current, point.Current);
         }
 
-        // Public methods -----------------------------------------------------
-
-        public override string ToPathString() => $"a {F(RX)} {F(RY)} {F(Angle)} {(LargeArcFlag ? 1 : 0)} {(SweepFlag ? 1 : 0)} {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
+        internal override string ToPathString() => $"a {F(RX)} {F(RY)} {F(Angle)} {(LargeArcFlag ? 1 : 0)} {(SweepFlag ? 1 : 0)} {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
         // Public properties --------------------------------------------------
 

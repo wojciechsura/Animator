@@ -38,6 +38,7 @@ foreach (var type in autoTypes)
 #>
         private class <#= ToFirstUpper(type) #>Serializer : TypeSerializer
 		{
+			public override bool CanDeserialize(string str) => <#= type #>.TryParse(str, out _);
 			public override object Deserialize(string str) => <#= type #>.Parse(str);
 			public override string Serialize(object obj) => ((<#= type #>)obj).ToString(CultureInfo.InvariantCulture);
 		}
@@ -47,6 +48,7 @@ foreach (var type in autoTypes)
 #>
 		private class StringSerializer : TypeSerializer
 		{
+			public override bool CanDeserialize(string str) => true;
 			public override object Deserialize(string str) => str;
 			public override string Serialize(object obj) => (string)obj;
 		}
@@ -57,6 +59,20 @@ foreach (var type in autoTypes)
 			private readonly Regex rgbaColorFormat = new Regex("^#[a-fA-F0-9]{8}$");
 			private readonly Regex numRgbColorFormat = new Regex("^[0-9]{,3}(,[0-9]{,3}){2}$");
 			private readonly Regex numRgbaColorFormat = new Regex("^[0-9]{,3}(,[0-9]{,3}){3}$");
+
+			public override bool CanDeserialize(string str)
+			{
+				if (Enum.TryParse(typeof(KnownColor), str, out object knownColor))
+					return true;
+
+				if (rgbColorFormat.IsMatch(str) ||
+					rgbaColorFormat.IsMatch(str) ||
+					numRgbColorFormat.IsMatch(str) ||
+					numRgbaColorFormat.IsMatch(str))
+					return true;
+
+				return false;
+			}
 
 			public override object Deserialize(string str)
             {
@@ -141,6 +157,11 @@ for (int i = 0; i < pointTypes.Length; i++)
         private class <#= ToFirstUpper(pointTypes[i]) #>Serializer : TypeSerializer
 		{
 			private readonly Regex pointRegex = new Regex("<#= pointRegexes[i] #>");
+
+			public override bool CanDeserialize(string str)
+			{
+				return pointRegex.IsMatch(str);
+			}
 
 			public override object Deserialize(string str)
 			{

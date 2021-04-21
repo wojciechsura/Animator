@@ -1,4 +1,4 @@
-﻿using Animator.Engine.Base;
+using Animator.Engine.Base;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -6,18 +6,16 @@ namespace Animator.Engine.Elements
 {
     public class AbsoluteMovePathElement : PathElement
     {
-        // Protected methods --------------------------------------------------
+        // Internal methods ---------------------------------------------------
 
-        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
             path.StartFigure();
 
             return (EndPoint, EndPoint);
         }
 
-        // Public methods -----------------------------------------------------
-
-        public override string ToPathString() => $"M {F(EndPoint.X)} {F(EndPoint.Y)}";
+        internal override string ToPathString() => $"M {F(EndPoint.X)} {F(EndPoint.Y)}";
 
         // Public properties --------------------------------------------------
 

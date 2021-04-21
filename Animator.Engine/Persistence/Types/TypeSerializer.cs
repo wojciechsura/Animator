@@ -10,5 +10,6 @@ namespace Animator.Engine.Persistence.Types
     {
         public abstract object Deserialize(string str);
         public abstract string Serialize(object obj);
+        public abstract bool CanDeserialize(string value);
     }
 }

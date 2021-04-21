@@ -1,4 +1,4 @@
-﻿using Animator.Engine.Base;
+using Animator.Engine.Base;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -6,9 +6,9 @@ namespace Animator.Engine.Elements
 {
     public class RelativeVerticalLinePathElement : PathElement
     {
-        // Protected methods --------------------------------------------------
+        // Internal methods ---------------------------------------------------
 
-        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
             PointF end = new PointF(start.X, start.Y + DY);
 
@@ -17,9 +17,7 @@ namespace Animator.Engine.Elements
             return (end, end);
         }
 
-        // Public methods -----------------------------------------------------
-
-        public override string ToPathString() => $"v {F(DY)}";
+        internal override string ToPathString() => $"v {F(DY)}";
 
         // Public properties --------------------------------------------------
 

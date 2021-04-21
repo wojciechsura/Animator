@@ -1,4 +1,4 @@
-﻿using Animator.Engine.Base;
+using Animator.Engine.Base;
 using Animator.Engine.Utils;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -7,9 +7,9 @@ namespace Animator.Engine.Elements
 {
     public class AbsoluteCubicShorthandBezierPathElement : PathElement
     {
-        // Protected methods --------------------------------------------------
+        // Internal methods ---------------------------------------------------
 
-        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
             var delta = start.Subtract(lastControlPoint);
             var controlPoint1 = start.Add(delta);
@@ -19,9 +19,7 @@ namespace Animator.Engine.Elements
             return (EndPoint, ControlPoint2);
         }
 
-        // Public methods -----------------------------------------------------
-
-        public override string ToPathString() => $"S {F(ControlPoint2.X)} {F(ControlPoint2.Y)} {F(EndPoint.X)} {F(EndPoint.Y)}";
+        internal override string ToPathString() => $"S {F(ControlPoint2.X)} {F(ControlPoint2.Y)} {F(EndPoint.X)} {F(EndPoint.Y)}";
 
         // Public properties --------------------------------------------------
 

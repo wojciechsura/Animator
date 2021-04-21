@@ -1,4 +1,4 @@
-﻿using Animator.Engine.Base;
+using Animator.Engine.Base;
 using Animator.Engine.Utils;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -7,7 +7,9 @@ namespace Animator.Engine.Elements
 {
     public class RelativeLinePathElement : PathElement
     {
-        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
+        // Internal methods ---------------------------------------------------
+
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
             var end = start.Add(DeltaEndPoint);
 
@@ -16,9 +18,7 @@ namespace Animator.Engine.Elements
             return (end, end);
         }
 
-        // Public methods -----------------------------------------------------
-
-        public override string ToPathString() => $"l {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
+        internal override string ToPathString() => $"l {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
         // Public properties --------------------------------------------------
 

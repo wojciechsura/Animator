@@ -8,6 +8,17 @@ namespace Animator.Engine.Persistence.Types
 {
     public static class TypeSerialization
     {
+        public static bool CanDeserialize(string value, Type type)
+        {
+            if (TypeSerializerRepository.Supports(type))
+            {
+                var serializer = TypeSerializerRepository.GetSerializerFor(type);                
+                return serializer.CanDeserialize(value);
+            }
+
+            return false;
+        }
+
         public static object Deserialize(string value, Type type)
         {
             if (TypeSerializerRepository.Supports(type))

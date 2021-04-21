@@ -1,4 +1,4 @@
-﻿using Animator.Engine.Base;
+using Animator.Engine.Base;
 using Animator.Engine.Utils;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -7,9 +7,9 @@ namespace Animator.Engine.Elements
 {
     public class RelativeQuadraticBezierPathElement : BaseQuadraticBezierPathElement
     {
-        // Protected methods ------------------------------------------------- 
+        // Internal methods ---------------------------------------------------
 
-        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
             // Note: deltas are evaluated differently in case of this element
             // See: https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#b%C3%A9zier_curves
@@ -23,9 +23,7 @@ namespace Animator.Engine.Elements
             return (end, controlPoint);
         }
 
-        // Public methods -----------------------------------------------------
-
-        public override string ToPathString() => $"q {F(DeltaControlPoint.X)} {F(DeltaControlPoint.Y)} {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
+        internal override string ToPathString() => $"q {F(DeltaControlPoint.X)} {F(DeltaControlPoint.Y)} {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
         // Public properties --------------------------------------------------
 

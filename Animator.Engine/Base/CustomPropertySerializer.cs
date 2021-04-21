@@ -9,6 +9,7 @@ namespace Animator.Engine.Base
     public abstract class CustomPropertySerializer
     {
         public abstract object Deserialize(string data);
+        public abstract bool CanSerialize(object obj);
         public abstract string Serialize(object obj);
     }
 }

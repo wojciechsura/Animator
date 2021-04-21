@@ -1,4 +1,4 @@
-﻿using Animator.Engine.Base;
+using Animator.Engine.Base;
 using Animator.Engine.Utils;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -7,9 +7,9 @@ namespace Animator.Engine.Elements
 {
     public class AbsoluteQuadraticShorthandBezierPathElement : BaseQuadraticBezierPathElement
     {
-        // Protected methods --------------------------------------------------
+        // Internal methods ---------------------------------------------------
 
-        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
             var delta = start.Subtract(lastControlPoint);
             var controlPoint = start.Add(delta);
@@ -21,9 +21,7 @@ namespace Animator.Engine.Elements
             return (EndPoint, controlPoint);
         }
 
-        // Public methpds -----------------------------------------------------
-
-        public override string ToPathString() => $"T {F(EndPoint.X)} {F(EndPoint.Y)}";
+        internal override string ToPathString() => $"T {F(EndPoint.X)} {F(EndPoint.Y)}";
 
         // Public properties --------------------------------------------------
 

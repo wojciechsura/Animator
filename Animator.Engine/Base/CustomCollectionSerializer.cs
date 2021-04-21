@@ -10,6 +10,7 @@ namespace Animator.Engine.Base
     public abstract class CustomCollectionSerializer
     {
         public abstract IList Deserialize(string data);
+        public abstract bool CanSerialize(IList list);
         public abstract string Serialize(IList list);
     }
 }

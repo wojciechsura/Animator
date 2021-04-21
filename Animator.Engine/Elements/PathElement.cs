@@ -39,10 +39,10 @@ namespace Animator.Engine.Elements
 
         protected string F(float value) => string.Format(CultureInfo.InvariantCulture, "{0:.##}", value);
 
-        protected abstract (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path);
+        // Internal methods -----------------------------------------------------
 
-        // Public methods -----------------------------------------------------
+        internal abstract (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path);
 
-        public abstract string ToPathString();        
+        internal abstract string ToPathString();        
     }
 }

@@ -1,4 +1,4 @@
-﻿using Animator.Engine.Base;
+using Animator.Engine.Base;
 using Animator.Engine.Utils;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -7,11 +7,11 @@ namespace Animator.Engine.Elements
 {
     public class RelativeMovePathElement : PathElement
     {
-        // Public methods -----------------------------------------------------
+        // Internal methods ---------------------------------------------------
 
-        public override string ToPathString() => $"m {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
+        internal override string ToPathString() => $"m {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
-        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
             path.StartFigure();
 

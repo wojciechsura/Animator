@@ -1,4 +1,4 @@
-﻿using Animator.Engine.Base;
+using Animator.Engine.Base;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -8,9 +8,9 @@ namespace Animator.Engine.Elements
     {
         // Public methods -----------------------------------------------------
 
-        public override string ToPathString() => $"A {F(RX)} {F(RY)} {F(Angle)} {(LargeArcFlag ? 1 : 0)} {(SweepFlag ? 1 : 0)} {F(EndPoint.X)} {F(EndPoint.Y)}";
+        internal override string ToPathString() => $"A {F(RX)} {F(RY)} {F(Angle)} {(LargeArcFlag ? 1 : 0)} {(SweepFlag ? 1 : 0)} {F(EndPoint.X)} {F(EndPoint.Y)}";
 
-        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
             InternalAddToGeometry(start, RX, RY, Angle, LargeArcFlag, SweepFlag, EndPoint, path);
             return (EndPoint, EndPoint);

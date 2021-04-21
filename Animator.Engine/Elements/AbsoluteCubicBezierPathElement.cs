@@ -1,4 +1,4 @@
-﻿using Animator.Engine.Base;
+using Animator.Engine.Base;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -8,7 +8,7 @@ namespace Animator.Engine.Elements
     {
         // Protected methods --------------------------------------------------
 
-        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
             path.AddBezier(start, ControlPoint1, ControlPoint2, EndPoint);
 
@@ -17,7 +17,7 @@ namespace Animator.Engine.Elements
 
         // Public methods -----------------------------------------------------
 
-        public override string ToPathString() => $"C {F(ControlPoint1.X)} {F(ControlPoint1.Y)} {F(ControlPoint2.X)} {F(ControlPoint2.Y)} {F(EndPoint.X)} {F(EndPoint.Y)}";
+        internal override string ToPathString() => $"C {F(ControlPoint1.X)} {F(ControlPoint1.Y)} {F(ControlPoint2.X)} {F(ControlPoint2.Y)} {F(EndPoint.X)} {F(EndPoint.Y)}";
 
         // Public properties --------------------------------------------------
 

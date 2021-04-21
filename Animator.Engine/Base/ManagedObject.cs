@@ -177,6 +177,11 @@ namespace Animator.Engine.Base
             return ManagedProperty.ByTypeAndName(GetType(), propertyName);
         }
 
+        public bool IsPropertySet(ManagedProperty property)
+        {
+            return propertyValues.ContainsKey(property.GlobalIndex);
+        }
+
         public object GetValue(ManagedProperty property)
         {
             if (property is ManagedSimpleProperty simpleProperty)

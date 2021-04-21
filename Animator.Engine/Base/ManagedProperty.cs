@@ -47,9 +47,13 @@ namespace Animator.Engine.Base
         // Private static fields ----------------------------------------------
 
         private static readonly Dictionary<PropertyKey, ManagedProperty> propertyDefinitions = new();
+        private static readonly Dictionary<Type, List<ManagedProperty>> propertiesByType = new();
+
         private static int nextAvailableGlobalIndex;
 
         private static readonly Regex nameRegex = new Regex("^[a-zA-Z_][a-zA-Z_0-9]*$");
+
+        private static readonly IReadOnlyList<ManagedProperty> emptyPropertyList = new List<ManagedProperty>();
 
         // Private fields -----------------------------------------------------
 
@@ -96,6 +100,17 @@ namespace Animator.Engine.Base
                 throw new ArgumentException("When registering a collection, property type must implement IList interface!");            
         }
 
+        private static void AddPropertyByType(Type ownerClassType, ManagedProperty prop)
+        {
+            if (!propertiesByType.TryGetValue(ownerClassType, out List<ManagedProperty> properties))
+            {
+                properties = new List<ManagedProperty>();
+                propertiesByType[ownerClassType] = properties;
+            }
+
+            properties.Add(prop);
+        }
+
         // Private methods ----------------------------------------------------
 
         private bool ValidatePropertyName(string name)
@@ -112,6 +127,14 @@ namespace Animator.Engine.Base
         internal static ManagedProperty ByTypeAndName(Type ownerClassType, string name)
         {
             return FindWithInheritance(ownerClassType, name);
+        }
+
+        internal static IReadOnlyList<ManagedProperty> ByType(Type ownerClassType)
+        {
+            if (propertiesByType.ContainsKey(ownerClassType))
+                return propertiesByType[ownerClassType];
+            else
+                return emptyPropertyList;
         }
 
         // Internal methods ---------------------------------------------------
@@ -143,6 +166,7 @@ namespace Animator.Engine.Base
             var propertyKey = new PropertyKey(ownerClassType, name);
 
             propertyDefinitions[propertyKey] = prop;
+            AddPropertyByType(ownerClassType, prop);            
 
             return prop;
         }
@@ -161,6 +185,7 @@ namespace Animator.Engine.Base
             var propertyKey = new PropertyKey(ownerClassType, name);
 
             propertyDefinitions[propertyKey] = prop;
+            AddPropertyByType(ownerClassType, prop);
 
             return prop;
         }

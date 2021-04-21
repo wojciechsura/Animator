@@ -1,13 +1,13 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
     public class CloseShapePathElement : PathElement
     {
-        // Protected methods --------------------------------------------------
+        // Internal methods ---------------------------------------------------
 
-        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
             var pathData = path.PathData;
 
@@ -28,8 +28,6 @@ namespace Animator.Engine.Elements
             return (new PointF(0.0f, 0.0f), new PointF(0.0f, 0.0f));
         }
 
-        // Public methods -----------------------------------------------------
-
-        public override string ToPathString() => "Z";
+        internal override string ToPathString() => "Z";
     }
 }
