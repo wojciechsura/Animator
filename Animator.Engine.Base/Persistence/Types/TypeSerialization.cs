@@ -10,6 +10,10 @@ namespace Animator.Engine.Base.Persistence.Types
     {
         public static bool CanDeserialize(string value, Type type)
         {
+            if (type.IsEnum)
+            {
+                return Enum.TryParse(type, value, out _);
+            }
             if (TypeSerializerRepository.Supports(type))
             {
                 var serializer = TypeSerializerRepository.GetSerializerFor(type);
@@ -21,6 +25,9 @@ namespace Animator.Engine.Base.Persistence.Types
 
         public static object Deserialize(string value, Type type)
         {
+            if (type.IsEnum)
+                return Enum.Parse(type, value);
+
             if (TypeSerializerRepository.Supports(type))
                 return TypeSerializerRepository.GetSerializerFor(type).Deserialize(value);
 
@@ -31,6 +38,9 @@ namespace Animator.Engine.Base.Persistence.Types
 
         public static string Serialize(object value)
         {
+            if (value.GetType().IsEnum)
+                return value.ToString();
+
             if (TypeSerializerRepository.Supports(value.GetType()))
                 return TypeSerializerRepository.GetSerializerFor(value.GetType()).Serialize(value);
 
