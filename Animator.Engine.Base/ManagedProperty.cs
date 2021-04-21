@@ -56,8 +56,6 @@ namespace Animator.Engine.Base
 
         private static readonly Regex nameRegex = new Regex("^[a-zA-Z_][a-zA-Z_0-9]*$");
 
-        private static readonly IReadOnlyList<ManagedProperty> emptyPropertyList = new List<ManagedProperty>();
-
         // Private fields -----------------------------------------------------
 
         private readonly Type ownerClassType;
@@ -132,12 +130,20 @@ namespace Animator.Engine.Base
             return FindWithInheritance(ownerClassType, name);
         }
 
-        internal static IReadOnlyList<ManagedProperty> ByType(Type ownerClassType)
+        internal static IEnumerable<ManagedProperty> ByType(Type ownerClassType, bool includeBaseClasses)
         {
-            if (propertiesByType.ContainsKey(ownerClassType))
-                return propertiesByType[ownerClassType];
-            else
-                return emptyPropertyList;
+            IEnumerable<ManagedProperty> result = Enumerable.Empty<ManagedProperty>();
+
+            do
+            {
+                if (propertiesByType.ContainsKey(ownerClassType))
+                    result = result.Concat(propertiesByType[ownerClassType]);
+
+                ownerClassType = ownerClassType.BaseType;
+            }
+            while (includeBaseClasses && (ownerClassType != typeof(ManagedObject) && ownerClassType != typeof(object)));
+
+            return result;
         }
 
         // Internal methods ---------------------------------------------------
@@ -156,15 +162,15 @@ namespace Animator.Engine.Base
 
         // Public static methods ----------------------------------------------
 
-        public static ManagedProperty Register(Type ownerClassType, string name, Type propertyType, ManagedAnimatedPropertyMetadata metadata = null)
+        public static ManagedProperty Register(Type ownerClassType, string name, Type propertyType, ManagedSimplePropertyMetadata metadata = null)
         {
             ValidateDuplicatedName(ownerClassType, name);
             ValidateInheritanceFromManagedObject(ownerClassType);
 
             if (metadata == null)
-                metadata = ManagedAnimatedPropertyMetadata.DefaultFor(propertyType);
+                metadata = ManagedSimplePropertyMetadata.DefaultFor(propertyType);
 
-            var prop = new ManagedAnimatedProperty(ownerClassType, name, propertyType, metadata);
+            var prop = new ManagedSimpleProperty(ownerClassType, name, propertyType, metadata);
 
             var propertyKey = new PropertyKey(ownerClassType, name);
 

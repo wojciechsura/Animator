@@ -32,7 +32,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty DXProperty = ManagedProperty.Register(typeof(RelativeHorizontalLinePathElement),
             nameof(DX),
             typeof(float),
-            new ManagedAnimatedPropertyMetadata(0.0f));
+            new ManagedSimplePropertyMetadata(0.0f));
 
         #endregion
     }

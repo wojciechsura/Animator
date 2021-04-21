@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public abstract class Brush : ManagedObject
+    public abstract class Brush : BaseElement
     {
         // Internal methods ---------------------------------------------------
 

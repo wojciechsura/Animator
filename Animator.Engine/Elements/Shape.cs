@@ -20,7 +20,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty BrushProperty = ManagedProperty.Register(typeof(Shape),
             nameof(Brush),
             typeof(Brush),
-            new ManagedAnimatedPropertyMetadata(null));
+            new ManagedSimplePropertyMetadata(null));
 
         #endregion
 
@@ -35,7 +35,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty PenProperty = ManagedProperty.Register(typeof(Shape),
             nameof(Pen),
             typeof(Pen),
-            new ManagedAnimatedPropertyMetadata(null));
+            new ManagedSimplePropertyMetadata(null));
 
         #endregion
     }

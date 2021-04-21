@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public abstract class Visual : ManagedObject
+    public abstract class Visual : BaseElement
     {
         protected abstract void InternalRender(Bitmap bitmap, Graphics graphics);
 
@@ -55,7 +55,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty PositionProperty = ManagedProperty.Register(typeof(Visual),
             nameof(Position),
             typeof(PointF),
-            new ManagedAnimatedPropertyMetadata(new PointF(0.0f, 0.0f)));
+            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
 
         #endregion
 
@@ -70,7 +70,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty OriginProperty = ManagedProperty.Register(typeof(Visual),
             nameof(Origin),
             typeof(PointF),
-            new ManagedAnimatedPropertyMetadata(new PointF(0.0f, 0.0f)));
+            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
 
         #endregion
 
@@ -85,7 +85,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty RotationProperty = ManagedProperty.Register(typeof(Visual),
             nameof(Rotation),
             typeof(float),
-            new ManagedAnimatedPropertyMetadata(0.0f));
+            new ManagedSimplePropertyMetadata(0.0f));
 
         #endregion
 
@@ -100,7 +100,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty ScaleProperty = ManagedProperty.Register(typeof(Visual),
             nameof(Scale),
             typeof(PointF),
-            new ManagedAnimatedPropertyMetadata(new PointF(1.0f, 1.0f)));
+            new ManagedSimplePropertyMetadata(new PointF(1.0f, 1.0f)));
 
         #endregion
     }

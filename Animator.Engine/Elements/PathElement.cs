@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public abstract class PathElement : ManagedObject
+    public abstract class PathElement : BaseElement
     {
         // Protected types ----------------------------------------------------
 

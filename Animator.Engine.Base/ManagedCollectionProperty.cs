@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Animator.Engine.Base
 {
+    [DebuggerDisplay("ManagedCollectionProperty {Name} of type {Type.Name}")]
     public class ManagedCollectionProperty : ManagedProperty
     {
         private readonly ManagedCollectionMetadata metadata;

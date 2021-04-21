@@ -20,7 +20,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty WidthProperty = ManagedProperty.Register(typeof(AnimationConfig), 
             nameof(Width), 
             typeof(int), 
-            new ManagedAnimatedPropertyMetadata(1024, CoerceWidth));
+            new ManagedSimplePropertyMetadata(1024, CoerceWidth));
 
         private static object CoerceWidth(ManagedObject obj, object baseValue)
         {
@@ -40,7 +40,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty HeightProperty = ManagedProperty.Register(typeof(AnimationConfig),
             nameof(Height),
             typeof(int),
-            new ManagedAnimatedPropertyMetadata(768, CoerceHeight));
+            new ManagedSimplePropertyMetadata(768, CoerceHeight));
 
         private static object CoerceHeight(ManagedObject obj, object baseValue)
         {

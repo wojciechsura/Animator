@@ -20,7 +20,7 @@ namespace Animator.Engine.Tests.TestClasses
         public static readonly ManagedProperty Max10Property = ManagedProperty.Register(typeof(SimpleCoercedPropertyClass), 
             nameof(Max10), 
             typeof(int), 
-            new ManagedAnimatedPropertyMetadata(0, Max10PropertyCoerce));
+            new ManagedSimplePropertyMetadata(0, Max10PropertyCoerce));
         
         private static object Max10PropertyCoerce(ManagedObject obj, object baseValue)
         {

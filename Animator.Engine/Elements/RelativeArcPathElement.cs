@@ -32,7 +32,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty RXProperty = ManagedProperty.Register(typeof(RelativeArcPathElement),
             nameof(RX),
             typeof(float),
-            new ManagedAnimatedPropertyMetadata(0.0f));
+            new ManagedSimplePropertyMetadata(0.0f));
 
         #endregion
 
@@ -47,7 +47,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty RYProperty = ManagedProperty.Register(typeof(RelativeArcPathElement),
             nameof(RY),
             typeof(float),
-            new ManagedAnimatedPropertyMetadata(0.0f));
+            new ManagedSimplePropertyMetadata(0.0f));
 
         #endregion
 
@@ -62,7 +62,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty AngleProperty = ManagedProperty.Register(typeof(RelativeArcPathElement),
             nameof(Angle),
             typeof(float),
-            new ManagedAnimatedPropertyMetadata(0.0f));
+            new ManagedSimplePropertyMetadata(0.0f));
 
         #endregion
 
@@ -77,7 +77,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty LargeArcFlagProperty = ManagedProperty.Register(typeof(RelativeArcPathElement),
             nameof(LargeArcFlag),
             typeof(bool),
-            new ManagedAnimatedPropertyMetadata(false));
+            new ManagedSimplePropertyMetadata(false));
 
         #endregion
 
@@ -92,7 +92,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty SweepFlagProperty = ManagedProperty.Register(typeof(RelativeArcPathElement),
             nameof(SweepFlag),
             typeof(bool),
-            new ManagedAnimatedPropertyMetadata(false));
+            new ManagedSimplePropertyMetadata(false));
 
         #endregion
 
@@ -107,7 +107,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeArcPathElement),
             nameof(DeltaEndPoint),
             typeof(PointF),
-            new ManagedAnimatedPropertyMetadata(new PointF(0.0f, 0.0f)));
+            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
 
         #endregion
     }

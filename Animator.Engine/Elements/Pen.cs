@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public class Pen : ManagedObject
+    public class Pen : BaseElement
     {
         // Internal methods ---------------------------------------------------
 
@@ -29,7 +29,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty ColorProperty = ManagedProperty.Register(typeof(Pen),
             nameof(Color),
             typeof(System.Drawing.Color),
-            new ManagedAnimatedPropertyMetadata(System.Drawing.Color.Black));
+            new ManagedSimplePropertyMetadata(System.Drawing.Color.Black));
 
         #endregion
 
@@ -44,7 +44,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty WidthProperty = ManagedProperty.Register(typeof(Pen),
             nameof(Width),
             typeof(float),
-            new ManagedAnimatedPropertyMetadata(1.0f));
+            new ManagedSimplePropertyMetadata(1.0f));
 
         #endregion
     }

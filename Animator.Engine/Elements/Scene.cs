@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Animator.Engine.Elements
 {
     [ContentProperty(nameof(Items))]
-    public class Scene : ManagedObject
+    public class Scene : BaseElement
     {
         // Public methods -----------------------------------------------------
 
@@ -35,20 +35,6 @@ namespace Animator.Engine.Elements
 
         // Public properties --------------------------------------------------
 
-        #region Name managed property
-
-        public string Name
-        {
-            get => (string)GetValue(NameProperty);
-            set => SetValue(NameProperty, value);
-        }
-
-        public static readonly ManagedProperty NameProperty = ManagedProperty.Register(typeof(Scene),
-            nameof(Name),
-            typeof(string));
-
-        #endregion
-
         #region Items managed collection
 
         public List<Visual> Items
@@ -62,7 +48,6 @@ namespace Animator.Engine.Elements
 
         #endregion
 
-
         #region Background managed property
 
         public Brush Background
@@ -74,7 +59,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty BackgroundProperty = ManagedProperty.Register(typeof(Scene),
             nameof(Background),
             typeof(Brush),
-            new ManagedAnimatedPropertyMetadata(null));
+            new ManagedSimplePropertyMetadata(null));
 
         #endregion
     }

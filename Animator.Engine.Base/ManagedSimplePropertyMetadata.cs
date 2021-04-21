@@ -9,20 +9,20 @@ namespace Animator.Engine.Base
 {
     public delegate object CoerceValueDelegate(ManagedObject obj, object baseValue);
 
-    public class ManagedAnimatedPropertyMetadata : BasePropertyMetadata
+    public class ManagedSimplePropertyMetadata : BasePropertyMetadata
     {
         // Private static fields ----------------------------------------------
 
-        private static readonly Dictionary<Type, ManagedAnimatedPropertyMetadata> defaultMetadata = new();
+        private static readonly Dictionary<Type, ManagedSimplePropertyMetadata> defaultMetadata = new();
 
         // Public static methods ----------------------------------------------
 
-        public static ManagedAnimatedPropertyMetadata DefaultFor(Type type)
+        public static ManagedSimplePropertyMetadata DefaultFor(Type type)
         {
-            if (!defaultMetadata.TryGetValue(type, out ManagedAnimatedPropertyMetadata metadata))
+            if (!defaultMetadata.TryGetValue(type, out ManagedSimplePropertyMetadata metadata))
             {
                 object defaultValue = type.IsValueType ? Activator.CreateInstance(type) : null;
-                metadata = new ManagedAnimatedPropertyMetadata(defaultValue);
+                metadata = new ManagedSimplePropertyMetadata(defaultValue);
 
                 defaultMetadata[type] = metadata;
             }
@@ -32,7 +32,7 @@ namespace Animator.Engine.Base
 
         // Public methods -----------------------------------------------------
 
-        public ManagedAnimatedPropertyMetadata(object defaultValue = null, CoerceValueDelegate coerceValueHandler = null, TypeSerializer customSerializer = null)
+        public ManagedSimplePropertyMetadata(object defaultValue = null, CoerceValueDelegate coerceValueHandler = null, TypeSerializer customSerializer = null)
         {
             DefaultValue = defaultValue;
             CoerceValueHandler = coerceValueHandler;
@@ -44,5 +44,7 @@ namespace Animator.Engine.Base
         public object DefaultValue { get; }
         public CoerceValueDelegate CoerceValueHandler { get; }
         public TypeSerializer CustomSerializer { get; }
+        public bool NotAnimatable { get; init; } = false;
+
     }
 }
