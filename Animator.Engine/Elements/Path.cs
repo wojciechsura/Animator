@@ -25,8 +25,6 @@ namespace Animator.Engine.Elements
 
             if (IsPropertySet(BrushProperty) && Brush != null)
             {
-                graphics.
-
                 using (var brush = Brush.BuildBrush())
                     graphics.FillPath(brush, path);
             }
