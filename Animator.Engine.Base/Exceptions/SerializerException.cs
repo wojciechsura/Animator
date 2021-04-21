@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Engine.Exceptions
+namespace Animator.Engine.Base.Exceptions
 {
     [Serializable]
     public class SerializerException : Exception

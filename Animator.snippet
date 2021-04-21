@@ -6,7 +6,8 @@
       <Shortcut>mcol</Shortcut>
     </Header>
     <Snippet>
-      <Code Language="CSharp"><![CDATA[#region $Name$ managed collection
+      <Code Language="CSharp">
+  <![CDATA[#region $Name$ managed collection
     
 public List<$PropType$> $Name$
 {
@@ -21,6 +22,9 @@ public static readonly ManagedProperty $Name$Property = ManagedProperty.Register
       <Imports>
         <Import>
           <Namespace>Animator.Engine.Base</Namespace>
+        </Import>
+        <Import>
+          <Namespace>System.Collections.ObjectModel</Namespace>
         </Import>
       </Imports>
       <Declarations>
@@ -61,7 +65,7 @@ public $PropType$ $Name$
 public static readonly ManagedProperty $Name$Property = ManagedProperty.Register(typeof($ClassType$), 
     nameof($Name$), 
     typeof($PropType$), 
-    new ManagedSimplePropertyMetadata($DefaultValue$));
+    new ManagedAnimatedPropertyMetadata($DefaultValue$));
     
 #endregion]]></Code>
       <Imports>

@@ -1,8 +1,7 @@
 ﻿using Animator.Engine.Base;
-using Animator.Engine.Elements;
-using Animator.Engine.Exceptions;
-using Animator.Engine.Persistence.Types;
-using Animator.Engine.Utils;
+using Animator.Engine.Base.Exceptions;
+using Animator.Engine.Base.Persistence.Types;
+using Animator.Engine.Base.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Animator.Engine.Persistence
+namespace Animator.Engine.Base.Persistence
 {
     public class ManagedObjectSerializer
     {
@@ -76,9 +75,9 @@ namespace Animator.Engine.Persistence
         /// of content property, or contents of collection (if
         /// deserialized node is one)
         /// </summary>
-        private void DeserializeChildren(XmlNode node, 
-            ManagedObject deserializedObject, 
-            DeserializationContext context, 
+        private void DeserializeChildren(XmlNode node,
+            ManagedObject deserializedObject,
+            DeserializationContext context,
             HashSet<string> propertiesSet)
         {
             foreach (XmlNode child in node.ChildNodes)
@@ -123,14 +122,14 @@ namespace Animator.Engine.Persistence
 
                     var content = DeserializeElement(child, context);
 
-                    if (property is ManagedSimpleProperty simpleProperty)
+                    if (property is ManagedAnimatedProperty animatedProperty)
                     {
                         if (propertiesSet.Contains(property.Name))
                             throw new SerializerException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}",
                                 node.FindXPath());
 
-                        deserializedObject.SetValue(simpleProperty, content);
-                        propertiesSet.Add(String.Format(contentDecoration, property.Name));
+                        deserializedObject.SetValue(animatedProperty, content);
+                        propertiesSet.Add(string.Format(contentDecoration, property.Name));
                     }
                     else if (property is ManagedCollectionProperty collectionProperty)
                     {
@@ -141,7 +140,7 @@ namespace Animator.Engine.Persistence
                         IList list = (IList)deserializedObject.GetValue(property);
                         list.Add(content);
 
-                        propertiesSet.Add(String.Format(contentDecoration, property.Name));
+                        propertiesSet.Add(string.Format(contentDecoration, property.Name));
                     }
                     else
                         throw new InvalidOperationException("Unsupported managed property!");
@@ -154,25 +153,25 @@ namespace Animator.Engine.Persistence
         /// node would be an &lt;Element.Property&gt;) into specific
         /// deserialized object's property.
         /// </summary>
-        private void DeserializeObjectProperty(XmlNode propertyNode, 
-            ManagedObject deserializedObject, 
-            ManagedProperty property, 
-            DeserializationContext context, 
+        private void DeserializeObjectProperty(XmlNode propertyNode,
+            ManagedObject deserializedObject,
+            ManagedProperty property,
+            DeserializationContext context,
             HashSet<string> propertiesSet)
         {
             if (property.Metadata.NotSerializable)
                 throw new SerializerException($"Cannot deserialize non-serializable property {property.Name}!",
                     propertyNode.FindXPath());
 
-            if (propertiesSet.Contains(property.Name) || propertiesSet.Contains(String.Format(contentDecoration, property.Name)))
+            if (propertiesSet.Contains(property.Name) || propertiesSet.Contains(string.Format(contentDecoration, property.Name)))
                 throw new SerializerException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}",
                     propertyNode.FindXPath());
 
-            if (property is ManagedSimpleProperty simpleProperty)
+            if (property is ManagedAnimatedProperty animatedProperty)
             {
                 if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 0)
                 {
-                    var content = DeserializePropertyValue(context, simpleProperty, propertyNode.InnerText);
+                    var content = DeserializePropertyValue(context, animatedProperty, propertyNode.InnerText);
                     deserializedObject.SetValue(property, content);
 
                     propertiesSet.Add(property.Name);
@@ -185,7 +184,7 @@ namespace Animator.Engine.Persistence
                     propertiesSet.Add(property.Name);
                 }
                 else
-                    throw new SerializerException($"Property {property.Name} on type {deserializedObject.GetType().Name} is a simple property, but is provided with multiple values.",
+                    throw new SerializerException($"Property {property.Name} on type {deserializedObject.GetType().Name} is an animated property, but is provided with multiple values.",
                         propertyNode.FindXPath());
             }
             else if (property is ManagedCollectionProperty collectionProperty)
@@ -227,9 +226,9 @@ namespace Animator.Engine.Persistence
         /// <summary>
         /// Deserialize attributes of given node into object's properties
         /// </summary>
-        private void DeserializeAttributes(XmlNode node, 
-            ManagedObject deserializedObject, 
-            DeserializationContext context, 
+        private void DeserializeAttributes(XmlNode node,
+            ManagedObject deserializedObject,
+            DeserializationContext context,
             HashSet<string> propertiesSet)
         {
             foreach (XmlAttribute attribute in node.Attributes)
@@ -257,13 +256,13 @@ namespace Animator.Engine.Persistence
                     throw new SerializerException($"Property {attribute.LocalName} on object {deserializedObject.GetType().Name} is not serializable!\r\nRemove it from input file.",
                         node.FindXPath());
 
-                if (managedProperty is ManagedSimpleProperty simpleProperty)
+                if (managedProperty is ManagedAnimatedProperty animatedProperty)
                 {
                     string propertyValue = attribute.Value;
 
-                    object value = DeserializePropertyValue(context, simpleProperty, attribute.Value);
+                    object value = DeserializePropertyValue(context, animatedProperty, attribute.Value);
 
-                    deserializedObject.SetValue(simpleProperty, value);
+                    deserializedObject.SetValue(animatedProperty, value);
                     propertiesSet.Add(attribute.LocalName);
                 }
                 else if (managedProperty is ManagedCollectionProperty collectionProperty)
@@ -288,14 +287,14 @@ namespace Animator.Engine.Persistence
             }
         }
 
-        private object DeserializePropertyValue(DeserializationContext context, ManagedSimpleProperty simpleProperty, string propertyValue)
+        private object DeserializePropertyValue(DeserializationContext context, ManagedAnimatedProperty animatedProperty, string propertyValue)
         {
-            if (simpleProperty.Metadata.CustomSerializer != null && simpleProperty.Metadata.CustomSerializer.CanDeserialize(propertyValue))
-                return simpleProperty.Metadata.CustomSerializer.Deserialize(propertyValue);
-            else if (context.CustomTypeSerializers != null && context.CustomTypeSerializers.TryGetValue(simpleProperty.Type, out TypeSerializer customSerializer) && customSerializer.CanDeserialize(propertyValue))
+            if (animatedProperty.Metadata.CustomSerializer != null && animatedProperty.Metadata.CustomSerializer.CanDeserialize(propertyValue))
+                return animatedProperty.Metadata.CustomSerializer.Deserialize(propertyValue);
+            else if (context.CustomTypeSerializers != null && context.CustomTypeSerializers.TryGetValue(animatedProperty.Type, out TypeSerializer customSerializer) && customSerializer.CanDeserialize(propertyValue))
                 return customSerializer.Deserialize(propertyValue);
             else
-                return TypeSerialization.Deserialize(propertyValue, simpleProperty.Type);
+                return TypeSerialization.Deserialize(propertyValue, animatedProperty.Type);
         }
 
         private static IList DeserializeCollectionPropertyValue(DeserializationContext context, ManagedCollectionProperty collectionProperty, string propertyValue)
@@ -313,7 +312,7 @@ namespace Animator.Engine.Persistence
             // 1. Figure out, which object to instantiate
 
             string className = node.LocalName;
-            
+
             if (!context.Namespaces.TryGetValue(node.NamespaceURI, out NamespaceDefinition namespaceDefinition))
             {
                 namespaceDefinition = ParseNamespaceDefinition(node.NamespaceURI);
@@ -339,7 +338,7 @@ namespace Animator.Engine.Persistence
                 throw new SerializerException($"Cannot access assembly {namespaceDefinition.Assembly}\r\nMake sure, it is loaded or accessible to load.",
                     node.FindXPath());
 
-            string fullClassTypeName = String.Join('.', namespaceDefinition.Namespace, className);
+            string fullClassTypeName = string.Join('.', namespaceDefinition.Namespace, className);
             Type objType = assembly.GetType(fullClassTypeName, false);
 
             if (objType == null)
@@ -423,7 +422,7 @@ namespace Animator.Engine.Persistence
             {
                 if (options.DefaultNamespace != null)
                 {
-                    context.Namespaces[String.Empty] = options.DefaultNamespace;
+                    context.Namespaces[string.Empty] = options.DefaultNamespace;
                 }
             }
 

@@ -1,11 +1,11 @@
-﻿using Animator.Engine.Persistence.Types;
+﻿using Animator.Engine.Base.Persistence.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Engine.Persistence
+namespace Animator.Engine.Base.Persistence
 {
     public class DeserializationOptions
     {

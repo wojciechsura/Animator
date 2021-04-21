@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Base
 {
-    public class ManagedSimpleProperty : ManagedProperty
+    public class ManagedAnimatedProperty : ManagedProperty
     {
-        private readonly ManagedSimplePropertyMetadata metadata;
+        private readonly ManagedAnimatedPropertyMetadata metadata;
 
         protected override BasePropertyMetadata ProvideBaseMetadata() => metadata;
 
-        internal ManagedSimpleProperty(Type ownerClassType, string name, Type propertyType, ManagedSimplePropertyMetadata metadata)
+        internal ManagedAnimatedProperty(Type ownerClassType, string name, Type propertyType, ManagedAnimatedPropertyMetadata metadata)
             : base(ownerClassType, name, propertyType)
         {
             this.metadata = metadata;
         }
 
-        public new ManagedSimplePropertyMetadata Metadata => metadata;
+        public new ManagedAnimatedPropertyMetadata Metadata => metadata;
     }
 }

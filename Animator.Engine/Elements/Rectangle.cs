@@ -39,7 +39,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty WidthProperty = ManagedProperty.Register(typeof(Rectangle),
             nameof(Width),
             typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+            new ManagedAnimatedPropertyMetadata(0.0f));
 
         #endregion
 
@@ -54,7 +54,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty HeightProperty = ManagedProperty.Register(typeof(Rectangle),
             nameof(Height),
             typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+            new ManagedAnimatedPropertyMetadata(0.0f));
 
         #endregion
     }

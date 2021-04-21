@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Animator.Engine.Utils
+namespace Animator.Engine.Base.Utils
 {
     public static class XmlUtils
     {

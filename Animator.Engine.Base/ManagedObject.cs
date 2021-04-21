@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,7 +46,7 @@ namespace Animator.Engine.Base
 
         // Private methods ----------------------------------------------------
 
-        private void ValidateValue(ManagedSimpleProperty property, object value)
+        private void ValidateValue(ManagedAnimatedProperty property, object value)
         {
             if (property.Type.IsValueType && value == null)
                 throw new ArgumentException($"{property.OwnerClassType.Name}.{property.Name} property type is value-type ({property.Type.Name}), but provided value is null.");
@@ -52,7 +55,7 @@ namespace Animator.Engine.Base
                 throw new ArgumentException($"Value of type {value.GetType().Name} cannot be assigned to property {property.OwnerClassType.Name}.{property.Name} of type {property.Type.Name}.");
         }
 
-        private (object, bool) InternalCoerceValue(ManagedSimpleProperty property)
+        private (object, bool) InternalCoerceValue(ManagedAnimatedProperty property)
         {
             if (property.Metadata.CoerceValueHandler != null)
             {
@@ -69,7 +72,7 @@ namespace Animator.Engine.Base
             return (null, false);
         }
 
-        private PropertyValue EnsurePropertyValue(ManagedSimpleProperty property)
+        private PropertyValue EnsurePropertyValue(ManagedAnimatedProperty property)
         {
             if (!propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue))
             {
@@ -85,13 +88,16 @@ namespace Animator.Engine.Base
             if (!collections.TryGetValue(property.GlobalIndex, out object collection))
             {
                 collection = property.Metadata.CollectionInitializer();
+                if (!collection.GetType().IsAssignableTo(property.Type))
+                    throw new InvalidOperationException($"Instantiated collection ({collection.GetType().Name} doesn't match property type ({property.Type.Name})!");
+
                 collections[property.GlobalIndex] = collection;
             }
 
             return collection;
         }
 
-        private void CoerceAfterFinalBaseValueChanged(ManagedSimpleProperty property, PropertyValue propertyValue, object oldEffectiveValue)
+        private void CoerceAfterFinalBaseValueChanged(ManagedAnimatedProperty property, PropertyValue propertyValue, object oldEffectiveValue)
         {
             (object coercedValue, bool coerced) = InternalCoerceValue(property);
 
@@ -120,10 +126,10 @@ namespace Animator.Engine.Base
 
         internal void SetAnimatedValue(ManagedProperty property, object value)
         {
-            if (property is not ManagedSimpleProperty simpleProperty)
-                throw new InvalidOperationException("Cannot ensure property value for non-simple property!");
+            if (property is not ManagedAnimatedProperty animatedProperty)
+                throw new InvalidOperationException("Cannot ensure property value for non-animated property!");
 
-            var propertyValue = EnsurePropertyValue(simpleProperty);
+            var propertyValue = EnsurePropertyValue(animatedProperty);
 
             if (!propertyValue.IsAnimated || propertyValue.AnimatedValue != value)
             {
@@ -131,14 +137,14 @@ namespace Animator.Engine.Base
 
                 propertyValue.AnimatedValue = value;
                 
-                CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
+                CoerceAfterFinalBaseValueChanged(animatedProperty, propertyValue, oldEffectiveValue);
             }
         }
 
         internal void ResetAnimatedValue(ManagedProperty property)
         {
-            if (property is not ManagedSimpleProperty simpleProperty)
-                throw new InvalidOperationException("Cannot ensure property value for non-simple property!");
+            if (property is not ManagedAnimatedProperty animatedProperty)
+                throw new InvalidOperationException("Cannot ensure property value for non-animated property!");
 
             if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue) && propertyValue.IsAnimated)
             {
@@ -146,7 +152,7 @@ namespace Animator.Engine.Base
 
                 propertyValue.ClearAnimatedValue();
 
-                CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
+                CoerceAfterFinalBaseValueChanged(animatedProperty, propertyValue, oldEffectiveValue);
             }
 
             // If there is no entry in PropertyValues for this value,
@@ -162,14 +168,14 @@ namespace Animator.Engine.Base
 
         public void CoerceValue(ManagedProperty property)
         {
-            if (property is not ManagedSimpleProperty simpleProperty)
-                throw new InvalidOperationException("Cannot ensure property value for non-simple property!");
+            if (property is not ManagedAnimatedProperty animatedProperty)
+                throw new InvalidOperationException("Cannot ensure property value for non-animated property!");
 
-            var propertyValue = EnsurePropertyValue(simpleProperty);
+            var propertyValue = EnsurePropertyValue(animatedProperty);
 
             var oldEffectiveValue = propertyValue.EffectiveValue;
 
-            CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
+            CoerceAfterFinalBaseValueChanged(animatedProperty, propertyValue, oldEffectiveValue);
         }
 
         public ManagedProperty GetProperty(string propertyName)
@@ -184,12 +190,12 @@ namespace Animator.Engine.Base
 
         public object GetValue(ManagedProperty property)
         {
-            if (property is ManagedSimpleProperty simpleProperty)
+            if (property is ManagedAnimatedProperty animatedProperty)
             {
                 if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue))
                     return propertyValue.EffectiveValue;
                 else
-                    return simpleProperty.Metadata.DefaultValue;
+                    return animatedProperty.Metadata.DefaultValue;
             }
             else if (property is ManagedCollectionProperty collectionProperty)
             {
@@ -204,25 +210,25 @@ namespace Animator.Engine.Base
 
         public object GetFinalBaseValue(ManagedProperty property)
         {
-            if (property is ManagedSimpleProperty simpleProperty)
+            if (property is ManagedAnimatedProperty animatedProperty)
             {
                 if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue))
                     return propertyValue.FinalBaseValue;
                 else
-                    return simpleProperty.Metadata.DefaultValue;
+                    return animatedProperty.Metadata.DefaultValue;
             }
             else
-                throw new ArgumentException("Final base value is available only for simple properties!");
+                throw new ArgumentException("Final base value is available only for animated properties!");
         }
 
         public void SetValue(ManagedProperty property, object value)
         {
-            if (property is not ManagedSimpleProperty simpleProperty)
-                throw new ArgumentException("Setting values is available only for simple properties!");
+            if (property is not ManagedAnimatedProperty animatedProperty)
+                throw new ArgumentException("Setting values is available only for animated properties!");
 
-            ValidateValue(simpleProperty, value);
+            ValidateValue(animatedProperty, value);
 
-            var propertyValue = EnsurePropertyValue(simpleProperty);
+            var propertyValue = EnsurePropertyValue(animatedProperty);
 
             if (propertyValue.BaseValue != value)
             {
@@ -232,7 +238,7 @@ namespace Animator.Engine.Base
                 propertyValue.ResetModifiers();
 
                 // Coertion
-                CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
+                CoerceAfterFinalBaseValueChanged(animatedProperty, propertyValue, oldEffectiveValue);
 
                 OnPropertyBaseValueInvalidated(property);
             }

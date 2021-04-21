@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Animator.Engine.Base
     {
         // Private types ------------------------------------------------------
 
-        [DebuggerDisplay("Key: {name}, {ownerType.Name}")]
+        [DebuggerDisplay("Key: ({name}, {ownerType.Name})")]
         private class PropertyKey
         {
             private readonly string name;
@@ -99,7 +100,7 @@ namespace Animator.Engine.Base
         private static void ValidateListType(Type propertyType)
         {
             if (!propertyType.IsAssignableTo(typeof(IList)))
-                throw new ArgumentException("When registering a collection, property type must implement IList interface!");            
+                throw new ArgumentException("When registering a collection, property type must implement IList interface!");
         }
 
         private static void AddPropertyByType(Type ownerClassType, ManagedProperty prop)
@@ -155,15 +156,15 @@ namespace Animator.Engine.Base
 
         // Public static methods ----------------------------------------------
 
-        public static ManagedSimpleProperty Register(Type ownerClassType, string name, Type propertyType, ManagedSimplePropertyMetadata metadata = null)
+        public static ManagedProperty Register(Type ownerClassType, string name, Type propertyType, ManagedAnimatedPropertyMetadata metadata = null)
         {
             ValidateDuplicatedName(ownerClassType, name);
             ValidateInheritanceFromManagedObject(ownerClassType);
 
             if (metadata == null)
-                metadata = ManagedSimplePropertyMetadata.DefaultFor(propertyType);
+                metadata = ManagedAnimatedPropertyMetadata.DefaultFor(propertyType);
 
-            var prop = new ManagedSimpleProperty(ownerClassType, name, propertyType, metadata);
+            var prop = new ManagedAnimatedProperty(ownerClassType, name, propertyType, metadata);
 
             var propertyKey = new PropertyKey(ownerClassType, name);
 

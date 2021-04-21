@@ -38,7 +38,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty DeltaControlPointProperty = ManagedProperty.Register(typeof(RelativeQuadraticBezierPathElement),
             nameof(DeltaControlPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
+            new ManagedAnimatedPropertyMetadata(new PointF(0.0f, 0.0f)));
 
         #endregion
 
@@ -54,7 +54,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeQuadraticBezierPathElement),
             nameof(DeltaEndPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
+            new ManagedAnimatedPropertyMetadata(new PointF(0.0f, 0.0f)));
 
         #endregion
     }

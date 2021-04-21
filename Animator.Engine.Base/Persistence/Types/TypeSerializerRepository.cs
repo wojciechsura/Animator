@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 using System.Drawing;
 using System.Collections.Generic;
 
-namespace Animator.Engine.Persistence.Types
+namespace Animator.Engine.Base.Persistence.Types
 {
     public class TypeSerializerRepository
 	{

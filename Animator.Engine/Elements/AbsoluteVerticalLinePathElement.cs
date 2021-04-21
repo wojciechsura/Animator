@@ -32,7 +32,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty YProperty = ManagedProperty.Register(typeof(AbsoluteVerticalLinePathElement),
             nameof(Y),
             typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+            new ManagedAnimatedPropertyMetadata(0.0f));
 
         #endregion
     }

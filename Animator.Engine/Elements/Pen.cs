@@ -29,7 +29,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty ColorProperty = ManagedProperty.Register(typeof(Pen),
             nameof(Color),
             typeof(System.Drawing.Color),
-            new ManagedSimplePropertyMetadata(System.Drawing.Color.Black));
+            new ManagedAnimatedPropertyMetadata(System.Drawing.Color.Black));
 
         #endregion
 
@@ -44,7 +44,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty WidthProperty = ManagedProperty.Register(typeof(Pen),
             nameof(Width),
             typeof(float),
-            new ManagedSimplePropertyMetadata(1.0f));
+            new ManagedAnimatedPropertyMetadata(1.0f));
 
         #endregion
     }

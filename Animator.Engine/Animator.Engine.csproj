@@ -9,27 +9,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Persistence\Types\TypeSerializerRepository.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>TypeSerializerRepository.cs</LastGenOutput>
-    </None>
+    <ProjectReference Include="..\Animator.Engine.Base\Animator.Engine.Base.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Persistence\Types\TypeSerializerRepository.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>TypeSerializerRepository.tt</DependentUpon>
-    </Compile>
-    <Compile Update="Persistence\Types\TypeHandlerRepository.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>TypeHandlerRepository.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,5 @@
 ﻿using Animator.Engine.Base;
-using Animator.Engine.Persistence;
+using Animator.Engine.Base.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -74,7 +74,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty BackgroundProperty = ManagedProperty.Register(typeof(Scene),
             nameof(Background),
             typeof(Brush),
-            new ManagedSimplePropertyMetadata(null));
+            new ManagedAnimatedPropertyMetadata(null));
 
         #endregion
     }

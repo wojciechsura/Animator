@@ -1,7 +1,8 @@
 ﻿using Animator.Engine.Base;
-using Animator.Engine.Persistence;
+using Animator.Engine.Base.Persistence;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,8 @@ namespace Animator.Engine.Tests.TestClasses
     [ContentProperty(nameof(SimpleCollectionClass.Items))]
     public class SimpleCollectionClass : ManagedObject
     {
-        #region Items managed property
+
+        #region Items managed collection
 
         public List<SimplePropertyClass> Items
         {
@@ -22,6 +24,6 @@ namespace Animator.Engine.Tests.TestClasses
             nameof(Items),
             typeof(List<SimplePropertyClass>));
 
-        #endregion
+        #endregion        
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Engine.Persistence
+namespace Animator.Engine.Base.Persistence
 {
     public class NamespaceDefinition
     {

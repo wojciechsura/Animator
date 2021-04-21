@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Engine.Persistence.Types
+namespace Animator.Engine.Base.Persistence.Types
 {
     public static class TypeSerialization
     {
@@ -12,7 +12,7 @@ namespace Animator.Engine.Persistence.Types
         {
             if (TypeSerializerRepository.Supports(type))
             {
-                var serializer = TypeSerializerRepository.GetSerializerFor(type);                
+                var serializer = TypeSerializerRepository.GetSerializerFor(type);
                 return serializer.CanDeserialize(value);
             }
 

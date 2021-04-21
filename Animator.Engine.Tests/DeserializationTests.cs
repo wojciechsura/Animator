@@ -1,11 +1,13 @@
 ﻿using Animator.Engine.Base;
-using Animator.Engine.Persistence;
+using Animator.Engine.Base.Persistence.Types;
+using Animator.Engine.Base.Persistence;
 using Animator.Engine.Tests.TestClasses;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using System.Collections.ObjectModel;
 
 namespace Animator.Engine.Tests
 {
@@ -214,7 +216,7 @@ namespace Animator.Engine.Tests
             var serializer = new ManagedObjectSerializer();
             var options = new DeserializationOptions
             {
-                CustomSerializers = new Dictionary<Type, Persistence.Types.TypeSerializer>
+                CustomSerializers = new Dictionary<Type, TypeSerializer>
                 {
                     { typeof(int), new CustomIntSerializer() },
                 }
@@ -242,7 +244,7 @@ namespace Animator.Engine.Tests
             var serializer = new ManagedObjectSerializer();
             var options = new DeserializationOptions
             {
-                CustomSerializers = new Dictionary<Type, Persistence.Types.TypeSerializer>
+                CustomSerializers = new Dictionary<Type, TypeSerializer>
                 {
                     { typeof(List<int>), new CustomIntListSerializer() }
                 }

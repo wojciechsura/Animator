@@ -1,4 +1,4 @@
-﻿using Animator.Engine.Persistence.Types;
+﻿using Animator.Engine.Base.Persistence.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +9,20 @@ namespace Animator.Engine.Base
 {
     public delegate object CoerceValueDelegate(ManagedObject obj, object baseValue);
 
-    public class ManagedSimplePropertyMetadata : BasePropertyMetadata
+    public class ManagedAnimatedPropertyMetadata : BasePropertyMetadata
     {
         // Private static fields ----------------------------------------------
 
-        private static readonly Dictionary<Type, ManagedSimplePropertyMetadata> defaultMetadata = new();
+        private static readonly Dictionary<Type, ManagedAnimatedPropertyMetadata> defaultMetadata = new();
 
         // Public static methods ----------------------------------------------
 
-        public static ManagedSimplePropertyMetadata DefaultFor(Type type)
+        public static ManagedAnimatedPropertyMetadata DefaultFor(Type type)
         {
-            if (!defaultMetadata.TryGetValue(type, out ManagedSimplePropertyMetadata metadata))
+            if (!defaultMetadata.TryGetValue(type, out ManagedAnimatedPropertyMetadata metadata))
             {
                 object defaultValue = type.IsValueType ? Activator.CreateInstance(type) : null;
-                metadata = new ManagedSimplePropertyMetadata(defaultValue);
+                metadata = new ManagedAnimatedPropertyMetadata(defaultValue);
 
                 defaultMetadata[type] = metadata;
             }
@@ -32,7 +32,7 @@ namespace Animator.Engine.Base
 
         // Public methods -----------------------------------------------------
 
-        public ManagedSimplePropertyMetadata(object defaultValue = null, CoerceValueDelegate coerceValueHandler = null, TypeSerializer customSerializer = null)
+        public ManagedAnimatedPropertyMetadata(object defaultValue = null, CoerceValueDelegate coerceValueHandler = null, TypeSerializer customSerializer = null)
         {
             DefaultValue = defaultValue;
             CoerceValueHandler = coerceValueHandler;

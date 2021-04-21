@@ -20,7 +20,7 @@ namespace Animator.Engine.Tests.TestClasses
         public static ManagedProperty IntValueProperty = ManagedProperty.Register(typeof(SimplePropertyClass), 
             nameof(IntValue), 
             typeof(int), 
-            new ManagedSimplePropertyMetadata(0));
+            new ManagedAnimatedPropertyMetadata(0));
 
         #endregion
     }

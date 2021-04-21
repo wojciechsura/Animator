@@ -1,5 +1,6 @@
-﻿using Animator.Engine.Elements;
-using Animator.Engine.Persistence;
+﻿using Animator.Engine.Base.Persistence;
+using Animator.Engine.Base.Persistence.Types;
+using Animator.Engine.Elements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace Animator.Engine.Elements.Persistence
             {
                 DefaultNamespace = new NamespaceDefinition(Assembly.GetExecutingAssembly().FullName,
                     typeof(Animation).Namespace),
-                CustomSerializers = new Dictionary<Type, Engine.Persistence.Types.TypeSerializer>
+                CustomSerializers = new Dictionary<Type, TypeSerializer>
                 {
                     { typeof(Brush), new BrushSerializer() },
                     { typeof(List<PathElement>), new PathElementsSerializer() }

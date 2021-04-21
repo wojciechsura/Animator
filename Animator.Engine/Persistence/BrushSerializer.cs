@@ -1,6 +1,6 @@
 ﻿using Animator.Engine.Base;
-using Animator.Engine.Exceptions;
-using Animator.Engine.Persistence.Types;
+using Animator.Engine.Base.Persistence.Types;
+using Animator.Engine.Base.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
