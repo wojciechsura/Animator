@@ -21,6 +21,7 @@ namespace Animator.Engine.Persistence.Types
 
         private class ByteSerializer : TypeSerializer
 		{
+			public override bool CanSerialize(object obj) => obj is byte;
 			public override bool CanDeserialize(string str) => byte.TryParse(str, out _);
 			public override object Deserialize(string str) => byte.Parse(str);
 			public override string Serialize(object obj) => ((byte)obj).ToString(CultureInfo.InvariantCulture);
@@ -28,6 +29,7 @@ namespace Animator.Engine.Persistence.Types
 
         private class SbyteSerializer : TypeSerializer
 		{
+			public override bool CanSerialize(object obj) => obj is sbyte;
 			public override bool CanDeserialize(string str) => sbyte.TryParse(str, out _);
 			public override object Deserialize(string str) => sbyte.Parse(str);
 			public override string Serialize(object obj) => ((sbyte)obj).ToString(CultureInfo.InvariantCulture);
@@ -35,6 +37,7 @@ namespace Animator.Engine.Persistence.Types
 
         private class ShortSerializer : TypeSerializer
 		{
+			public override bool CanSerialize(object obj) => obj is short;
 			public override bool CanDeserialize(string str) => short.TryParse(str, out _);
 			public override object Deserialize(string str) => short.Parse(str);
 			public override string Serialize(object obj) => ((short)obj).ToString(CultureInfo.InvariantCulture);
@@ -42,6 +45,7 @@ namespace Animator.Engine.Persistence.Types
 
         private class UshortSerializer : TypeSerializer
 		{
+			public override bool CanSerialize(object obj) => obj is ushort;
 			public override bool CanDeserialize(string str) => ushort.TryParse(str, out _);
 			public override object Deserialize(string str) => ushort.Parse(str);
 			public override string Serialize(object obj) => ((ushort)obj).ToString(CultureInfo.InvariantCulture);
@@ -49,6 +53,7 @@ namespace Animator.Engine.Persistence.Types
 
         private class IntSerializer : TypeSerializer
 		{
+			public override bool CanSerialize(object obj) => obj is int;
 			public override bool CanDeserialize(string str) => int.TryParse(str, out _);
 			public override object Deserialize(string str) => int.Parse(str);
 			public override string Serialize(object obj) => ((int)obj).ToString(CultureInfo.InvariantCulture);
@@ -56,6 +61,7 @@ namespace Animator.Engine.Persistence.Types
 
         private class UintSerializer : TypeSerializer
 		{
+			public override bool CanSerialize(object obj) => obj is uint;
 			public override bool CanDeserialize(string str) => uint.TryParse(str, out _);
 			public override object Deserialize(string str) => uint.Parse(str);
 			public override string Serialize(object obj) => ((uint)obj).ToString(CultureInfo.InvariantCulture);
@@ -63,6 +69,7 @@ namespace Animator.Engine.Persistence.Types
 
         private class LongSerializer : TypeSerializer
 		{
+			public override bool CanSerialize(object obj) => obj is long;
 			public override bool CanDeserialize(string str) => long.TryParse(str, out _);
 			public override object Deserialize(string str) => long.Parse(str);
 			public override string Serialize(object obj) => ((long)obj).ToString(CultureInfo.InvariantCulture);
@@ -70,6 +77,7 @@ namespace Animator.Engine.Persistence.Types
 
         private class UlongSerializer : TypeSerializer
 		{
+			public override bool CanSerialize(object obj) => obj is ulong;
 			public override bool CanDeserialize(string str) => ulong.TryParse(str, out _);
 			public override object Deserialize(string str) => ulong.Parse(str);
 			public override string Serialize(object obj) => ((ulong)obj).ToString(CultureInfo.InvariantCulture);
@@ -77,6 +85,7 @@ namespace Animator.Engine.Persistence.Types
 
         private class FloatSerializer : TypeSerializer
 		{
+			public override bool CanSerialize(object obj) => obj is float;
 			public override bool CanDeserialize(string str) => float.TryParse(str, out _);
 			public override object Deserialize(string str) => float.Parse(str);
 			public override string Serialize(object obj) => ((float)obj).ToString(CultureInfo.InvariantCulture);
@@ -84,6 +93,7 @@ namespace Animator.Engine.Persistence.Types
 
         private class DoubleSerializer : TypeSerializer
 		{
+			public override bool CanSerialize(object obj) => obj is double;
 			public override bool CanDeserialize(string str) => double.TryParse(str, out _);
 			public override object Deserialize(string str) => double.Parse(str);
 			public override string Serialize(object obj) => ((double)obj).ToString(CultureInfo.InvariantCulture);
@@ -91,6 +101,7 @@ namespace Animator.Engine.Persistence.Types
 
 		private class StringSerializer : TypeSerializer
 		{
+			public override bool CanSerialize(object obj) => obj is string;
 			public override bool CanDeserialize(string str) => true;
 			public override object Deserialize(string str) => str;
 			public override string Serialize(object obj) => (string)obj;
@@ -102,6 +113,11 @@ namespace Animator.Engine.Persistence.Types
 			private readonly Regex rgbaColorFormat = new Regex("^#[a-fA-F0-9]{8}$");
 			private readonly Regex numRgbColorFormat = new Regex("^[0-9]{,3}(,[0-9]{,3}){2}$");
 			private readonly Regex numRgbaColorFormat = new Regex("^[0-9]{,3}(,[0-9]{,3}){3}$");
+
+			public override bool CanSerialize(object obj)
+			{
+				return obj is System.Drawing.Color;
+			}
 
 			public override bool CanDeserialize(string str)
 			{
@@ -128,19 +144,19 @@ namespace Animator.Engine.Persistence.Types
 				// Format #aabbcc
 				if (rgbColorFormat.IsMatch(str))
                 {
-					int r = Convert.ToInt32(str.Substring(1, 2), 16);
-					int g = Convert.ToInt32(str.Substring(3, 2), 16);
-					int b = Convert.ToInt32(str.Substring(5, 2), 16);
+					int r = Convert.ToInt32(str[1..3], 16);
+					int g = Convert.ToInt32(str[3..5], 16);
+					int b = Convert.ToInt32(str[5..7], 16);
 
 					return Color.FromArgb(255, r, g, b);
                 }
 				
 				if (rgbaColorFormat.IsMatch(str))
                 {
-					int r = Convert.ToInt32(str.Substring(1, 2), 16);
-					int g = Convert.ToInt32(str.Substring(3, 2), 16);
-					int b = Convert.ToInt32(str.Substring(5, 2), 16);
-					int a = Convert.ToInt32(str.Substring(5, 2), 16);
+					int r = Convert.ToInt32(str[1..3], 16);
+					int g = Convert.ToInt32(str[3..5], 16);
+					int b = Convert.ToInt32(str[5..7], 16);
+					int a = Convert.ToInt32(str[7..9], 16);
 
 					return Color.FromArgb(a, r, g, b);
 				}
@@ -196,10 +212,8 @@ namespace Animator.Engine.Persistence.Types
 		{
 			private readonly Regex pointRegex = new Regex("^[0-9]+;[0-9]+$");
 
-			public override bool CanDeserialize(string str)
-			{
-				return pointRegex.IsMatch(str);
-			}
+			public override bool CanSerialize (object obj) => obj is Point;
+			public override bool CanDeserialize(string str) => pointRegex.IsMatch(str);
 
 			public override object Deserialize(string str)
 			{
@@ -228,10 +242,8 @@ namespace Animator.Engine.Persistence.Types
 		{
 			private readonly Regex pointRegex = new Regex("^[0-9]+(\\.[0-9]+)?;[0-9]+(\\.[0-9]+)?$");
 
-			public override bool CanDeserialize(string str)
-			{
-				return pointRegex.IsMatch(str);
-			}
+			public override bool CanSerialize (object obj) => obj is PointF;
+			public override bool CanDeserialize(string str) => pointRegex.IsMatch(str);
 
 			public override object Deserialize(string str)
 			{

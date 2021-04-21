@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Persistence.Types;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,19 +9,23 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Tests.TestClasses
 {
-    public class IntListCustomDeserializer : CustomCollectionSerializer
+    public class CustomIntListSerializer : TypeSerializer
     {
-        public override IList Deserialize(string data)
+        public override bool CanDeserialize(string value) => true;
+
+        public override bool CanSerialize(object obj) => obj is List<int>;
+
+        public override object Deserialize(string data)
         {
             return data.Split(',')
                 .Select(x => int.Parse(x))
                 .ToList();
         }
 
-        public override string Serialize(IList list)
+        public override string Serialize(object obj)
         {
             List<string> data = new();
-            foreach (var item in list)
+            foreach (var item in (IList)obj)
                 data.Add(((int)item).ToString());
 
             return string.Join(',', data);

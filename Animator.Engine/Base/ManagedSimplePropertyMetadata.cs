@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Animator.Engine.Persistence.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,20 +29,20 @@ namespace Animator.Engine.Base
 
             return metadata;
         }
-        
+
         // Public methods -----------------------------------------------------
 
-        public ManagedSimplePropertyMetadata(object defaultValue = null, CoerceValueDelegate coerceValueHandler = null, CustomPropertySerializer serializer = null)
+        public ManagedSimplePropertyMetadata(object defaultValue = null, CoerceValueDelegate coerceValueHandler = null, TypeSerializer customSerializer = null)
         {
             DefaultValue = defaultValue;
             CoerceValueHandler = coerceValueHandler;
-            Serializer = serializer;
+            CustomSerializer = customSerializer;
         }
 
         // Public properties --------------------------------------------------
 
         public object DefaultValue { get; }
         public CoerceValueDelegate CoerceValueHandler { get; }
-        public CustomPropertySerializer Serializer { get; }
+        public TypeSerializer CustomSerializer { get; }
     }
 }

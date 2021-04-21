@@ -21,13 +21,16 @@ namespace Animator.Engine.Persistence
 
         private class DeserializationContext
         {
-            public DeserializationContext(CustomActivator customActivator)
+            public DeserializationContext(CustomActivator customActivator, Dictionary<Type, TypeSerializer> customTypeSerializers)
             {
                 CustomActivator = customActivator;
+                CustomTypeSerializers = customTypeSerializers;
             }
 
             public Dictionary<string, NamespaceDefinition> Namespaces { get; } = new();
+            public HashSet<Type> StaticallyInitializedTypes { get; } = new();
             public CustomActivator CustomActivator { get; }
+            public Dictionary<Type, TypeSerializer> CustomTypeSerializers { get; }
         }
 
         // Private constants --------------------------------------------------
@@ -167,14 +170,14 @@ namespace Animator.Engine.Persistence
 
             if (property is ManagedSimpleProperty simpleProperty)
             {
-                if (propertyNode.ChildNodes.Count == 0)
+                if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 0)
                 {
-                    var content = TypeSerialization.Deserialize(propertyNode.InnerText, property.Type);
+                    var content = DeserializePropertyValue(context, simpleProperty, propertyNode.InnerText);
                     deserializedObject.SetValue(property, content);
 
                     propertiesSet.Add(property.Name);
                 }
-                else if (propertyNode.ChildNodes.Count == 1)
+                else if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 1)
                 {
                     var content = DeserializeElement(propertyNode.FirstChild, context);
                     deserializedObject.SetValue(property, content);
@@ -187,15 +190,35 @@ namespace Animator.Engine.Persistence
             }
             else if (property is ManagedCollectionProperty collectionProperty)
             {
-                var list = (IList)deserializedObject.GetValue(property);
-
-                foreach (XmlNode child in propertyNode.ChildNodes)
+                if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 0)
                 {
-                    var content = DeserializeElement(child, context);
-                    list.Add(content);
-                }
+                    var value = DeserializeCollectionPropertyValue(context, collectionProperty, propertyNode.InnerText);
 
-                propertiesSet.Add(property.Name);
+                    if (value != null)
+                    {
+                        IList collection = (IList)deserializedObject.GetValue(collectionProperty);
+
+                        foreach (object obj in value)
+                            collection.Add(obj);
+
+                        propertiesSet.Add(propertyNode.LocalName);
+                    }
+                    else
+                        throw new SerializerException($"Property {propertyNode.LocalName} of {deserializedObject.GetType().Name} is a collection property, but its value is stored in attribute and no custom serializer is provided!",
+                            propertyNode.FindXPath());
+                }
+                else
+                {
+                    var list = (IList)deserializedObject.GetValue(property);
+
+                    foreach (XmlNode child in propertyNode.ChildNodes)
+                    {
+                        var content = DeserializeElement(child, context);
+                        list.Add(content);
+                    }
+
+                    propertiesSet.Add(property.Name);
+                }
             }
             else
                 throw new InvalidOperationException("Unsupported managed property!");
@@ -236,36 +259,23 @@ namespace Animator.Engine.Persistence
 
                 if (managedProperty is ManagedSimpleProperty simpleProperty)
                 {
-                    // 3.1.1 Check for custom serializer
+                    string propertyValue = attribute.Value;
 
-                    object value;
-                    if (simpleProperty.Metadata.Serializer != null)
-                    {
-                        value = simpleProperty.Metadata.Serializer.Deserialize(attribute.Value);
-                    }
-                    else
-                    {
-                        value = TypeSerialization.Deserialize(attribute.Value, simpleProperty.Type);
-                    }
-
-                    // 4. Set value to property and mark as set
+                    object value = DeserializePropertyValue(context, simpleProperty, attribute.Value);
 
                     deserializedObject.SetValue(simpleProperty, value);
                     propertiesSet.Add(attribute.LocalName);
                 }
                 else if (managedProperty is ManagedCollectionProperty collectionProperty)
                 {
-                    // 3.2.1 Check for custom serializer
+                    IList value = DeserializeCollectionPropertyValue(context, collectionProperty, attribute.Value);
 
-                    if (collectionProperty.Metadata.CustomSerializer != null)
+                    if (value != null)
                     {
-                        IList value = collectionProperty.Metadata.CustomSerializer.Deserialize(attribute.Value);
-
                         IList collection = (IList)deserializedObject.GetValue(collectionProperty);
 
-                        if (value != null)
-                            foreach (object obj in value)
-                                collection.Add(obj);
+                        foreach (object obj in value)
+                            collection.Add(obj);
 
                         propertiesSet.Add(attribute.LocalName);
                     }
@@ -276,6 +286,26 @@ namespace Animator.Engine.Persistence
                 else
                     throw new InvalidOperationException("Unsupported property type!");
             }
+        }
+
+        private object DeserializePropertyValue(DeserializationContext context, ManagedSimpleProperty simpleProperty, string propertyValue)
+        {
+            if (simpleProperty.Metadata.CustomSerializer != null && simpleProperty.Metadata.CustomSerializer.CanDeserialize(propertyValue))
+                return simpleProperty.Metadata.CustomSerializer.Deserialize(propertyValue);
+            else if (context.CustomTypeSerializers != null && context.CustomTypeSerializers.TryGetValue(simpleProperty.Type, out TypeSerializer customSerializer) && customSerializer.CanDeserialize(propertyValue))
+                return customSerializer.Deserialize(propertyValue);
+            else
+                return TypeSerialization.Deserialize(propertyValue, simpleProperty.Type);
+        }
+
+        private static IList DeserializeCollectionPropertyValue(DeserializationContext context, ManagedCollectionProperty collectionProperty, string propertyValue)
+        {
+            if (collectionProperty.Metadata.CustomSerializer != null && collectionProperty.Metadata.CustomSerializer.CanDeserialize(propertyValue))
+                return (IList)collectionProperty.Metadata.CustomSerializer.Deserialize(propertyValue);
+            if (context.CustomTypeSerializers != null && context.CustomTypeSerializers.TryGetValue(collectionProperty.Type, out TypeSerializer customSerializer) && customSerializer.CanDeserialize(propertyValue))
+                return (IList)customSerializer.Deserialize(propertyValue);
+
+            return null;
         }
 
         private ManagedObject DeserializeElement(XmlNode node, DeserializationContext context)
@@ -328,17 +358,20 @@ namespace Animator.Engine.Persistence
 
             try
             {
-                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(objType.TypeHandle);
+                // We have to run static initializers manually, because this is not done automatically.
+                // If we don't do that, managed properties will not be registered.
+                StaticInitializeRecursively(context, objType);
 
                 if (context.CustomActivator != null)
                     deserializedObject = (ManagedObject)context.CustomActivator.CreateInstance(objType);
                 else
                     deserializedObject = (ManagedObject)Activator.CreateInstance(objType);
             }
-            catch
+            catch (Exception e)
             {
-                throw new SerializerException($"Type {fullClassTypeName} does not contain public, parameterless constructor!",
-                    node.FindXPath());
+                throw new SerializerException($"Cannot instantiate type {fullClassTypeName}. Check inner exception for details.",
+                    node.FindXPath(),
+                    e);
             }
 
             // 5. Load attributes
@@ -356,6 +389,23 @@ namespace Animator.Engine.Persistence
             return deserializedObject;
         }
 
+        private static void StaticInitializeRecursively(DeserializationContext context, Type objType)
+        {
+            if (context.StaticallyInitializedTypes.Contains(objType))
+                return;
+
+            var type = objType;
+
+            do
+            {
+                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
+                context.StaticallyInitializedTypes.Add(type);
+
+                type = type.BaseType;
+            }
+            while (type != typeof(ManagedObject) && type != typeof(object));
+        }
+
         // Public methods -----------------------------------------------------
 
         public ManagedObject Deserialize(string filename, DeserializationOptions options = null)
@@ -367,7 +417,7 @@ namespace Animator.Engine.Persistence
 
         public ManagedObject Deserialize(XmlDocument document, DeserializationOptions options = null)
         {
-            var context = new DeserializationContext(options?.CustomActivator);
+            var context = new DeserializationContext(options?.CustomActivator, options?.CustomSerializers);
 
             if (options != null)
             {

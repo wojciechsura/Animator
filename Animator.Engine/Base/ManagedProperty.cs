@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ namespace Animator.Engine.Base
     {
         // Private types ------------------------------------------------------
 
+        [DebuggerDisplay("Key: {name}, {ownerType.Name}")]
         private class PropertyKey
         {
             private readonly string name;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Tests.TestClasses
 {
-    public class CustomSerializedClass : ManagedObject
+    public class IntDataClass : ManagedObject
     {
         #region IntValue managed property
 
@@ -17,10 +17,10 @@ namespace Animator.Engine.Tests.TestClasses
             set => SetValue(IntValueProperty, value);
         }
 
-        public static readonly ManagedProperty IntValueProperty = ManagedProperty.Register(typeof(CustomSerializedClass),
+        public static readonly ManagedProperty IntValueProperty = ManagedProperty.Register(typeof(IntDataClass),
             nameof(IntValue),
             typeof(int),
-            new ManagedSimplePropertyMetadata(0, null, new IntFieldCustomSerializer()));
+            new ManagedSimplePropertyMetadata(0));
 
         #endregion
 
@@ -31,10 +31,10 @@ namespace Animator.Engine.Tests.TestClasses
             get => (List<int>)GetValue(IntCollectionProperty);
         }
 
-        public static readonly ManagedProperty IntCollectionProperty = ManagedProperty.RegisterCollection(typeof(CustomSerializedClass),
+        public static readonly ManagedProperty IntCollectionProperty = ManagedProperty.RegisterCollection(typeof(IntDataClass),
             nameof(IntCollection),
             typeof(List<int>),
-            new ManagedCollectionMetadata(() => new List<int>(), new IntListCustomDeserializer()));
+            new ManagedCollectionMetadata(() => new List<int>()));
 
         #endregion
     }

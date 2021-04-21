@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Animator.Engine.Persistence.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,15 +9,14 @@ namespace Animator.Engine.Base
 {
     public class ManagedCollectionMetadata : BasePropertyMetadata
     {
-        public ManagedCollectionMetadata(Func<object> collectionInitializer, CustomCollectionSerializer customSerializer = null)
+        public ManagedCollectionMetadata(Func<object> collectionInitializer, TypeSerializer customSerializer = null)
         {
-            this.CollectionInitializer = collectionInitializer;
+            CollectionInitializer = collectionInitializer;
             CustomSerializer = customSerializer;
         }
 
         public Func<object> CollectionInitializer { get; }
-
-        public CustomCollectionSerializer CustomSerializer { get; }
+        public TypeSerializer CustomSerializer { get; }
 
         internal static ManagedCollectionMetadata DefaultFor(Type propertyType)
         {

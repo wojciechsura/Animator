@@ -48,7 +48,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty ItemsProperty = ManagedProperty.RegisterCollection(typeof(Path),
             nameof(Items),
             typeof(List<PathElement>),
-            new ManagedCollectionMetadata(() => new List<PathElement>(), new PathElementsSerializer()));
+            new ManagedCollectionMetadata(() => new List<PathElement>()));
 
         #endregion
     }

@@ -1,5 +1,6 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Exceptions;
+using Animator.Engine.Persistence.Types;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements.Persistence
 {
-    internal class PathElementsSerializer : CustomCollectionSerializer
+    internal class PathElementsSerializer : TypeSerializer
     {
         // Private constants --------------------------------------------------
 
@@ -243,6 +244,8 @@ namespace Animator.Engine.Elements.Persistence
 
         // Public methods -----------------------------------------------------
 
+        public override bool CanDeserialize(string data) => true;
+
         public override IList Deserialize(string data)
         {
             List<PathElement> result = new List<PathElement>();
@@ -321,14 +324,14 @@ namespace Animator.Engine.Elements.Persistence
             return result;
         }
 
-        public override bool CanSerialize(IList list)
+        public override bool CanSerialize(object obj)
         {
             return true;
         }
 
-        public override string Serialize(IList list)
+        public override string Serialize(object obj)
         {
-            var elementList = list as List<PathElement>;
+            var elementList = obj as List<PathElement>;
 
             if (elementList != null)
                 return string.Join(" ", elementList.Select(e => e.ToPathString()));

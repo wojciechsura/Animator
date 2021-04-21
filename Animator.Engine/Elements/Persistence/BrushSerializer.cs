@@ -9,8 +9,13 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements.Persistence
 {
-    public class BrushSerializer : CustomPropertySerializer
+    public class BrushSerializer : TypeSerializer
     {
+        public override bool CanDeserialize(string value)
+        {
+            return TypeSerialization.CanDeserialize(value, typeof(System.Drawing.Color));
+        }
+
         public override object Deserialize(string data)
         {
             if (TypeSerialization.CanDeserialize(data, typeof(System.Drawing.Color)))

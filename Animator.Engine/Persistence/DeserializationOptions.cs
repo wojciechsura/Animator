@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Animator.Engine.Persistence.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,6 @@ namespace Animator.Engine.Persistence
     {
         public NamespaceDefinition DefaultNamespace { get; init; }
         public CustomActivator CustomActivator { get; init; }
+        public Dictionary<Type, TypeSerializer> CustomSerializers { get; init; }
     }
 }

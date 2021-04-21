@@ -19,7 +19,12 @@ namespace Animator.Engine.Elements.Persistence
             deserializationOptions = new DeserializationOptions
             {
                 DefaultNamespace = new NamespaceDefinition(Assembly.GetExecutingAssembly().FullName,
-                    typeof(Animation).Namespace)
+                    typeof(Animation).Namespace),
+                CustomSerializers = new Dictionary<Type, Engine.Persistence.Types.TypeSerializer>
+                {
+                    { typeof(Brush), new BrushSerializer() },
+                    { typeof(List<PathElement>), new PathElementsSerializer() }
+                }
             };
         }
 

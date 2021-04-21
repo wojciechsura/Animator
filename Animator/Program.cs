@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Animator.Engine.Elements.Persistence;
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Xml;
 
 namespace Animator
 {
@@ -18,7 +22,17 @@ namespace Animator
 "  </Scene>" +
 "</Animation>";
 
-            
+            XmlDocument document = new();
+            document.LoadXml(testAnimation);
+
+            var animationSerializer = new AnimationSerializer();
+            var animation = animationSerializer.Deserialize(document);
+
+
+            var bitmap = new Bitmap(animation.Config.Width, animation.Config.Height, PixelFormat.Format32bppArgb);
+            animation.Scenes[0].Render(bitmap);
+
+            bitmap.Save(@"D:\scene.png");
         }
     }
 }

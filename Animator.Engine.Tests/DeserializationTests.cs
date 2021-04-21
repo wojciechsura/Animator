@@ -203,9 +203,66 @@ namespace Animator.Engine.Tests
         }
 
         [TestMethod]
-        public void CustomPropertySerializationTest()
+        public void GlobalCustomPropertySerializationTest()
         {
-            string xml = "<CustomSerializedClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
+            string xml = "<IntDataClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
+                "IntValue=\"-42\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+            var options = new DeserializationOptions
+            {
+                CustomSerializers = new Dictionary<Type, Persistence.Types.TypeSerializer>
+                {
+                    { typeof(int), new CustomIntSerializer() },
+                }
+            };
+
+            // Act
+
+            IntDataClass deserialized = (IntDataClass)serializer.Deserialize(document, options);
+
+            // Assert
+
+            Assert.IsNotNull(deserialized);
+            Assert.AreEqual(42, deserialized.IntValue);
+        }
+
+        [TestMethod]
+        public void GlobalCustomCollectionSerializationTest()
+        {
+            string xml = "<IntDataClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
+                "IntCollection=\"4,3,2,1\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+            var options = new DeserializationOptions
+            {
+                CustomSerializers = new Dictionary<Type, Persistence.Types.TypeSerializer>
+                {
+                    { typeof(List<int>), new CustomIntListSerializer() }
+                }
+            };
+
+            // Act
+
+            IntDataClass deserialized = (IntDataClass)serializer.Deserialize(document, options);
+
+            // Assert
+
+            Assert.IsNotNull(deserialized);
+            Assert.AreEqual(4, deserialized.IntCollection.Count);
+            Assert.AreEqual(4, deserialized.IntCollection[0]);
+        }
+
+        [TestMethod]
+        public void PerPropertyCustomSerializationTest1()
+        {
+            string xml = "<CustomSerializedIntDataClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
                 "IntValue=\"-42\" />";
 
             XmlDocument document = new XmlDocument();
@@ -215,7 +272,7 @@ namespace Animator.Engine.Tests
 
             // Act
 
-            CustomSerializedClass deserialized = (CustomSerializedClass)serializer.Deserialize(document);
+            CustomSerializedIntDataClass deserialized = (CustomSerializedIntDataClass)serializer.Deserialize(document);
 
             // Assert
 
@@ -224,9 +281,9 @@ namespace Animator.Engine.Tests
         }
 
         [TestMethod]
-        public void CustomCollectionSerializationTest()
+        public void PerPropertyCustomCollectionSerializationTest1()
         {
-            string xml = "<CustomSerializedClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
+            string xml = "<CustomSerializedIntDataClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
                 "IntCollection=\"4,3,2,1\" />";
 
             XmlDocument document = new XmlDocument();
@@ -236,7 +293,52 @@ namespace Animator.Engine.Tests
 
             // Act
 
-            CustomSerializedClass deserialized = (CustomSerializedClass)serializer.Deserialize(document);
+            CustomSerializedIntDataClass deserialized = (CustomSerializedIntDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(deserialized);
+            Assert.AreEqual(4, deserialized.IntCollection.Count);
+            Assert.AreEqual(4, deserialized.IntCollection[0]);
+        }
+
+        [TestMethod]
+        public void PerPropertyCustomSerializationTest2()
+        {
+            string xml = "<CustomSerializedIntDataClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\">" +
+                "  <CustomSerializedIntDataClass.IntValue>-42</CustomSerializedIntDataClass.IntValue>" +
+                "</CustomSerializedIntDataClass>";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            CustomSerializedIntDataClass deserialized = (CustomSerializedIntDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(deserialized);
+            Assert.AreEqual(42, deserialized.IntValue);
+        }
+
+        [TestMethod]
+        public void PerPropertyCustomCollectionSerializationTest2()
+        {
+            string xml = "<CustomSerializedIntDataClass xmlns=\"assembly=Animator.Engine.Tests;namespace=Animator.Engine.Tests.TestClasses\">" +
+                "  <CustomSerializedIntDataClass.IntCollection>4,3,2,1</CustomSerializedIntDataClass.IntCollection>" +
+                "</CustomSerializedIntDataClass>";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            CustomSerializedIntDataClass deserialized = (CustomSerializedIntDataClass)serializer.Deserialize(document);
 
             // Assert
 
