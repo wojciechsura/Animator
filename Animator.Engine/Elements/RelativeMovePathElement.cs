@@ -1,40 +1,39 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Utils;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
     public class RelativeMovePathElement : PathElement
     {
-        public override string ToPathString() => $"m {F(DX)} {F(DY)}";
+        // Public methods -----------------------------------------------------
 
+        public override string ToPathString() => $"m {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
-        #region DX managed property
-
-        public float DX
+        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
         {
-            get => (float)GetValue(DXProperty);
-            set => SetValue(DXProperty, value);
+            path.StartFigure();
+
+            PointF endPoint = start.Add(DeltaEndPoint);
+
+            return (endPoint, endPoint);
         }
 
-        public static readonly ManagedProperty DXProperty = ManagedProperty.Register(typeof(RelativeMovePathElement),
-            nameof(DX),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+        // Public properties --------------------------------------------------
 
-        #endregion
+        #region DeltaEndPoint managed property
 
-
-        #region DY managed property
-
-        public float DY
+        public PointF DeltaEndPoint
         {
-            get => (float)GetValue(DYProperty);
-            set => SetValue(DYProperty, value);
+            get => (PointF)GetValue(DeltaEndPointProperty);
+            set => SetValue(DeltaEndPointProperty, value);
         }
 
-        public static readonly ManagedProperty DYProperty = ManagedProperty.Register(typeof(RelativeMovePathElement),
-            nameof(DY),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+        public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeMovePathElement),
+            nameof(DeltaEndPoint),
+            typeof(PointF),
+            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
 
         #endregion
     }

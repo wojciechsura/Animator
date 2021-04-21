@@ -1,40 +1,44 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Utils;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
-    public class AbsoluteQuadraticShorthandBezierPathElement : PathElement
+    public class AbsoluteQuadraticShorthandBezierPathElement : BaseQuadraticBezierPathElement
     {
-        public override string ToPathString() => $"T {F(X)} {F(Y)}";
+        // Protected methods --------------------------------------------------
 
-
-        #region X managed property
-
-        public float X
+        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
         {
-            get => (float)GetValue(XProperty);
-            set => SetValue(XProperty, value);
+            var delta = start.Subtract(lastControlPoint);
+            var controlPoint = start.Add(delta);
+
+            (var controlPoint1, var controlPoint2) = EstimateCubicControlPoints(start, controlPoint, EndPoint);
+
+            path.AddBezier(start, controlPoint1, controlPoint2, EndPoint);
+
+            return (EndPoint, controlPoint);
         }
 
-        public static readonly ManagedProperty XProperty = ManagedProperty.Register(typeof(AbsoluteQuadraticShorthandBezierPathElement),
-            nameof(X),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+        // Public methpds -----------------------------------------------------
 
-        #endregion
+        public override string ToPathString() => $"T {F(EndPoint.X)} {F(EndPoint.Y)}";
 
+        // Public properties --------------------------------------------------
 
-        #region Y managed property
+        #region EndPoint managed property
 
-        public float Y
+        public PointF EndPoint
         {
-            get => (float)GetValue(YProperty);
-            set => SetValue(YProperty, value);
+            get => (PointF)GetValue(EndPointProperty);
+            set => SetValue(EndPointProperty, value);
         }
 
-        public static readonly ManagedProperty YProperty = ManagedProperty.Register(typeof(AbsoluteQuadraticShorthandBezierPathElement),
-            nameof(Y),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+        public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(AbsoluteQuadraticShorthandBezierPathElement),
+            nameof(EndPoint),
+            typeof(PointF),
+            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
 
         #endregion
     }

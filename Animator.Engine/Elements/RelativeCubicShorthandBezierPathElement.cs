@@ -1,73 +1,62 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Utils;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
     public class RelativeCubicShorthandBezierPathElement : PathElement
     {
-        public override string ToPathString() => $"s {F(DX2)} {F(DY2)} {F(DX)} {F(DY)}";
+        // Protected methods --------------------------------------------------
 
-
-        #region DX2 managed property
-
-        public float DX2
+        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
         {
-            get => (float)GetValue(DX2Property);
-            set => SetValue(DX2Property, value);
+            var delta = start.Subtract(lastControlPoint);
+            var controlPoint1 = start.Add(delta);
+
+            RunningPoint point = new RunningPoint(start);
+
+            PointF controlPoint2 = point.Delta(DeltaControlPoint2);
+            PointF endPoint = point.Delta(DeltaEndPoint);
+            path.AddBezier(point.Current, controlPoint1, controlPoint2, endPoint);
+
+            return (endPoint, controlPoint2);
         }
 
-        public static readonly ManagedProperty DX2Property = ManagedProperty.Register(typeof(RelativeCubicShorthandBezierPathElement),
-            nameof(DX2),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+        // Public methods -----------------------------------------------------
+
+        public override string ToPathString() => $"s {F(DeltaControlPoint2.X)} {F(DeltaControlPoint2.Y)} {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
+
+        // Public properties --------------------------------------------------
+
+        #region DeltaControlPoint2 managed property
+
+        public PointF DeltaControlPoint2
+        {
+            get => (PointF)GetValue(DeltaControlPoint2Property);
+            set => SetValue(DeltaControlPoint2Property, value);
+        }
+
+        public static readonly ManagedProperty DeltaControlPoint2Property = ManagedProperty.Register(typeof(RelativeCubicShorthandBezierPathElement),
+            nameof(DeltaControlPoint2),
+            typeof(PointF),
+            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
 
         #endregion
 
+        #region DeltaEndPoint managed property
 
-        #region DY2 managed property
-
-        public float DY2
+        public PointF DeltaEndPoint
         {
-            get => (float)GetValue(DY2Property);
-            set => SetValue(DY2Property, value);
+            get => (PointF)GetValue(DeltaEndPointProperty);
+            set => SetValue(DeltaEndPointProperty, value);
         }
 
-        public static readonly ManagedProperty DY2Property = ManagedProperty.Register(typeof(RelativeCubicShorthandBezierPathElement),
-            nameof(DY2),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+        public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeCubicShorthandBezierPathElement),
+            nameof(DeltaEndPoint),
+            typeof(PointF),
+            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
 
         #endregion
-
-
-        #region DX managed property
-
-        public float DX
-        {
-            get => (float)GetValue(DXProperty);
-            set => SetValue(DXProperty, value);
-        }
-
-        public static readonly ManagedProperty DXProperty = ManagedProperty.Register(typeof(RelativeCubicShorthandBezierPathElement),
-            nameof(DX),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
-
-        #endregion
-
-
-        #region DY managed property
-
-        public float DY
-        {
-            get => (float)GetValue(DYProperty);
-            set => SetValue(DYProperty, value);
-        }
-
-        public static readonly ManagedProperty DYProperty = ManagedProperty.Register(typeof(RelativeCubicShorthandBezierPathElement),
-            nameof(DY),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
-
-        #endregion        
     }
 }

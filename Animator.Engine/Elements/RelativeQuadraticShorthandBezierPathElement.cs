@@ -1,38 +1,46 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Utils;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
-    public class RelativeQuadraticShorthandBezierPathElement : PathElement
+    public class RelativeQuadraticShorthandBezierPathElement : BaseQuadraticBezierPathElement
     {
-        public override string ToPathString() => $"t {F(DX)} {F(DY)}";
+        // Protected methods --------------------------------------------------
 
-        #region DX managed property
-
-        public float DX
+        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
         {
-            get => (float)GetValue(DXProperty);
-            set => SetValue(DXProperty, value);
+            var delta = start.Subtract(lastControlPoint);
+            var controlPoint = start.Add(delta);
+
+            var end = start.Add(DeltaEndPoint);
+
+            (var controlPoint1, var controlPoint2) = EstimateCubicControlPoints(start, controlPoint, end);
+
+            path.AddBezier(start, controlPoint1, controlPoint2, end);
+
+            return (end, controlPoint);
         }
 
-        public static readonly ManagedProperty DXProperty = ManagedProperty.Register(typeof(RelativeQuadraticShorthandBezierPathElement),
-            nameof(DX),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+        // Public methods -----------------------------------------------------
 
-        #endregion
+        public override string ToPathString() => $"t {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
-        #region DY managed property
+        // Public properties --------------------------------------------------
 
-        public float DY
+        #region DeltaEndPoint managed property
+
+        public PointF DeltaEndPoint
         {
-            get => (float)GetValue(DYProperty);
-            set => SetValue(DYProperty, value);
+            get => (PointF)GetValue(DeltaEndPointProperty);
+            set => SetValue(DeltaEndPointProperty, value);
         }
 
-        public static readonly ManagedProperty DYProperty = ManagedProperty.Register(typeof(RelativeQuadraticShorthandBezierPathElement),
-            nameof(DY),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+        public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeQuadraticShorthandBezierPathElement),
+            nameof(DeltaEndPoint),
+            typeof(PointF),
+            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
 
         #endregion
     }

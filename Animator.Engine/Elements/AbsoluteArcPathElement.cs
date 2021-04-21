@@ -1,10 +1,22 @@
 ﻿using Animator.Engine.Base;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
-    public class AbsoluteArcPathElement : PathElement
+    public class AbsoluteArcPathElement : BaseArcPathElement
     {
-        public override string ToPathString() => $"A {F(RX)} {F(RY)} {F(XAxisRotation)} {(LargeArcFlag ? 1 : 0)} {(SweepFlag ? 1 : 0)} {F(X)} {F(Y)}";
+        // Public methods -----------------------------------------------------
+
+        public override string ToPathString() => $"A {F(RX)} {F(RY)} {F(Angle)} {(LargeArcFlag ? 1 : 0)} {(SweepFlag ? 1 : 0)} {F(EndPoint.X)} {F(EndPoint.Y)}";
+
+        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
+        {
+            InternalAddToGeometry(start, RX, RY, Angle, LargeArcFlag, SweepFlag, EndPoint, path);
+            return (EndPoint, EndPoint);
+        }
+
+        // Public properties --------------------------------------------------
 
         #region RX managed property
 
@@ -36,21 +48,20 @@ namespace Animator.Engine.Elements
 
         #endregion
 
-        #region XAxisRotation managed property
+        #region Angle managed property
 
-        public float XAxisRotation
+        public float Angle
         {
-            get => (float)GetValue(XAxisRotationProperty);
-            set => SetValue(XAxisRotationProperty, value);
+            get => (float)GetValue(AngleProperty);
+            set => SetValue(AngleProperty, value);
         }
 
-        public static readonly ManagedProperty XAxisRotationProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
-            nameof(XAxisRotation),
+        public static readonly ManagedProperty AngleProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
+            nameof(Angle),
             typeof(float),
             new ManagedSimplePropertyMetadata(0.0f));
 
         #endregion
-
 
         #region LargeArcFlag managed property
 
@@ -67,7 +78,6 @@ namespace Animator.Engine.Elements
 
         #endregion
 
-
         #region SweepFlag managed property
 
         public bool SweepFlag
@@ -83,35 +93,18 @@ namespace Animator.Engine.Elements
 
         #endregion
 
+        #region EndPoint managed property
 
-        #region X managed property
-
-        public float X
+        public PointF EndPoint
         {
-            get => (float)GetValue(XProperty);
-            set => SetValue(XProperty, value);
+            get => (PointF)GetValue(EndPointProperty);
+            set => SetValue(EndPointProperty, value);
         }
 
-        public static readonly ManagedProperty XProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
-            nameof(X),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0));
-
-        #endregion
-
-
-        #region Y managed property
-
-        public float Y
-        {
-            get => (float)GetValue(YProperty);
-            set => SetValue(YProperty, value);
-        }
-
-        public static readonly ManagedProperty YProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
-            nameof(Y),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0));
+        public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
+            nameof(EndPoint),
+            typeof(PointF),
+            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
 
         #endregion
     }

@@ -3,6 +3,7 @@ using Animator.Engine.Exceptions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -79,11 +80,10 @@ namespace Animator.Engine.Elements.Persistence
             {
                 RX = ExpectFloat(data, ref index),
                 RY = ExpectFloat(data, ref index),
-                XAxisRotation = ExpectFloat(data, ref index),
+                Angle = ExpectFloat(data, ref index),
                 LargeArcFlag = ExpectInt(data, ref index) == 1,
                 SweepFlag = ExpectInt(data, ref index) == 1,
-                DX = ExpectFloat(data, ref index),
-                DY = ExpectFloat(data, ref index)
+                DeltaEndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
@@ -93,11 +93,10 @@ namespace Animator.Engine.Elements.Persistence
             {
                 RX = ExpectFloat(data, ref index),
                 RY = ExpectFloat(data, ref index),
-                XAxisRotation = ExpectFloat(data, ref index),
+                Angle = ExpectFloat(data, ref index),
                 LargeArcFlag = ExpectInt(data, ref index) == 1,
                 SweepFlag = ExpectInt(data, ref index) == 1,
-                X = ExpectFloat(data, ref index),
-                Y = ExpectFloat(data, ref index)
+                EndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
@@ -105,8 +104,7 @@ namespace Animator.Engine.Elements.Persistence
         {
             return new RelativeQuadraticShorthandBezierPathElement()
             {
-                DX = ExpectFloat(data, ref index),
-                DY = ExpectFloat(data, ref index)
+                DeltaEndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
@@ -114,8 +112,7 @@ namespace Animator.Engine.Elements.Persistence
         {
             return new AbsoluteQuadraticShorthandBezierPathElement()
             {
-                X = ExpectFloat(data, ref index),
-                Y = ExpectFloat(data, ref index)
+                EndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
@@ -123,10 +120,8 @@ namespace Animator.Engine.Elements.Persistence
         {
             return new RelativeQuadraticBezierPathElement
             {
-                DX1 = ExpectFloat(data, ref index),
-                DY1 = ExpectFloat(data, ref index),
-                DX = ExpectFloat(data, ref index),
-                DY = ExpectFloat(data, ref index)
+                DeltaControlPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
+                DeltaEndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
@@ -134,10 +129,8 @@ namespace Animator.Engine.Elements.Persistence
         {
             return new AbsoluteQuadraticBezierPathElement
             {
-                X1 = ExpectFloat(data, ref index),
-                Y1 = ExpectFloat(data, ref index),
-                X = ExpectFloat(data, ref index),
-                Y = ExpectFloat(data, ref index)
+                ControlPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
+                EndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
@@ -145,10 +138,8 @@ namespace Animator.Engine.Elements.Persistence
         {
             return new RelativeCubicShorthandBezierPathElement
             {
-                DX2 = ExpectFloat(data, ref index),
-                DY2 = ExpectFloat(data, ref index),
-                DX = ExpectFloat(data, ref index),
-                DY = ExpectFloat(data, ref index)
+                DeltaControlPoint2 = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
+                DeltaEndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
@@ -156,10 +147,8 @@ namespace Animator.Engine.Elements.Persistence
         {
             return new AbsoluteCubicShorthandBezierPathElement
             {
-                X2 = ExpectFloat(data, ref index),
-                Y2 = ExpectFloat(data, ref index),
-                X = ExpectFloat(data, ref index),
-                Y = ExpectFloat(data, ref index)
+                ControlPoint2 = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
+                EndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
@@ -167,12 +156,9 @@ namespace Animator.Engine.Elements.Persistence
         {
             return new RelativeCubicBezierPathElement
             {
-                DX1 = ExpectFloat(data, ref index),
-                DY1 = ExpectFloat(data, ref index),
-                DX2 = ExpectFloat(data, ref index),
-                DY2 = ExpectFloat(data, ref index),
-                DX = ExpectFloat(data, ref index),
-                DY = ExpectFloat(data, ref index)
+                DeltaControlPoint1 = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
+                DeltaControlPoint2 = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
+                DeltaEndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
@@ -180,12 +166,9 @@ namespace Animator.Engine.Elements.Persistence
         {
             return new AbsoluteCubicBezierPathElement
             {
-                X1 = ExpectFloat(data, ref index),
-                Y1 = ExpectFloat(data, ref index),
-                X2 = ExpectFloat(data, ref index),
-                Y2 = ExpectFloat(data, ref index),
-                X = ExpectFloat(data, ref index),
-                Y = ExpectFloat(data, ref index)
+                ControlPoint1 = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
+                ControlPoint2 = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
+                EndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
@@ -230,8 +213,7 @@ namespace Animator.Engine.Elements.Persistence
         {
             return new RelativeLinePathElement
             {
-                DX = ExpectFloat(data, ref index),
-                DY = ExpectFloat(data, ref index)
+                DeltaEndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
@@ -239,8 +221,7 @@ namespace Animator.Engine.Elements.Persistence
         {
             return new AbsoluteLinePathElement
             {
-                X = ExpectFloat(data, ref index),
-                Y = ExpectFloat(data, ref index)
+                EndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
@@ -248,8 +229,7 @@ namespace Animator.Engine.Elements.Persistence
         {
             return new RelativeMovePathElement
             {
-                DX = ExpectFloat(data, ref index),
-                DY = ExpectFloat(data, ref index)
+                DeltaEndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
@@ -257,8 +237,7 @@ namespace Animator.Engine.Elements.Persistence
         {
             return new AbsoluteMovePathElement
             {
-                X = ExpectFloat(data, ref index),
-                Y = ExpectFloat(data, ref index)
+                EndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 

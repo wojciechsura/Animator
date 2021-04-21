@@ -1,40 +1,39 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Utils;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
     public class RelativeLinePathElement : PathElement
     {
-        public override string ToPathString() => $"l {F(DX)} {F(DY)}";
-
-
-        #region DX managed property
-
-        public float DX
+        protected override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PathElement lastElement, PointF lastControlPoint, GraphicsPath path)
         {
-            get => (float)GetValue(DXProperty);
-            set => SetValue(DXProperty, value);
+            var end = start.Add(DeltaEndPoint);
+
+            path.AddLine(start, end);
+
+            return (end, end);
         }
 
-        public static readonly ManagedProperty DXProperty = ManagedProperty.Register(typeof(RelativeLinePathElement),
-            nameof(DX),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+        // Public methods -----------------------------------------------------
 
-        #endregion
+        public override string ToPathString() => $"l {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
+        // Public properties --------------------------------------------------
 
-        #region DY managed property
+        #region DeltaEndPoint managed property
 
-        public float DY
+        public PointF DeltaEndPoint
         {
-            get => (float)GetValue(DYProperty);
-            set => SetValue(DYProperty, value);
+            get => (PointF)GetValue(DeltaEndPointProperty);
+            set => SetValue(DeltaEndPointProperty, value);
         }
 
-        public static readonly ManagedProperty DYProperty = ManagedProperty.Register(typeof(RelativeLinePathElement),
-            nameof(DY),
-            typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+        public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeLinePathElement),
+            nameof(DeltaEndPoint),
+            typeof(PointF),
+            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
 
         #endregion
     }
