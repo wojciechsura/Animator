@@ -35,7 +35,9 @@ namespace Animator.Engine.Elements
         {
             var originalTransform = graphics.Transform;
 
-            graphics.Transform.Multiply(BuildTransformMatrix(), MatrixOrder.Prepend);
+            var transform = originalTransform.Clone();
+            transform.Multiply(BuildTransformMatrix(), MatrixOrder.Prepend);
+            graphics.Transform = transform;
 
             InternalRender(bitmap, graphics);
 
