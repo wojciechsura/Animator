@@ -20,7 +20,7 @@ namespace Animator.Engine.Elements
             PointF start = new PointF(0.0f, 0.0f);
             PointF lastControlPoint = new PointF(0.0f, 0.0f);
 
-            foreach (var pathElement in Items)
+            foreach (var pathElement in Definition)
                 (start, lastControlPoint) = pathElement.AddToGeometry(start, lastControlPoint, path);
 
             if (IsPropertySet(BrushProperty) && Brush != null)
@@ -38,15 +38,15 @@ namespace Animator.Engine.Elements
 
         // Public properties --------------------------------------------------
 
-        #region Items managed collection
+        #region Definition managed collection
 
-        public List<PathElement> Items
+        public List<PathElement> Definition
         {
-            get => (List<PathElement>)GetValue(ItemsProperty);
+            get => (List<PathElement>)GetValue(DefinitionProperty);
         }
 
-        public static readonly ManagedProperty ItemsProperty = ManagedProperty.RegisterCollection(typeof(Path),
-            nameof(Items),
+        public static readonly ManagedProperty DefinitionProperty = ManagedProperty.RegisterCollection(typeof(Path),
+            nameof(Definition),
             typeof(List<PathElement>),
             new ManagedCollectionMetadata(() => new List<PathElement>()));
 
