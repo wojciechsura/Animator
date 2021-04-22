@@ -73,12 +73,12 @@ namespace Animator.Engine.Base
         {
             (object coercedValue, bool coerced) = InternalCoerceValue(property);
 
-            if (coerced && coercedValue != propertyValue.BaseValue)
+            if (coerced && !object.Equals(coercedValue, propertyValue.BaseValue))
                 propertyValue.CoercedValue = coercedValue;
             else
                 propertyValue.ClearCoercedValue();
 
-            if (!oldEffectiveValue.Equals(propertyValue.EffectiveValue))
+            if (!object.Equals(oldEffectiveValue, propertyValue.EffectiveValue))
             {
                 if (property.Metadata.ValueChangedHandler != null)
                     property.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(oldEffectiveValue, propertyValue.EffectiveValue));

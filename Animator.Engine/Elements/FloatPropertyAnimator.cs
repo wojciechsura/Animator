@@ -23,22 +23,11 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty StartTimeProperty = ManagedProperty.Register(typeof(FloatPropertyAnimator),
             nameof(StartTime),
             typeof(TimeSpan),
-            new ManagedSimplePropertyMetadata(TimeSpan.FromMilliseconds(0), HandleStartTimeChanged, CoerceStartTime));
+            new ManagedSimplePropertyMetadata(TimeSpan.FromMilliseconds(0), HandleStartTimeChanged));
         
         private static void HandleStartTimeChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
             sender.CoerceValue(EndTimeProperty);
-        }
-
-        private static object CoerceStartTime(ManagedObject obj, object baseValue)
-        {
-            var endTime = (TimeSpan)obj.GetFinalBaseValue(EndTimeProperty);
-            var startTime = (TimeSpan)baseValue;
-
-            if (startTime < endTime)
-                return startTime;
-            else
-                return endTime;
         }
 
         #endregion
@@ -54,12 +43,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EndTimeProperty = ManagedProperty.Register(typeof(FloatPropertyAnimator),
             nameof(EndTime),
             typeof(TimeSpan),
-            new ManagedSimplePropertyMetadata(TimeSpan.FromMilliseconds(0), HandleEndTimeChanged, CoerceEndTime));
-
-        private static void HandleEndTimeChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
-        {
-            sender.CoerceValue(StartTimeProperty);
-        }
+            new ManagedSimplePropertyMetadata(TimeSpan.FromMilliseconds(0), null, CoerceEndTime));
 
         private static object CoerceEndTime(ManagedObject obj, object baseValue)
         {
@@ -77,6 +61,7 @@ namespace Animator.Engine.Elements
         public TimeSpan Duration
         {
             get => EndTime - StartTime;
+            set => EndTime = StartTime + value;
         }
 
         #region From managed property

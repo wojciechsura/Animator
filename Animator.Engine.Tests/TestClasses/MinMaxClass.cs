@@ -21,19 +21,11 @@ namespace Animator.Engine.Tests.TestClasses
         public static readonly ManagedProperty MinProperty = ManagedProperty.Register(typeof(MinMaxClass),
             nameof(Min),
             typeof(int),
-            new ManagedSimplePropertyMetadata(0, HandleMinChanged, MinCoerce));
+            new ManagedSimplePropertyMetadata(0, HandleMinChanged));
 
         private static void HandleMinChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
             sender.CoerceValue(MaxProperty);
-        }
-
-        private static object MinCoerce(ManagedObject obj, object baseValue)
-        {
-            var min = (int)baseValue;
-            var max = (int)obj.GetFinalBaseValue(MaxProperty);
-
-            return Math.Min(min, max);
         }
 
         #endregion

@@ -219,12 +219,12 @@ namespace Animator.Engine.Tests
 
             cls.Max = 0;
 
-            Assert.AreEqual(0, cls.Min);
+            Assert.AreEqual(10, cls.Min);
             Assert.AreEqual(10, cls.Max);
 
             cls.Min = 20;
 
-            Assert.AreEqual(10, cls.Min);
+            Assert.AreEqual(20, cls.Min);
             Assert.AreEqual(20, cls.Max);
         }
     }

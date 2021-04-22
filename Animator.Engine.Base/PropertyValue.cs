@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Animator.Engine.Base
 {
+    [DebuggerDisplay("Property value; Base = {baseValue}, Animated = {animatedValue}, Coerced = {coercedValue}")]
     internal class PropertyValue
     {
         // Private fields -----------------------------------------------------
