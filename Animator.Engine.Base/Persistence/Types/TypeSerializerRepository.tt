@@ -27,7 +27,7 @@ namespace Animator.Engine.Base.Persistence.Types
 
 <# 
 var autoTypes = new[] { "byte", "sbyte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double" };
-var otherTypes = new[] { "string", "Color" };
+var otherTypes = new[] { "string", "Color", "TimeSpan" };
 
 var pointTypes = new[] { "Point", "PointF" };
 var pointUnderlyingTypes = new[] { "int", "float" };
@@ -193,8 +193,25 @@ for (int i = 0; i < pointTypes.Length; i++)
 
 <#
 }
-
 #>
+        private class TimeSpanSerializer : TypeSerializer
+		{
+			public override bool CanSerialize(object obj) => obj is TimeSpan;
+			public override bool CanDeserialize(string str) => TimeSpan.TryParse(str, CultureInfo.InvariantCulture, out _);
+
+            public override object Deserialize(string str)
+            {
+				if (!TimeSpan.TryParse(str, CultureInfo.InvariantCulture, out TimeSpan result))
+					throw new InvalidCastException($"Invalid TimeSpan format: {str}");
+
+				return result;
+            }
+
+            public override string Serialize(object obj)
+            {
+				return ((TimeSpan)obj).ToString();
+            }
+        }
 
 		// Private static fields -----------------------------------------------------
 

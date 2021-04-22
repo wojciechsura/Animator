@@ -1,4 +1,5 @@
-﻿using Animator.Engine.Elements;
+﻿using Animator.Engine.Animation;
+using Animator.Engine.Elements;
 using Animator.Engine.Elements.Persistence;
 using System;
 using System.Collections.Generic;
@@ -40,7 +41,7 @@ namespace Animator
             var animationSerializer = new AnimationSerializer();
             var animation = animationSerializer.Deserialize(document);
 
-            Dictionary<string, List<BaseElement>> names = new();
+            NameRegistry names = new();
             animation.Scenes.First().FindNamedElements(names);
 
             foreach (var kvp in names)

@@ -9,34 +9,6 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Base
 {
-    public class PropertyValueChangedEventArgs : EventArgs
-    {
-        public PropertyValueChangedEventArgs(ManagedProperty property, object oldValue, object newValue)
-        {
-            Property = property;
-            OldValue = oldValue;
-            NewValue = newValue;
-        }
-
-        public ManagedProperty Property { get; }
-        public object OldValue { get; }
-        public object NewValue { get; }
-    }
-
-    public delegate void PropertyValueChangedDelegate(object sender, PropertyValueChangedEventArgs args);
-
-    public class PropertyBaseValueInvalidatedEventArgs
-    {
-        public PropertyBaseValueInvalidatedEventArgs(ManagedProperty property)
-        {
-            Property = property;
-        }
-
-        public ManagedProperty Property { get; }
-    }
-
-    public delegate void PropertyBaseValueInvalidatedDelegate(object sender, PropertyBaseValueInvalidatedEventArgs args);
-
     public abstract class ManagedObject
     {
         // Private fields -----------------------------------------------------
@@ -101,25 +73,16 @@ namespace Animator.Engine.Base
         {
             (object coercedValue, bool coerced) = InternalCoerceValue(property);
 
-            if (coerced && coercedValue != propertyValue.CoercedValue)
+            if (coerced && coercedValue != propertyValue.BaseValue)
                 propertyValue.CoercedValue = coercedValue;
             else
                 propertyValue.ClearCoercedValue();
 
-            if (oldEffectiveValue != propertyValue.EffectiveValue)
-                OnPropertyValueChanged(property, oldEffectiveValue, propertyValue.EffectiveValue);
-        }
-
-        // Protected methods --------------------------------------------------
-
-        protected virtual void OnPropertyValueChanged(ManagedProperty property, object oldValue, object newValue)
-        {
-            PropertyValueChanged?.Invoke(this, new PropertyValueChangedEventArgs(property, oldValue, newValue));
-        }
-
-        protected virtual void OnPropertyBaseValueInvalidated(ManagedProperty property)
-        {
-            PropertyBaseValueInvalidated?.Invoke(this, new PropertyBaseValueInvalidatedEventArgs(property));
+            if (!oldEffectiveValue.Equals(propertyValue.EffectiveValue))
+            {
+                if (property.Metadata.ValueChangedHandler != null)
+                    property.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(oldEffectiveValue, propertyValue.EffectiveValue));
+            }
         }
 
         // Internal methods ---------------------------------------------------
@@ -247,14 +210,8 @@ namespace Animator.Engine.Base
                 // Coertion
                 CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
 
-                OnPropertyBaseValueInvalidated(property);
+                // Possible notification about base value change goes here
             }
         }
-
-        // Public properties --------------------------------------------------
-
-        public event PropertyValueChangedDelegate PropertyValueChanged;
-
-        public event PropertyBaseValueInvalidatedDelegate PropertyBaseValueInvalidated;
     }
 }

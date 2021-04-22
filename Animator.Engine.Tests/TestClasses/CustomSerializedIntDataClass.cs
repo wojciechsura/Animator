@@ -21,7 +21,7 @@ namespace Animator.Engine.Tests.TestClasses
         public static readonly ManagedProperty IntValueProperty = ManagedProperty.Register(typeof(CustomSerializedIntDataClass),
             nameof(IntValue),
             typeof(int),
-            new ManagedSimplePropertyMetadata(0, null, new CustomIntSerializer()));
+            new ManagedSimplePropertyMetadata(0, null, null, new CustomIntSerializer()));
 
         #endregion
 

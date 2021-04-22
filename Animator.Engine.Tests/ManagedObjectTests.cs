@@ -60,12 +60,12 @@ namespace Animator.Engine.Tests
         {
             // Arrange
 
-            List<(ManagedProperty prop, object oldValue, object newValue)> registeredChanges = new();
+            List<(object oldValue, object newValue)> registeredChanges = new();
 
             var cls = new SimplePropertyClass();
-            cls.PropertyValueChanged += (s, e) =>
+            cls.IntValueChanged += (s, e) =>
             {
-                registeredChanges.Add((e.Property, e.OldValue, e.NewValue));
+                registeredChanges.Add((e.OldValue, e.NewValue));
             };
 
             // Act
@@ -75,7 +75,6 @@ namespace Animator.Engine.Tests
 
             // Assert
 
-            Assert.AreEqual(SimplePropertyClass.IntValueProperty, registeredChanges.Last().prop);
             Assert.AreEqual(44, registeredChanges.Last().oldValue);
             Assert.AreEqual(99, registeredChanges.Last().newValue);
         }
@@ -85,12 +84,12 @@ namespace Animator.Engine.Tests
         {
             // Arrange
 
-            List<(ManagedProperty prop, object oldValue, object newValue)> registeredChanges = new();
+            List<(object oldValue, object newValue)> registeredChanges = new();
 
             var cls = new SimplePropertyClass();
-            cls.PropertyValueChanged += (s, e) =>
+            cls.IntValueChanged += (s, e) =>
             {
-                registeredChanges.Add((e.Property, e.OldValue, e.NewValue));
+                registeredChanges.Add((e.OldValue, e.NewValue));
             };
 
             // Act
@@ -100,29 +99,8 @@ namespace Animator.Engine.Tests
 
             // Assert
 
-            Assert.AreEqual(SimplePropertyClass.IntValueProperty, registeredChanges.Last().prop);
             Assert.AreEqual(44, registeredChanges.Last().oldValue);
             Assert.AreEqual(99, registeredChanges.Last().newValue);
-        }
-
-        [TestMethod]
-        public void ManagedPropertyBaseValueNotificationTest()
-        {
-            // Arrange
-
-            var cls = new SimplePropertyClass();
-
-            bool called = false;
-
-            cls.PropertyBaseValueInvalidated += (s, e) => { called = true; };
-
-            // Act
-
-            cls.IntValue = 123;
-
-            // Assert
-
-            Assert.IsTrue(called);
         }
 
         [TestMethod]
@@ -223,6 +201,31 @@ namespace Animator.Engine.Tests
             // Assert
 
             Assert.AreEqual(44, cls.Collection[0]);
+        }
+
+        [TestMethod]
+        public void RangeCoercionTest()
+        {
+            // Arrange
+
+            var cls = new MinMaxClass();
+            cls.Min = 10;
+            cls.Max = 20;
+
+            // Act & Assert
+
+            Assert.AreEqual(10, cls.Min);
+            Assert.AreEqual(20, cls.Max);
+
+            cls.Max = 0;
+
+            Assert.AreEqual(0, cls.Min);
+            Assert.AreEqual(10, cls.Max);
+
+            cls.Min = 20;
+
+            Assert.AreEqual(10, cls.Min);
+            Assert.AreEqual(20, cls.Max);
         }
     }
 }

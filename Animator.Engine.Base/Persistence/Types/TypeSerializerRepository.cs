@@ -268,6 +268,24 @@ namespace Animator.Engine.Base.Persistence.Types
 			}
 		}
 
+        private class TimeSpanSerializer : TypeSerializer
+		{
+			public override bool CanSerialize(object obj) => obj is TimeSpan;
+			public override bool CanDeserialize(string str) => TimeSpan.TryParse(str, CultureInfo.InvariantCulture, out _);
+
+            public override object Deserialize(string str)
+            {
+				if (!TimeSpan.TryParse(str, CultureInfo.InvariantCulture, out TimeSpan result))
+					throw new InvalidCastException($"Invalid TimeSpan format: {str}");
+
+				return result;
+            }
+
+            public override string Serialize(object obj)
+            {
+				return ((TimeSpan)obj).ToString();
+            }
+        }
 
 		// Private static fields -----------------------------------------------------
 
@@ -291,6 +309,7 @@ namespace Animator.Engine.Base.Persistence.Types
 			serializers[typeof(PointF)] = new PointFSerializer();
 			serializers[typeof(string)] = new StringSerializer();
 			serializers[typeof(Color)] = new ColorSerializer();
+			serializers[typeof(TimeSpan)] = new TimeSpanSerializer();
 		}
 
 		// Static methods -----------------------------------------------------------

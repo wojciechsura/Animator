@@ -1,4 +1,5 @@
-﻿using Animator.Engine.Base;
+﻿using Animator.Engine.Animation;
+using Animator.Engine.Base;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Animator.Engine.Elements
 {
     public abstract class BaseElement : ManagedObject
     {
-        public void FindNamedElements(Dictionary<string, List<BaseElement>> names)
+        public void FindNamedElements(NameRegistry names)
         {
             if (IsPropertySet(NameProperty) && Name != null)
             {
