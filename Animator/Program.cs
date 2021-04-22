@@ -22,12 +22,12 @@ namespace Animator
 "    <AnimationConfig Width=\"100\" Height=\"100\" />" +
 "  </Animation.Config>" +
 "  <Scene Name=\"Scene1\">" +
-"    <Rectangle Position=\"5;5\" Rotation=\"-10\" Width=\"20\" Height=\"20\" Brush=\"Green\">" +
+"    <Rectangle Position=\"15;15\" Origin=\"10;10\" Rotation=\"-10\" Width=\"20\" Height=\"20\" Brush=\"Green\">" +
 "      <Rectangle.Pen>" +
-"        <Pen Color=\"Black\" Width=\"1\" />" +
+"        <Pen Name=\"RectanglePen\" Color=\"Black\" Width=\"1\" />" +
 "      </Rectangle.Pen>" +
 "    </Rectangle>" +
-"    <Rectangle Position=\"10;10\" Width=\"20\" Height=\"20\" Brush=\"Red\">" +
+"    <Rectangle Position=\"5;5\" Width=\"20\" Height=\"20\" Brush=\"Red\">" +
 "      <Rectangle.Pen>" +
 "        <Pen Color=\"Black\" Width=\"1\" />" +
 "      </Rectangle.Pen>" +

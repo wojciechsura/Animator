@@ -56,10 +56,9 @@ namespace Animator.Engine.Elements
             set => SetValue(BackgroundProperty, value);
         }
 
-        public static readonly ManagedProperty BackgroundProperty = ManagedProperty.Register(typeof(Scene),
+        public static readonly ManagedProperty BackgroundProperty = ManagedProperty.RegisterReference(typeof(Scene),
             nameof(Background),
-            typeof(Brush),
-            new ManagedSimplePropertyMetadata(null));
+            typeof(Brush));
 
         #endregion
 

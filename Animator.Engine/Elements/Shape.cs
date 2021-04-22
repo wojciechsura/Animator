@@ -9,6 +9,7 @@ namespace Animator.Engine.Elements
 {
     public abstract class Shape : Visual
     {
+
         #region Brush managed property
 
         public Brush Brush
@@ -17,12 +18,13 @@ namespace Animator.Engine.Elements
             set => SetValue(BrushProperty, value);
         }
 
-        public static readonly ManagedProperty BrushProperty = ManagedProperty.Register(typeof(Shape),
+        public static readonly ManagedProperty BrushProperty = ManagedProperty.RegisterReference(typeof(Shape),
             nameof(Brush),
             typeof(Brush),
-            new ManagedSimplePropertyMetadata(null));
+            new ManagedReferencePropertyMetadata());
 
         #endregion
+
 
         #region Pen managed property
 
@@ -32,10 +34,10 @@ namespace Animator.Engine.Elements
             set => SetValue(PenProperty, value);
         }
 
-        public static readonly ManagedProperty PenProperty = ManagedProperty.Register(typeof(Shape),
+        public static readonly ManagedProperty PenProperty = ManagedProperty.RegisterReference(typeof(Shape),
             nameof(Pen),
             typeof(Pen),
-            new ManagedSimplePropertyMetadata(null));
+            new ManagedReferencePropertyMetadata());
 
         #endregion
     }

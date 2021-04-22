@@ -11,6 +11,7 @@ namespace Animator.Engine.Tests.TestClasses
     [ContentProperty(nameof(SimpleCompositeClass.NestedObject))]
     public class SimpleCompositeClass : ManagedObject
     {
+
         #region NestedObject managed property
 
         public SimplePropertyClass NestedObject
@@ -19,9 +20,10 @@ namespace Animator.Engine.Tests.TestClasses
             set => SetValue(NestedObjectProperty, value);
         }
 
-        public static readonly ManagedProperty NestedObjectProperty = ManagedProperty.Register(typeof(SimpleCompositeClass),
+        public static readonly ManagedProperty NestedObjectProperty = ManagedProperty.RegisterReference(typeof(SimpleCompositeClass),
             nameof(NestedObject),
-            typeof(SimplePropertyClass));
+            typeof(SimplePropertyClass),
+            new ManagedReferencePropertyMetadata());
 
         #endregion
     }

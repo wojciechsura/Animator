@@ -122,21 +122,22 @@ namespace Animator.Engine.Base.Persistence
 
                     var content = DeserializeElement(child, context);
 
+                    if (propertiesSet.Contains(property.Name))
+                        throw new SerializerException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}",
+                            node.FindXPath());
+
                     if (property is ManagedSimpleProperty simpleProperty)
                     {
-                        if (propertiesSet.Contains(property.Name))
-                            throw new SerializerException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}",
-                                node.FindXPath());
-
                         deserializedObject.SetValue(simpleProperty, content);
+                        propertiesSet.Add(string.Format(contentDecoration, property.Name));
+                    }
+                    else if (property is ManagedReferenceProperty referenceProperty)
+                    {
+                        deserializedObject.SetValue(referenceProperty, content);
                         propertiesSet.Add(string.Format(contentDecoration, property.Name));
                     }
                     else if (property is ManagedCollectionProperty collectionProperty)
                     {
-                        if (propertiesSet.Contains(property.Name))
-                            throw new SerializerException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}",
-                                node.FindXPath());
-
                         IList list = (IList)deserializedObject.GetValue(property);
                         list.Add(content);
 
@@ -167,11 +168,13 @@ namespace Animator.Engine.Base.Persistence
                 throw new SerializerException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}",
                     propertyNode.FindXPath());
 
-            if (property is ManagedSimpleProperty simpleProperty)
+            // TODO get rid of duplicated code
+
+            if (property is ManagedValueProperty valueProperty)
             {
                 if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 0)
                 {
-                    var content = DeserializePropertyValue(context, simpleProperty, propertyNode.InnerText);
+                    var content = DeserializePropertyValue(context, valueProperty, propertyNode.InnerText);
                     deserializedObject.SetValue(property, content);
 
                     propertiesSet.Add(property.Name);
@@ -256,13 +259,15 @@ namespace Animator.Engine.Base.Persistence
                     throw new SerializerException($"Property {attribute.LocalName} on object {deserializedObject.GetType().Name} is not serializable!\r\nRemove it from input file.",
                         node.FindXPath());
 
-                if (managedProperty is ManagedSimpleProperty simpleProperty)
+                // TODO merge duplicated code
+
+                if (managedProperty is ManagedValueProperty valueProperty)
                 {
                     string propertyValue = attribute.Value;
 
-                    object value = DeserializePropertyValue(context, simpleProperty, attribute.Value);
+                    object value = DeserializePropertyValue(context, valueProperty, attribute.Value);
 
-                    deserializedObject.SetValue(simpleProperty, value);
+                    deserializedObject.SetValue(valueProperty, value);
                     propertiesSet.Add(attribute.LocalName);
                 }
                 else if (managedProperty is ManagedCollectionProperty collectionProperty)
@@ -287,14 +292,14 @@ namespace Animator.Engine.Base.Persistence
             }
         }
 
-        private object DeserializePropertyValue(DeserializationContext context, ManagedSimpleProperty simpleProperty, string propertyValue)
+        private object DeserializePropertyValue(DeserializationContext context, ManagedValueProperty valueProperty, string propertyValue)
         {
-            if (simpleProperty.Metadata.CustomSerializer != null && simpleProperty.Metadata.CustomSerializer.CanDeserialize(propertyValue))
-                return simpleProperty.Metadata.CustomSerializer.Deserialize(propertyValue);
-            else if (context.CustomTypeSerializers != null && context.CustomTypeSerializers.TryGetValue(simpleProperty.Type, out TypeSerializer customSerializer) && customSerializer.CanDeserialize(propertyValue))
+            if (valueProperty.Metadata.CustomSerializer != null && valueProperty.Metadata.CustomSerializer.CanDeserialize(propertyValue))
+                return valueProperty.Metadata.CustomSerializer.Deserialize(propertyValue);
+            else if (context.CustomTypeSerializers != null && context.CustomTypeSerializers.TryGetValue(valueProperty.Type, out TypeSerializer customSerializer) && customSerializer.CanDeserialize(propertyValue))
                 return customSerializer.Deserialize(propertyValue);
             else
-                return TypeSerialization.Deserialize(propertyValue, simpleProperty.Type);
+                return TypeSerialization.Deserialize(propertyValue, valueProperty.Type);
         }
 
         private static IList DeserializeCollectionPropertyValue(DeserializationContext context, ManagedCollectionProperty collectionProperty, string propertyValue)

@@ -7,7 +7,7 @@
     </Header>
     <Snippet>
       <Code Language="CSharp">
-  <![CDATA[#region $Name$ managed collection
+        <![CDATA[#region $Name$ managed collection
     
 public List<$PropType$> $Name$
 {
@@ -18,7 +18,8 @@ public static readonly ManagedProperty $Name$Property = ManagedProperty.Register
     nameof($Name$), 
     typeof(List<$PropType$>));
     
-#endregion]]></Code>
+#endregion]]>
+      </Code>
       <Imports>
         <Import>
           <Namespace>Animator.Engine.Base</Namespace>
@@ -46,15 +47,16 @@ public static readonly ManagedProperty $Name$Property = ManagedProperty.Register
       </Declarations>
     </Snippet>
   </CodeSnippet>
-  
-    <CodeSnippet Format="1.0.0">
+
+  <CodeSnippet Format="1.0.0">
     <Header>
       <Title>Managed property</Title>
       <Description>Creates a managed property (Animator)</Description>
       <Shortcut>mprop</Shortcut>
     </Header>
     <Snippet>
-      <Code Language="CSharp"><![CDATA[#region $Name$ managed property
+      <Code Language="CSharp">
+        <![CDATA[#region $Name$ managed property
     
 public $PropType$ $Name$
 {
@@ -65,9 +67,63 @@ public $PropType$ $Name$
 public static readonly ManagedProperty $Name$Property = ManagedProperty.Register(typeof($ClassType$), 
     nameof($Name$), 
     typeof($PropType$), 
-    new ManagedAnimatedPropertyMetadata($DefaultValue$));
+    new ManagedSimplePropertyMetadata($DefaultValue$));
     
-#endregion]]></Code>
+#endregion]]>
+      </Code>
+      <Imports>
+        <Import>
+          <Namespace>Animator.Engine.Base</Namespace>
+        </Import>
+      </Imports>
+      <Declarations>
+        <Literal>
+          <ID>Name</ID>
+          <ToolTip>Name of managed property.</ToolTip>
+          <Default>Value</Default>
+        </Literal>
+        <Literal>
+          <ID>ClassType</ID>
+          <ToolTip>Type of owning class.</ToolTip>
+          <Default>OwningClass</Default>
+        </Literal>
+        <Literal>
+          <ID>PropType</ID>
+          <ToolTip>Type of property</ToolTip>
+          <Default>int</Default>
+        </Literal>
+        <Literal>
+          <ID>DefaultValue</ID>
+          <ToolTip>Default value</ToolTip>
+          <Default>0</Default>
+        </Literal>
+      </Declarations>
+    </Snippet>
+  </CodeSnippet>
+
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Managed reference property</Title>
+      <Description>Creates a managed reference property (Animator)</Description>
+      <Shortcut>mref</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="CSharp">
+        <![CDATA[#region $Name$ managed property
+    
+public $PropType$ $Name$
+{
+    get => ($PropType$)GetValue($Name$Property);
+    set => SetValue($Name$Property, value);
+}
+
+public static readonly ManagedProperty $Name$Property = ManagedProperty.RegisterReference(typeof($ClassType$), 
+    nameof($Name$), 
+    typeof($PropType$), 
+    new ManagedReferencePropertyMetadata());
+    
+#endregion]]>
+      </Code>
       <Imports>
         <Import>
           <Namespace>Animator.Engine.Base</Namespace>

@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Animator.Engine.Base.BasePropertyMetadata;
 
 namespace Animator.Engine.Base
 {
@@ -15,6 +16,7 @@ namespace Animator.Engine.Base
 
         private readonly Dictionary<int, PropertyValue> propertyValues = new();
         private readonly Dictionary<int, object> collections = new();
+        private readonly Dictionary<int, object> references = new();
 
         // Private methods ----------------------------------------------------
 
@@ -23,6 +25,12 @@ namespace Animator.Engine.Base
             if (property.Type.IsValueType && value == null)
                 throw new ArgumentException($"{property.OwnerClassType.Name}.{property.Name} property type is value-type ({property.Type.Name}), but provided value is null.");
 
+            if (!value.GetType().IsAssignableTo(property.Type))
+                throw new ArgumentException($"Value of type {value.GetType().Name} cannot be assigned to property {property.OwnerClassType.Name}.{property.Name} of type {property.Type.Name}.");
+        }
+
+        private void ValidateValue(ManagedReferenceProperty property, object value)
+        {
             if (!value.GetType().IsAssignableTo(property.Type))
                 throw new ArgumentException($"Value of type {value.GetType().Name} cannot be assigned to property {property.OwnerClassType.Name}.{property.Name} of type {property.Type.Name}.");
         }
@@ -90,9 +98,9 @@ namespace Animator.Engine.Base
         internal void SetAnimatedValue(ManagedProperty property, object value)
         {
             if (property is not ManagedSimpleProperty simpleProperty)
-                throw new InvalidOperationException($"Cannot ensure property value for non-simple property {property.Name}!");
+                throw new InvalidOperationException($"Animated value cannot be set to non-simple property {property.Name} of {GetType().Name}!");
             if (simpleProperty.Metadata.NotAnimatable)
-                throw new InvalidOperationException($"Animation is disabled for this property {property.Name}!");
+                throw new InvalidOperationException($"Animation is disabled for property {property.Name} of {GetType().Name}!");
 
             var propertyValue = EnsurePropertyValue(simpleProperty);
 
@@ -109,7 +117,7 @@ namespace Animator.Engine.Base
         internal void ResetAnimatedValue(ManagedProperty property)
         {
             if (property is not ManagedSimpleProperty simpleProperty)
-                throw new InvalidOperationException("Cannot ensure property value for non-simple property!");
+                throw new InvalidOperationException($"Animated value cannot be set to non-simple property {property.Name} of {GetType().Name}!");
 
             if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue) && propertyValue.IsAnimated)
             {
@@ -134,7 +142,7 @@ namespace Animator.Engine.Base
         public void CoerceValue(ManagedProperty property)
         {
             if (property is not ManagedSimpleProperty simpleProperty)
-                throw new InvalidOperationException("Cannot ensure property value for non-simple property!");
+                throw new InvalidOperationException($"Cannot coerce non-simple property {property.Name} of {GetType().Name}!");
 
             var propertyValue = EnsurePropertyValue(simpleProperty);
 
@@ -155,7 +163,14 @@ namespace Animator.Engine.Base
 
         public bool IsPropertySet(ManagedProperty property)
         {
-            return propertyValues.ContainsKey(property.GlobalIndex) || collections.ContainsKey(property.GlobalIndex);
+            if (property is ManagedSimpleProperty)
+                return propertyValues.ContainsKey(property.GlobalIndex);
+            else if (property is ManagedCollectionProperty)
+                return collections.ContainsKey(property.GlobalIndex);
+            else if (property is ManagedReferenceProperty)
+                return references.ContainsKey(property.GlobalIndex);
+            else
+                throw new InvalidOperationException("Unsupported managed property type!");
         }
 
         public object GetValue(ManagedProperty property)
@@ -166,6 +181,13 @@ namespace Animator.Engine.Base
                     return propertyValue.EffectiveValue;
                 else
                     return simpleProperty.Metadata.DefaultValue;
+            }
+            else if (property is ManagedReferenceProperty referenceProperty)
+            {
+                if (references.TryGetValue(property.GlobalIndex, out object value))
+                    return value;
+                else
+                    return null;
             }
             else if (property is ManagedCollectionProperty collectionProperty)
             {
@@ -193,24 +215,40 @@ namespace Animator.Engine.Base
 
         public void SetValue(ManagedProperty property, object value)
         {
-            if (property is not ManagedSimpleProperty simpleProperty)
-                throw new ArgumentException("Setting values is available only for simple properties!");
 
-            ValidateValue(simpleProperty, value);
-
-            var propertyValue = EnsurePropertyValue(simpleProperty);
-
-            if (propertyValue.BaseValue != value)
+            if (property is ManagedSimpleProperty simpleProperty)
             {
-                var oldEffectiveValue = propertyValue.EffectiveValue;
+                ValidateValue(simpleProperty, value);
 
-                propertyValue.BaseValue = value;
-                propertyValue.ResetModifiers();
+                var propertyValue = EnsurePropertyValue(simpleProperty);
 
-                // Coertion
-                CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
+                if (propertyValue.BaseValue != value)
+                {
+                    var oldEffectiveValue = propertyValue.EffectiveValue;
 
-                // Possible notification about base value change goes here
+                    propertyValue.BaseValue = value;
+                    propertyValue.ResetModifiers();
+
+                    // Coertion
+                    CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
+
+                    // Possible notification about base value change goes here
+                }
+            }
+            else if (property is ManagedReferenceProperty referenceProperty)
+            {
+                ValidateValue(referenceProperty, value);
+
+                if (!references.TryGetValue(property.GlobalIndex, out object oldValue))
+                    oldValue = null;
+
+                references[property.GlobalIndex] = value;
+
+                if (!object.Equals(oldValue, value))
+                {
+                    if (referenceProperty.Metadata.ValueChangedHandler != null)
+                        referenceProperty.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(oldValue, value));
+                }
             }
         }
     }

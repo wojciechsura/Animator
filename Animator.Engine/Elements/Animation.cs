@@ -19,7 +19,7 @@ namespace Animator.Engine.Elements
             set => SetValue(ConfigProperty, value);
         }
 
-        public static readonly ManagedProperty ConfigProperty = ManagedProperty.Register(typeof(Animation),
+        public static readonly ManagedProperty ConfigProperty = ManagedProperty.RegisterReference(typeof(Animation),
             nameof(Config),
             typeof(AnimationConfig));
 

@@ -82,7 +82,7 @@ namespace Animator.Engine.Base
         private static void ValidateDuplicatedName(Type ownerClassType, string name)
         {
             if (FindWithInheritance(ownerClassType, name) != null)
-                throw new ArgumentException("Property already registered (possibly in base class)!", nameof(name));
+                throw new ArgumentException($"Property with name {name} is already registered for type {ownerClassType.Name} (possibly in base class)!", nameof(name));
         }
 
         private static void ValidateInheritanceFromManagedObject(Type ownerClassType)
@@ -93,6 +93,18 @@ namespace Animator.Engine.Base
 
             if (parentType != typeof(ManagedObject))
                 throw new ArgumentException("Owner class type must derive from ManagedObject!");
+        }
+
+        private static void ValidateSimpleType(Type propertyType)
+        {
+            if (!propertyType.IsValueType && propertyType != typeof(string))
+                throw new ArgumentException("When registering a simple property, property type must be a value type!");
+        }
+
+        private static void ValidateReferenceType(Type propertyType)
+        {
+            if (propertyType.IsValueType)
+                throw new ArgumentException("When registering a reference property, property type must be a reference type!");
         }
 
         private static void ValidateListType(Type propertyType)
@@ -166,6 +178,7 @@ namespace Animator.Engine.Base
         {
             ValidateDuplicatedName(ownerClassType, name);
             ValidateInheritanceFromManagedObject(ownerClassType);
+            ValidateSimpleType(propertyType);
 
             if (metadata == null)
                 metadata = ManagedSimplePropertyMetadata.DefaultFor(propertyType);
@@ -199,6 +212,25 @@ namespace Animator.Engine.Base
             return prop;
         }
 
+        public static ManagedProperty RegisterReference(Type ownerClassType, string name, Type propertyType, ManagedReferencePropertyMetadata metadata = null)
+        {
+            ValidateDuplicatedName(ownerClassType, name);
+            ValidateInheritanceFromManagedObject(ownerClassType);
+            ValidateReferenceType(propertyType);
+
+            if (metadata == null)
+                metadata = ManagedReferencePropertyMetadata.DefaultFor(propertyType);
+
+            var prop = new ManagedReferenceProperty(ownerClassType, name, propertyType, metadata);
+
+            var propertyKey = new PropertyKey(ownerClassType, name);
+
+            propertyDefinitions[propertyKey] = prop;
+            AddPropertyByType(ownerClassType, prop);
+
+            return prop;
+        }
+
         // Public properties --------------------------------------------------
 
         public string Name => name;
@@ -207,9 +239,5 @@ namespace Animator.Engine.Base
         public int GlobalIndex => globalIndex;
 
         public BasePropertyMetadata Metadata => ProvideBaseMetadata();
-
-        // Public static properties -------------------------------------------
-
-        public static object UnsetValue { get; } = new object();
     }
 }
