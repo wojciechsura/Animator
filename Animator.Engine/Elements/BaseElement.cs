@@ -12,37 +12,86 @@ namespace Animator.Engine.Elements
 {
     public abstract class BaseElement : ManagedObject
     {
-        public void FindNamedElements(NameRegistry names)
-        {
-            if (IsPropertySet(NameProperty) && Name != null)
-            {
-                if (!names.TryGetValue(Name, out List<BaseElement> list))
-                {
-                    list = new();
-                    names[Name] = list;
-                }
+        // Private fields -----------------------------------------------------
 
-                list.Add(this);
+        private BaseElement parent;
+        private Scene scene;
+
+        // Private methods ----------------------------------------------------
+
+        private void SetParent(BaseElement newParent)
+        {
+            if (parent != null)
+            {
+                RemoveNamesRecursiveFromParent();
             }
 
-            foreach (var prop in GetProperties(true))
+            parent = newParent;
+
+            if (parent != null)
             {
-                if (IsPropertySet(prop))
+                if (parent is Scene)
+                    scene = (Scene)parent;
+                else
+                    scene = parent.Scene;
+
+                AddNamesRecursiveToParent();
+            }
+            else
+            {
+                scene = null;
+            }
+        }
+
+        private void AddNamesRecursiveToParent()
+        {
+            ProcessElementsRecursive(baseElement =>
+            {
+                if (baseElement.IsPropertySet(NameProperty) && baseElement.Name != null)
+                {
+                    scene.RegisterName(baseElement.Name, baseElement);
+                }
+            });
+        }
+
+        private void RemoveNamesRecursiveFromParent()
+        {
+            ProcessElementsRecursive(baseElement =>
+            {
+                if (baseElement.IsPropertySet(NameProperty) && baseElement.Name != null)
+                {
+                    scene.UnregisterName(baseElement.Name, baseElement);
+                }
+            });
+        }
+
+        // Public methods -----------------------------------------------------
+
+        public void ProcessElementsRecursive(Action<BaseElement> action)
+        {
+            action(this);
+
+            foreach (var prop in GetProperties(true).Where(p => IsPropertySet(p)))
+            {
+                if (prop is ManagedReferenceProperty refProp)
                 {
                     var value = GetValue(prop);
                     if (value is BaseElement baseElement)
-                    {
-                        baseElement.FindNamedElements(names);
-                    }
-                    else if (value is IList list)
-                    {
-                        foreach (var obj in list)
-                            if (obj is BaseElement listItemBaseElement)
-                                listItemBaseElement.FindNamedElements(names);
-                    }
+                        baseElement.ProcessElementsRecursive(action);
+                }
+                else if (prop is ManagedCollectionProperty collectionProp)
+                {
+                    var collection = GetValue(collectionProp) as ManagedCollection;
+
+                    foreach (var obj in collection)
+                        if (obj is BaseElement baseElement)
+                            baseElement.ProcessElementsRecursive(action);
+
                 }
             }
         }
+
+        // Public properties --------------------------------------------------
 
         #region Name managed property
 
@@ -52,11 +101,26 @@ namespace Animator.Engine.Elements
             set => SetValue(NameProperty, value);
         }
 
-        public static readonly ManagedProperty NameProperty = ManagedProperty.Register(typeof(BaseElement),
+        public static readonly ManagedProperty NameProperty = ManagedProperty.RegisterReference(typeof(BaseElement),
             nameof(Name),
             typeof(string),
-            new ManagedSimplePropertyMetadata { NotAnimatable = true });
+            new ManagedReferencePropertyMetadata { ValueIsPermanent = true, ValueChangedHandler = HandleNameChanged });
+
+        private static void HandleNameChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
+        {
+            // Value is permanent, so the change may be done only once
+            if (sender is BaseElement baseElement)
+                baseElement.Scene.RegisterName((string)args.NewValue, baseElement);
+        }
 
         #endregion
+
+        public BaseElement Parent
+        {
+            get => parent;
+            internal set => SetParent(value);
+        }
+
+        public Scene Scene => scene;
     }
 }

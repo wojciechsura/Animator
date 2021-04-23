@@ -49,8 +49,16 @@ namespace Animator.Engine.Base
 
         // Public properties --------------------------------------------------
 
+        /// <summary>Used to construct the collection in custom way 
+        /// (ie. when it does not contain public, parameterless
+        /// contstructor)</summary>
         public InitializeCollectionDelegate CollectionInitializer { get; init; }
+
+        /// <summary>Custom serializer allows the collection to 
+        /// be serialized into an XML attribute</summary>
         public TypeSerializer CustomSerializer { get; init; }
+
+        /// <summary>Handler for collection change events</summary>
         public ManagedCollectionChangedDelegate CollectionChangedHandler { get; init; }
     }
 }

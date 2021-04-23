@@ -39,9 +39,16 @@ namespace Animator.Engine.Base
 
         // Public properties --------------------------------------------------
 
+        /// <summary>Default value for property if none is set</summary>
         public object DefaultValue { get; init; } = null;
-        public CoerceValueDelegate CoerceValueHandler { get; init; } = null;
-        public bool NotAnimatable { get; init; } = false;
 
+        /// <summary>Coercion handler allows correcting value to
+        /// match specific requirements. Coercion is applied
+        /// to final base value (ie. after animation)</summary>
+        public CoerceValueDelegate CoerceValueHandler { get; init; } = null;
+
+        /// <summary>Enables or disables animation for this 
+        /// property</summary>
+        public bool NotAnimatable { get; init; } = false;
     }
 }

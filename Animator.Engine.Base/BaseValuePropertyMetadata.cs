@@ -14,7 +14,11 @@ namespace Animator.Engine.Base
 
         }
 
+        /// <summary>Handler for value change events</summary>
         public PropertyValueChangedDelegate ValueChangedHandler { get; init; } = null;
+
+        /// <summary>Custom serializer allows serializing value 
+        /// into an XML attribute</summary>
         public TypeSerializer CustomSerializer { get; init; } = null;
 
     }

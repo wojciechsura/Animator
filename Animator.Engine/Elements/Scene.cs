@@ -13,6 +13,33 @@ namespace Animator.Engine.Elements
     [ContentProperty(nameof(Items))]
     public class Scene : BaseElement
     {
+        // Private fields -----------------------------------------------------
+
+        private readonly Dictionary<string, List<BaseElement>> names = new();
+
+        // Internal methods ---------------------------------------------------
+
+        internal void RegisterName(string name, BaseElement baseElement)
+        {
+            if (!names.TryGetValue(name, out List<BaseElement> list))
+            {
+                list = new List<BaseElement>();
+                names[name] = list;
+            }
+
+            list.Add(baseElement);
+        }
+
+        internal void UnregisterName(string name, BaseElement baseElement)
+        {
+            if (names.TryGetValue(name, out List<BaseElement> list))
+            {
+                list.Remove(baseElement);                
+                if (!list.Any())
+                    names.Remove(name);
+            }
+        }
+
         // Public methods -----------------------------------------------------
 
         public void Render(Bitmap bitmap)
@@ -31,6 +58,22 @@ namespace Animator.Engine.Elements
             {
                 item.Render(bitmap, graphics);
             }
+        }
+
+        public BaseElement FindSingleByName(string name)
+        {
+            if (names.TryGetValue(name, out List<BaseElement> elements))
+                return elements.SingleOrDefault();
+
+            return null;
+        }
+
+        public IEnumerable<BaseElement> FindElements(string name)
+        {
+            if (names.TryGetValue(name, out List<BaseElement> elements))
+                return elements;
+
+            return null;
         }
 
         // Public properties --------------------------------------------------

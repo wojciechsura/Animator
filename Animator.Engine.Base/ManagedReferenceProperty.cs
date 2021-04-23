@@ -25,6 +25,6 @@ namespace Animator.Engine.Base
             this.metadata = metadata;
         }
 
-        public new ManagedReferencePropertyMetadata Metadata => metadata;
+        public new ManagedReferencePropertyMetadata Metadata => metadata;        
     }
 }

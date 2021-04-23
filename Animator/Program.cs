@@ -41,14 +41,6 @@ namespace Animator
             var animationSerializer = new AnimationSerializer();
             var animation = animationSerializer.Deserialize(document);
 
-            NameRegistry names = new();
-            animation.Scenes.First().FindNamedElements(names);
-
-            foreach (var kvp in names)
-            {
-                Console.WriteLine($"{kvp.Key} - {kvp.Value.Count()} item(s)");
-            }
-
             var bitmap = new Bitmap(animation.Config.Width, animation.Config.Height, PixelFormat.Format32bppArgb);
             animation.Scenes[0].Render(bitmap);
 

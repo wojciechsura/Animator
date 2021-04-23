@@ -33,6 +33,9 @@ namespace Animator.Engine.Base
         {
             if (!value.GetType().IsAssignableTo(property.Type))
                 throw new ArgumentException($"Value of type {value.GetType().Name} cannot be assigned to property {property.OwnerClassType.Name}.{property.Name} of type {property.Type.Name}.");
+
+            if (property.Metadata.ValueValidationHandler != null && !property.Metadata.ValueValidationHandler.Invoke(this, new ValueValidationEventArgs(value)))
+                throw new ArgumentException($"Value {value} failed validation for property {property.OwnerClassType.Name}{property.Name}");
         }
 
         private (object, bool) InternalCoerceValue(ManagedSimpleProperty property)
@@ -240,7 +243,6 @@ namespace Animator.Engine.Base
 
         public void SetValue(ManagedProperty property, object value)
         {
-
             if (property is ManagedSimpleProperty simpleProperty)
             {
                 ValidateValue(simpleProperty, value);
@@ -264,7 +266,14 @@ namespace Animator.Engine.Base
             {
                 ValidateValue(referenceProperty, value);
 
-                if (!references.TryGetValue(property.GlobalIndex, out object oldValue))
+
+
+                if (references.TryGetValue(property.GlobalIndex, out object oldValue))
+                {
+                    if (oldValue != null && referenceProperty.Metadata.ValueIsPermanent)
+                        throw new InvalidOperationException($"Property {property.Name} of type {GetType().Name} has permanent value flag set in metadata. This allows setting its value only once.");
+                }
+                else
                     oldValue = null;
 
                 references[property.GlobalIndex] = value;
