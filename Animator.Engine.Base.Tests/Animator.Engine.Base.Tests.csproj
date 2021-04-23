@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Animator.Engine\Animator.Engine.csproj" />
+    <ProjectReference Include="..\Animator.Engine.Base\Animator.Engine.Base.csproj" />
   </ItemGroup>
 
 </Project>

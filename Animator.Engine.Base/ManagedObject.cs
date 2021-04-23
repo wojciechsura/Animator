@@ -31,7 +31,7 @@ namespace Animator.Engine.Base
 
         private void ValidateValue(ManagedReferenceProperty property, object value)
         {
-            if (!value.GetType().IsAssignableTo(property.Type))
+            if (value != null && !value.GetType().IsAssignableTo(property.Type))
                 throw new ArgumentException($"Value of type {value.GetType().Name} cannot be assigned to property {property.OwnerClassType.Name}.{property.Name} of type {property.Type.Name}.");
 
             if (property.Metadata.ValueValidationHandler != null && !property.Metadata.ValueValidationHandler.Invoke(this, new ValueValidationEventArgs(value)))

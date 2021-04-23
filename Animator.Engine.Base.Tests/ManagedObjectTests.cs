@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Animator.Engine.Tests
+namespace Animator.Engine.Base.Tests
 {
     [TestClass]
     public class ManagedObjectTests

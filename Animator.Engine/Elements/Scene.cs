@@ -80,14 +80,14 @@ namespace Animator.Engine.Elements
 
         #region Items managed collection
 
-        public List<Visual> Items
+        public ManagedCollection<Visual> Items
         {
-            get => (List<Visual>)GetValue(ItemsProperty);
+            get => (ManagedCollection<Visual>)GetValue(ItemsProperty);
         }
 
         public static readonly ManagedProperty ItemsProperty = ManagedProperty.RegisterCollection(typeof(Scene),
             nameof(Items),
-            typeof(List<Visual>));
+            typeof(ManagedCollection<Visual>));
 
         #endregion
 

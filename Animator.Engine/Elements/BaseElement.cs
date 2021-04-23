@@ -17,6 +17,32 @@ namespace Animator.Engine.Elements
         private BaseElement parent;
         private Scene scene;
 
+        // Protected methods --------------------------------------------------
+
+        protected override void OnReferenceValueChanged(ManagedReferenceProperty referenceProperty, object oldValue, object newValue)
+        {
+            if (oldValue is BaseElement oldBaseElement)
+                oldBaseElement.Parent = null;
+
+            if (newValue is BaseElement newBaseElement)
+                newBaseElement.Parent = this;
+
+            base.OnReferenceValueChanged(referenceProperty, oldValue, newValue);
+        }
+
+        protected override void OnCollectionChanged(ManagedCollectionProperty property, ManagedCollection collection, CollectionChangedEventArgs e)
+        {
+            if (e.ItemsRemoved != null)
+                foreach (BaseElement removedElement in e.ItemsRemoved.OfType<BaseElement>())
+                    removedElement.Parent = null;
+
+            if (e.ItemsAdded != null)
+                foreach (BaseElement addedElement in e.ItemsAdded.OfType<BaseElement>())
+                    addedElement.Parent = this;
+
+            base.OnCollectionChanged(property, collection, e);
+        }
+
         // Private methods ----------------------------------------------------
 
         private void SetParent(BaseElement newParent)
@@ -109,7 +135,7 @@ namespace Animator.Engine.Elements
         private static void HandleNameChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
             // Value is permanent, so the change may be done only once
-            if (sender is BaseElement baseElement)
+            if (sender is BaseElement baseElement && baseElement.Scene != null)
                 baseElement.Scene.RegisterName((string)args.NewValue, baseElement);
         }
 
