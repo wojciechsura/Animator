@@ -48,5 +48,20 @@ namespace Animator.Engine.Elements
         }
 
         #endregion
+
+        #region FramesPerSecond managed property
+
+        public float FramesPerSecond
+        {
+            get => (float)GetValue(FramesPerSecondProperty);
+            set => SetValue(FramesPerSecondProperty, value);
+        }
+
+        public static readonly ManagedProperty FramesPerSecondProperty = ManagedProperty.Register(typeof(AnimationConfig),
+            nameof(FramesPerSecond),
+            typeof(float),
+            new ManagedSimplePropertyMetadata { DefaultValue = 30.0f });
+
+        #endregion
     }
 }

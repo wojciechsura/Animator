@@ -121,45 +121,6 @@ namespace Animator.Engine.Base
                 referenceProperty.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(oldValue, newValue));
         }
 
-        // Internal methods ---------------------------------------------------
-
-        internal void SetAnimatedValue(ManagedProperty property, object value)
-        {
-            if (property is not ManagedSimpleProperty simpleProperty)
-                throw new InvalidOperationException($"Animated value cannot be set to non-simple property {property.Name} of {GetType().Name}!");
-            if (simpleProperty.Metadata.NotAnimatable)
-                throw new InvalidOperationException($"Animation is disabled for property {property.Name} of {GetType().Name}!");
-
-            var propertyValue = EnsurePropertyValue(simpleProperty);
-
-            if (!propertyValue.IsAnimated || propertyValue.AnimatedValue != value)
-            {
-                var oldEffectiveValue = propertyValue.EffectiveValue;
-
-                propertyValue.AnimatedValue = value;
-                
-                CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
-            }
-        }
-
-        internal void ResetAnimatedValue(ManagedProperty property)
-        {
-            if (property is not ManagedSimpleProperty simpleProperty)
-                throw new InvalidOperationException($"Animated value cannot be set to non-simple property {property.Name} of {GetType().Name}!");
-
-            if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue) && propertyValue.IsAnimated)
-            {
-                var oldEffectiveValue = propertyValue.EffectiveValue;
-
-                propertyValue.ClearAnimatedValue();
-
-                CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
-            }
-
-            // If there is no entry in PropertyValues for this value,
-            // there can be no animated value too, so there's nothing to do
-        }
-
         // Public methods -----------------------------------------------------
 
         public ManagedObject()
@@ -177,6 +138,43 @@ namespace Animator.Engine.Base
             var oldEffectiveValue = propertyValue.EffectiveValue;
 
             CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
+        }
+
+        public void SetAnimatedValue(ManagedProperty property, object value)
+        {
+            if (property is not ManagedSimpleProperty simpleProperty)
+                throw new InvalidOperationException($"Animated value cannot be set to non-simple property {property.Name} of {GetType().Name}!");
+            if (simpleProperty.Metadata.NotAnimatable)
+                throw new InvalidOperationException($"Animation is disabled for property {property.Name} of {GetType().Name}!");
+
+            var propertyValue = EnsurePropertyValue(simpleProperty);
+
+            if (!propertyValue.IsAnimated || propertyValue.AnimatedValue != value)
+            {
+                var oldEffectiveValue = propertyValue.EffectiveValue;
+
+                propertyValue.AnimatedValue = value;
+
+                CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
+            }
+        }
+
+        public void ResetAnimatedValue(ManagedProperty property)
+        {
+            if (property is not ManagedSimpleProperty simpleProperty)
+                throw new InvalidOperationException($"Animated value cannot be set to non-simple property {property.Name} of {GetType().Name}!");
+
+            if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue) && propertyValue.IsAnimated)
+            {
+                var oldEffectiveValue = propertyValue.EffectiveValue;
+
+                propertyValue.ClearAnimatedValue();
+
+                CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
+            }
+
+            // If there is no entry in PropertyValues for this value,
+            // there can be no animated value too, so there's nothing to do
         }
 
         public ManagedProperty GetProperty(string propertyName)
@@ -226,6 +224,19 @@ namespace Animator.Engine.Base
             {
                 throw new InvalidOperationException("Unsupported managed property type!");
             }
+        }
+
+        public object GetBaseValue(ManagedProperty property)
+        {
+            if (property is ManagedSimpleProperty simpleProperty)
+            {
+                if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue))
+                    return propertyValue.BaseValue;
+                else
+                    return simpleProperty.Metadata.DefaultValue;
+            }
+            else
+                throw new ArgumentException("Base value is available only for simple properties!");
         }
 
         public object GetFinalBaseValue(ManagedProperty property)

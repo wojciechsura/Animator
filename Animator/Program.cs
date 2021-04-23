@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Animation;
+using Animator.Engine.Animation.Maths;
 using Animator.Engine.Elements;
 using Animator.Engine.Elements.Persistence;
 using System;
@@ -14,37 +15,34 @@ namespace Animator
     {
         static void Main(string[] args)
         {
-            // Placeholder for tests
-
-            string testAnimation =
-"<Animation>" +
-"  <Animation.Config>" +
-"    <AnimationConfig Width=\"100\" Height=\"100\" />" +
-"  </Animation.Config>" +
-"  <Scene Name=\"Scene1\">" +
-"    <Rectangle Position=\"15;15\" Origin=\"10;10\" Rotation=\"-10\" Width=\"20\" Height=\"20\" Brush=\"Green\">" +
-"      <Rectangle.Pen>" +
-"        <Pen Name=\"RectanglePen\" Color=\"Black\" Width=\"1\" />" +
-"      </Rectangle.Pen>" +
-"    </Rectangle>" +
-"    <Rectangle Position=\"5;5\" Width=\"20\" Height=\"20\" Brush=\"Red\">" +
-"      <Rectangle.Pen>" +
-"        <Pen Color=\"Black\" Width=\"1\" />" +
-"      </Rectangle.Pen>" +
-"    </Rectangle>" +
-"  </Scene>" +
-"</Animation>";
-
+            // Placeholder for tests          
             XmlDocument document = new();
-            document.LoadXml(testAnimation);
+            document.Load(args[0]);
 
             var animationSerializer = new AnimationSerializer();
             var animation = animationSerializer.Deserialize(document);
 
+            // Render scene without animation
+
             var bitmap = new Bitmap(animation.Config.Width, animation.Config.Height, PixelFormat.Format32bppArgb);
             animation.Scenes[0].Render(bitmap);
-
             bitmap.Save(@"D:\scene.png");
+
+            // Render animation
+
+            var frameCount = TimeCalculator.EvalFrameCount((float)animation.Scenes[0].Duration.TotalMilliseconds, animation.Config.FramesPerSecond);
+
+            for (int i = 0; i < frameCount; i++)
+            {
+                float timeMs = TimeCalculator.EvalMillisecondsForFrame(i, animation.Config.FramesPerSecond);
+
+                foreach (var animator in animation.Scenes[0].Animators)
+                    animator.ApplyAnimation(timeMs);
+
+                animation.Scenes[0].Render(bitmap);
+
+                bitmap.Save($"D:\\frame{i}.png");
+            }
         }
     }
 }

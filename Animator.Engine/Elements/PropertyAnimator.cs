@@ -8,44 +8,21 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public abstract class PropertyAnimator : ManagedObject
+    public abstract class PropertyAnimator : BaseAnimator
     {
-        protected (ManagedObject, ManagedProperty) FindProperty(NameRegistry names, string targetName, string path)
+        // Public methods -----------------------------------------------------
+
+        public override void ResetAnimation()
         {
-            // Find uniquely named component
-            if (!names.TryGetValue(targetName, out List<BaseElement> elements))
-                return (null, null);
-            
-            ManagedObject element = elements.SingleOrDefault();
-            if (element == null)
-                return (null, null);
+            if (Scene == null)
+                throw new InvalidOperationException("Animation can be reset only if scene is available!");
 
-            // Travel through properties in path (so that A.B.C property chaining is possible)
-            var props = path.Split('.');
-            if (props.Length == 0)
-                return (null, null);
-
-            // Get access to first property
-            var property = element.GetProperty(props[0]);
-            if (property == null)
-                return (null, null);
-
-            // Process next properties
-            for (int i = 1; i < props.Length; i++)
-            {
-                // Value of the property must be a ManagedObject
-                var value = element.GetValue(property);
-                if (value is not ManagedObject)
-                    return (null, null);
-
-                element = value as ManagedObject;
-                property = element.GetProperty(props[i]);
-                if (property == null)
-                    return (null, null);
-            }
-
-            return (element, property);
+            (var obj, var prop) = Scene.FindProperty(TargetName, Path);
+            if (obj != null && prop != null)
+                obj.ResetAnimatedValue(prop);
         }
+
+        // Public properties --------------------------------------------------
 
         #region TargetName managed property
 

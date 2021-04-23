@@ -1,15 +1,15 @@
 ﻿using Animator.Engine.Animation.Maths;
 using Animator.Engine.Base;
-using Animator.Engine.Elements.Types;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public class FloatPropertyAnimator : TimeDurationNumericPropertyAnimator
+    public class PointPropertyAnimator : TimeDurationNumericPropertyAnimator
     {
         // Public methods -----------------------------------------------------
 
@@ -23,44 +23,46 @@ namespace Animator.Engine.Elements
             if (obj != null && prop != null)
             {
                 var factor = TimeCalculator.EvalAnimationFactor((float)StartTime.TotalMilliseconds, (float)EndTime.TotalMilliseconds, timeMs);
-                var easedValue = EasingFunctionRepository.Ease(EasingFunction, factor);
+                float easedValue = EasingFunctionRepository.Ease(EasingFunction, factor);
 
-                float from = IsPropertySet(FromProperty) ? From : (float)obj.GetBaseValue(prop);
-                float to = IsPropertySet(ToProperty) ? To : (float)obj.GetBaseValue(prop);
+                PointF from = IsPropertySet(FromProperty) ? From : (PointF)obj.GetBaseValue(prop);
+                PointF to = IsPropertySet(ToProperty) ? To : (PointF)obj.GetBaseValue(prop);
 
-                obj.SetAnimatedValue(prop, from + (to - from) * easedValue);
+                obj.SetAnimatedValue(prop, new PointF(from.X + (to.X - from.X) * easedValue, from.Y + (to.Y - from.Y) * easedValue));
             }
         }
 
         // Public properties --------------------------------------------------
-      
+
+
         #region From managed property
 
-        public float From
+        public PointF From
         {
-            get => (float)GetValue(FromProperty);
+            get => (PointF)GetValue(FromProperty);
             set => SetValue(FromProperty, value);
         }
 
-        public static readonly ManagedProperty FromProperty = ManagedProperty.Register(typeof(FloatPropertyAnimator),
+        public static readonly ManagedProperty FromProperty = ManagedProperty.Register(typeof(PointPropertyAnimator),
             nameof(From),
-            typeof(float),
-            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
+            typeof(PointF),
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
 
         #endregion
 
+
         #region To managed property
 
-        public float To
+        public PointF To
         {
-            get => (float)GetValue(ToProperty);
+            get => (PointF)GetValue(ToProperty);
             set => SetValue(ToProperty, value);
         }
 
-        public static readonly ManagedProperty ToProperty = ManagedProperty.Register(typeof(FloatPropertyAnimator),
+        public static readonly ManagedProperty ToProperty = ManagedProperty.Register(typeof(PointPropertyAnimator),
             nameof(To),
-            typeof(float),
-            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
+            typeof(PointF),
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
 
         #endregion
     }

@@ -26,16 +26,17 @@ namespace Animator.Engine.Elements
 
         #endregion
 
+
         #region Scenes managed collection
 
-        public List<Scene> Scenes
+        public ManagedCollection<Scene> Scenes
         {
-            get => (List<Scene>)GetValue(ScenesProperty);
+            get => (ManagedCollection<Scene>)GetValue(ScenesProperty);
         }
 
         public static readonly ManagedProperty ScenesProperty = ManagedProperty.RegisterCollection(typeof(Animation),
             nameof(Scenes),
-            typeof(List<Scene>));
+            typeof(ManagedCollection<Scene>));
 
         #endregion
 

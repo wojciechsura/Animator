@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public class TimeSegmentPropertyAnimator : PropertyAnimator
+    public abstract class TimeDurationPropertyAnimator : PropertyAnimator
     {
         #region StartTime managed property
 
@@ -17,7 +17,7 @@ namespace Animator.Engine.Elements
             set => SetValue(StartTimeProperty, value);
         }
 
-        public static readonly ManagedProperty StartTimeProperty = ManagedProperty.Register(typeof(FloatPropertyAnimator),
+        public static readonly ManagedProperty StartTimeProperty = ManagedProperty.Register(typeof(TimeDurationPropertyAnimator),
             nameof(StartTime),
             typeof(TimeSpan),
             new ManagedSimplePropertyMetadata { DefaultValue = TimeSpan.FromMilliseconds(0), ValueChangedHandler = HandleStartTimeChanged });
@@ -37,7 +37,7 @@ namespace Animator.Engine.Elements
             set => SetValue(EndTimeProperty, value);
         }
 
-        public static readonly ManagedProperty EndTimeProperty = ManagedProperty.Register(typeof(FloatPropertyAnimator),
+        public static readonly ManagedProperty EndTimeProperty = ManagedProperty.Register(typeof(TimeDurationPropertyAnimator),
             nameof(EndTime),
             typeof(TimeSpan),
             new ManagedSimplePropertyMetadata { DefaultValue = TimeSpan.FromMilliseconds(0), CoerceValueHandler = CoerceEndTime });

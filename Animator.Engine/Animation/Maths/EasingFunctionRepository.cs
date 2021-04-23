@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Engine.Animation.Utils
+namespace Animator.Engine.Animation.Maths
 {
     public static class EasingFunctionRepository
     {
@@ -29,12 +29,12 @@ namespace Animator.Engine.Animation.Utils
         private static Func<float, float> SpeedUpToSlowDown(Func<float, float> f) => x => 1.0f - f(1.0f - x);
 
         /// <remarks>Assumes, that func is continuous, func(0) = 0 and func(1) = 1.</remarks>
-        private static Func<float, float> SpeedUpToBoth(Func<float, float> f) => x => x < 0.5 ? (f(2.0f * x) / 2.0f) : 1.0f - f((1.0f - x) * 2.0f) / 2.0f;
+        private static Func<float, float> SpeedUpToBoth(Func<float, float> f) => x => x < 0.5 ? f(2.0f * x) / 2.0f : 1.0f - f((1.0f - x) * 2.0f) / 2.0f;
 
         /// <remarks>Assumes, that func is continuous, func(0) = 0 and func(1) = 1.</remarks>
-        private static Func<float, float> SpeedUpToReverseBoth(Func<float, float> f) => x => x < 0.5 ? 0.5f - f((0.5f - x) * 2.0f) / 2.0f : (f((x - 0.5f) * 2.0f) / 2.0f) + 0.5f;
+        private static Func<float, float> SpeedUpToReverseBoth(Func<float, float> f) => x => x < 0.5 ? 0.5f - f((0.5f - x) * 2.0f) / 2.0f : f((x - 0.5f) * 2.0f) / 2.0f + 0.5f;
 
-        private static Func<float, float> NegativeNudge(float horizontalDivider, float verticalDivider) => x => (x > 0 && x < (1.0f / horizontalDivider)) ? ((float)Math.Cos((horizontalDivider * x) * Math.PI * 2) - 1) / verticalDivider : 0.0f;
+        private static Func<float, float> NegativeNudge(float horizontalDivider, float verticalDivider) => x => x > 0 && x < 1.0f / horizontalDivider ? ((float)Math.Cos(horizontalDivider * x * Math.PI * 2) - 1) / verticalDivider : 0.0f;
 
         // Static ctor --------------------------------------------------------
 
