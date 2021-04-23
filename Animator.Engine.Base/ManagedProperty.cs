@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Animator.Engine.Base
-{
+{    
     public abstract class ManagedProperty
     {
         // Private types ------------------------------------------------------
@@ -109,8 +109,8 @@ namespace Animator.Engine.Base
 
         private static void ValidateListType(Type propertyType)
         {
-            if (!propertyType.IsAssignableTo(typeof(IList)))
-                throw new ArgumentException("When registering a collection, property type must implement IList interface!");
+            if (!propertyType.IsAssignableTo(typeof(ManagedCollection)))
+                throw new ArgumentException("When registering a collection, property type must derive from ManagedCollection!\r\nYou can also use ManagedCollection<T> for convenience.");
         }
 
         private static void AddPropertyByType(Type ownerClassType, ManagedProperty prop)

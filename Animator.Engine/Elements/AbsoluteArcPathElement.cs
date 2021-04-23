@@ -29,7 +29,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty RXProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
             nameof(RX),
             typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
 
         #endregion
 
@@ -44,7 +44,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty RYProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
             nameof(RY),
             typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
 
         #endregion
 
@@ -59,7 +59,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty AngleProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
             nameof(Angle),
             typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
 
         #endregion
 
@@ -74,7 +74,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty LargeArcFlagProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
             nameof(LargeArcFlag),
             typeof(bool),
-            new ManagedSimplePropertyMetadata(false));
+            new ManagedSimplePropertyMetadata { DefaultValue = false });
 
         #endregion
 
@@ -89,7 +89,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty SweepFlagProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
             nameof(SweepFlag),
             typeof(bool),
-            new ManagedSimplePropertyMetadata(false));
+            new ManagedSimplePropertyMetadata { DefaultValue = false });
 
         #endregion
 
@@ -104,7 +104,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
             nameof(EndPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
 
         #endregion
     }

@@ -23,7 +23,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty StartTimeProperty = ManagedProperty.Register(typeof(FloatPropertyAnimator),
             nameof(StartTime),
             typeof(TimeSpan),
-            new ManagedSimplePropertyMetadata(TimeSpan.FromMilliseconds(0), HandleStartTimeChanged));
+            new ManagedSimplePropertyMetadata { DefaultValue = TimeSpan.FromMilliseconds(0), ValueChangedHandler = HandleStartTimeChanged });
         
         private static void HandleStartTimeChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
@@ -43,7 +43,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EndTimeProperty = ManagedProperty.Register(typeof(FloatPropertyAnimator),
             nameof(EndTime),
             typeof(TimeSpan),
-            new ManagedSimplePropertyMetadata(TimeSpan.FromMilliseconds(0), null, CoerceEndTime));
+            new ManagedSimplePropertyMetadata { DefaultValue = TimeSpan.FromMilliseconds(0), CoerceValueHandler = CoerceEndTime });
 
         private static object CoerceEndTime(ManagedObject obj, object baseValue)
         {
@@ -75,7 +75,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty FromProperty = ManagedProperty.Register(typeof(FloatPropertyAnimator),
             nameof(From),
             typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
 
         #endregion
 
@@ -90,7 +90,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty ToProperty = ManagedProperty.Register(typeof(FloatPropertyAnimator),
             nameof(To),
             typeof(float),
-            new ManagedSimplePropertyMetadata(0.0f));
+            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
 
         #endregion
     }

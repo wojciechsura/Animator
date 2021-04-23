@@ -58,7 +58,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty TargetNameProperty = ManagedProperty.Register(typeof(PropertyAnimator),
             nameof(TargetName),
             typeof(string),
-            new ManagedSimplePropertyMetadata(null) { NotAnimatable = true });
+            new ManagedSimplePropertyMetadata { NotAnimatable = true });
 
         #endregion
 
@@ -73,7 +73,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty PathProperty = ManagedProperty.Register(typeof(PropertyAnimator),
             nameof(Path),
             typeof(string),
-            new ManagedSimplePropertyMetadata(null) { NotAnimatable = true });
+            new ManagedSimplePropertyMetadata { NotAnimatable = true });
 
         #endregion
     }

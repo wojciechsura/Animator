@@ -21,21 +21,21 @@ namespace Animator.Engine.Tests.TestClasses
         public static readonly ManagedProperty IntValueProperty = ManagedProperty.Register(typeof(CustomSerializedIntDataClass),
             nameof(IntValue),
             typeof(int),
-            new ManagedSimplePropertyMetadata(0, null, null, new CustomIntSerializer()));
+            new ManagedSimplePropertyMetadata { DefaultValue = 0, CustomSerializer = new CustomIntSerializer() });
 
         #endregion
 
         #region IntCollection managed collection
 
-        public List<int> IntCollection
+        public ManagedCollection<int> IntCollection
         {
-            get => (List<int>)GetValue(IntCollectionProperty);
+            get => (ManagedCollection<int>)GetValue(IntCollectionProperty);
         }
 
         public static readonly ManagedProperty IntCollectionProperty = ManagedProperty.RegisterCollection(typeof(CustomSerializedIntDataClass),
             nameof(IntCollection),
-            typeof(List<int>), 
-            new ManagedCollectionMetadata(() => new List<int>(), new CustomIntListSerializer()));
+            typeof(ManagedCollection<int>), 
+            new ManagedCollectionMetadata { CustomSerializer = new CustomIntListSerializer() });
 
         #endregion
     }

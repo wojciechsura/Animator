@@ -11,10 +11,9 @@ namespace Animator.Engine.Base
     {
         private static readonly ManagedReferencePropertyMetadata defaultMetadata = new ManagedReferencePropertyMetadata();
 
-        internal static ManagedReferencePropertyMetadata DefaultFor(Type propertyType) => defaultMetadata;
+        public static ManagedReferencePropertyMetadata DefaultFor(Type propertyType) => defaultMetadata;
 
-        public ManagedReferencePropertyMetadata(PropertyValueChangedDelegate valueChangedHandler = null, TypeSerializer customSerializer = null)
-            : base(valueChangedHandler, customSerializer)
+        public ManagedReferencePropertyMetadata()
         {
 
         }

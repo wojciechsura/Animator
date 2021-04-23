@@ -55,7 +55,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty NameProperty = ManagedProperty.Register(typeof(BaseElement),
             nameof(Name),
             typeof(string),
-            new ManagedSimplePropertyMetadata(null) { NotAnimatable = true });
+            new ManagedSimplePropertyMetadata { NotAnimatable = true });
 
         #endregion
     }

@@ -138,8 +138,8 @@ namespace Animator.Engine.Base.Persistence
                     }
                     else if (property is ManagedCollectionProperty collectionProperty)
                     {
-                        IList list = (IList)deserializedObject.GetValue(property);
-                        list.Add(content);
+                        ManagedCollection collection = (ManagedCollection)deserializedObject.GetValue(property);
+                        ((IList)collection).Add(content);
 
                         propertiesSet.Add(string.Format(contentDecoration, property.Name));
                     }
@@ -198,10 +198,10 @@ namespace Animator.Engine.Base.Persistence
 
                     if (value != null)
                     {
-                        IList collection = (IList)deserializedObject.GetValue(collectionProperty);
+                        var collection = (ManagedCollection)deserializedObject.GetValue(collectionProperty);
 
                         foreach (object obj in value)
-                            collection.Add(obj);
+                            ((IList)collection).Add(obj);
 
                         propertiesSet.Add(propertyNode.LocalName);
                     }
@@ -211,12 +211,12 @@ namespace Animator.Engine.Base.Persistence
                 }
                 else
                 {
-                    var list = (IList)deserializedObject.GetValue(property);
+                    var collection = (ManagedCollection)deserializedObject.GetValue(property);
 
                     foreach (XmlNode child in propertyNode.ChildNodes)
                     {
                         var content = DeserializeElement(child, context);
-                        list.Add(content);
+                        ((IList)collection).Add(content);
                     }
 
                     propertiesSet.Add(property.Name);
@@ -276,10 +276,10 @@ namespace Animator.Engine.Base.Persistence
 
                     if (value != null)
                     {
-                        IList collection = (IList)deserializedObject.GetValue(collectionProperty);
+                        var collection = (ManagedCollection)deserializedObject.GetValue(collectionProperty);
 
                         foreach (object obj in value)
-                            collection.Add(obj);
+                            ((IList)collection).Add(obj);
 
                         propertiesSet.Add(attribute.LocalName);
                     }

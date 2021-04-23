@@ -13,14 +13,14 @@ namespace Animator.Engine.Tests.TestClasses
 
         #region Collection managed collection
 
-        public List<int> Collection
+        public ManagedCollection<int> Collection
         {
-            get => (List<int>)GetValue(CollectionProperty);
+            get => (ManagedCollection<int>)GetValue(CollectionProperty);
         }
 
         public static readonly ManagedProperty CollectionProperty = ManagedProperty.RegisterCollection(typeof(SimpleCollectionPropertyClass),
             nameof(Collection),
-            typeof(List<int>));
+            typeof(ManagedCollection<int>));
 
         #endregion
     }

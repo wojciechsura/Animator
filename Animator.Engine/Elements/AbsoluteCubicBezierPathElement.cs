@@ -32,7 +32,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty ControlPoint1Property = ManagedProperty.Register(typeof(AbsoluteCubicBezierPathElement),
             nameof(ControlPoint1),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
 
         #endregion
 
@@ -47,7 +47,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty ControlPoint2Property = ManagedProperty.Register(typeof(AbsoluteCubicBezierPathElement),
             nameof(ControlPoint2),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
 
         #endregion
 
@@ -62,7 +62,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(AbsoluteCubicBezierPathElement),
             nameof(EndPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
 
         #endregion
     }

@@ -9,14 +9,14 @@
       <Code Language="CSharp">
         <![CDATA[#region $Name$ managed collection
     
-public List<$PropType$> $Name$
+public ManagedCollection<$PropType$> $Name$
 {
-    get => (List<$PropType$>)GetValue($Name$Property);
+    get => (ManagedCollection<$PropType$>)GetValue($Name$Property);
 }
 
 public static readonly ManagedProperty $Name$Property = ManagedProperty.RegisterCollection(typeof($ClassType$), 
     nameof($Name$), 
-    typeof(List<$PropType$>));
+    typeof(ManagedCollection<$PropType$>));
     
 #endregion]]>
       </Code>
@@ -67,7 +67,7 @@ public $PropType$ $Name$
 public static readonly ManagedProperty $Name$Property = ManagedProperty.Register(typeof($ClassType$), 
     nameof($Name$), 
     typeof($PropType$), 
-    new ManagedSimplePropertyMetadata($DefaultValue$));
+    new ManagedSimplePropertyMetadata { DefaultValue = $DefaultValue$ });
     
 #endregion]]>
       </Code>

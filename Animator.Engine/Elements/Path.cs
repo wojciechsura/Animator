@@ -40,15 +40,14 @@ namespace Animator.Engine.Elements
 
         #region Definition managed collection
 
-        public List<PathElement> Definition
+        public ManagedCollection<PathElement> Definition
         {
-            get => (List<PathElement>)GetValue(DefinitionProperty);
+            get => (ManagedCollection<PathElement>)GetValue(DefinitionProperty);
         }
 
         public static readonly ManagedProperty DefinitionProperty = ManagedProperty.RegisterCollection(typeof(Path),
             nameof(Definition),
-            typeof(List<PathElement>),
-            new ManagedCollectionMetadata(() => new List<PathElement>()));
+            typeof(ManagedCollection<PathElement>));
 
         #endregion
     }

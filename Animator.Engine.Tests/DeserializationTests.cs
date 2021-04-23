@@ -246,7 +246,7 @@ namespace Animator.Engine.Tests
             {
                 CustomSerializers = new Dictionary<Type, TypeSerializer>
                 {
-                    { typeof(List<int>), new CustomIntListSerializer() }
+                    { typeof(ManagedCollection<int>), new CustomIntListSerializer() }
                 }
             };
 

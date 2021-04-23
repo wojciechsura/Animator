@@ -22,7 +22,7 @@ namespace Animator.Engine.Base
             if (!defaultMetadata.TryGetValue(type, out ManagedSimplePropertyMetadata metadata))
             {
                 object defaultValue = type.IsValueType ? Activator.CreateInstance(type) : null;
-                metadata = new ManagedSimplePropertyMetadata(defaultValue);
+                metadata = new ManagedSimplePropertyMetadata { DefaultValue = defaultValue };
 
                 defaultMetadata[type] = metadata;
             }
@@ -32,20 +32,15 @@ namespace Animator.Engine.Base
 
         // Public methods -----------------------------------------------------
 
-        public ManagedSimplePropertyMetadata(object defaultValue = null,
-            PropertyValueChangedDelegate valueChangedHandler = null,
-            CoerceValueDelegate coerceValueHandler = null,
-            TypeSerializer customSerializer = null)
-            : base(valueChangedHandler, customSerializer)
+        public ManagedSimplePropertyMetadata()            
         {
-            DefaultValue = defaultValue;
-            CoerceValueHandler = coerceValueHandler;
+
         }
 
         // Public properties --------------------------------------------------
 
-        public object DefaultValue { get; }
-        public CoerceValueDelegate CoerceValueHandler { get; }
+        public object DefaultValue { get; init; } = null;
+        public CoerceValueDelegate CoerceValueHandler { get; init; } = null;
         public bool NotAnimatable { get; init; } = false;
 
     }

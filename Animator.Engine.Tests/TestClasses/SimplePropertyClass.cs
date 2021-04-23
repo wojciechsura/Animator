@@ -20,7 +20,7 @@ namespace Animator.Engine.Tests.TestClasses
         public static ManagedProperty IntValueProperty = ManagedProperty.Register(typeof(SimplePropertyClass), 
             nameof(IntValue), 
             typeof(int), 
-            new ManagedSimplePropertyMetadata(0, HandleIntValueChanged));
+            new ManagedSimplePropertyMetadata { DefaultValue = 0, ValueChangedHandler = HandleIntValueChanged });
 
         private static void HandleIntValueChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {

@@ -33,7 +33,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty ControlPointProperty = ManagedProperty.Register(typeof(AbsoluteQuadraticBezierPathElement),
             nameof(ControlPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
 
         #endregion
 
@@ -48,7 +48,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(AbsoluteQuadraticBezierPathElement),
             nameof(EndPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata(new PointF(0.0f, 0.0f)));
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
 
         #endregion
     }

@@ -7,20 +7,50 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Base
 {
+    public delegate ManagedCollection InitializeCollectionDelegate();
+
+    public class ManagedCollectionChangedEventArgs : EventArgs
+    {
+        public ManagedCollectionChangedEventArgs(ManagedCollection collection,
+            CollectionChange change,
+            IList<object> itemsAdded,
+            IList<object> itemsRemoved)
+        {
+            Collection = collection;
+            Change = change;
+            ItemsAdded = itemsAdded;
+            ItemsRemoved = itemsRemoved;
+        }
+
+        public ManagedCollection Collection { get; }
+        public CollectionChange Change { get; }
+        public IList<object> ItemsAdded { get; }
+        public IList<object> ItemsRemoved { get; }
+    }
+
+    public delegate void ManagedCollectionChangedDelegate(ManagedObject sender, ManagedCollectionChangedEventArgs args);
+
     public class ManagedCollectionMetadata : BasePropertyMetadata
     {
-        public ManagedCollectionMetadata(Func<object> collectionInitializer, TypeSerializer customSerializer = null)
+        // Private static fields ----------------------------------------------
+
+        private static readonly ManagedCollectionMetadata DefaultMetadata = new ManagedCollectionMetadata();
+
+        // Public static methods ----------------------------------------------
+
+        public static ManagedCollectionMetadata DefaultFor(Type propertyType) => DefaultMetadata;
+
+        // Public methods -----------------------------------------------------
+
+        public ManagedCollectionMetadata()
         {
-            CollectionInitializer = collectionInitializer;
-            CustomSerializer = customSerializer;
+
         }
 
-        public Func<object> CollectionInitializer { get; }
-        public TypeSerializer CustomSerializer { get; }
+        // Public properties --------------------------------------------------
 
-        internal static ManagedCollectionMetadata DefaultFor(Type propertyType)
-        {
-            return new ManagedCollectionMetadata(() => Activator.CreateInstance(propertyType));
-        }
+        public InitializeCollectionDelegate CollectionInitializer { get; init; }
+        public TypeSerializer CustomSerializer { get; init; }
+        public ManagedCollectionChangedDelegate CollectionChangedHandler { get; init; }
     }
 }

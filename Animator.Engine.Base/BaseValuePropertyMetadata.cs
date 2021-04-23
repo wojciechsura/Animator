@@ -9,14 +9,13 @@ namespace Animator.Engine.Base
 {
     public class BaseValuePropertyMetadata : BasePropertyMetadata
     {
-        public BaseValuePropertyMetadata(PropertyValueChangedDelegate valueChangedHandler, TypeSerializer customSerializer)
+        public BaseValuePropertyMetadata()
         {
-            ValueChangedHandler = valueChangedHandler;
-            CustomSerializer = customSerializer;
+
         }
 
-        public PropertyValueChangedDelegate ValueChangedHandler { get; }
-        public TypeSerializer CustomSerializer { get; }
+        public PropertyValueChangedDelegate ValueChangedHandler { get; init; } = null;
+        public TypeSerializer CustomSerializer { get; init; } = null;
 
     }
 }

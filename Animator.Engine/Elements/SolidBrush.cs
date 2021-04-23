@@ -29,7 +29,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty ColorProperty = ManagedProperty.Register(typeof(SolidBrush),
             nameof(Color),
             typeof(System.Drawing.Color),
-            new ManagedSimplePropertyMetadata(System.Drawing.Color.Transparent));
+            new ManagedSimplePropertyMetadata { DefaultValue = System.Drawing.Color.Transparent });
 
         #endregion
     }

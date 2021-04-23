@@ -21,22 +21,31 @@ namespace Animator.Engine.Tests.TestClasses
         public static readonly ManagedProperty IntValueProperty = ManagedProperty.Register(typeof(IntDataClass),
             nameof(IntValue),
             typeof(int),
-            new ManagedSimplePropertyMetadata(0));
+            new ManagedSimplePropertyMetadata { DefaultValue = 0 });
 
         #endregion
 
 
         #region IntCollection managed collection
 
-        public List<int> IntCollection
+        public ManagedCollection<int> IntCollection
         {
-            get => (List<int>)GetValue(IntCollectionProperty);
+            get => (ManagedCollection<int>)GetValue(IntCollectionProperty);
         }
 
         public static readonly ManagedProperty IntCollectionProperty = ManagedProperty.RegisterCollection(typeof(IntDataClass),
             nameof(IntCollection),
-            typeof(List<int>));
+            typeof(ManagedCollection<int>),
+            new ManagedCollectionMetadata { CollectionChangedHandler = HandleCollectionChanged });
+
+        private static void HandleCollectionChanged(ManagedObject sender, ManagedCollectionChangedEventArgs args)
+        {
+            (sender as IntDataClass).CollectionChanged?.Invoke(sender, args);
+        }
+
 
         #endregion
+
+        public event ManagedCollectionChangedDelegate CollectionChanged;
     }
 }

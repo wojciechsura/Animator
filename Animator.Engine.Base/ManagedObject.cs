@@ -15,7 +15,7 @@ namespace Animator.Engine.Base
         // Private fields -----------------------------------------------------
 
         private readonly Dictionary<int, PropertyValue> propertyValues = new();
-        private readonly Dictionary<int, object> collections = new();
+        private readonly Dictionary<int, ManagedCollection> collections = new();
         private readonly Dictionary<int, object> references = new();
 
         // Private methods ----------------------------------------------------
@@ -63,15 +63,21 @@ namespace Animator.Engine.Base
             return propertyValue;
         }
 
-        private object EnsureCollection(ManagedCollectionProperty property)
+        private ManagedCollection EnsureCollection(ManagedCollectionProperty property)
         {
-            if (!collections.TryGetValue(property.GlobalIndex, out object collection))
+            if (!collections.TryGetValue(property.GlobalIndex, out ManagedCollection collection))
             {
-                collection = property.Metadata.CollectionInitializer();
+                if (property.Metadata.CollectionInitializer != null)
+                    collection = property.Metadata.CollectionInitializer();
+                else
+                    collection = (ManagedCollection)Activator.CreateInstance(property.Type);
+
                 if (!collection.GetType().IsAssignableTo(property.Type))
                     throw new InvalidOperationException($"Instantiated collection ({collection.GetType().Name} doesn't match property type ({property.Type.Name})!");
 
                 collections[property.GlobalIndex] = collection;
+
+                collection.CollectionChanged += (s, e) => OnCollectionChanged(property, s, e);
             }
 
             return collection;
@@ -88,9 +94,28 @@ namespace Animator.Engine.Base
 
             if (!object.Equals(oldEffectiveValue, propertyValue.EffectiveValue))
             {
-                if (property.Metadata.ValueChangedHandler != null)
-                    property.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(oldEffectiveValue, propertyValue.EffectiveValue));
+                OnPropertyValueChanged(property, oldEffectiveValue, propertyValue.EffectiveValue);
             }
+        }
+
+        // Protected methods --------------------------------------------------
+
+        protected virtual void OnCollectionChanged(ManagedCollectionProperty property, ManagedCollection collection, CollectionChangedEventArgs e)
+        {
+            if (property.Metadata.CollectionChangedHandler != null)
+                property.Metadata.CollectionChangedHandler.Invoke(this, new ManagedCollectionChangedEventArgs(collection, e.Change, e.ItemsAdded, e.ItemsRemoved));
+        }
+
+        protected virtual void OnPropertyValueChanged(ManagedSimpleProperty property, object oldValue, object newValue)
+        {
+            if (property.Metadata.ValueChangedHandler != null)
+                property.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(oldValue, newValue));
+        }
+
+        protected virtual void OnReferenceValueChanged(ManagedReferenceProperty referenceProperty, object oldValue, object newValue)
+        {
+            if (referenceProperty.Metadata.ValueChangedHandler != null)
+                referenceProperty.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(oldValue, newValue));
         }
 
         // Internal methods ---------------------------------------------------
@@ -246,8 +271,7 @@ namespace Animator.Engine.Base
 
                 if (!object.Equals(oldValue, value))
                 {
-                    if (referenceProperty.Metadata.ValueChangedHandler != null)
-                        referenceProperty.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(oldValue, value));
+                    OnReferenceValueChanged(referenceProperty, oldValue, value);
                 }
             }
         }

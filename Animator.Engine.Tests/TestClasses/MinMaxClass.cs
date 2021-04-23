@@ -21,7 +21,7 @@ namespace Animator.Engine.Tests.TestClasses
         public static readonly ManagedProperty MinProperty = ManagedProperty.Register(typeof(MinMaxClass),
             nameof(Min),
             typeof(int),
-            new ManagedSimplePropertyMetadata(0, HandleMinChanged));
+            new ManagedSimplePropertyMetadata { DefaultValue = 0, ValueChangedHandler = HandleMinChanged } );
 
         private static void HandleMinChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
@@ -42,7 +42,7 @@ namespace Animator.Engine.Tests.TestClasses
         public static readonly ManagedProperty MaxProperty = ManagedProperty.Register(typeof(MinMaxClass),
             nameof(Max),
             typeof(int),
-            new ManagedSimplePropertyMetadata(0, HandleMaxChanged, CoerceMax));
+            new ManagedSimplePropertyMetadata { DefaultValue = 0, ValueChangedHandler = HandleMaxChanged, CoerceValueHandler = CoerceMax });
 
         private static void HandleMaxChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {

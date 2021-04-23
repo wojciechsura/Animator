@@ -23,8 +23,15 @@ namespace Animator.Engine.Tests.TestClasses
         public static readonly ManagedProperty NestedObjectProperty = ManagedProperty.RegisterReference(typeof(SimpleCompositeClass),
             nameof(NestedObject),
             typeof(SimplePropertyClass),
-            new ManagedReferencePropertyMetadata());
+            new ManagedReferencePropertyMetadata { ValueChangedHandler = HandleValueChanged });
+
+        private static void HandleValueChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
+        {
+            (sender as SimpleCompositeClass).NestedObjectChanged?.Invoke(sender, args);
+        }
 
         #endregion
+
+        public event PropertyValueChangedDelegate NestedObjectChanged;
     }
 }
