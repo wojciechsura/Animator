@@ -2,6 +2,7 @@
 using Animator.Engine.Base.Persistence;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +36,19 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty ScenesProperty = ManagedProperty.RegisterCollection(typeof(Animation),
             nameof(Scenes),
             typeof(List<Scene>));
+
+        #endregion
+
+        #region Animators managed collection
+
+        public ManagedCollection<PropertyAnimator> Animators
+        {
+            get => (ManagedCollection<PropertyAnimator>)GetValue(AnimatorsProperty);
+        }
+
+        public static readonly ManagedProperty AnimatorsProperty = ManagedProperty.RegisterCollection(typeof(Animation),
+            nameof(Animators),
+            typeof(ManagedCollection<PropertyAnimator>));
 
         #endregion
     }
