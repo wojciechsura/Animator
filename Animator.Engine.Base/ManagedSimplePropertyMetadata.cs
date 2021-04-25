@@ -50,5 +50,7 @@ namespace Animator.Engine.Base
         /// <summary>Enables or disables animation for this 
         /// property</summary>
         public bool NotAnimatable { get; init; } = false;
+
+        public bool InheritedFromParent { get; init; } = false;
     }
 }

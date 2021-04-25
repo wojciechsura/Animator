@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Engine.Tests.TestClasses
+namespace Animator.Engine.Base.Tests.TestClasses
 {
-    [ContentProperty(nameof(SimpleCollectionClass.Items))]
+    [ContentProperty(nameof(Items))]
     public class SimpleCollectionClass : ManagedObject
     {
 

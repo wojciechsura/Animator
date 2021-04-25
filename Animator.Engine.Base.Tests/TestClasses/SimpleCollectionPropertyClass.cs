@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Engine.Tests.TestClasses
+namespace Animator.Engine.Base.Tests.TestClasses
 {
     public class SimpleCollectionPropertyClass : ManagedObject
     {

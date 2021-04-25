@@ -6,12 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Engine.Tests.TestClasses
+namespace Animator.Engine.Base.Tests.TestClasses
 {
-    [ContentProperty(nameof(SimpleCompositeClass.NestedObject))]
+    [ContentProperty(nameof(NestedObject))]
     public class SimpleCompositeClass : ManagedObject
     {
-
         #region NestedObject managed property
 
         public SimplePropertyClass NestedObject

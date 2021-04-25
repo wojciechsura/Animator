@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Engine.Tests.TestClasses
+namespace Animator.Engine.Base.Tests.TestClasses
 {
     public class IntDataClass : ManagedObject
     {
@@ -24,7 +24,6 @@ namespace Animator.Engine.Tests.TestClasses
             new ManagedSimplePropertyMetadata { DefaultValue = 0 });
 
         #endregion
-
 
         #region IntCollection managed collection
 

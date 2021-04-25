@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Engine.Tests.TestClasses
+namespace Animator.Engine.Base.Tests.TestClasses
 {
     public class CustomSerializedIntDataClass : ManagedObject
     {
@@ -34,7 +34,7 @@ namespace Animator.Engine.Tests.TestClasses
 
         public static readonly ManagedProperty IntCollectionProperty = ManagedProperty.RegisterCollection(typeof(CustomSerializedIntDataClass),
             nameof(IntCollection),
-            typeof(ManagedCollection<int>), 
+            typeof(ManagedCollection<int>),
             new ManagedCollectionMetadata { CustomSerializer = new CustomIntListSerializer() });
 
         #endregion

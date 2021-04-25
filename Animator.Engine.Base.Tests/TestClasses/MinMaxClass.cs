@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Engine.Tests.TestClasses
+namespace Animator.Engine.Base.Tests.TestClasses
 {
     public class MinMaxClass : ManagedObject
     {
@@ -21,7 +21,7 @@ namespace Animator.Engine.Tests.TestClasses
         public static readonly ManagedProperty MinProperty = ManagedProperty.Register(typeof(MinMaxClass),
             nameof(Min),
             typeof(int),
-            new ManagedSimplePropertyMetadata { DefaultValue = 0, ValueChangedHandler = HandleMinChanged } );
+            new ManagedSimplePropertyMetadata { DefaultValue = 0, ValueChangedHandler = HandleMinChanged });
 
         private static void HandleMinChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
@@ -46,7 +46,7 @@ namespace Animator.Engine.Tests.TestClasses
 
         private static void HandleMaxChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
-            sender.CoerceValue(MinProperty);            
+            sender.CoerceValue(MinProperty);
         }
 
         private static object CoerceMax(ManagedObject obj, object baseValue)

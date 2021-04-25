@@ -1,5 +1,5 @@
 using Animator.Engine.Base;
-using Animator.Engine.Tests.TestClasses;
+using Animator.Engine.Base.Tests.TestClasses;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -376,5 +376,178 @@ namespace Animator.Engine.Base.Tests
             Assert.AreEqual(value2, changes[1].NewValue);
         }
 
+        // TODO add tests for parents
+
+        [TestMethod]
+        public void ChildInheritsDefaultValueTest()
+        {
+            // Arrange
+
+            var child = new InheritanceChildClass();
+
+            // Assert
+
+            Assert.AreEqual(20, child.Value);
+        }
+
+        [TestMethod]
+        public void ChildInheritsValueAfterAssigningToParentTest()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+
+            // Act & assert
+
+            Assert.AreEqual(20, child.Value);
+            parent.Child = child;
+            Assert.AreEqual(10, child.Value);
+        }
+
+        [TestMethod]
+        public void ChildInheritsValueAfterAddingToParentsCollectionTest()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+
+            // Act & assert
+
+            Assert.AreEqual(20, child.Value);
+            parent.Children.Add(child);
+            Assert.AreEqual(10, child.Value);
+        }
+
+        [TestMethod]
+        public void ChildsStopsInheritingValueAfterRemovingFromParentTest()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+
+            // Act & assert
+
+            parent.Child = child;
+            Assert.AreEqual(10, child.Value);
+
+            parent.Child = null;
+            Assert.AreEqual(20, child.Value);
+        }
+
+        [TestMethod]
+        public void ChildStopsInheritingValueAfterRemovingFromParentsCollectionTest()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+
+            // Act & assert
+
+            parent.Children.Add(child);
+            Assert.AreEqual(10, child.Value);
+            parent.Children.Remove(child);
+            Assert.AreEqual(20, child.Value);
+        }
+
+        [TestMethod]
+        public void InheritedValueChangesOnChildWhenOnParentTest1()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+            parent.Child = child;
+
+            // Act & assert
+
+            Assert.AreEqual(10, child.Value);
+            parent.Value = 12;
+            Assert.AreEqual(12, child.Value);
+        }
+
+        [TestMethod]
+        public void InheritedValueChangesOnChildWhenOnParentTest2()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+            parent.Children.Add(child);
+
+            // Act & assert
+
+            Assert.AreEqual(10, child.Value);
+            parent.Value = 12;
+            Assert.AreEqual(12, child.Value);
+        }
+
+        [TestMethod]
+        public void ExplicitValueOverridesInheritedTest1()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+            parent.Child = child;
+
+            // Act & assert
+
+            Assert.AreEqual(10, child.Value);
+            child.Value = 12;
+            Assert.AreEqual(12, child.Value);
+        }
+
+        [TestMethod]
+        public void ExplicitValueOverridesInheritedTest2()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+            parent.Children.Add(child);
+
+            // Act & assert
+
+            Assert.AreEqual(10, child.Value);
+            child.Value = 12;
+            Assert.AreEqual(12, child.Value);
+        }
+
+        [TestMethod]
+        public void AnimatedValueOverridesInheritedValueTest()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+            parent.Child = child;
+
+            // Act & assert
+
+            Assert.AreEqual(10, child.Value);
+            child.SetAnimatedValue(InheritanceChildClass.ValueProperty, 42);
+            Assert.AreEqual(42, child.Value);
+        }
+
+        [TestMethod]
+        public void InheritedValueReturnsAfterClearingAnimatedValueTest()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+            parent.Child = child;
+
+            // Act & assert
+
+            Assert.AreEqual(10, child.Value);
+            child.SetAnimatedValue(InheritanceChildClass.ValueProperty, 42);
+            child.ResetAnimatedValue(InheritanceChildClass.ValueProperty);
+            Assert.AreEqual(10, child.Value);
+        }
     }
 }

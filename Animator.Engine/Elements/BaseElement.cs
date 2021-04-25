@@ -14,60 +14,9 @@ namespace Animator.Engine.Elements
     {
         // Private fields -----------------------------------------------------
 
-        private BaseElement parent;
         private Scene scene;
 
-        // Protected methods --------------------------------------------------
-
-        protected override void OnReferenceValueChanged(ManagedReferenceProperty referenceProperty, object oldValue, object newValue)
-        {
-            if (oldValue is BaseElement oldBaseElement)
-                oldBaseElement.Parent = null;
-
-            if (newValue is BaseElement newBaseElement)
-                newBaseElement.Parent = this;
-
-            base.OnReferenceValueChanged(referenceProperty, oldValue, newValue);
-        }
-
-        protected override void OnCollectionChanged(ManagedCollectionProperty property, ManagedCollection collection, CollectionChangedEventArgs e)
-        {
-            if (e.ItemsRemoved != null)
-                foreach (BaseElement removedElement in e.ItemsRemoved.OfType<BaseElement>())
-                    removedElement.Parent = null;
-
-            if (e.ItemsAdded != null)
-                foreach (BaseElement addedElement in e.ItemsAdded.OfType<BaseElement>())
-                    addedElement.Parent = this;
-
-            base.OnCollectionChanged(property, collection, e);
-        }
-
         // Private methods ----------------------------------------------------
-
-        private void SetParent(BaseElement newParent)
-        {
-            if (parent != null)
-            {
-                RemoveNamesRecursiveFromParent();
-            }
-
-            parent = newParent;
-
-            if (parent != null)
-            {
-                if (parent is Scene)
-                    scene = (Scene)parent;
-                else
-                    scene = parent.Scene;
-
-                AddNamesRecursiveToParent();
-            }
-            else
-            {
-                scene = null;
-            }
-        }
 
         private void AddNamesRecursiveToParent()
         {
@@ -89,6 +38,35 @@ namespace Animator.Engine.Elements
                     scene.UnregisterName(baseElement.Name, baseElement);
                 }
             });
+        }
+
+        // Protected methods --------------------------------------------------
+
+        protected override void ParentDetaching()
+        {
+            if (Parent != null)
+            {
+                RemoveNamesRecursiveFromParent();
+            }
+        }
+
+        protected override void ParentAttached()
+        {
+            if (Parent != null)
+            {
+                if (Parent is Scene)
+                    scene = (Scene)Parent;
+                else if (Parent is BaseElement baseElement)
+                    scene = baseElement.Scene;
+                else
+                    scene = null;
+
+                AddNamesRecursiveToParent();
+            }
+            else
+            {
+                scene = null;
+            }
         }
 
         // Public methods -----------------------------------------------------
@@ -140,12 +118,6 @@ namespace Animator.Engine.Elements
         }
 
         #endregion
-
-        public BaseElement Parent
-        {
-            get => parent;
-            internal set => SetParent(value);
-        }
 
         public Scene Scene => scene;
     }

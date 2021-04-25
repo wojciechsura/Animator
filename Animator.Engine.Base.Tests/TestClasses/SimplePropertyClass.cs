@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Engine.Tests.TestClasses
+namespace Animator.Engine.Base.Tests.TestClasses
 {
     public class SimplePropertyClass : ManagedObject
     {
@@ -17,9 +17,9 @@ namespace Animator.Engine.Tests.TestClasses
             set => SetValue(IntValueProperty, value);
         }
 
-        public static ManagedProperty IntValueProperty = ManagedProperty.Register(typeof(SimplePropertyClass), 
-            nameof(IntValue), 
-            typeof(int), 
+        public static ManagedProperty IntValueProperty = ManagedProperty.Register(typeof(SimplePropertyClass),
+            nameof(IntValue),
+            typeof(int),
             new ManagedSimplePropertyMetadata { DefaultValue = 0, ValueChangedHandler = HandleIntValueChanged });
 
         private static void HandleIntValueChanged(ManagedObject sender, PropertyValueChangedEventArgs args)

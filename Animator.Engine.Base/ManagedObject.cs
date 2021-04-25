@@ -18,6 +18,8 @@ namespace Animator.Engine.Base
         private readonly Dictionary<int, ManagedCollection> collections = new();
         private readonly Dictionary<int, object> references = new();
 
+        private ManagedObject parent;
+
         // Private methods ----------------------------------------------------
 
         private void ValidateValue(ManagedSimpleProperty property, object value)
@@ -57,11 +59,27 @@ namespace Animator.Engine.Base
 
         private PropertyValue EnsurePropertyValue(ManagedSimpleProperty property)
         {
-            if (!propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue))
+            if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue))
+                return propertyValue;
+
+            // Try to inherit
+            if (property.Metadata.InheritedFromParent &&
+                parent != null)                
             {
-                propertyValue = new PropertyValue(property.GlobalIndex, property.Metadata.DefaultValue);
-                propertyValues[property.GlobalIndex] = propertyValue;
+                var parentProperty = parent.GetProperty(property.Name);
+                if (parentProperty != null && parentProperty.Type == property.Type)
+                {
+                    propertyValue = new PropertyValue(property.GlobalIndex, parent.GetValue(parentProperty));
+                    propertyValue.ValueSource = PropertyValueSource.Inherited;
+                    propertyValues[property.GlobalIndex] = propertyValue;
+
+                    return propertyValue;
+                }
             }
+
+            propertyValue = new PropertyValue(property.GlobalIndex, property.Metadata.DefaultValue);
+            propertyValue.ValueSource = PropertyValueSource.Default;
+            propertyValues[property.GlobalIndex] = propertyValue;
 
             return propertyValue;
         }
@@ -101,10 +119,64 @@ namespace Animator.Engine.Base
             }
         }
 
+        private void SetParent(ManagedObject newParent)
+        {
+            if (parent != newParent)            
+            {
+                ParentDetaching();
+
+                parent = newParent;
+
+                ParentAttached();
+            }
+        }
+
         // Protected methods --------------------------------------------------
+
+        protected virtual void ParentDetaching()
+        {
+            // Clear all inheirted properties
+            var inheritedValues = propertyValues.Values.Where(pv => pv.ValueSource == PropertyValueSource.Inherited);
+
+            foreach (var inheritedValue in inheritedValues)
+            {
+                var property = (ManagedSimpleProperty)ManagedProperty.ByGlobalIndex(inheritedValue.PropertyIndex);
+
+                var oldValue = inheritedValue.FinalBaseValue;
+                propertyValues.Remove(inheritedValue.PropertyIndex);
+                var newValue = property.Metadata.DefaultValue;
+
+                OnPropertyValueChanged(property, oldValue, newValue);
+            }
+
+            // TODO add event
+            parent.PropertyValueChanged -= HandleParentPropertyValueChanged;
+        }
+
+        private void HandleParentPropertyValueChanged(ManagedSimpleProperty arg1, object arg2, object arg3)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual void ParentAttached()
+        {
+            // Iterate through all inheritable properties and if its current
+            // value is not set or it is set to a default, replace it with
+            // inherited value
+
+            // TODO
+        }
 
         protected virtual void OnCollectionChanged(ManagedCollectionProperty property, ManagedCollection collection, CollectionChangedEventArgs e)
         {
+            if (e.ItemsRemoved != null)
+                foreach (ManagedObject removedElement in e.ItemsRemoved.OfType<ManagedObject>())
+                    removedElement.Parent = null;
+
+            if (e.ItemsAdded != null)
+                foreach (ManagedObject addedElement in e.ItemsAdded.OfType<ManagedObject>())
+                    addedElement.Parent = this;
+
             if (property.Metadata.CollectionChangedHandler != null)
                 property.Metadata.CollectionChangedHandler.Invoke(this, new ManagedCollectionChangedEventArgs(collection, e.Change, e.ItemsAdded, e.ItemsRemoved));
         }
@@ -117,6 +189,12 @@ namespace Animator.Engine.Base
 
         protected virtual void OnReferenceValueChanged(ManagedReferenceProperty referenceProperty, object oldValue, object newValue)
         {
+            if (oldValue is ManagedObject oldBaseElement)
+                oldBaseElement.Parent = null;
+
+            if (newValue is ManagedObject newBaseElement)
+                newBaseElement.Parent = this;
+
             if (referenceProperty.Metadata.ValueChangedHandler != null)
                 referenceProperty.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(oldValue, newValue));
         }
@@ -277,8 +355,6 @@ namespace Animator.Engine.Base
             {
                 ValidateValue(referenceProperty, value);
 
-
-
                 if (references.TryGetValue(property.GlobalIndex, out object oldValue))
                 {
                     if (oldValue != null && referenceProperty.Metadata.ValueIsPermanent)
@@ -294,6 +370,14 @@ namespace Animator.Engine.Base
                     OnReferenceValueChanged(referenceProperty, oldValue, value);
                 }
             }
+        }
+
+        // Public properties --------------------------------------------------
+
+        public ManagedObject Parent
+        {
+            get => parent;
+            internal set => SetParent(value);
         }
     }
 }

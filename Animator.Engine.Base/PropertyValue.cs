@@ -12,6 +12,8 @@ namespace Animator.Engine.Base
     {
         // Private fields -----------------------------------------------------
 
+        private PropertyValueSource valueSource;
+
         private readonly int propertyIndex;
 
         private object baseValue = null;
@@ -55,13 +57,16 @@ namespace Animator.Engine.Base
 
         // Internal properties ------------------------------------------------
 
+        internal PropertyValueSource ValueSource
+        {
+            get => valueSource;
+            set => valueSource = value;
+        }
+
         internal object BaseValue
         {
             get => baseValue;
-            set
-            {
-                baseValue = value;
-            }
+            set => baseValue = value;
         }
 
         internal object AnimatedValue
@@ -86,13 +91,7 @@ namespace Animator.Engine.Base
 
         internal object FinalBaseValue
         {
-            get
-            {
-                if (isAnimated)
-                    return animatedValue;
-
-                return baseValue;
-            }
+            get => isAnimated ? animatedValue : baseValue;
         }
 
         internal object EffectiveValue
@@ -107,6 +106,8 @@ namespace Animator.Engine.Base
                 return baseValue;
             }
         }
+
+        public int PropertyIndex => propertyIndex;
 
         public bool IsCoerced => isCoerced;
 

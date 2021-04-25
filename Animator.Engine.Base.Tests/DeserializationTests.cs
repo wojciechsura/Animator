@@ -1,13 +1,13 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Base.Persistence.Types;
 using Animator.Engine.Base.Persistence;
-using Animator.Engine.Tests.TestClasses;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using System.Collections.ObjectModel;
+using Animator.Engine.Base.Tests.TestClasses;
 
 namespace Animator.Engine.Base.Tests
 {

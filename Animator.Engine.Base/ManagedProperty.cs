@@ -51,6 +51,7 @@ namespace Animator.Engine.Base
 
         private static readonly Dictionary<PropertyKey, ManagedProperty> propertyDefinitions = new();
         private static readonly Dictionary<Type, List<ManagedProperty>> propertiesByType = new();
+        private static readonly Dictionary<int, ManagedProperty> propertiesByIndex = new();
 
         private static int nextAvailableGlobalIndex;
 
@@ -158,6 +159,11 @@ namespace Animator.Engine.Base
             return result;
         }
 
+        internal static ManagedProperty ByGlobalIndex(int globalPropertyIndex)
+        {
+            return propertiesByIndex[globalPropertyIndex];
+        }
+
         // Internal methods ---------------------------------------------------
 
         internal ManagedProperty(Type ownerClassType, string name, Type type)
@@ -188,6 +194,7 @@ namespace Animator.Engine.Base
             var propertyKey = new PropertyKey(ownerClassType, name);
 
             propertyDefinitions[propertyKey] = prop;
+            propertiesByIndex[prop.GlobalIndex] = prop;
             AddPropertyByType(ownerClassType, prop);            
 
             return prop;
@@ -207,6 +214,7 @@ namespace Animator.Engine.Base
             var propertyKey = new PropertyKey(ownerClassType, name);
 
             propertyDefinitions[propertyKey] = prop;
+            propertiesByIndex[prop.GlobalIndex] = prop;
             AddPropertyByType(ownerClassType, prop);
 
             return prop;
@@ -226,6 +234,7 @@ namespace Animator.Engine.Base
             var propertyKey = new PropertyKey(ownerClassType, name);
 
             propertyDefinitions[propertyKey] = prop;
+            propertiesByIndex[prop.GlobalIndex] = prop;
             AddPropertyByType(ownerClassType, prop);
 
             return prop;
