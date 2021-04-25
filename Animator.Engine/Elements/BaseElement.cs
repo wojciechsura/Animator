@@ -12,13 +12,9 @@ namespace Animator.Engine.Elements
 {
     public abstract class BaseElement : ManagedObject
     {
-        // Private fields -----------------------------------------------------
-
-        private Scene scene;
-
         // Private methods ----------------------------------------------------
 
-        private void AddNamesRecursiveToParent()
+        private void AddNamesRecursiveToParent(Scene scene)
         {
             ProcessElementsRecursive(baseElement =>
             {
@@ -29,7 +25,7 @@ namespace Animator.Engine.Elements
             });
         }
 
-        private void RemoveNamesRecursiveFromParent()
+        private void RemoveNamesRecursiveFromParent(Scene scene)
         {
             ProcessElementsRecursive(baseElement =>
             {
@@ -44,9 +40,13 @@ namespace Animator.Engine.Elements
 
         protected override void OnParentDetaching()
         {
-            if (Parent != null)
+            if (Parent is Scene scene)
             {
-                RemoveNamesRecursiveFromParent();
+                RemoveNamesRecursiveFromParent(scene);
+            }
+            else if (Parent is BaseElement baseElement && baseElement.Scene != null)
+            {
+                RemoveNamesRecursiveFromParent(baseElement.Scene);
             }
         }
 
@@ -55,18 +55,9 @@ namespace Animator.Engine.Elements
             if (Parent != null)
             {
                 if (Parent is Scene)
-                    scene = (Scene)Parent;
-                else if (Parent is BaseElement baseElement)
-                    scene = baseElement.Scene;
-                else
-                    scene = null;
-
-                if (scene != null)
-                    AddNamesRecursiveToParent();
-            }
-            else
-            {
-                scene = null;
+                    AddNamesRecursiveToParent(Parent as Scene);
+                else if (Parent is BaseElement baseElement && baseElement.Scene != null)
+                    AddNamesRecursiveToParent(baseElement.Scene);
             }
         }
 
@@ -120,6 +111,17 @@ namespace Animator.Engine.Elements
 
         #endregion
 
-        public Scene Scene => scene;
+        public Scene Scene
+        {
+            get
+            {
+                if (Parent is Scene scene)
+                    return scene;
+                else if (Parent is BaseElement baseElement)
+                    return baseElement.Scene;
+                else
+                    return null;
+            }
+        }
     }
 }

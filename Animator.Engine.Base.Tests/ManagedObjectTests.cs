@@ -648,6 +648,7 @@ namespace Animator.Engine.Base.Tests
         public void InheritedValueCoercionTest()
         {
             // Arrange
+
             var parent = new InheritanceParentClass();
             var child = new InheritanceChildClass();
             parent.Child = child;
@@ -659,6 +660,20 @@ namespace Animator.Engine.Base.Tests
             // Assert
 
             Assert.AreEqual(100, child.Value2);
+        }
+
+        [TestMethod]
+        public void NonInheritablePropertyTest()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+            parent.Child = child;
+
+            // Assert
+
+            Assert.AreEqual(20, child.Value3);
         }
 
         [TestMethod]

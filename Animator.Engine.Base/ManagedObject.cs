@@ -150,7 +150,10 @@ namespace Animator.Engine.Base
                 parent != null)
             {
                 var parentProperty = parent.GetProperty(simpleProperty.Name);
-                if (parentProperty != null && parentProperty is ManagedSimpleProperty && parentProperty.Type == simpleProperty.Type)
+                if (parentProperty != null && 
+                    parentProperty is ManagedSimpleProperty parentSimpleProperty &&
+                    parentSimpleProperty.Metadata.Inheritable &&
+                    parentProperty.Type == simpleProperty.Type)
                 {
                     propertyValue.BaseValue = parent.GetValue(parentProperty);
                     propertyValue.ValueSource = PropertyValueSource.Inherited;
@@ -314,7 +317,10 @@ namespace Animator.Engine.Base
                     .Where(sp => sp.Metadata.InheritedFromParent))
                 {
                     var parentProperty = parent.GetProperty(simpleProperty.Name);
-                    if (parentProperty != null && parentProperty is ManagedSimpleProperty && parentProperty.Type == simpleProperty.Type)
+                    if (parentProperty != null && 
+                        parentProperty is ManagedSimpleProperty parentSimpleProperty && 
+                        parentSimpleProperty.Metadata.Inheritable &&
+                        parentProperty.Type == simpleProperty.Type)
                     {
                         var inheritedValue = parent.GetValue(parentProperty);
 

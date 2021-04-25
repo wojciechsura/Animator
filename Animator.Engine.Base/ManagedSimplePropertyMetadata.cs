@@ -52,5 +52,7 @@ namespace Animator.Engine.Base
         public bool NotAnimatable { get; init; } = false;
 
         public bool InheritedFromParent { get; init; } = false;
+        
+        public bool Inheritable { get; init; } = true;
     }
 }
