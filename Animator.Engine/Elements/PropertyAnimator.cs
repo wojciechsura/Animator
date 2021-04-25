@@ -19,7 +19,7 @@ namespace Animator.Engine.Elements
 
             (var obj, var prop) = Scene.FindProperty(TargetName, Path);
             if (obj != null && prop != null)
-                obj.ResetAnimatedValue(prop);
+                obj.ClearAnimatedValue(prop);
         }
 
         // Public properties --------------------------------------------------

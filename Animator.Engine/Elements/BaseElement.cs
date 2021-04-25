@@ -42,7 +42,7 @@ namespace Animator.Engine.Elements
 
         // Protected methods --------------------------------------------------
 
-        protected override void ParentDetaching()
+        protected override void OnParentDetaching()
         {
             if (Parent != null)
             {
@@ -50,7 +50,7 @@ namespace Animator.Engine.Elements
             }
         }
 
-        protected override void ParentAttached()
+        protected override void OnParentAttached()
         {
             if (Parent != null)
             {

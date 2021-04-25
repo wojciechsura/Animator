@@ -131,7 +131,7 @@ namespace Animator.Engine.Base.Tests
 
             // Act
 
-            cls.ResetAnimatedValue(SimplePropertyClass.IntValueProperty);
+            cls.ClearAnimatedValue(SimplePropertyClass.IntValueProperty);
 
             // Assert
 
@@ -518,6 +518,24 @@ namespace Animator.Engine.Base.Tests
         }
 
         [TestMethod]
+        public void ExplicitValueOverridesInheritedTest3()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+            parent.Children.Add(child);
+
+            // Act & assert
+
+            var childDefaultValue = (int)((ManagedSimpleProperty)child.GetProperty(nameof(child.Value))).Metadata.DefaultValue;
+
+            Assert.AreEqual(10, child.Value);
+            child.Value = childDefaultValue;
+            Assert.AreEqual(childDefaultValue, child.Value);
+        }
+
+        [TestMethod]
         public void AnimatedValueOverridesInheritedValueTest()
         {
             // Arrange
@@ -546,8 +564,101 @@ namespace Animator.Engine.Base.Tests
 
             Assert.AreEqual(10, child.Value);
             child.SetAnimatedValue(InheritanceChildClass.ValueProperty, 42);
-            child.ResetAnimatedValue(InheritanceChildClass.ValueProperty);
+            child.ClearAnimatedValue(InheritanceChildClass.ValueProperty);
             Assert.AreEqual(10, child.Value);
+        }
+
+        [TestMethod]
+        public void ChangeOfInheritedPropertyIsPropagated1()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+            parent.Child = child;
+
+            List<(ManagedProperty property, object oldValue, object newValue)> changeRegister = new();
+            child.PropertyValueChanged += (s, e) => changeRegister.Add((e.Property, e.OldValue, e.NewValue));
+
+            // Act
+
+            parent.Value = 50;
+
+            // Assert
+
+            Assert.AreEqual(50, child.Value);
+            Assert.AreEqual(1, changeRegister.Count);
+            Assert.AreEqual(10, changeRegister[0].oldValue);
+            Assert.AreEqual(50, changeRegister[0].newValue);
+        }
+
+        [TestMethod]
+        public void ChangeOfInheritedPropertyIsPropagated2()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+            child.SetAnimatedValue(InheritanceChildClass.ValueProperty, 90);
+            parent.Child = child;
+
+            List<(ManagedProperty property, object oldValue, object newValue)> changeRegister = new();
+            child.PropertyValueChanged += (s, e) => changeRegister.Add((e.Property, e.OldValue, e.NewValue));
+
+            // Act
+
+            parent.Value = 50;
+
+            // Assert
+
+            Assert.AreEqual(50, child.Value);
+            Assert.AreEqual(1, changeRegister.Count);
+            Assert.AreEqual(10, changeRegister[0].oldValue);
+            Assert.AreEqual(50, changeRegister[0].newValue);
+        }
+
+        [TestMethod]
+        public void ChangeOfInheritedPropertyIsPropagatedAfterDetachingParentTest()
+        {
+            // Arrange
+
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+            parent.Value = 50;
+            parent.Child = child;
+
+            List<(ManagedProperty property, object oldValue, object newValue)> changeRegister = new();
+            child.PropertyValueChanged += (s, e) => changeRegister.Add((e.Property, e.OldValue, e.NewValue));
+
+            // Act
+
+            parent.Child = null;
+
+            // Assert
+
+            Assert.AreEqual(20, child.Value);
+
+            var valueChangeRegistry = changeRegister.FirstOrDefault(x => x.property == InheritanceChildClass.ValueProperty);
+            Assert.IsNotNull(valueChangeRegistry);
+            Assert.AreEqual(50, valueChangeRegistry.oldValue);
+            Assert.AreEqual(20, valueChangeRegistry.newValue);
+        }
+
+        [TestMethod]
+        public void InheritedValueCoercionTest()
+        {
+            // Arrange
+            var parent = new InheritanceParentClass();
+            var child = new InheritanceChildClass();
+            parent.Child = child;
+
+            // Act
+
+            parent.Value2 = 200;
+
+            // Assert
+
+            Assert.AreEqual(100, child.Value2);
         }
     }
 }

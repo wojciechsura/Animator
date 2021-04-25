@@ -8,6 +8,7 @@ using System.Linq;
 using System.Xml;
 using System.Collections.ObjectModel;
 using Animator.Engine.Base.Tests.TestClasses;
+using System.Reflection;
 
 namespace Animator.Engine.Base.Tests
 {
@@ -19,7 +20,7 @@ namespace Animator.Engine.Base.Tests
         {
             // Arrange
 
-            string xml = "<SimplePropertyClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\" />";
+            string xml = $"<SimplePropertyClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" />";
             XmlDocument document = new XmlDocument();
             document.LoadXml(xml);
 
@@ -50,7 +51,7 @@ namespace Animator.Engine.Base.Tests
 
             var options = new DeserializationOptions
             {
-                DefaultNamespace = new NamespaceDefinition("Animator.Engine.Base.Tests", "Animator.Engine.Tests.TestClasses")
+                DefaultNamespace = new NamespaceDefinition(Assembly.GetExecutingAssembly().FullName, typeof(SimplePropertyClass).Namespace)
             };
             ManagedObject deserialized = serializer.Deserialize(document, options);
 
@@ -65,7 +66,7 @@ namespace Animator.Engine.Base.Tests
         {
             // Arrange
 
-            string xml = "<SimplePropertyClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
+            string xml = $"<SimplePropertyClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" " +
                 "IntValue=\"42\" />";
             XmlDocument document = new XmlDocument();
             document.LoadXml(xml);
@@ -87,7 +88,7 @@ namespace Animator.Engine.Base.Tests
         {
             // Arrange
 
-            string xml = "<SimpleCoercedPropertyClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
+            string xml = $"<SimpleCoercedPropertyClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" " +
                 "Max10=\"42\" />";
             XmlDocument document = new XmlDocument();
             document.LoadXml(xml);
@@ -107,7 +108,7 @@ namespace Animator.Engine.Base.Tests
         [TestMethod]
         public void NestedObjectDeserializationTest()
         {
-            string xml = "<SimpleCompositeClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\">\r\n" +
+            string xml = $"<SimpleCompositeClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\">\r\n" +
                 "    <SimpleCompositeClass.NestedObject>\r\n" +
                 "        <SimplePropertyClass IntValue=\"42\" />\r\n" +
                 "    </SimpleCompositeClass.NestedObject>\r\n" +
@@ -132,7 +133,7 @@ namespace Animator.Engine.Base.Tests
         [TestMethod]
         public void ContentPropertyDeserializationTest()
         {
-            string xml = "<SimpleCompositeClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\">\r\n" +
+            string xml = $"<SimpleCompositeClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\">\r\n" +
                 "    <SimplePropertyClass IntValue=\"42\" />\r\n" +
                 "</SimpleCompositeClass>";
 
@@ -155,7 +156,7 @@ namespace Animator.Engine.Base.Tests
         [TestMethod]
         public void CollectionDeserializationTest()
         {
-            string xml = "<SimpleCollectionClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\">\r\n" +
+            string xml = $"<SimpleCollectionClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\">\r\n" +
                 "    <SimpleCollectionClass.Items>\r\n" +
                 "       <SimplePropertyClass IntValue=\"10\" />\r\n" +
                 "       <SimplePropertyClass IntValue=\"20\" />\r\n" +
@@ -182,7 +183,7 @@ namespace Animator.Engine.Base.Tests
         [TestMethod]
         public void CollectionAsContentPropertyDeserializationTest()
         {
-            string xml = "<SimpleCollectionClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\">\r\n" +
+            string xml = $"<SimpleCollectionClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\">\r\n" +
                 "   <SimplePropertyClass IntValue=\"10\" />\r\n" +
                 "   <SimplePropertyClass IntValue=\"20\" />\r\n" +
                 "   <SimplePropertyClass IntValue=\"30\" />\r\n" +
@@ -207,7 +208,7 @@ namespace Animator.Engine.Base.Tests
         [TestMethod]
         public void GlobalCustomPropertySerializationTest()
         {
-            string xml = "<IntDataClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
+            string xml = $"<IntDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" " +
                 "IntValue=\"-42\" />";
 
             XmlDocument document = new XmlDocument();
@@ -235,7 +236,7 @@ namespace Animator.Engine.Base.Tests
         [TestMethod]
         public void GlobalCustomCollectionSerializationTest()
         {
-            string xml = "<IntDataClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
+            string xml = $"<IntDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" " +
                 "IntCollection=\"4,3,2,1\" />";
 
             XmlDocument document = new XmlDocument();
@@ -264,7 +265,7 @@ namespace Animator.Engine.Base.Tests
         [TestMethod]
         public void PerPropertyCustomSerializationTest1()
         {
-            string xml = "<CustomSerializedIntDataClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
+            string xml = $"<CustomSerializedIntDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" " +
                 "IntValue=\"-42\" />";
 
             XmlDocument document = new XmlDocument();
@@ -285,7 +286,7 @@ namespace Animator.Engine.Base.Tests
         [TestMethod]
         public void PerPropertyCustomCollectionSerializationTest1()
         {
-            string xml = "<CustomSerializedIntDataClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\" " +
+            string xml = $"<CustomSerializedIntDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" " +
                 "IntCollection=\"4,3,2,1\" />";
 
             XmlDocument document = new XmlDocument();
@@ -307,7 +308,7 @@ namespace Animator.Engine.Base.Tests
         [TestMethod]
         public void PerPropertyCustomSerializationTest2()
         {
-            string xml = "<CustomSerializedIntDataClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\">" +
+            string xml = $"<CustomSerializedIntDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\">" +
                 "  <CustomSerializedIntDataClass.IntValue>-42</CustomSerializedIntDataClass.IntValue>" +
                 "</CustomSerializedIntDataClass>";
 
@@ -329,7 +330,7 @@ namespace Animator.Engine.Base.Tests
         [TestMethod]
         public void PerPropertyCustomCollectionSerializationTest2()
         {
-            string xml = "<CustomSerializedIntDataClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\">" +
+            string xml = $"<CustomSerializedIntDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\">" +
                 "  <CustomSerializedIntDataClass.IntCollection>4,3,2,1</CustomSerializedIntDataClass.IntCollection>" +
                 "</CustomSerializedIntDataClass>";
 
@@ -352,7 +353,7 @@ namespace Animator.Engine.Base.Tests
         [TestMethod]
         public void CustomActivatorDeserializationTest()
         {
-            string xml = "<NontrivialCtorClass xmlns=\"assembly=Animator.Engine.Base.Tests;namespace=Animator.Engine.Tests.TestClasses\" />";
+            string xml = $"<NontrivialCtorClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" />";
 
             XmlDocument document = new XmlDocument();
             document.LoadXml(xml);

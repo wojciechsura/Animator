@@ -3,13 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Animator.Engine.Base.BasePropertyMetadata;
 
+// TODO Make sure, that Value change notification is raised only when value actually changes
+
 namespace Animator.Engine.Base
 {
+    public class PropertyBaseValueChangedEventArgs : EventArgs
+    {
+        public PropertyBaseValueChangedEventArgs(ManagedProperty property, object newValue)
+        {
+            Property = property;
+            NewValue = newValue;
+        }
+
+        public ManagedProperty Property { get; }
+        public object NewValue { get; }
+    }
+
+    public delegate void PropertyBaseValueChangedDelegate(ManagedObject sender, PropertyBaseValueChangedEventArgs args);
+
     public abstract class ManagedObject
     {
         // Private fields -----------------------------------------------------
@@ -22,33 +39,64 @@ namespace Animator.Engine.Base
 
         // Private methods ----------------------------------------------------
 
-        private void ValidateValue(ManagedSimpleProperty property, object value)
+        private void SetBaseValue(ManagedSimpleProperty simpleProperty, object value, PropertyValueSource source = PropertyValueSource.Direct)
         {
-            if (property.Type.IsValueType && value == null)
-                throw new ArgumentException($"{property.OwnerClassType.Name}.{property.Name} property type is value-type ({property.Type.Name}), but provided value is null.");
+            ValidateSimpleValue(simpleProperty, value);
 
-            if (!value.GetType().IsAssignableTo(property.Type))
-                throw new ArgumentException($"Value of type {value.GetType().Name} cannot be assigned to property {property.OwnerClassType.Name}.{property.Name} of type {property.Type.Name}.");
-        }
+            var propertyValue = EnsurePropertyValue(simpleProperty);
+            propertyValue.ValueSource = source;
 
-        private void ValidateValue(ManagedReferenceProperty property, object value)
-        {
-            if (value != null && !value.GetType().IsAssignableTo(property.Type))
-                throw new ArgumentException($"Value of type {value.GetType().Name} cannot be assigned to property {property.OwnerClassType.Name}.{property.Name} of type {property.Type.Name}.");
-
-            if (property.Metadata.ValueValidationHandler != null && !property.Metadata.ValueValidationHandler.Invoke(this, new ValueValidationEventArgs(value)))
-                throw new ArgumentException($"Value {value} failed validation for property {property.OwnerClassType.Name}{property.Name}");
-        }
-
-        private (object, bool) InternalCoerceValue(ManagedSimpleProperty property)
-        {
-            if (property.Metadata.CoerceValueHandler != null)
+            if (propertyValue.BaseValue != value)
             {
-                PropertyValue propertyValue = EnsurePropertyValue(property);
+                var oldEffectiveValue = propertyValue.EffectiveValue;
+
+                propertyValue.BaseValue = value;
+                propertyValue.ResetModifiers();
+
+                if (source != PropertyValueSource.Default)
+                {
+                    // Coercion
+                    // Force value change notification, so that eg. animation can pick off changed base value
+                    CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
+                }
+                else
+                {
+                    // No coercion, but inform about value change
+                    if (!object.Equals(oldEffectiveValue, value))
+                        InternalPropertyValueChanged(simpleProperty, oldEffectiveValue, value);
+                }
+
+                InternalPropertyBaseValueChanged(simpleProperty, value);
+            }
+        }
+
+        private void ValidateSimpleValue(ManagedSimpleProperty simpleProperty, object value)
+        {
+            if (simpleProperty.Type.IsValueType && value == null)
+                throw new ArgumentException($"{simpleProperty.OwnerClassType.Name}.{simpleProperty.Name} property type is value-type ({simpleProperty.Type.Name}), but provided value is null.");
+
+            if (!value.GetType().IsAssignableTo(simpleProperty.Type))
+                throw new ArgumentException($"Value of type {value.GetType().Name} cannot be assigned to property {simpleProperty.OwnerClassType.Name}.{simpleProperty.Name} of type {simpleProperty.Type.Name}.");
+        }
+
+        private void ValidateReferenceValue(ManagedReferenceProperty refProperty, object value)
+        {
+            if (value != null && !value.GetType().IsAssignableTo(refProperty.Type))
+                throw new ArgumentException($"Value of type {value.GetType().Name} cannot be assigned to property {refProperty.OwnerClassType.Name}.{refProperty.Name} of type {refProperty.Type.Name}.");
+
+            if (refProperty.Metadata.ValueValidationHandler != null && !refProperty.Metadata.ValueValidationHandler.Invoke(this, new ValueValidationEventArgs(value)))
+                throw new ArgumentException($"Value {value} failed validation for property {refProperty.OwnerClassType.Name}{refProperty.Name}");
+        }
+
+        private (object, bool) InternalCoerceValue(ManagedSimpleProperty simpleProperty)
+        {
+            if (simpleProperty.Metadata.CoerceValueHandler != null)
+            {
+                PropertyValue propertyValue = EnsurePropertyValue(simpleProperty);
 
                 var oldValue = propertyValue.EffectiveValue;
 
-                var newValue = property.Metadata.CoerceValueHandler(this, propertyValue.FinalBaseValue);
+                var newValue = simpleProperty.Metadata.CoerceValueHandler(this, propertyValue.FinalBaseValue);
 
                 if (newValue != oldValue)
                     return (newValue, true);
@@ -57,29 +105,40 @@ namespace Animator.Engine.Base
             return (null, false);
         }
 
-        private PropertyValue EnsurePropertyValue(ManagedSimpleProperty property)
+        private PropertyValue EnsurePropertyValue(ManagedSimpleProperty simpleProperty)
         {
-            if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue))
+            // If it already exists, there is nothing to do.
+
+            if (propertyValues.TryGetValue(simpleProperty.GlobalIndex, out PropertyValue propertyValue))
                 return propertyValue;
 
-            // Try to inherit
-            if (property.Metadata.InheritedFromParent &&
-                parent != null)                
+            propertyValue = new PropertyValue(simpleProperty.GlobalIndex);
+            propertyValues[simpleProperty.GlobalIndex] = propertyValue;
+
+            return InitializeBaseValue(simpleProperty, propertyValue);
+        }
+
+        private PropertyValue InitializeBaseValue(ManagedSimpleProperty simpleProperty, PropertyValue propertyValue)
+        {
+            // Check, if inherited value exists
+
+            if (simpleProperty.Metadata.InheritedFromParent &&
+                parent != null)
             {
-                var parentProperty = parent.GetProperty(property.Name);
-                if (parentProperty != null && parentProperty.Type == property.Type)
+                var parentProperty = parent.GetProperty(simpleProperty.Name);
+                if (parentProperty != null && parentProperty is ManagedSimpleProperty && parentProperty.Type == simpleProperty.Type)
                 {
-                    propertyValue = new PropertyValue(property.GlobalIndex, parent.GetValue(parentProperty));
+                    propertyValue.BaseValue = parent.GetValue(parentProperty);
                     propertyValue.ValueSource = PropertyValueSource.Inherited;
-                    propertyValues[property.GlobalIndex] = propertyValue;
 
                     return propertyValue;
                 }
             }
 
-            propertyValue = new PropertyValue(property.GlobalIndex, property.Metadata.DefaultValue);
+            // Use default value otherwise
+
+            propertyValue.BaseValue = simpleProperty.Metadata.DefaultValue;
             propertyValue.ValueSource = PropertyValueSource.Default;
-            propertyValues[property.GlobalIndex] = propertyValue;
 
             return propertyValue;
         }
@@ -98,7 +157,7 @@ namespace Animator.Engine.Base
 
                 collections[property.GlobalIndex] = collection;
 
-                collection.CollectionChanged += (s, e) => OnCollectionChanged(property, s, e);
+                collection.CollectionChanged += (s, e) => InternalCollectionChanged(property, s, e);
             }
 
             return collection;
@@ -106,6 +165,10 @@ namespace Animator.Engine.Base
 
         private void CoerceAfterFinalBaseValueChanged(ManagedSimpleProperty property, PropertyValue propertyValue, object oldEffectiveValue)
         {
+            // Default value is never coerced
+            if (propertyValue.ValueSource == PropertyValueSource.Default)
+                return;
+
             (object coercedValue, bool coerced) = InternalCoerceValue(property);
 
             if (coerced && !object.Equals(coercedValue, propertyValue.BaseValue))
@@ -114,60 +177,22 @@ namespace Animator.Engine.Base
                 propertyValue.ClearCoercedValue();
 
             if (!object.Equals(oldEffectiveValue, propertyValue.EffectiveValue))
-            {
-                OnPropertyValueChanged(property, oldEffectiveValue, propertyValue.EffectiveValue);
-            }
+                InternalPropertyValueChanged(property, oldEffectiveValue, propertyValue.EffectiveValue);
         }
 
         private void SetParent(ManagedObject newParent)
         {
             if (parent != newParent)            
             {
-                ParentDetaching();
+                InternalParentDetaching();
 
                 parent = newParent;
 
-                ParentAttached();
+                InternalParentAttached();
             }
         }
 
-        // Protected methods --------------------------------------------------
-
-        protected virtual void ParentDetaching()
-        {
-            // Clear all inheirted properties
-            var inheritedValues = propertyValues.Values.Where(pv => pv.ValueSource == PropertyValueSource.Inherited);
-
-            foreach (var inheritedValue in inheritedValues)
-            {
-                var property = (ManagedSimpleProperty)ManagedProperty.ByGlobalIndex(inheritedValue.PropertyIndex);
-
-                var oldValue = inheritedValue.FinalBaseValue;
-                propertyValues.Remove(inheritedValue.PropertyIndex);
-                var newValue = property.Metadata.DefaultValue;
-
-                OnPropertyValueChanged(property, oldValue, newValue);
-            }
-
-            // TODO add event
-            parent.PropertyValueChanged -= HandleParentPropertyValueChanged;
-        }
-
-        private void HandleParentPropertyValueChanged(ManagedSimpleProperty arg1, object arg2, object arg3)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected virtual void ParentAttached()
-        {
-            // Iterate through all inheritable properties and if its current
-            // value is not set or it is set to a default, replace it with
-            // inherited value
-
-            // TODO
-        }
-
-        protected virtual void OnCollectionChanged(ManagedCollectionProperty property, ManagedCollection collection, CollectionChangedEventArgs e)
+        private void InternalCollectionChanged(ManagedCollectionProperty property, ManagedCollection collection, CollectionChangedEventArgs e)
         {
             if (e.ItemsRemoved != null)
                 foreach (ManagedObject removedElement in e.ItemsRemoved.OfType<ManagedObject>())
@@ -179,15 +204,139 @@ namespace Animator.Engine.Base
 
             if (property.Metadata.CollectionChangedHandler != null)
                 property.Metadata.CollectionChangedHandler.Invoke(this, new ManagedCollectionChangedEventArgs(collection, e.Change, e.ItemsAdded, e.ItemsRemoved));
+
+            OnCollectionChanged(property, collection, e);
         }
 
-        protected virtual void OnPropertyValueChanged(ManagedSimpleProperty property, object oldValue, object newValue)
+        private void HandleParentPropertyValueChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
+        {
+            // If parent's changed property matches this object's property, which
+            // is inherited and has default value, notify about its change too
+
+            if (GetProperty(args.Property.Name) is ManagedSimpleProperty simpleProperty &&
+                simpleProperty.Metadata.InheritedFromParent &&
+                args.Property is ManagedSimpleProperty &&
+                simpleProperty.Type == args.Property.Type)
+            {
+                if (propertyValues.TryGetValue(simpleProperty.GlobalIndex, out PropertyValue propertyValue))
+                {
+                    switch (propertyValue.ValueSource)
+                    {
+                        case PropertyValueSource.Default:
+                            {
+                                // This should never happen.
+                                throw new InvalidOperationException($"Internal algorithms failure: property {simpleProperty.Name}, which inherits value from parent, currently have PropertyValue with Source set to Default. This shouldn't be possible.");
+                            }
+                        case PropertyValueSource.Direct:
+                            {
+                                // Since user manually set value to this property, there's nothing to do.
+                                break;
+                            }
+                        case PropertyValueSource.Inherited:
+                            {
+                                if (!object.Equals(propertyValue.BaseValue, args.NewValue))
+                                {
+                                    SetBaseValue(simpleProperty, args.NewValue, PropertyValueSource.Inherited);
+                                }
+                                break;
+                            }
+                        default:
+                            throw new InvalidEnumArgumentException("Unsupported ValueSource!");
+                    }
+                }
+                else
+                {
+                    propertyValue = new PropertyValue(simpleProperty.GlobalIndex);
+                    propertyValues[simpleProperty.GlobalIndex] = propertyValue;
+
+                    SetBaseValue(simpleProperty, args.NewValue, PropertyValueSource.Inherited);
+                }
+            }
+        }
+
+        private void InternalParentDetaching()
+        {
+            if (parent != null)
+            {
+                // Clear all inheirted properties, since we have no parent from now on
+                var inheritedValues = propertyValues.Values.Where(pv => pv.ValueSource == PropertyValueSource.Inherited);
+
+                foreach (var inheritedValue in inheritedValues)
+                {
+                    var simpleProperty = (ManagedSimpleProperty)ManagedProperty.ByGlobalIndex(inheritedValue.PropertyIndex);
+
+                    var oldValue = inheritedValue.FinalBaseValue;
+                    var newValue = simpleProperty.Metadata.DefaultValue;
+
+                    SetBaseValue(simpleProperty, newValue, PropertyValueSource.Default);                   
+                }
+
+                parent.PropertyValueChanged -= HandleParentPropertyValueChanged;
+            }
+
+            OnParentDetaching();
+        }
+
+        private void InternalParentAttached()
+        {
+            if (parent != null)
+            {
+                parent.PropertyValueChanged += HandleParentPropertyValueChanged;
+
+                // We convert all PropertyValues, which currently serve the default value
+                // to inherited ones (if it is possible)
+                foreach (var simpleProperty in GetProperties(true)
+                    .OfType<ManagedSimpleProperty>()
+                    .Where(sp => sp.Metadata.InheritedFromParent))
+                {
+                    var parentProperty = parent.GetProperty(simpleProperty.Name);
+                    if (parentProperty != null && parentProperty is ManagedSimpleProperty && parentProperty.Type == simpleProperty.Type)
+                    {
+                        var inheritedValue = parent.GetValue(parentProperty);
+
+                        if (propertyValues.TryGetValue(simpleProperty.GlobalIndex, out PropertyValue propertyValue))                            
+                        {
+                            if (propertyValue.ValueSource == PropertyValueSource.Default)
+                            {
+                                // If there is a PropertyValue with source set to Default, replace its
+                                // value with inherited one and modify the source.
+
+                                SetBaseValue(simpleProperty, inheritedValue, PropertyValueSource.Inherited);
+                            }
+                        }
+                        else
+                        {
+                            propertyValue = new PropertyValue(simpleProperty.GlobalIndex);
+                            propertyValues[simpleProperty.GlobalIndex] = propertyValue;
+
+                            SetBaseValue(simpleProperty, inheritedValue, PropertyValueSource.Inherited);
+                        }
+                    }
+                }
+            }
+
+            OnParentAttached();
+        }
+
+        private void InternalPropertyBaseValueChanged(ManagedSimpleProperty simpleProperty, object newValue)
+        {
+            PropertyBaseValueChanged?.Invoke(this, new PropertyBaseValueChangedEventArgs(simpleProperty, newValue));
+        }
+
+        private void InternalPropertyValueChanged(ManagedSimpleProperty property, object oldValue, object newValue)
         {
             if (property.Metadata.ValueChangedHandler != null)
-                property.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(oldValue, newValue));
+                property.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(property, oldValue, newValue));
+
+            if (object.Equals(oldValue, newValue))
+                throw new InvalidOperationException("ValueChange called, but old and new values are equal!");
+
+            PropertyValueChanged?.Invoke(this, new PropertyValueChangedEventArgs(property, oldValue, newValue));
+
+            OnPropertyValueChanged(property, oldValue, newValue);
         }
 
-        protected virtual void OnReferenceValueChanged(ManagedReferenceProperty referenceProperty, object oldValue, object newValue)
+        private void InternalReferenceValueChanged(ManagedReferenceProperty referenceProperty, object oldValue, object newValue)
         {
             if (oldValue is ManagedObject oldBaseElement)
                 oldBaseElement.Parent = null;
@@ -196,14 +345,44 @@ namespace Animator.Engine.Base
                 newBaseElement.Parent = this;
 
             if (referenceProperty.Metadata.ValueChangedHandler != null)
-                referenceProperty.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(oldValue, newValue));
+                referenceProperty.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(referenceProperty, oldValue, newValue));
+
+            OnReferenceValueChanged(referenceProperty, oldValue, newValue);
+        }
+
+        // Protected methods --------------------------------------------------
+
+        protected virtual void OnParentDetaching()
+        {
+
+        }
+
+        protected virtual void OnParentAttached()
+        {
+
+        }
+
+        protected virtual void OnCollectionChanged(ManagedCollectionProperty property, ManagedCollection collection, CollectionChangedEventArgs e)
+        {
+
+        }
+
+        protected virtual void OnPropertyValueChanged(ManagedSimpleProperty property, object oldValue, object newValue)
+        {
+
+        }        
+
+        protected virtual void OnReferenceValueChanged(ManagedReferenceProperty referenceProperty, object oldValue, object newValue)
+        {
+
         }
 
         // Public methods -----------------------------------------------------
 
         public ManagedObject()
         {
-
+            // Force run static initializers on this class
+            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(GetType().TypeHandle);
         }
 
         public void CoerceValue(ManagedProperty property)
@@ -212,6 +391,10 @@ namespace Animator.Engine.Base
                 throw new InvalidOperationException($"Cannot coerce non-simple property {property.Name} of {GetType().Name}!");
 
             var propertyValue = EnsurePropertyValue(simpleProperty);
+
+            // Default value is never coerced
+            if (propertyValue.ValueSource == PropertyValueSource.Default)
+                return;
 
             var oldEffectiveValue = propertyValue.EffectiveValue;
 
@@ -227,7 +410,7 @@ namespace Animator.Engine.Base
 
             var propertyValue = EnsurePropertyValue(simpleProperty);
 
-            if (!propertyValue.IsAnimated || propertyValue.AnimatedValue != value)
+            if (!propertyValue.IsAnimated || !object.Equals(propertyValue.AnimatedValue, value))
             {
                 var oldEffectiveValue = propertyValue.EffectiveValue;
 
@@ -237,7 +420,7 @@ namespace Animator.Engine.Base
             }
         }
 
-        public void ResetAnimatedValue(ManagedProperty property)
+        public void ClearAnimatedValue(ManagedProperty property)
         {
             if (property is not ManagedSimpleProperty simpleProperty)
                 throw new InvalidOperationException($"Animated value cannot be set to non-simple property {property.Name} of {GetType().Name}!");
@@ -268,7 +451,14 @@ namespace Animator.Engine.Base
         public bool IsPropertySet(ManagedProperty property)
         {
             if (property is ManagedSimpleProperty)
-                return propertyValues.ContainsKey(property.GlobalIndex);
+            {
+                if (!propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue value))
+                    return false;
+
+                // Note: we treat inherited value as set
+
+                return value.ValueSource != PropertyValueSource.Default;
+            }
             else if (property is ManagedCollectionProperty)
                 return collections.ContainsKey(property.GlobalIndex);
             else if (property is ManagedReferenceProperty)
@@ -281,14 +471,12 @@ namespace Animator.Engine.Base
         {
             if (property is ManagedSimpleProperty simpleProperty)
             {
-                if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue))
-                    return propertyValue.EffectiveValue;
-                else
-                    return simpleProperty.Metadata.DefaultValue;
+                var propertyValue = EnsurePropertyValue(simpleProperty);
+                return propertyValue.EffectiveValue;
             }
             else if (property is ManagedReferenceProperty referenceProperty)
             {
-                if (references.TryGetValue(property.GlobalIndex, out object value))
+                if (references.TryGetValue(referenceProperty.GlobalIndex, out object value))
                     return value;
                 else
                     return null;
@@ -308,10 +496,8 @@ namespace Animator.Engine.Base
         {
             if (property is ManagedSimpleProperty simpleProperty)
             {
-                if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue))
-                    return propertyValue.BaseValue;
-                else
-                    return simpleProperty.Metadata.DefaultValue;
+                var propertyValue = EnsurePropertyValue(simpleProperty);
+                return propertyValue.BaseValue;
             }
             else
                 throw new ArgumentException("Base value is available only for simple properties!");
@@ -321,10 +507,8 @@ namespace Animator.Engine.Base
         {
             if (property is ManagedSimpleProperty simpleProperty)
             {
-                if (propertyValues.TryGetValue(property.GlobalIndex, out PropertyValue propertyValue))
-                    return propertyValue.FinalBaseValue;
-                else
-                    return simpleProperty.Metadata.DefaultValue;
+                var propertyValue = EnsurePropertyValue(simpleProperty);
+                return propertyValue.FinalBaseValue;
             }
             else
                 throw new ArgumentException("Final base value is available only for simple properties!");
@@ -334,26 +518,11 @@ namespace Animator.Engine.Base
         {
             if (property is ManagedSimpleProperty simpleProperty)
             {
-                ValidateValue(simpleProperty, value);
-
-                var propertyValue = EnsurePropertyValue(simpleProperty);
-
-                if (propertyValue.BaseValue != value)
-                {
-                    var oldEffectiveValue = propertyValue.EffectiveValue;
-
-                    propertyValue.BaseValue = value;
-                    propertyValue.ResetModifiers();
-
-                    // Coertion
-                    CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
-
-                    // Possible notification about base value change goes here
-                }
+                SetBaseValue(simpleProperty, value);
             }
             else if (property is ManagedReferenceProperty referenceProperty)
             {
-                ValidateValue(referenceProperty, value);
+                ValidateReferenceValue(referenceProperty, value);
 
                 if (references.TryGetValue(property.GlobalIndex, out object oldValue))
                 {
@@ -367,7 +536,7 @@ namespace Animator.Engine.Base
 
                 if (!object.Equals(oldValue, value))
                 {
-                    OnReferenceValueChanged(referenceProperty, oldValue, value);
+                    InternalReferenceValueChanged(referenceProperty, oldValue, value);
                 }
             }
         }
@@ -379,5 +548,9 @@ namespace Animator.Engine.Base
             get => parent;
             internal set => SetParent(value);
         }
+
+        public event PropertyValueChangedDelegate PropertyValueChanged;
+
+        public event PropertyBaseValueChangedDelegate PropertyBaseValueChanged;
     }
 }

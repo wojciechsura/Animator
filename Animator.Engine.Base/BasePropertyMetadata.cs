@@ -8,12 +8,14 @@ namespace Animator.Engine.Base
 {
     public class PropertyValueChangedEventArgs : EventArgs
     {
-        public PropertyValueChangedEventArgs(object oldValue, object newValue)
+        public PropertyValueChangedEventArgs(ManagedProperty property, object oldValue, object newValue)
         {
+            Property = property;
             OldValue = oldValue;
             NewValue = newValue;
         }
 
+        public ManagedProperty Property { get; }
         public object OldValue { get; }
         public object NewValue { get; }
     }

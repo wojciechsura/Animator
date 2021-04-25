@@ -25,6 +25,22 @@ namespace Animator.Engine.Base.Tests.TestClasses
 
         #endregion
 
+
+        #region Value2 managed property
+
+        public int Value2
+        {
+            get => (int)GetValue(Value2Property);
+            set => SetValue(Value2Property, value);
+        }
+
+        public static readonly ManagedProperty Value2Property = ManagedProperty.Register(typeof(InheritanceParentClass),
+            nameof(Value2),
+            typeof(int),
+            new ManagedSimplePropertyMetadata { DefaultValue = 10 });
+
+        #endregion
+
         #region Child managed property
 
         public InheritanceChildClass Child

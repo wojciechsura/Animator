@@ -401,8 +401,7 @@ namespace Animator.Engine.Base.Persistence
             var type = objType;
 
             do
-            {
-                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
+            {                
                 context.StaticallyInitializedTypes.Add(type);
 
                 type = type.BaseType;
