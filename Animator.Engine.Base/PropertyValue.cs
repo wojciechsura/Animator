@@ -115,5 +115,7 @@ namespace Animator.Engine.Base
         public bool IsCoerced => isCoerced;
 
         public bool IsAnimated => isAnimated;
+
+        public bool IsPureDefault => valueSource == PropertyValueSource.Default && !isAnimated;
     }
 }

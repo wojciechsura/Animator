@@ -660,5 +660,52 @@ namespace Animator.Engine.Base.Tests
 
             Assert.AreEqual(100, child.Value2);
         }
+
+        [TestMethod]
+        public void IsPropertySetTest1()
+        {
+            // Arrange
+
+            var cls = new SimplePropertyClass();
+
+            // Act
+
+            // Assert
+
+            Assert.IsFalse(cls.IsPropertySet(SimplePropertyClass.IntValueProperty));
+        }
+
+        [TestMethod]
+        public void IsPropertySetTest2()
+        {
+            // Arrange
+
+            var cls = new SimplePropertyClass();
+
+            // Act
+
+            cls.IntValue = 99;
+
+            // Assert
+
+            Assert.IsTrue(cls.IsPropertySet(SimplePropertyClass.IntValueProperty));
+        }
+
+        [TestMethod]
+        public void IsPropertySetTest3()
+        {
+            // Arrange
+
+            var cls = new SimplePropertyClass();
+
+            // Act
+
+            cls.SetAnimatedValue(SimplePropertyClass.IntValueProperty, 99);
+
+            // Assert
+
+            Assert.IsTrue(cls.IsPropertySet(SimplePropertyClass.IntValueProperty));
+        }
+
     }
 }

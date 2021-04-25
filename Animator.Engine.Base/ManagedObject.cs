@@ -29,6 +29,10 @@ namespace Animator.Engine.Base
 
     public abstract class ManagedObject
     {
+        // Private static fields ----------------------------------------------
+
+        private static readonly HashSet<Type> staticallyInitializedTypes = new();
+
         // Private fields -----------------------------------------------------
 
         private readonly Dictionary<int, PropertyValue> propertyValues = new();
@@ -36,6 +40,26 @@ namespace Animator.Engine.Base
         private readonly Dictionary<int, object> references = new();
 
         private ManagedObject parent;
+
+        // Private static methods ---------------------------------------------
+
+        private static void StaticInitializeRecursively(Type type)
+        {
+            do
+            {
+                // If type is initialized, its base types must have been initialized too,
+                // don't waste time on them
+                if (staticallyInitializedTypes.Contains(type))
+                    return;
+
+                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
+
+                staticallyInitializedTypes.Add(type);
+
+                type = type.BaseType;
+            }
+            while (type != typeof(ManagedObject) && type != typeof(object));
+        }
 
         // Private methods ----------------------------------------------------
 
@@ -166,7 +190,7 @@ namespace Animator.Engine.Base
         private void CoerceAfterFinalBaseValueChanged(ManagedSimpleProperty property, PropertyValue propertyValue, object oldEffectiveValue)
         {
             // Default value is never coerced
-            if (propertyValue.ValueSource == PropertyValueSource.Default)
+            if (propertyValue.IsPureDefault)
                 return;
 
             (object coercedValue, bool coerced) = InternalCoerceValue(property);
@@ -381,8 +405,7 @@ namespace Animator.Engine.Base
 
         public ManagedObject()
         {
-            // Force run static initializers on this class
-            System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(GetType().TypeHandle);
+            StaticInitializeRecursively(GetType());    
         }
 
         public void CoerceValue(ManagedProperty property)
@@ -457,7 +480,7 @@ namespace Animator.Engine.Base
 
                 // Note: we treat inherited value as set
 
-                return value.ValueSource != PropertyValueSource.Default;
+                return !value.IsPureDefault;
             }
             else if (property is ManagedCollectionProperty)
                 return collections.ContainsKey(property.GlobalIndex);

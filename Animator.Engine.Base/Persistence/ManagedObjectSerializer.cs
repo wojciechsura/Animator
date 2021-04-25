@@ -362,10 +362,6 @@ namespace Animator.Engine.Base.Persistence
 
             try
             {
-                // We have to run static initializers manually, because this is not done automatically.
-                // If we don't do that, managed properties will not be registered.
-                StaticInitializeRecursively(context, objType);
-
                 if (context.CustomActivator != null)
                     deserializedObject = (ManagedObject)context.CustomActivator.CreateInstance(objType);
                 else
@@ -391,22 +387,6 @@ namespace Animator.Engine.Base.Persistence
             // 7. Return deserialized object
 
             return deserializedObject;
-        }
-
-        private static void StaticInitializeRecursively(DeserializationContext context, Type objType)
-        {
-            if (context.StaticallyInitializedTypes.Contains(objType))
-                return;
-
-            var type = objType;
-
-            do
-            {                
-                context.StaticallyInitializedTypes.Add(type);
-
-                type = type.BaseType;
-            }
-            while (type != typeof(ManagedObject) && type != typeof(object));
         }
 
         // Public methods -----------------------------------------------------

@@ -21,7 +21,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EasingFunctionProperty = ManagedProperty.Register(typeof(TimeDurationNumericPropertyAnimator),
             nameof(EasingFunction),
             typeof(EasingFunction),
-            new ManagedSimplePropertyMetadata { DefaultValue = EasingFunction.Linear });
+            new ManagedSimplePropertyMetadata { DefaultValue = EasingFunction.Linear, InheritedFromParent = true });
 
         #endregion
     }

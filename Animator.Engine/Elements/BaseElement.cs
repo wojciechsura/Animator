@@ -61,7 +61,8 @@ namespace Animator.Engine.Elements
                 else
                     scene = null;
 
-                AddNamesRecursiveToParent();
+                if (scene != null)
+                    AddNamesRecursiveToParent();
             }
             else
             {
