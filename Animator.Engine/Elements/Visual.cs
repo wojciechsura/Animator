@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Elements.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,7 +12,7 @@ namespace Animator.Engine.Elements
 {
     public abstract class Visual : BaseElement
     {
-        protected abstract void InternalRender(Bitmap bitmap, Graphics graphics);
+        protected abstract void InternalRender(BitmapBuffer buffer);
 
         protected Matrix BuildTransformMatrix()
         {
@@ -31,17 +32,17 @@ namespace Animator.Engine.Elements
             return result;
         }
 
-        internal void Render(Bitmap bitmap, Graphics graphics, Utilities.BufferRepository buffers)
+        internal void Render(BitmapBuffer buffer, BitmapBufferRepository buffers)
         {
-            var originalTransform = graphics.Transform;
+            var originalTransform = buffer.Graphics.Transform;
 
             var transform = originalTransform.Clone();
             transform.Multiply(BuildTransformMatrix(), MatrixOrder.Prepend);
-            graphics.Transform = transform;
+            buffer.Graphics.Transform = transform;
 
-            InternalRender(bitmap, graphics);
+            InternalRender(buffer);
 
-            graphics.Transform = originalTransform;
+            buffer.Graphics.Transform = originalTransform;
         }
 
         #region Position managed property

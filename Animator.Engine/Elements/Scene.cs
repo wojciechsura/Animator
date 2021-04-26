@@ -45,17 +45,16 @@ namespace Animator.Engine.Elements
 
         // Public methods -----------------------------------------------------
 
-        public void Render(Bitmap bitmap, BufferRepository buffers = null)
+        public void Render(Bitmap bitmap)
         {
-            if (buffers == null)
-            {
-                buffers = new BufferRepository(bitmap.Width, bitmap.Height, bitmap.PixelFormat);
-            }
-            else
-            {
-                if (buffers.Width != bitmap.Width || buffers.Height != bitmap.Height || buffers.PixelFormat != bitmap.PixelFormat)
-                    throw new ArgumentException(nameof(buffers), "Buffer repository bitmap parameters doesn't match output bitmap ones!");
-            }
+            using var bufferRepository = new BitmapBufferRepository(bitmap.Width, bitmap.Height, bitmap.PixelFormat);
+            Render(bitmap, bufferRepository);
+        }
+
+        public void Render(Bitmap bitmap, BitmapBufferRepository buffers)
+        {
+            if (buffers.Width != bitmap.Width || buffers.Height != bitmap.Height || buffers.PixelFormat != bitmap.PixelFormat)
+                throw new ArgumentException(nameof(buffers), "Buffer repository bitmap parameters doesn't match output bitmap ones!");
 
             // Prepare bitmap
             using Graphics graphics = Graphics.FromImage(bitmap);
@@ -69,16 +68,16 @@ namespace Animator.Engine.Elements
                 graphics.FillRectangle(brush, new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height));
             }
 
-            Bitmap buffer = buffers.Lease();
+            BitmapBuffer buffer = buffers.Lease(graphics.Transform);
+            
             try
             {
-                using Graphics bufferGraphics = Graphics.FromImage(buffer);
 
                 foreach (var item in Items)
                 {
-                    bufferGraphics.Clear(Color.Transparent);
-                    item.Render(buffer, bufferGraphics, buffers);
-                    graphics.DrawImage(buffer, 0, 0);
+                    buffer.Graphics.Clear(Color.Transparent);
+                    item.Render(buffer, buffers);
+                    graphics.DrawImage(buffer.Bitmap, 0, 0);
                 }
             }
             finally

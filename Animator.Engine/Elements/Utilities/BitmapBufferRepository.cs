@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
@@ -8,24 +9,24 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements.Utilities
 {
-    public class BufferRepository
+    public class BitmapBufferRepository : IDisposable
     {
         private readonly int width;
         private readonly int height;
         private readonly PixelFormat pixelFormat;
 
-        private readonly List<Bitmap> buffers = new();
+        private readonly List<BitmapBuffer> buffers = new();
 
-        public BufferRepository(int width, int height, PixelFormat pixelFormat)
+        public BitmapBufferRepository(int width, int height, PixelFormat pixelFormat)
         {
             this.width = width;
             this.height = height;
             this.pixelFormat = pixelFormat;
         }
 
-        public Bitmap Lease()
+        public BitmapBuffer Lease(Matrix baseTransform)
         {
-            Bitmap buffer;
+            BitmapBuffer buffer;
 
             if (buffers.Any())
             {
@@ -33,24 +34,35 @@ namespace Animator.Engine.Elements.Utilities
                 buffers.RemoveAt(buffers.Count - 1);
             }
             else
-                buffer = new Bitmap(width, height, pixelFormat);
-
-            using (Graphics g = Graphics.FromImage(buffer))
             {
-                g.Clear(Color.Transparent);
+                var bitmap = new Bitmap(width, height, pixelFormat);
+                var graphics = Graphics.FromImage(bitmap);
+
+                buffer = new BitmapBuffer(bitmap, graphics);
             }
+
+            buffer.Graphics.Transform = baseTransform;
 
             return buffer;
         }
 
-        public void Return(Bitmap buffer)
+        public void Return(BitmapBuffer buffer)
         {
             if (buffer == null)
                 throw new ArgumentNullException(nameof(buffer));
-            if (buffer.Width != width || buffer.Height != height || buffer.PixelFormat != pixelFormat)
+            if (buffer.Bitmap.Width != width || buffer.Bitmap.Height != height || buffer.Bitmap.PixelFormat != pixelFormat)
                 throw new ArgumentException("Invalid buffer!");
 
             buffers.Add(buffer);
+        }
+
+        public void Dispose()
+        {
+            while (buffers.Any())
+            {
+                buffers.Last().Dispose();
+                buffers.RemoveAt(buffers.Count - 1);
+            }
         }
 
         public int Width => width;

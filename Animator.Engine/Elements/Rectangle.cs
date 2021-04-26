@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Elements.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,21 +11,21 @@ namespace Animator.Engine.Elements
 {
     public class Rectangle : Shape
     {
-        protected override void InternalRender(Bitmap bitmap, Graphics graphics)
+        protected override void InternalRender(BitmapBuffer buffer)
         {
             if (IsPropertySet(BrushProperty))
             {
                 using (var brush = Brush.BuildBrush())
                 {
                     RectangleF rect = new RectangleF(0.0f, 0.0f, Width, Height);
-                    graphics.FillRectangle(brush, rect);
+                    buffer.Graphics.FillRectangle(brush, rect);
                 }
             }
 
             if (IsPropertySet(PenProperty))
             {
                 using (var pen = Pen.BuildPen())
-                    graphics.DrawRectangle(pen, 0.0f, 0.0f, Width, Height);
+                    buffer.Graphics.DrawRectangle(pen, 0.0f, 0.0f, Width, Height);
             }
         }
 

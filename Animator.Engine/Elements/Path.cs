@@ -1,5 +1,6 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Elements.Persistence;
+using Animator.Engine.Elements.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,7 +15,7 @@ namespace Animator.Engine.Elements
     {
         // Protected methods --------------------------------------------------
 
-        protected override void InternalRender(Bitmap bitmap, Graphics graphics)
+        protected override void InternalRender(BitmapBuffer buffer)
         {
             GraphicsPath path = new GraphicsPath();
             PointF start = new PointF(0.0f, 0.0f);
@@ -26,13 +27,13 @@ namespace Animator.Engine.Elements
             if (IsPropertySet(BrushProperty) && Brush != null)
             {
                 using (var brush = Brush.BuildBrush())
-                    graphics.FillPath(brush, path);
+                    buffer.Graphics.FillPath(brush, path);
             }
 
             if (IsPropertySet(PenProperty) && Pen != null)
             {
                 using (var pen = Pen.BuildPen())
-                    graphics.DrawPath(pen, path);
+                    buffer.Graphics.DrawPath(pen, path);
             }            
         }
 
