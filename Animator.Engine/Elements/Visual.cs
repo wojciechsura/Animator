@@ -31,7 +31,7 @@ namespace Animator.Engine.Elements
             return result;
         }
 
-        internal void Render(Bitmap bitmap, Graphics graphics)
+        internal void Render(Bitmap bitmap, Graphics graphics, Utilities.BufferRepository buffers)
         {
             var originalTransform = graphics.Transform;
 

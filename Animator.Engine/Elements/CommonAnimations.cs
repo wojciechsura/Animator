@@ -40,7 +40,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty TargetNameProperty = ManagedProperty.Register(typeof(CommonAnimations),
             nameof(TargetName),
             typeof(string),
-            new ManagedSimplePropertyMetadata { NotAnimatable = true, InheritedFromParent = true });
+            new ManagedSimplePropertyMetadata { NotAnimatable = true, Inheritable = true, InheritedFromParent = true });
 
         #endregion
 
@@ -55,7 +55,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty PathProperty = ManagedProperty.Register(typeof(CommonAnimations),
             nameof(Path),
             typeof(string),
-            new ManagedSimplePropertyMetadata { NotAnimatable = true, InheritedFromParent = true });
+            new ManagedSimplePropertyMetadata { NotAnimatable = true, Inheritable = true, InheritedFromParent = true });
 
         #endregion
 
@@ -70,7 +70,12 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty StartTimeProperty = ManagedProperty.Register(typeof(CommonAnimations),
             nameof(StartTime),
             typeof(TimeSpan),
-            new ManagedSimplePropertyMetadata { DefaultValue = TimeSpan.FromMilliseconds(0), ValueChangedHandler = HandleStartTimeChanged, InheritedFromParent = true });
+            new ManagedSimplePropertyMetadata { 
+                DefaultValue = TimeSpan.FromMilliseconds(0), 
+                ValueChangedHandler = HandleStartTimeChanged,
+                Inheritable = true,
+                InheritedFromParent = true
+            });
 
         private static void HandleStartTimeChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
@@ -90,7 +95,11 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EndTimeProperty = ManagedProperty.Register(typeof(CommonAnimations),
             nameof(EndTime),
             typeof(TimeSpan),
-            new ManagedSimplePropertyMetadata { DefaultValue = TimeSpan.FromMilliseconds(0), CoerceValueHandler = CoerceEndTime, InheritedFromParent = true });
+            new ManagedSimplePropertyMetadata { DefaultValue = TimeSpan.FromMilliseconds(0), 
+                CoerceValueHandler = CoerceEndTime,
+                Inheritable = true,
+                InheritedFromParent = true
+            });
 
         private static object CoerceEndTime(ManagedObject obj, object baseValue)
         {
@@ -116,7 +125,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EasingFunctionProperty = ManagedProperty.Register(typeof(CommonAnimations),
             nameof(EasingFunction),
             typeof(EasingFunction),
-            new ManagedSimplePropertyMetadata { DefaultValue = EasingFunction.Linear, InheritedFromParent = true });
+            new ManagedSimplePropertyMetadata { DefaultValue = EasingFunction.Linear, Inheritable = true, InheritedFromParent = true });
 
         #endregion
 

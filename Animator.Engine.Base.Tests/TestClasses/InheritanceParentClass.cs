@@ -21,10 +21,9 @@ namespace Animator.Engine.Base.Tests.TestClasses
         public static readonly ManagedProperty ValueProperty = ManagedProperty.Register(typeof(InheritanceParentClass),
             nameof(Value),
             typeof(int),
-            new ManagedSimplePropertyMetadata { DefaultValue = 10 });
+            new ManagedSimplePropertyMetadata { DefaultValue = 10, Inheritable = true });
 
         #endregion
-
 
         #region Value2 managed property
 
@@ -37,10 +36,9 @@ namespace Animator.Engine.Base.Tests.TestClasses
         public static readonly ManagedProperty Value2Property = ManagedProperty.Register(typeof(InheritanceParentClass),
             nameof(Value2),
             typeof(int),
-            new ManagedSimplePropertyMetadata { DefaultValue = 10 });
+            new ManagedSimplePropertyMetadata { DefaultValue = 10, Inheritable = true });
 
         #endregion
-
 
         #region Value3 managed property
 
@@ -53,7 +51,7 @@ namespace Animator.Engine.Base.Tests.TestClasses
         public static readonly ManagedProperty Value3Property = ManagedProperty.Register(typeof(InheritanceParentClass),
             nameof(Value3),
             typeof(int),
-            new ManagedSimplePropertyMetadata { DefaultValue = 10, Inheritable = false });
+            new ManagedSimplePropertyMetadata { DefaultValue = 10 });
 
         #endregion
 

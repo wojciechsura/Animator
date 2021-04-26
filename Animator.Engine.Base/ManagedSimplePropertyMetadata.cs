@@ -53,6 +53,6 @@ namespace Animator.Engine.Base
 
         public bool InheritedFromParent { get; init; } = false;
         
-        public bool Inheritable { get; init; } = true;
+        public bool Inheritable { get; init; } = false;
     }
 }

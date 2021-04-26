@@ -1,5 +1,6 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Base.Persistence;
+using Animator.Engine.Elements.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -41,15 +42,26 @@ namespace Animator.Engine.Elements
             }
         }
 
+
         // Public methods -----------------------------------------------------
 
-        public void Render(Bitmap bitmap)
+        public void Render(Bitmap bitmap, BufferRepository buffers = null)
         {
-            // Clear bitmap
+            if (buffers == null)
+            {
+                buffers = new BufferRepository(bitmap.Width, bitmap.Height, bitmap.PixelFormat);
+            }
+            else
+            {
+                if (buffers.Width != bitmap.Width || buffers.Height != bitmap.Height || buffers.PixelFormat != bitmap.PixelFormat)
+                    throw new ArgumentException(nameof(buffers), "Buffer repository bitmap parameters doesn't match output bitmap ones!");
+            }
+
+            // Prepare bitmap
             using Graphics graphics = Graphics.FromImage(bitmap);
-            graphics.Clear(Color.Transparent);
             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bicubic;
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            graphics.Clear(Color.Transparent);
 
             if (IsPropertySet(BackgroundProperty))
             {
@@ -57,9 +69,21 @@ namespace Animator.Engine.Elements
                 graphics.FillRectangle(brush, new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height));
             }
 
-            foreach (var item in Items)
+            Bitmap buffer = buffers.Lease();
+            try
             {
-                item.Render(bitmap, graphics);
+                using Graphics bufferGraphics = Graphics.FromImage(buffer);
+
+                foreach (var item in Items)
+                {
+                    bufferGraphics.Clear(Color.Transparent);
+                    item.Render(buffer, bufferGraphics, buffers);
+                    graphics.DrawImage(buffer, 0, 0);
+                }
+            }
+            finally
+            {
+                buffers.Return(buffer);
             }
         }
 
