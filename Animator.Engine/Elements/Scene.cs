@@ -58,7 +58,6 @@ namespace Animator.Engine.Elements
 
             // Prepare bitmap
             using Graphics graphics = Graphics.FromImage(bitmap);
-            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bicubic;
             graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             graphics.Clear(Color.Transparent);
 
@@ -72,7 +71,6 @@ namespace Animator.Engine.Elements
             
             try
             {
-
                 foreach (var item in Items)
                 {
                     buffer.Graphics.Clear(Color.Transparent);

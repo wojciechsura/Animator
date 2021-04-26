@@ -37,6 +37,7 @@ namespace Animator.Engine.Elements.Utilities
             {
                 var bitmap = new Bitmap(width, height, pixelFormat);
                 var graphics = Graphics.FromImage(bitmap);
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
                 buffer = new BitmapBuffer(bitmap, graphics);
             }

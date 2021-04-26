@@ -1,2 +1,5 @@
 EXPORTS
 	ApplyAlpha=ApplyAlpha
+	CopyData=CopyData
+	Blur=Blur
+	GaussianBlur=GaussianBlur

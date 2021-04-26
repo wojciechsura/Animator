@@ -3,6 +3,7 @@ using Animator.Engine.Elements.Utilities;
 using Animator.Engine.Tools;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -15,14 +16,43 @@ namespace Animator.Engine.Elements
 {
     public abstract class Visual : BaseElement
     {
+        // Private methods ----------------------------------------------------
+
         private void ApplyAlpha(float alpha, Bitmap image)
         {
             var data = image.LockBits(new System.Drawing.Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 
-            ImageProcessing.ApplyAlpha(data.Scan0, data.Width, data.Height, data.Stride, alpha);
+            ImageProcessing.ApplyAlpha(data.Scan0, data.Stride, data.Width, data.Height, alpha);
 
             image.UnlockBits(data);
         }
+
+        private void CopyBitmap(Bitmap source, Bitmap destination)
+        {
+            if (source.Width != destination.Width ||
+                source.Height != destination.Height)
+                throw new ArgumentException(nameof(destination), "Invalid destination bitmap size!");
+
+            if (source.PixelFormat != PixelFormat.Format32bppArgb)
+                throw new ArgumentException(nameof(source), "Invalid source pixel format!");
+
+            if (destination.PixelFormat != PixelFormat.Format32bppArgb)
+                throw new ArgumentException(nameof(destination), "Invalid destination pixel format!");
+
+            BitmapData sourceData = source.LockBits(new System.Drawing.Rectangle(0, 0, source.Width, source.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            BitmapData destinationData = destination.LockBits(new System.Drawing.Rectangle(0, 0, destination.Width, destination.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+            try
+            {
+                ImageProcessing.CopyData(sourceData.Scan0, sourceData.Stride, destinationData.Scan0, destinationData.Stride, source.Width, source.Height);
+            }
+            finally
+            {
+                source.UnlockBits(sourceData);
+                destination.UnlockBits(destinationData);
+            }
+        }
+
+        // Protected methods --------------------------------------------------
 
         protected abstract void InternalRender(BitmapBuffer buffer);
 
@@ -44,6 +74,8 @@ namespace Animator.Engine.Elements
             return result;
         }
 
+        // Internal methods ---------------------------------------------------
+
         internal void Render(BitmapBuffer buffer, BitmapBufferRepository buffers)
         {
             var originalTransform = buffer.Graphics.Transform;
@@ -54,11 +86,45 @@ namespace Animator.Engine.Elements
 
             InternalRender(buffer);
 
+            if (Effects.Any())
+            {
+                var backBuffer = buffers.Lease(new Matrix());
+                backBuffer.Graphics.Clear(Color.Transparent);
+
+                var frontBuffer = buffers.Lease(new Matrix());
+                frontBuffer.Graphics.Clear(Color.Transparent);
+
+                var frameBuffer = buffers.Lease(new Matrix());
+                frameBuffer.Graphics.Clear(Color.Transparent);
+                try
+                {
+                    CopyBitmap(buffer.Bitmap, frameBuffer.Bitmap);
+
+                    foreach (var effect in Effects)
+                        effect.Apply(frameBuffer, frontBuffer, backBuffer, buffers);
+
+                    // Join buffers
+
+                    backBuffer.Graphics.DrawImage(frameBuffer.Bitmap, new Point(0, 0));
+                    backBuffer.Graphics.DrawImage(frontBuffer.Bitmap, new Point(0, 0));
+
+                    CopyBitmap(backBuffer.Bitmap, buffer.Bitmap);
+                }
+                finally
+                {
+                    buffers.Return(frameBuffer);
+                    buffers.Return(frontBuffer);
+                    buffers.Return(backBuffer);
+                }
+            }
+
             if (IsPropertySet(AlphaProperty))
                 ApplyAlpha(Alpha, buffer.Bitmap);
 
             buffer.Graphics.Transform = originalTransform;
         }
+
+        // Public properties --------------------------------------------------
 
         #region Position managed property
 
@@ -132,6 +198,19 @@ namespace Animator.Engine.Elements
             nameof(Alpha),
             typeof(float),
             new ManagedSimplePropertyMetadata { DefaultValue = 1.0f });
+
+        #endregion
+
+        #region Effects managed collection
+
+        public ManagedCollection<BaseEffect> Effects
+        {
+            get => (ManagedCollection<BaseEffect>)GetValue(EffectsProperty);
+        }
+
+        public static readonly ManagedProperty EffectsProperty = ManagedProperty.RegisterCollection(typeof(Visual),
+            nameof(Effects),
+            typeof(ManagedCollection<BaseEffect>));
 
         #endregion
     }

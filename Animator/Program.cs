@@ -53,6 +53,41 @@ namespace Animator
             Random random = new Random();
 
             // Adding 100 rectangles
+            // Add100Rectangles(animation, random);
+
+            // Render scene without animation
+
+            var bitmap = new Bitmap(animation.Config.Width, animation.Config.Height, PixelFormat.Format32bppArgb);
+            // animation.Scenes[0].Render(bitmap);
+            // bitmap.Save(@"D:\scene.png");
+
+            // Render animation
+
+            var frameCount = TimeCalculator.EvalFrameCount((float)animation.Scenes[0].Duration.TotalMilliseconds, animation.Config.FramesPerSecond);
+
+            for (int i = 0; i < frameCount; i++)
+            {
+                using (new DisposableStopwatch("Rendering frame"))
+                {
+                    Console.WriteLine($"Rendering frame {i} of {frameCount}...");
+
+                    float timeMs = TimeCalculator.EvalMillisecondsForFrame(i, animation.Config.FramesPerSecond);
+
+                    Console.WriteLine($"  Applying animators...");
+                    foreach (var animator in animation.Scenes[0].Animators)
+                        animator.ApplyAnimation(timeMs);
+
+                    Console.WriteLine($"  Rendering scene...");
+                    animation.Scenes[0].Render(bitmap);
+
+                    Console.WriteLine($"  Saving file...");
+                    bitmap.Save($"D:\\frame{i}.png");
+                }
+            }
+        }
+
+        private static void Add100Rectangles(Animation animation, Random random)
+        {
             for (int i = 0; i < 100; i++)
             {
                 float width = random.Next(100);
@@ -100,36 +135,6 @@ namespace Animator
                 };
 
                 animation.Scenes[0].Animators.Add(animator);
-            }
-
-            // Render scene without animation
-
-            var bitmap = new Bitmap(animation.Config.Width, animation.Config.Height, PixelFormat.Format32bppArgb);
-            animation.Scenes[0].Render(bitmap);
-            bitmap.Save(@"D:\scene.png");
-
-            // Render animation
-
-            var frameCount = TimeCalculator.EvalFrameCount((float)animation.Scenes[0].Duration.TotalMilliseconds, animation.Config.FramesPerSecond);
-
-            for (int i = 0; i < frameCount; i++)
-            {
-                using (new DisposableStopwatch("Rendering frame"))
-                {
-                    Console.WriteLine($"Rendering frame {i} of {frameCount}...");
-
-                    float timeMs = TimeCalculator.EvalMillisecondsForFrame(i, animation.Config.FramesPerSecond);
-
-                    Console.WriteLine($"  Applying animators...");
-                    foreach (var animator in animation.Scenes[0].Animators)
-                        animator.ApplyAnimation(timeMs);
-
-                    Console.WriteLine($"  Rendering scene...");
-                    animation.Scenes[0].Render(bitmap);
-
-                    Console.WriteLine($"  Saving file...");
-                    bitmap.Save($"D:\\frame{i}.png");
-                }
             }
         }
     }
