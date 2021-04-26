@@ -1,8 +1,10 @@
 #include <Windows.h>
+#include <cstdio>
 
 const int BYTES_PER_PIXEL = 4;
+const int ALPHA_OFFSET = 3;
 
-extern "C" __declspec(dllexport) void __cdecl ApplyAlpha(char* bitmapData, int width, int height, int stride, float alpha)
+extern "C" __declspec(dllexport) void __cdecl ApplyAlpha(unsigned char* bitmapData, int width, int height, int stride, float alpha)
 {
 	if (alpha < 0.0f)
 		alpha = 0.0f;
@@ -12,14 +14,15 @@ extern "C" __declspec(dllexport) void __cdecl ApplyAlpha(char* bitmapData, int w
 
 	for (int y = 0; y < height; y++)
 	{
-		char* row = bitmapData + (y * stride) + 3;
+		int index = y * stride + ALPHA_OFFSET;
 
 		for (int x = 0; x < width; x++)
 		{
-			char newAlpha = (char)((((float)*row) / 255.0f) * alpha);
+			int oldAlpha = (int)bitmapData[index];
+			int newAlpha = (int)((((float)oldAlpha / 255.5f) * alpha) * 255.0f);
+			bitmapData[index] = (unsigned char)newAlpha;
 
-			*row = newAlpha;
-			*row += BYTES_PER_PIXEL;
+			index += BYTES_PER_PIXEL;
 		}
 	}
 }
