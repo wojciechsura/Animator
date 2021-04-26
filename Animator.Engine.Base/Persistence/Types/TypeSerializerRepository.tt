@@ -39,8 +39,8 @@ foreach (var type in autoTypes)
         private class <#= ToFirstUpper(type) #>Serializer : TypeSerializer
 		{
 			public override bool CanSerialize(object obj) => obj is <#= type #>;
-			public override bool CanDeserialize(string str) => <#= type #>.TryParse(str, out _);
-			public override object Deserialize(string str) => <#= type #>.Parse(str);
+			public override bool CanDeserialize(string str) => <#= type #>.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+			public override object Deserialize(string str) => <#= type #>.Parse(str, CultureInfo.InvariantCulture);
 			public override string Serialize(object obj) => ((<#= type #>)obj).ToString(CultureInfo.InvariantCulture);
 		}
 

@@ -1,10 +1,13 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Elements.Utilities;
+using Animator.Engine.Tools;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +15,15 @@ namespace Animator.Engine.Elements
 {
     public abstract class Visual : BaseElement
     {
+        private void ApplyAlpha(float alpha, Bitmap image)
+        {
+            var data = image.LockBits(new System.Drawing.Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+            ImageProcessing.ApplyAlpha(data.Scan0, data.Width, data.Height, data.Stride, alpha);
+
+            image.UnlockBits(data);
+        }
+
         protected abstract void InternalRender(BitmapBuffer buffer);
 
         protected Matrix BuildTransformMatrix()
@@ -41,6 +53,9 @@ namespace Animator.Engine.Elements
             buffer.Graphics.Transform = transform;
 
             InternalRender(buffer);
+
+            if (IsPropertySet(AlphaProperty))
+                ApplyAlpha(Alpha, buffer.Bitmap);
 
             buffer.Graphics.Transform = originalTransform;
         }
@@ -102,6 +117,21 @@ namespace Animator.Engine.Elements
             nameof(Scale),
             typeof(PointF),
             new ManagedSimplePropertyMetadata { DefaultValue = new PointF(1.0f, 1.0f) });
+
+        #endregion
+
+        #region Alpha managed property
+
+        public float Alpha
+        {
+            get => (float)GetValue(AlphaProperty);
+            set => SetValue(AlphaProperty, value);
+        }
+
+        public static readonly ManagedProperty AlphaProperty = ManagedProperty.Register(typeof(Visual),
+            nameof(Alpha),
+            typeof(float),
+            new ManagedSimplePropertyMetadata { DefaultValue = 1.0f });
 
         #endregion
     }

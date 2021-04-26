@@ -22,80 +22,80 @@ namespace Animator.Engine.Base.Persistence.Types
         private class ByteSerializer : TypeSerializer
 		{
 			public override bool CanSerialize(object obj) => obj is byte;
-			public override bool CanDeserialize(string str) => byte.TryParse(str, out _);
-			public override object Deserialize(string str) => byte.Parse(str);
+			public override bool CanDeserialize(string str) => byte.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+			public override object Deserialize(string str) => byte.Parse(str, CultureInfo.InvariantCulture);
 			public override string Serialize(object obj) => ((byte)obj).ToString(CultureInfo.InvariantCulture);
 		}
 
         private class SbyteSerializer : TypeSerializer
 		{
 			public override bool CanSerialize(object obj) => obj is sbyte;
-			public override bool CanDeserialize(string str) => sbyte.TryParse(str, out _);
-			public override object Deserialize(string str) => sbyte.Parse(str);
+			public override bool CanDeserialize(string str) => sbyte.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+			public override object Deserialize(string str) => sbyte.Parse(str, CultureInfo.InvariantCulture);
 			public override string Serialize(object obj) => ((sbyte)obj).ToString(CultureInfo.InvariantCulture);
 		}
 
         private class ShortSerializer : TypeSerializer
 		{
 			public override bool CanSerialize(object obj) => obj is short;
-			public override bool CanDeserialize(string str) => short.TryParse(str, out _);
-			public override object Deserialize(string str) => short.Parse(str);
+			public override bool CanDeserialize(string str) => short.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+			public override object Deserialize(string str) => short.Parse(str, CultureInfo.InvariantCulture);
 			public override string Serialize(object obj) => ((short)obj).ToString(CultureInfo.InvariantCulture);
 		}
 
         private class UshortSerializer : TypeSerializer
 		{
 			public override bool CanSerialize(object obj) => obj is ushort;
-			public override bool CanDeserialize(string str) => ushort.TryParse(str, out _);
-			public override object Deserialize(string str) => ushort.Parse(str);
+			public override bool CanDeserialize(string str) => ushort.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+			public override object Deserialize(string str) => ushort.Parse(str, CultureInfo.InvariantCulture);
 			public override string Serialize(object obj) => ((ushort)obj).ToString(CultureInfo.InvariantCulture);
 		}
 
         private class IntSerializer : TypeSerializer
 		{
 			public override bool CanSerialize(object obj) => obj is int;
-			public override bool CanDeserialize(string str) => int.TryParse(str, out _);
-			public override object Deserialize(string str) => int.Parse(str);
+			public override bool CanDeserialize(string str) => int.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+			public override object Deserialize(string str) => int.Parse(str, CultureInfo.InvariantCulture);
 			public override string Serialize(object obj) => ((int)obj).ToString(CultureInfo.InvariantCulture);
 		}
 
         private class UintSerializer : TypeSerializer
 		{
 			public override bool CanSerialize(object obj) => obj is uint;
-			public override bool CanDeserialize(string str) => uint.TryParse(str, out _);
-			public override object Deserialize(string str) => uint.Parse(str);
+			public override bool CanDeserialize(string str) => uint.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+			public override object Deserialize(string str) => uint.Parse(str, CultureInfo.InvariantCulture);
 			public override string Serialize(object obj) => ((uint)obj).ToString(CultureInfo.InvariantCulture);
 		}
 
         private class LongSerializer : TypeSerializer
 		{
 			public override bool CanSerialize(object obj) => obj is long;
-			public override bool CanDeserialize(string str) => long.TryParse(str, out _);
-			public override object Deserialize(string str) => long.Parse(str);
+			public override bool CanDeserialize(string str) => long.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+			public override object Deserialize(string str) => long.Parse(str, CultureInfo.InvariantCulture);
 			public override string Serialize(object obj) => ((long)obj).ToString(CultureInfo.InvariantCulture);
 		}
 
         private class UlongSerializer : TypeSerializer
 		{
 			public override bool CanSerialize(object obj) => obj is ulong;
-			public override bool CanDeserialize(string str) => ulong.TryParse(str, out _);
-			public override object Deserialize(string str) => ulong.Parse(str);
+			public override bool CanDeserialize(string str) => ulong.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+			public override object Deserialize(string str) => ulong.Parse(str, CultureInfo.InvariantCulture);
 			public override string Serialize(object obj) => ((ulong)obj).ToString(CultureInfo.InvariantCulture);
 		}
 
         private class FloatSerializer : TypeSerializer
 		{
 			public override bool CanSerialize(object obj) => obj is float;
-			public override bool CanDeserialize(string str) => float.TryParse(str, out _);
-			public override object Deserialize(string str) => float.Parse(str);
+			public override bool CanDeserialize(string str) => float.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+			public override object Deserialize(string str) => float.Parse(str, CultureInfo.InvariantCulture);
 			public override string Serialize(object obj) => ((float)obj).ToString(CultureInfo.InvariantCulture);
 		}
 
         private class DoubleSerializer : TypeSerializer
 		{
 			public override bool CanSerialize(object obj) => obj is double;
-			public override bool CanDeserialize(string str) => double.TryParse(str, out _);
-			public override object Deserialize(string str) => double.Parse(str);
+			public override bool CanDeserialize(string str) => double.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
+			public override object Deserialize(string str) => double.Parse(str, CultureInfo.InvariantCulture);
 			public override string Serialize(object obj) => ((double)obj).ToString(CultureInfo.InvariantCulture);
 		}
 
@@ -240,7 +240,7 @@ namespace Animator.Engine.Base.Persistence.Types
 
         private class PointFSerializer : TypeSerializer
 		{
-			private readonly Regex pointRegex = new Regex("^\\-?[0-9]+(\\.[0-9]+)?;\\-?[0-9]+(\\.[0-9]+)?$");
+			private readonly Regex pointRegex = new Regex("^[0-9]+(\\.[0-9]+)?;[0-9]+(\\.[0-9]+)?$");
 
 			public override bool CanSerialize (object obj) => obj is PointF;
 			public override bool CanDeserialize(string str) => pointRegex.IsMatch(str);
