@@ -54,7 +54,7 @@ namespace Animator.Engine.Elements
 
         // Protected methods --------------------------------------------------
 
-        protected abstract void InternalRender(BitmapBuffer buffer);
+        protected abstract void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers);
 
         protected Matrix BuildTransformMatrix()
         {
@@ -84,7 +84,7 @@ namespace Animator.Engine.Elements
             transform.Multiply(BuildTransformMatrix(), MatrixOrder.Prepend);
             buffer.Graphics.Transform = transform;
 
-            InternalRender(buffer);
+            InternalRender(buffer, buffers);
 
             if (Effects.Any())
             {

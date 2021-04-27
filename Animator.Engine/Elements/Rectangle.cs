@@ -11,7 +11,7 @@ namespace Animator.Engine.Elements
 {
     public class Rectangle : Shape
     {
-        protected override void InternalRender(BitmapBuffer buffer)
+        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
         {
             if (IsPropertySet(BrushProperty))
             {

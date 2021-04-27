@@ -15,7 +15,7 @@ namespace Animator.Engine.Elements
     {
         // Protected methods --------------------------------------------------
 
-        protected override void InternalRender(BitmapBuffer buffer)
+        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
         {
             GraphicsPath path = new GraphicsPath();
             PointF start = new PointF(0.0f, 0.0f);
