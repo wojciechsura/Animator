@@ -1,5 +1,8 @@
 EXPORTS
 	ApplyAlpha=ApplyAlpha
+	ApplyMask=ApplyMask
+	Combine=Combine
+	CombineWithMask=CombineWithMask
 	CopyData=CopyData
 	Blur=Blur
 	GaussianBlur=GaussianBlur

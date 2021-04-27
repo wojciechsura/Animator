@@ -23,8 +23,7 @@ namespace Animator.Engine.Elements.Persistence
                     typeof(Animation).Namespace),
                 CustomSerializers = new Dictionary<Type, TypeSerializer>
                 {
-                    { typeof(Brush), new BrushSerializer() },
-                    { typeof(List<PathElement>), new PathElementsSerializer() }
+                    { typeof(Brush), new BrushSerializer() }
                 }
             };
         }

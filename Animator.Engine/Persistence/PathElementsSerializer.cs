@@ -32,13 +32,16 @@ namespace Animator.Engine.Elements.Persistence
 
             int start = index;
 
-            while (index < str.Length && str[index] >= '0' && str[index] <= 9)
+            if (index < str.Length && str[index] == '-')
+                index++;
+
+            while (index < str.Length && str[index] >= '0' && str[index] <= '9')
                 index++;
 
             if (index < str.Length && str[index] == CultureInfo.InvariantCulture.NumberFormat.NumberDecimalSeparator[0])
                 index++;
 
-            while (index < str.Length && str[index] >= '0' && str[index] <= 9)
+            while (index < str.Length && str[index] >= '0' && str[index] <= '9')
                 index++;
 
             if (index == start)

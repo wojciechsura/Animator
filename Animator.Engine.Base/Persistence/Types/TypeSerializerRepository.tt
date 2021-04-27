@@ -27,11 +27,11 @@ namespace Animator.Engine.Base.Persistence.Types
 
 <# 
 var autoTypes = new[] { "byte", "sbyte", "short", "ushort", "int", "uint", "long", "ulong", "float", "double" };
-var otherTypes = new[] { "string", "Color", "TimeSpan" };
+var otherTypes = new[] { "string", "bool", "Color", "TimeSpan" };
 
 var pointTypes = new[] { "Point", "PointF" };
 var pointUnderlyingTypes = new[] { "int", "float" };
-var pointRegexes = new[] { "^[0-9]+;[0-9]+$", "^[0-9]+(\\\\.[0-9]+)?;[0-9]+(\\\\.[0-9]+)?$" };
+var pointRegexes = new[] { "^\\\\-?[0-9]+;\\\\-?[0-9]+$", "^\\\\-?[0-9]+(\\\\.[0-9]+)?;\\\\-?[0-9]+(\\\\.[0-9]+)?$" };
 
 foreach (var type in autoTypes)
 {
@@ -53,6 +53,14 @@ foreach (var type in autoTypes)
 			public override bool CanDeserialize(string str) => true;
 			public override object Deserialize(string str) => str;
 			public override string Serialize(object obj) => (string)obj;
+		}
+
+		private class BoolSerializer : TypeSerializer
+		{
+			public override bool CanSerialize(object obj) => obj is bool;
+			public override bool CanDeserialize(string str) => bool.TryParse(str, out _);
+			public override object Deserialize(string str) => bool.Parse(str);
+			public override string Serialize(object obj) => ((bool)obj).ToString();
 		}
 
 		private class ColorSerializer : TypeSerializer

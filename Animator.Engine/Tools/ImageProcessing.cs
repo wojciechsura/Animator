@@ -17,6 +17,35 @@ namespace Animator.Engine.Tools
             float alpha);
 
         [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ApplyMask(IntPtr bitmapData,
+            int bitmapStride,
+            IntPtr maskData,
+            int maskStride,
+            int width,
+            int height,
+            bool invertMask);
+
+        [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void Combine(IntPtr @base,
+            int baseStride,
+            IntPtr first,
+            int firstStride,
+            IntPtr second,
+            int secondStride,
+            int width,
+            int height);
+
+        [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void CombineWithMask(IntPtr @base,
+            int baseStride,
+            IntPtr mask,
+            int maskStride,
+            IntPtr target,
+            int targetStride,
+            int width,
+            int height);
+
+        [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void CopyData(IntPtr sourceData,
             int sourceStride,
             IntPtr destinationData,

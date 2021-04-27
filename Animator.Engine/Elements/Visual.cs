@@ -92,13 +92,9 @@ namespace Animator.Engine.Elements
             if (Effects.Any())
             {
                 var backBuffer = buffers.Lease(new Matrix());
-                backBuffer.Graphics.Clear(Color.Transparent);
-
                 var frontBuffer = buffers.Lease(new Matrix());
-                frontBuffer.Graphics.Clear(Color.Transparent);
-
                 var frameBuffer = buffers.Lease(new Matrix());
-                frameBuffer.Graphics.Clear(Color.Transparent);
+
                 try
                 {
                     CopyBitmap(buffer.Bitmap, frameBuffer.Bitmap);
@@ -108,16 +104,53 @@ namespace Animator.Engine.Elements
 
                     // Join buffers
 
-                    backBuffer.Graphics.DrawImage(frameBuffer.Bitmap, new Point(0, 0));
-                    backBuffer.Graphics.DrawImage(frontBuffer.Bitmap, new Point(0, 0));
+                    var backBufferData = backBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, backBuffer.Bitmap.Width, backBuffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                    var frameBufferData = frameBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, frameBuffer.Bitmap.Width, frameBuffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                    var frontBufferData = frontBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, frontBuffer.Bitmap.Width, frontBuffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                    var bufferData = buffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, buffer.Bitmap.Width, buffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 
-                    CopyBitmap(backBuffer.Bitmap, buffer.Bitmap);
+                    ImageProcessing.Combine(backBufferData.Scan0, backBufferData.Stride, frameBufferData.Scan0, frameBufferData.Stride, frontBufferData.Scan0, frontBufferData.Stride, backBuffer.Bitmap.Width, backBuffer.Bitmap.Height);
+                    ImageProcessing.CopyData(backBufferData.Scan0, backBufferData.Stride, bufferData.Scan0, bufferData.Stride, frameBuffer.Bitmap.Width, frameBuffer.Bitmap.Height);
+
+                    backBuffer.Bitmap.UnlockBits(backBufferData);
+                    frameBuffer.Bitmap.UnlockBits(frameBufferData);
+                    frontBuffer.Bitmap.UnlockBits(frontBufferData);
+                    buffer.Bitmap.UnlockBits(bufferData);
                 }
                 finally
                 {
                     buffers.Return(frameBuffer);
                     buffers.Return(frontBuffer);
                     buffers.Return(backBuffer);
+                }
+            }
+
+            if (Mask.Any())
+            {
+                var maskBuffer = buffers.Lease(new Matrix());
+                var itemBuffer = buffers.Lease(originalTransform);
+
+                try
+                {
+                    foreach (var item in Mask)
+                    {
+                        itemBuffer.Graphics.Clear(Color.Transparent);
+                        item.Render(itemBuffer, buffers);
+                        maskBuffer.Graphics.DrawImage(itemBuffer.Bitmap, 0, 0);
+                    }
+
+                    var maskData = maskBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, maskBuffer.Bitmap.Width, maskBuffer.Bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                    var bufferData = buffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, buffer.Bitmap.Width, buffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
+                    ImageProcessing.ApplyMask(bufferData.Scan0, bufferData.Stride, maskData.Scan0, maskData.Stride, buffer.Bitmap.Width, buffer.Bitmap.Height, InvertMask);
+
+                    maskBuffer.Bitmap.UnlockBits(maskData);
+                    buffer.Bitmap.UnlockBits(bufferData);
+                }
+                finally
+                {
+                    buffers.Return(itemBuffer);       
+                    buffers.Return(maskBuffer);
                 }
             }
 
@@ -211,6 +244,34 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EffectsProperty = ManagedProperty.RegisterCollection(typeof(Visual),
             nameof(Effects),
             typeof(ManagedCollection<BaseEffect>));
+
+        #endregion
+
+        #region InvertMask managed property
+
+        public bool InvertMask
+        {
+            get => (bool)GetValue(InvertMaskProperty);
+            set => SetValue(InvertMaskProperty, value);
+        }
+
+        public static readonly ManagedProperty InvertMaskProperty = ManagedProperty.Register(typeof(Visual),
+            nameof(InvertMask),
+            typeof(bool),
+            new ManagedSimplePropertyMetadata { DefaultValue = false });
+
+        #endregion
+
+        #region Mask managed collection
+
+        public ManagedCollection<Visual> Mask
+        {
+            get => (ManagedCollection<Visual>)GetValue(MaskProperty);
+        }
+
+        public static readonly ManagedProperty MaskProperty = ManagedProperty.RegisterCollection(typeof(Visual),
+            nameof(Mask),
+            typeof(ManagedCollection<Visual>));
 
         #endregion
     }

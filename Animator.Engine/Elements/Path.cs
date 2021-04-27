@@ -48,7 +48,8 @@ namespace Animator.Engine.Elements
 
         public static readonly ManagedProperty DefinitionProperty = ManagedProperty.RegisterCollection(typeof(Path),
             nameof(Definition),
-            typeof(ManagedCollection<PathElement>));
+            typeof(ManagedCollection<PathElement>),
+            new ManagedCollectionMetadata { CustomSerializer = new PathElementsSerializer() });
 
         #endregion
     }

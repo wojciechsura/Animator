@@ -43,6 +43,7 @@ namespace Animator.Engine.Elements.Utilities
             }
 
             buffer.Graphics.Transform = baseTransform;
+            buffer.Graphics.Clear(Color.Transparent);
 
             return buffer;
         }

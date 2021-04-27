@@ -107,6 +107,14 @@ namespace Animator.Engine.Base.Persistence.Types
 			public override string Serialize(object obj) => (string)obj;
 		}
 
+		private class BoolSerializer : TypeSerializer
+		{
+			public override bool CanSerialize(object obj) => obj is bool;
+			public override bool CanDeserialize(string str) => bool.TryParse(str, out _);
+			public override object Deserialize(string str) => bool.Parse(str);
+			public override string Serialize(object obj) => ((bool)obj).ToString();
+		}
+
 		private class ColorSerializer : TypeSerializer
 		{
 			private readonly Regex rgbColorFormat = new Regex("^#[a-fA-F0-9]{6}$");
@@ -210,7 +218,7 @@ namespace Animator.Engine.Base.Persistence.Types
 
         private class PointSerializer : TypeSerializer
 		{
-			private readonly Regex pointRegex = new Regex("^[0-9]+;[0-9]+$");
+			private readonly Regex pointRegex = new Regex("^\\-?[0-9]+;\\-?[0-9]+$");
 
 			public override bool CanSerialize (object obj) => obj is Point;
 			public override bool CanDeserialize(string str) => pointRegex.IsMatch(str);
@@ -240,7 +248,7 @@ namespace Animator.Engine.Base.Persistence.Types
 
         private class PointFSerializer : TypeSerializer
 		{
-			private readonly Regex pointRegex = new Regex("^[0-9]+(\\.[0-9]+)?;[0-9]+(\\.[0-9]+)?$");
+			private readonly Regex pointRegex = new Regex("^\\-?[0-9]+(\\.[0-9]+)?;\\-?[0-9]+(\\.[0-9]+)?$");
 
 			public override bool CanSerialize (object obj) => obj is PointF;
 			public override bool CanDeserialize(string str) => pointRegex.IsMatch(str);
@@ -308,6 +316,7 @@ namespace Animator.Engine.Base.Persistence.Types
 			serializers[typeof(Point)] = new PointSerializer();
 			serializers[typeof(PointF)] = new PointFSerializer();
 			serializers[typeof(string)] = new StringSerializer();
+			serializers[typeof(bool)] = new BoolSerializer();
 			serializers[typeof(Color)] = new ColorSerializer();
 			serializers[typeof(TimeSpan)] = new TimeSpanSerializer();
 		}
