@@ -86,6 +86,9 @@ namespace Animator.Engine.Elements
 
             InternalRender(buffer, buffers);
 
+            if (IsPropertySet(AlphaProperty))
+                ApplyAlpha(Alpha, buffer.Bitmap);
+
             if (Effects.Any())
             {
                 var backBuffer = buffers.Lease(new Matrix());
@@ -117,9 +120,6 @@ namespace Animator.Engine.Elements
                     buffers.Return(backBuffer);
                 }
             }
-
-            if (IsPropertySet(AlphaProperty))
-                ApplyAlpha(Alpha, buffer.Bitmap);
 
             buffer.Graphics.Transform = originalTransform;
         }
