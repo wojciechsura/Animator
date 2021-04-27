@@ -101,7 +101,7 @@ namespace Animator.Engine.Elements
                     CopyBitmap(buffer.Bitmap, frameBuffer.Bitmap);
 
                     foreach (var effect in Effects)
-                        effect.Apply(frameBuffer, frontBuffer, backBuffer, buffers);
+                        effect.Apply(frameBuffer, backBuffer, frontBuffer, buffers);
 
                     // Join buffers
 

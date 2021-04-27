@@ -110,9 +110,9 @@ namespace Animator.Engine.Base.Persistence.Types
 		private class ColorSerializer : TypeSerializer
 		{
 			private readonly Regex rgbColorFormat = new Regex("^#[a-fA-F0-9]{6}$");
-			private readonly Regex rgbaColorFormat = new Regex("^#[a-fA-F0-9]{8}$");
+			private readonly Regex argbColorFormat = new Regex("^#[a-fA-F0-9]{8}$");
 			private readonly Regex numRgbColorFormat = new Regex("^[0-9]{,3}(,[0-9]{,3}){2}$");
-			private readonly Regex numRgbaColorFormat = new Regex("^[0-9]{,3}(,[0-9]{,3}){3}$");
+			private readonly Regex numArgbColorFormat = new Regex("^[0-9]{,3}(,[0-9]{,3}){3}$");
 
 			public override bool CanSerialize(object obj)
 			{
@@ -125,9 +125,9 @@ namespace Animator.Engine.Base.Persistence.Types
 					return true;
 
 				if (rgbColorFormat.IsMatch(str) ||
-					rgbaColorFormat.IsMatch(str) ||
+					argbColorFormat.IsMatch(str) ||
 					numRgbColorFormat.IsMatch(str) ||
-					numRgbaColorFormat.IsMatch(str))
+					numArgbColorFormat.IsMatch(str))
 					return true;
 
 				return false;
@@ -151,12 +151,12 @@ namespace Animator.Engine.Base.Persistence.Types
 					return Color.FromArgb(255, r, g, b);
                 }
 				
-				if (rgbaColorFormat.IsMatch(str))
+				if (argbColorFormat.IsMatch(str))
                 {
-					int r = Convert.ToInt32(str[1..3], 16);
-					int g = Convert.ToInt32(str[3..5], 16);
-					int b = Convert.ToInt32(str[5..7], 16);
-					int a = Convert.ToInt32(str[7..9], 16);
+					int a = Convert.ToInt32(str[1..3], 16);
+					int r = Convert.ToInt32(str[3..5], 16);
+					int g = Convert.ToInt32(str[5..7], 16);
+					int b = Convert.ToInt32(str[7..9], 16);
 
 					return Color.FromArgb(a, r, g, b);
 				}
@@ -175,14 +175,14 @@ namespace Animator.Engine.Base.Persistence.Types
 					return Color.FromArgb(255, r, g, b);
                 }
 
-				if (numRgbaColorFormat.IsMatch(str))
+				if (numArgbColorFormat.IsMatch(str))
                 {
 					string[] values = str.Split(',');
 
-					int r = Convert.ToInt32(values[0]);
-					int g = Convert.ToInt32(values[1]);
-					int b = Convert.ToInt32(values[2]);
-					int a = Convert.ToInt32(values[3]);
+					int a = Convert.ToInt32(values[0]);
+					int r = Convert.ToInt32(values[1]);
+					int g = Convert.ToInt32(values[2]);
+					int b = Convert.ToInt32(values[3]);
 
 					if (r > 255 || g > 255 || b > 255 || a > 255)
 						throw new InvalidCastException($"Color constant values exceeds 255: {str}");
@@ -240,7 +240,7 @@ namespace Animator.Engine.Base.Persistence.Types
 
         private class PointFSerializer : TypeSerializer
 		{
-			private readonly Regex pointRegex = new Regex("^\\-?[0-9]+(\\.[0-9]+)?;\\-?[0-9]+(\\.[0-9]+)?$");
+			private readonly Regex pointRegex = new Regex("^[0-9]+(\\.[0-9]+)?;[0-9]+(\\.[0-9]+)?$");
 
 			public override bool CanSerialize (object obj) => obj is PointF;
 			public override bool CanDeserialize(string str) => pointRegex.IsMatch(str);

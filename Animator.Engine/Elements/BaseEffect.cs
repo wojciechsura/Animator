@@ -9,6 +9,6 @@ namespace Animator.Engine.Elements
 {
     public abstract class BaseEffect : BaseElement
     {
-        internal abstract void Apply(BitmapBuffer framebuffer, BitmapBuffer overlayBuffer, BitmapBuffer underlayBuffer, BitmapBufferRepository repository);        
+        internal abstract void Apply(BitmapBuffer framebuffer, BitmapBuffer backBuffer, BitmapBuffer frontBuffer, BitmapBufferRepository repository);        
     }
 }
