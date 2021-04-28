@@ -8,18 +8,35 @@ using System.Reflection;
 using Animator.Engine.Elements;
 using Animator.Engine.Base;
 using Animator.Engine.Types;
+using System.Text.RegularExpressions;
 
 namespace Animator.Documentation
 {
-    class Program
+    static class Program
     {
+        private static readonly Regex genericTypeRegex = new Regex("(.*)`([0-9]+)");
+
         private static string MakeLinkToType(string type) => $"[{type}]({type})";
+
+        private static string ToReadableName(this Type type)
+        {
+            if (!type.IsGenericType)
+                return type.Name;
+
+            var baseName = type.Name[0..type.Name.IndexOf('`')];
+
+            List<string> genericArguments = type.GenericTypeArguments
+                .Select(t => ToReadableName(t))
+                .ToList();
+
+            return $"{baseName}<{string.Join(',', genericArguments)}>";
+        }
 
         private static void BuildTypeDocumentation(Type type, Assembly engineAssembly, string elementsNamespace, StringBuilder sb)
         {
             // Header
 
-            sb.Append($"# <a name=\"{type.Name}\"></a>{type.Name}");
+            sb.Append($"# <a name=\"{type.ToReadableName()}\"></a>{type.ToReadableName()}");
             if (type.IsAbstract)
             {
                 sb.Append(" *(abstract)*");
@@ -34,7 +51,7 @@ namespace Animator.Documentation
             Type parentType = type;
             while (parentType != typeof(ManagedObject))
             {
-                inheritedTypes.Add(parentType.Name);
+                inheritedTypes.Add(parentType.ToReadableName());
                 parentType = parentType.BaseType;
             }
 
@@ -58,7 +75,7 @@ namespace Animator.Documentation
 
                 foreach (var derivedType in derivedTypes)
                 {
-                    sb.AppendLine($"* {MakeLinkToType(derivedType.Name)}");
+                    sb.AppendLine($"* {MakeLinkToType(derivedType.ToReadableName())}");
                 }
 
                 sb.AppendLine();
@@ -97,7 +114,7 @@ namespace Animator.Documentation
 
                 foreach (var property in properties)
                 {
-                    sb.AppendLine($"* `{property.PropertyType.Name}` **`{type.Name}.{property.Name}`**");
+                    sb.AppendLine($"* `{property.PropertyType.ToReadableName()}` **`{type.ToReadableName()}.{property.Name}`**");
 
                     var propDocumentation = property.GetDocumentation();
                     if (propDocumentation != null)
