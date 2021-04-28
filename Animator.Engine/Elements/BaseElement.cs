@@ -1,5 +1,6 @@
 ﻿using Animator.Engine.Animation;
 using Animator.Engine.Base;
+using Animator.Engine.Types;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -111,6 +112,7 @@ namespace Animator.Engine.Elements
 
         #endregion
 
+        [DoNotDocument]
         public Scene Scene
         {
             get

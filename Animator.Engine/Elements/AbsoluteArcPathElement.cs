@@ -4,6 +4,9 @@ using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Represents a path part, which is drawn as an elliptical arc.
+    /// </summary>
     public class AbsoluteArcPathElement : BaseArcPathElement
     {
         // Public methods -----------------------------------------------------
@@ -20,6 +23,9 @@ namespace Animator.Engine.Elements
 
         #region RX managed property
 
+        /// <summary>
+        /// X radius of the ellipse, from which the arc is built
+        /// </summary>
         public float RX
         {
             get => (float)GetValue(RXProperty);
@@ -35,6 +41,9 @@ namespace Animator.Engine.Elements
 
         #region RY managed property
 
+        /// <summary>
+        /// Y radius of the ellipse, from which the arc is built
+        /// </summary>
         public float RY
         {
             get => (float)GetValue(RYProperty);
@@ -50,6 +59,9 @@ namespace Animator.Engine.Elements
 
         #region Angle managed property
 
+        /// <summary>
+        /// Angle of the arc
+        /// </summary>
         public float Angle
         {
             get => (float)GetValue(AngleProperty);
@@ -65,6 +77,9 @@ namespace Animator.Engine.Elements
 
         #region LargeArcFlag managed property
 
+        /// <summary>
+        /// Whether arc should follow the larger path or smaller one
+        /// </summary>
         public bool LargeArcFlag
         {
             get => (bool)GetValue(LargeArcFlagProperty);
@@ -95,6 +110,9 @@ namespace Animator.Engine.Elements
 
         #region EndPoint managed property
 
+        /// <summary>
+        /// End point of the arc
+        /// </summary>
         public PointF EndPoint
         {
             get => (PointF)GetValue(EndPointProperty);

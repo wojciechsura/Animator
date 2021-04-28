@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Represents basic element, which can be drawn on the scene.
+    /// </summary>
     public abstract class Visual : BaseElement
     {
         // Private methods ----------------------------------------------------

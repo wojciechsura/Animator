@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Animator.Engine</name>
+    </assembly>
+    <members>
+        <member name="M:Animator.Engine.Animation.Maths.EasingFunctionRepository.SpeedUpToSlowDown(System.Func{System.Single,System.Single})">
+            <remarks>Assumes, that func is continuous, func(0) = 0 and func(1) = 1.</remarks>
+        </member>
+        <member name="M:Animator.Engine.Animation.Maths.EasingFunctionRepository.SpeedUpToBoth(System.Func{System.Single,System.Single})">
+            <remarks>Assumes, that func is continuous, func(0) = 0 and func(1) = 1.</remarks>
+        </member>
+        <member name="M:Animator.Engine.Animation.Maths.EasingFunctionRepository.SpeedUpToReverseBoth(System.Func{System.Single,System.Single})">
+            <remarks>Assumes, that func is continuous, func(0) = 0 and func(1) = 1.</remarks>
+        </member>
+        <member name="T:Animator.Engine.Elements.AbsoluteArcPathElement">
+            <summary>
+            Represents a path part, which is drawn as an elliptical arc.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.RX">
+            <summary>
+            X radius of the ellipse, from which the arc is built
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.RY">
+            <summary>
+            Y radius of the ellipse, from which the arc is built
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.Angle">
+            <summary>
+            Angle of the arc
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.LargeArcFlag">
+            <summary>
+            Whether arc should follow the larger path or smaller one
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.EndPoint">
+            <summary>
+            End point of the arc
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.PathElement.RunningPoint">
+            <summary>
+            Utility class to simplify handling relative positions
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Visual">
+            <summary>
+            Represents basic element, which can be drawn on the scene.
+            </summary>
+        </member>
+    </members>
+</doc>
