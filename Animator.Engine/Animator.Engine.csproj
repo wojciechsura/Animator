@@ -7,10 +7,11 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>D:\Dokumenty\Dev\VS\Animator\Animator.Engine\Animator.Engine.xml</DocumentationFile>
+    <DocumentationFile>D:\Dokumenty\Dev\Animator\Animator.Engine\Animator.Engine.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ProCalc.NET" Version="1.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
   </ItemGroup>
 

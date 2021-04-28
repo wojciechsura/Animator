@@ -151,7 +151,7 @@ namespace Animator.Documentation
                 var type = elementTypes[i];
 
                 if (i > 0)
-                    sb.AppendLine("<hr />");
+                    sb.AppendLine("<hr />").AppendLine();
 
                 BuildTypeDocumentation(type, engineAssembly, elementsNamespace, sb);
             }
