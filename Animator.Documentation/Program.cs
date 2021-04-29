@@ -116,18 +116,24 @@ namespace Animator.Documentation
 
                 foreach (var property in properties)
                 {
-                    sb.AppendLine($"* `{property.PropertyType.ToReadableName()}` **`{type.ToReadableName()}.{property.Name}`**");
+                    sb.AppendLine($"* `{property.PropertyType.ToReadableName()}` **`{type.ToReadableName()}.{property.Name}`**").AppendLine("    ");
 
                     var propDocumentation = property.GetDocumentation();
                     if (propDocumentation != null)
                     {
+                        var isFirst = true;
+
                         var summary = propDocumentation["member"]?["summary"];
 
                         if (summary != null)
                         {
-                            foreach (var line in summary.InnerText.Trim().Split('\n'))
+                            if (!isFirst)
+                                sb.AppendLine();
+                            isFirst = false;
+
+                            foreach (var line in summary.InnerText.Trim().Split("\r\n"))
                             {
-                                sb.AppendLine($"    {line}");
+                                sb.AppendLine($"    {line.Trim()}");
                             }
                         }
 
@@ -135,15 +141,17 @@ namespace Animator.Documentation
 
                         if (example != null)
                         {
-                            sb.AppendLine($"    **Example:**");
+                            if (!isFirst)
+                                sb.AppendLine();
+                            isFirst = false;
 
-                            foreach (var line in example.InnerText.Trim().Split('\n'))
+                            sb.AppendLine($"    **Example:**").AppendLine("    ");
+
+                            foreach (var line in example.InnerText.Trim().Split("\r\n"))
                             {
-                                sb.AppendLine($"    {line}");
+                                sb.AppendLine($"    {line.Trim()}");
                             }
                         }
-
-                        sb.AppendLine();
                     }
 
                     sb.AppendLine();

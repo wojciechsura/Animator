@@ -218,21 +218,21 @@ namespace Animator.Engine.Elements
         #region Expression managed property
 
         /// <summary>
-        /// Expression, for the property.
+        /// Expression for the property.
         /// 
         /// You may use the following pre-defined values:
         /// 
-        /// * StartTime - value of StartTime property expressed in milliseconds (1/1000 of a second)
-        /// * EndTime - value of EndTime property expressed in milliseconds
-        /// * CurrentTime - time of current frame expressed in milliseconds
-        /// * EasedFactor - value ranging from 0 (when CurrentTime = StartTime) to 1 (when CurrentTime = EndTime)
+        /// * **StartTime** - value of StartTime property expressed in milliseconds (1/1000 of a second)
+        /// * **EndTime** - value of EndTime property expressed in milliseconds
+        /// * **CurrentTime** - time of current frame expressed in milliseconds
+        /// * **EasedFactor** - value ranging from 0 (when CurrentTime = StartTime) to 1 (when CurrentTime = EndTime)
         ///     with easing function applied.
         ///     
         /// In addition, you can reach value of any named element's property with the simple
         /// notation.
         /// </summary>
         /// <example>
-        /// `Expression="Rect.Position + [10,10] * EasedFactor`
+        /// `Expression="Rect.Position + [10,10] * EasedFactor"`
         /// </example>
         public string Expression
         {

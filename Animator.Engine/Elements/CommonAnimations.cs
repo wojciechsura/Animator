@@ -73,6 +73,7 @@ namespace Animator.Engine.Elements
             new ManagedSimplePropertyMetadata { 
                 DefaultValue = TimeSpan.FromMilliseconds(0), 
                 ValueChangedHandler = HandleStartTimeChanged,
+                NotAnimatable = true,
                 Inheritable = true,
                 InheritedFromParent = true
             });
@@ -97,6 +98,7 @@ namespace Animator.Engine.Elements
             typeof(TimeSpan),
             new ManagedSimplePropertyMetadata { DefaultValue = TimeSpan.FromMilliseconds(0), 
                 CoerceValueHandler = CoerceEndTime,
+                NotAnimatable = true,
                 Inheritable = true,
                 InheritedFromParent = true
             });
@@ -125,7 +127,11 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EasingFunctionProperty = ManagedProperty.Register(typeof(CommonAnimations),
             nameof(EasingFunction),
             typeof(EasingFunction),
-            new ManagedSimplePropertyMetadata { DefaultValue = EasingFunction.Linear, Inheritable = true, InheritedFromParent = true });
+            new ManagedSimplePropertyMetadata { 
+                DefaultValue = EasingFunction.Linear,
+                NotAnimatable = true,
+                Inheritable = true, 
+                InheritedFromParent = true });
 
         #endregion
 
