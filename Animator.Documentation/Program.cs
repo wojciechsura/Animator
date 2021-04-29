@@ -16,7 +16,7 @@ namespace Animator.Documentation
     {
         private static readonly Regex genericTypeRegex = new Regex("(.*)`([0-9]+)");
 
-        private static string MakeLinkToType(string type) => $"[{type}]({type})";
+        private static string MakeLinkToType(string type) => $"[{type}](#{type})";
 
         private static string ToReadableName(this Type type)
         {
