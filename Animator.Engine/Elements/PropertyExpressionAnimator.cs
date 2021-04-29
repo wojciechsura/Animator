@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Allows evaluating animated value of an property basing on a mathematical expression.
+    /// </summary>
     public class PropertyExpressionAnimator : TimeDurationNumericPropertyAnimator
     {
         // Private types ------------------------------------------------------
@@ -214,6 +217,23 @@ namespace Animator.Engine.Elements
 
         #region Expression managed property
 
+        /// <summary>
+        /// Expression, for the property.
+        /// 
+        /// You may use the following pre-defined values:
+        /// 
+        /// * StartTime - value of StartTime property expressed in milliseconds (1/1000 of a second)
+        /// * EndTime - value of EndTime property expressed in milliseconds
+        /// * CurrentTime - time of current frame expressed in milliseconds
+        /// * EasedFactor - value ranging from 0 (when CurrentTime = StartTime) to 1 (when CurrentTime = EndTime)
+        ///     with easing function applied.
+        ///     
+        /// In addition, you can reach value of any named element's property with the simple
+        /// notation.
+        /// </summary>
+        /// <example>
+        /// `Expression="Rect.Position + [10,10] * EasedFactor`
+        /// </example>
         public string Expression
         {
             get => (string)GetValue(ExpressionProperty);

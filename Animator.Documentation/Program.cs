@@ -112,6 +112,8 @@ namespace Animator.Documentation
             {
                 sb.AppendLine("### Properties");
 
+                // TODO FIX PROPERTY DOCUMENTATION
+
                 foreach (var property in properties)
                 {
                     sb.AppendLine($"* `{property.PropertyType.ToReadableName()}` **`{type.ToReadableName()}.{property.Name}`**");
@@ -125,10 +127,23 @@ namespace Animator.Documentation
                         {
                             foreach (var line in summary.InnerText.Trim().Split('\n'))
                             {
-                                sb.AppendLine($"    > {line}");
+                                sb.AppendLine($"    {line}");
                             }
-                            sb.AppendLine();
                         }
+
+                        var example = propDocumentation["member"]?["example"];
+
+                        if (example != null)
+                        {
+                            sb.AppendLine($"    **Example:**");
+
+                            foreach (var line in example.InnerText.Trim().Split('\n'))
+                            {
+                                sb.AppendLine($"    {line}");
+                            }
+                        }
+
+                        sb.AppendLine();
                     }
 
                     sb.AppendLine();
