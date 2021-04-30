@@ -1,4 +1,5 @@
-﻿using Animator.Engine.Base;
+﻿using Animator.Engine.Animation.Maths;
+using Animator.Engine.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace Animator.Engine.Elements
 
         public override object EvalValue(float fromTimeMs, object fromValue, float currentTimeMs)
         {
-            float easedFactor = EvalTimeFactor(fromTimeMs, currentTimeMs);
+            float easedFactor = EasingFunctionRepository.Ease(EasingFunction, TimeCalculator.EvalAnimationFactor(fromTimeMs, (float)Time.TotalMilliseconds, currentTimeMs));
             var fromPoint = (float)fromValue;
             float result = fromPoint + (Value - fromPoint) * easedFactor;
 

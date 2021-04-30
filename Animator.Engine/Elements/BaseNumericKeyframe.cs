@@ -6,17 +6,6 @@ namespace Animator.Engine.Elements
 {
     public abstract class BaseNumericKeyframe : BaseKeyframe
     {
-        // Protected methods --------------------------------------------------
-
-        protected float EvalTimeFactor(float fromTimeMs, float currentTimeMs)
-        {
-            var timeFactor = 0.0f;
-            if (Time.TotalMilliseconds - fromTimeMs > 0)
-                timeFactor = (currentTimeMs - fromTimeMs) / ((float)Time.TotalMilliseconds - fromTimeMs);
-            var easedFactor = EasingFunctionRepository.Ease(EasingFunction, timeFactor);
-            return easedFactor;
-        }
-
         // Public methods -----------------------------------------------------
 
         #region EasingFunction managed property

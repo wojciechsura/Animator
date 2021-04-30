@@ -17,7 +17,7 @@ namespace Animator.Engine.Elements
 
         public override object EvalValue(float fromTimeMs, object fromValue, float currentTimeMs)
         {
-            float easedFactor = EvalTimeFactor(fromTimeMs, currentTimeMs);
+            float easedFactor = EasingFunctionRepository.Ease(EasingFunction, TimeCalculator.EvalAnimationFactor(fromTimeMs, (float)Time.TotalMilliseconds, currentTimeMs));
 
             var fromPoint = (PointF)fromValue;
 
