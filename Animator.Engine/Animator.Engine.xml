@@ -59,17 +59,19 @@
             
             You may use the following pre-defined values:
             
-            * **StartTime** - value of StartTime property expressed in milliseconds (1/1000 of a second)
-            * **EndTime** - value of EndTime property expressed in milliseconds
-            * **CurrentTime** - time of current frame expressed in milliseconds
-            * **EasedFactor** - value ranging from 0 (when CurrentTime = StartTime) to 1 (when CurrentTime = EndTime)
-                with easing function applied.
+            <ul>
+            <li><strong>StartTime</strong> - value of StartTime property expressed in milliseconds (1/1000 of a second)</li>
+            <li><strong>EndTime</strong> - value of EndTime property expressed in milliseconds</li>
+            <li><strong>CurrentTime</strong> - time of current frame expressed in milliseconds</li>
+            <li><strong>EasedFactor</strong> - value ranging from 0 (when CurrentTime = StartTime) to 1 (when CurrentTime = EndTime)
+            with easing function applied.</li>
+            </ul>
                 
             In addition, you can reach value of any named element's property with the simple
             notation.
             </summary>
             <example>
-            `Expression="Rect.Position + [10,10] * EasedFactor"`
+            <code><pre>Expression="Rect.Position + [10,10] * EasedFactor"</pre></code>
             </example>
         </member>
         <member name="T:Animator.Engine.Elements.Visual">

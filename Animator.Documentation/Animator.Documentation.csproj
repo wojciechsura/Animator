@@ -10,6 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\documentation_postfix.html" />
+    <None Remove="Resources\documentation_prefix.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\documentation_postfix.html" />
+    <EmbeddedResource Include="Resources\documentation_prefix.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Animator.Engine.Base\Animator.Engine.Base.csproj" />
     <ProjectReference Include="..\Animator.Engine\Animator.Engine.csproj" />
   </ItemGroup>

@@ -9,6 +9,7 @@ using Animator.Engine.Elements;
 using Animator.Engine.Base;
 using Animator.Engine.Types;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace Animator.Documentation
 {
@@ -16,7 +17,7 @@ namespace Animator.Documentation
     {
         private static readonly Regex genericTypeRegex = new Regex("(.*)`([0-9]+)");
 
-        private static string MakeLinkToType(string type) => $"[{type}](#{type})";
+        private static string MakeLinkToType(string type) => $"<a href=\"#{type}\">{type}</a>";
 
         private static string ToReadableName(this Type type)
         {
@@ -36,17 +37,19 @@ namespace Animator.Documentation
         {
             // Header
 
-            sb.Append($"# <a name=\"{type.ToReadableName()}\"></a>{type.ToReadableName()}");
+            sb.Append($"<h1><a name=\"{type.ToReadableName()}\"></a>{type.ToReadableName()}");
             if (type.IsAbstract)
             {
-                sb.Append(" *(abstract)*");
+                sb.Append(" <em>(abstract)</em>");
             }
+            sb.Append("</h1>");
             sb.AppendLine();
 
             // Inheritance
 
-            sb.AppendLine("### Inheritance");
+            sb.AppendLine("<h2>Inheritance</h2>");
 
+            sb.Append("<pre><code>");
             var inheritedTypes = new List<string>();
             Type parentType = type;
             while (parentType != typeof(ManagedObject))
@@ -61,7 +64,7 @@ namespace Animator.Documentation
                 if (i > 0)
                     sb.Append(" » ");
             }
-            sb.AppendLine().AppendLine();
+            sb.AppendLine("</pre></code>");
 
             // Derived types
 
@@ -71,14 +74,14 @@ namespace Animator.Documentation
 
             if (derivedTypes.Any())
             {
-                sb.AppendLine("### Derived types").AppendLine();
+                sb.AppendLine("<h2>Derived types</h2>");
 
+                sb.AppendLine("<ul>");
                 foreach (var derivedType in derivedTypes)
                 {
-                    sb.AppendLine($"* {MakeLinkToType(derivedType.ToReadableName())}");
+                    sb.AppendLine($"<li>{MakeLinkToType(derivedType.ToReadableName())}</li>");
                 }
-
-                sb.AppendLine();
+                sb.AppendLine("</ul>");
             }
 
             // Description
@@ -90,15 +93,15 @@ namespace Animator.Documentation
                 var summary = documentation["member"]?["summary"];
                 if (summary != null)
                 {
-                    sb.AppendLine("### Description").AppendLine();
-                    sb.AppendLine(summary.InnerText.Trim());
+                    sb.AppendLine("<h2>Description</h2>");
+                    sb.AppendLine(summary.InnerXml.Trim());
                 }
 
                 var remarks = documentation["member"]?["remarks"];
                 if (remarks != null)
                 {
-                    sb.AppendLine("**Remarks**").AppendLine();
-                    sb.AppendLine(remarks.InnerText.Trim());
+                    sb.AppendLine("<h2>Remarks</h2>").AppendLine();
+                    sb.AppendLine(remarks.InnerXml.Trim());
                 }
             }
 
@@ -110,13 +113,19 @@ namespace Animator.Documentation
 
             if (properties.Any())
             {
-                sb.AppendLine("### Properties");
+                sb.AppendLine("<h2>Properties</h2>");
 
-                // TODO FIX PROPERTY DOCUMENTATION
-
+                sb.AppendLine("<table class=\"properties\">");
                 foreach (var property in properties)
                 {
-                    sb.AppendLine($"* `{property.PropertyType.ToReadableName()}` **`{type.ToReadableName()}.{property.Name}`**").AppendLine("    ");
+                    sb.AppendLine("<tr>");
+                    sb.AppendLine("<td>");
+                    sb.AppendLine($"<pre><code>{HttpUtility.HtmlEncode(property.PropertyType.ToReadableName())}</code></pre>");
+                    sb.AppendLine("</td>");
+                    sb.AppendLine("<td>");
+                    sb.AppendLine($"<pre><code><strong>{property.Name}</strong></code></pre>");
+                    sb.AppendLine("</td>");
+                    sb.AppendLine("<td>");
 
                     var propDocumentation = property.GetDocumentation();
                     if (propDocumentation != null)
@@ -127,43 +136,32 @@ namespace Animator.Documentation
 
                         if (summary != null)
                         {
-                            if (!isFirst)
-                                sb.AppendLine();
-                            isFirst = false;
-
-                            foreach (var line in summary.InnerText.Trim().Split("\r\n"))
-                            {
-                                sb.AppendLine($"    {line.Trim()}");
-                            }
+                            sb.AppendLine(summary.InnerXml);
                         }
 
                         var example = propDocumentation["member"]?["example"];
 
                         if (example != null)
                         {
-                            if (!isFirst)
-                                sb.AppendLine();
-                            isFirst = false;
-
-                            sb.AppendLine($"    **Example:**").AppendLine("    ");
-
-                            foreach (var line in example.InnerText.Trim().Split("\r\n"))
-                            {
-                                sb.AppendLine($"    {line.Trim()}");
-                            }
+                            sb.Append("<p><strong>Example:</strong></p>");
+                            sb.AppendLine(example.InnerXml);
                         }
                     }
 
-                    sb.AppendLine();
+                    sb.AppendLine("</td>");
                 }
-            }
 
-            sb.AppendLine();
+                sb.AppendLine("</table>");
+            }
         }
 
         private static StringBuilder BuildDocumentation(Assembly engineAssembly, string elementsNamespace)
         {
             StringBuilder sb = new StringBuilder();
+
+            var preStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Animator.Documentation.Resources.documentation_prefix.html");
+            using (StreamReader sr = new StreamReader(preStream))
+                sb.AppendLine(sr.ReadToEnd());
 
             var elementTypes = engineAssembly.GetTypes()
                 .Where(t => t.IsPublic && t.Namespace == elementsNamespace && !t.CustomAttributes.Any(a => a.AttributeType == typeof(DoNotDocumentAttribute)))
@@ -178,6 +176,10 @@ namespace Animator.Documentation
 
                 BuildTypeDocumentation(type, engineAssembly, elementsNamespace, sb);
             }
+
+            var postStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Animator.Documentation.Resources.documentation_postfix.html");
+            using (StreamReader sr = new StreamReader(postStream))
+                sb.AppendLine(sr.ReadToEnd());
 
             return sb;
         }
