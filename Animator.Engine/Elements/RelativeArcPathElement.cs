@@ -4,6 +4,10 @@ using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Represents a path part, which is drawn as an elliptical arc.
+    /// Endpoint of the arc is expressed in relative coordinates.
+    /// </summary>
     public class RelativeArcPathElement : BaseArcPathElement
     {
         // Internal methods ---------------------------------------------------
@@ -23,6 +27,9 @@ namespace Animator.Engine.Elements
 
         #region RX managed property
 
+        /// <summary>
+        /// X radius of the ellipse, from which the arc is built.
+        /// </summary>
         public float RX
         {
             get => (float)GetValue(RXProperty);
@@ -38,6 +45,9 @@ namespace Animator.Engine.Elements
 
         #region RY managed property
 
+        /// <summary>
+        /// Y radius of the ellipse, from which the arc is built.
+        /// </summary>
         public float RY
         {
             get => (float)GetValue(RYProperty);
@@ -53,6 +63,9 @@ namespace Animator.Engine.Elements
 
         #region Angle managed property
 
+        /// <summary>
+        /// Angle of the arc
+        /// </summary>
         public float Angle
         {
             get => (float)GetValue(AngleProperty);
@@ -68,6 +81,9 @@ namespace Animator.Engine.Elements
 
         #region LargeArcFlag managed property
 
+        /// <summary>
+        /// Determines, whether arc should follow the larger path or smaller one.
+        /// </summary>
         public bool LargeArcFlag
         {
             get => (bool)GetValue(LargeArcFlagProperty);
@@ -83,6 +99,9 @@ namespace Animator.Engine.Elements
 
         #region SweepFlag managed property
 
+        /// <summary>
+        /// Determines, whether arc will be drawn positive-angle or negative-angle.
+        /// </summary>
         public bool SweepFlag
         {
             get => (bool)GetValue(SweepFlagProperty);
@@ -98,6 +117,9 @@ namespace Animator.Engine.Elements
 
         #region DeltaEndPoint managed property
 
+        /// <summary>
+        /// End point of the arc, relative to the endpoint of previous path element.
+        /// </summary>
         public PointF DeltaEndPoint
         {
             get => (PointF)GetValue(DeltaEndPointProperty);

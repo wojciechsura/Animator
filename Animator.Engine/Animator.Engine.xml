@@ -16,26 +16,32 @@
         <member name="T:Animator.Engine.Elements.AbsoluteArcPathElement">
             <summary>
             Represents a path part, which is drawn as an elliptical arc.
+            Endpoint of the arc is expressed in absolute coordinates.
             </summary>
         </member>
         <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.RX">
             <summary>
-            X radius of the ellipse, from which the arc is built
+            X radius of the ellipse, from which the arc is built.
             </summary>
         </member>
         <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.RY">
             <summary>
-            Y radius of the ellipse, from which the arc is built
+            Y radius of the ellipse, from which the arc is built.
             </summary>
         </member>
         <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.Angle">
             <summary>
-            Angle of the arc
+            Angle of the arc.
             </summary>
         </member>
         <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.LargeArcFlag">
             <summary>
-            Whether arc should follow the larger path or smaller one
+            Determines, whether arc should follow the larger path or smaller one.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.SweepFlag">
+            <summary>
+            Determines, whether arc will be drawn positive-angle or negative-angle.
             </summary>
         </member>
         <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.EndPoint">
@@ -73,6 +79,42 @@
             <example>
             <code><pre>Expression="Rect.Position + [10,10] * EasedFactor"</pre></code>
             </example>
+        </member>
+        <member name="T:Animator.Engine.Elements.RelativeArcPathElement">
+            <summary>
+            Represents a path part, which is drawn as an elliptical arc.
+            Endpoint of the arc is expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeArcPathElement.RX">
+            <summary>
+            X radius of the ellipse, from which the arc is built.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeArcPathElement.RY">
+            <summary>
+            Y radius of the ellipse, from which the arc is built.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeArcPathElement.Angle">
+            <summary>
+            Angle of the arc
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeArcPathElement.LargeArcFlag">
+            <summary>
+            Determines, whether arc should follow the larger path or smaller one.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeArcPathElement.SweepFlag">
+            <summary>
+            Determines, whether arc will be drawn positive-angle or negative-angle.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeArcPathElement.DeltaEndPoint">
+            <summary>
+            End point of the arc, relative to the endpoint of previous path element.
+            </summary>
         </member>
         <member name="T:Animator.Engine.Elements.Visual">
             <summary>

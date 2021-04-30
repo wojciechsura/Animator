@@ -6,6 +6,7 @@ namespace Animator.Engine.Elements
 {
     /// <summary>
     /// Represents a path part, which is drawn as an elliptical arc.
+    /// Endpoint of the arc is expressed in absolute coordinates.
     /// </summary>
     public class AbsoluteArcPathElement : BaseArcPathElement
     {
@@ -24,7 +25,7 @@ namespace Animator.Engine.Elements
         #region RX managed property
 
         /// <summary>
-        /// X radius of the ellipse, from which the arc is built
+        /// X radius of the ellipse, from which the arc is built.
         /// </summary>
         public float RX
         {
@@ -42,7 +43,7 @@ namespace Animator.Engine.Elements
         #region RY managed property
 
         /// <summary>
-        /// Y radius of the ellipse, from which the arc is built
+        /// Y radius of the ellipse, from which the arc is built.
         /// </summary>
         public float RY
         {
@@ -60,7 +61,7 @@ namespace Animator.Engine.Elements
         #region Angle managed property
 
         /// <summary>
-        /// Angle of the arc
+        /// Angle of the arc.
         /// </summary>
         public float Angle
         {
@@ -78,7 +79,7 @@ namespace Animator.Engine.Elements
         #region LargeArcFlag managed property
 
         /// <summary>
-        /// Whether arc should follow the larger path or smaller one
+        /// Determines, whether arc should follow the larger path or smaller one.
         /// </summary>
         public bool LargeArcFlag
         {
@@ -95,6 +96,9 @@ namespace Animator.Engine.Elements
 
         #region SweepFlag managed property
 
+        /// <summary>
+        /// Determines, whether arc will be drawn positive-angle or negative-angle.
+        /// </summary>
         public bool SweepFlag
         {
             get => (bool)GetValue(SweepFlagProperty);
