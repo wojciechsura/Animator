@@ -4,6 +4,10 @@ using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Represents a path part, which is drawn as a vertical line.
+    /// All points are expressed in absolute coordinates.
+    /// </summary>
     public class AbsoluteVerticalLinePathElement : PathElement
     {
         // Internal methods ---------------------------------------------------
@@ -23,6 +27,10 @@ namespace Animator.Engine.Elements
 
         #region Y managed property
 
+        /// <summary>
+        /// Y-coordinate of the end point. X-coordinate equals to
+        /// the end point's of the previous path element.
+        /// </summary>
         public float Y
         {
             get => (float)GetValue(YProperty);

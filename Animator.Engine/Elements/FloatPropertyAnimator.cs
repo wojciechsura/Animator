@@ -9,6 +9,12 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Allows applying an animation to a float property of some
+    /// object. It is meant to be used only if you want to apply
+    /// single animation per whole scene. Otherwise, use Storyboard
+    /// and FloatKeyframe to define the whole animation.
+    /// </summary>
     public class FloatPropertyAnimator : TimeDurationNumericPropertyAnimator
     {
         // Public methods -----------------------------------------------------
@@ -36,6 +42,9 @@ namespace Animator.Engine.Elements
       
         #region From managed property
 
+        /// <summary>
+        /// Initial value of the property when animation starts (at StartTime)
+        /// </summary>
         public float From
         {
             get => (float)GetValue(FromProperty);
@@ -51,6 +60,9 @@ namespace Animator.Engine.Elements
 
         #region To managed property
 
+        /// <summary>
+        /// Final value of the property when animation ends (at EndTime)
+        /// </summary>
         public float To
         {
             get => (float)GetValue(ToProperty);

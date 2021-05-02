@@ -5,6 +5,9 @@ using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Begins a new path in specified relative coordinates
+    /// </summary>
     public class RelativeMovePathElement : PathElement
     {
         // Internal methods ---------------------------------------------------
@@ -24,6 +27,10 @@ namespace Animator.Engine.Elements
 
         #region DeltaEndPoint managed property
 
+        /// <summary>
+        /// Coordinates at which new path should begin, relative
+        /// to end point of the previous path element.
+        /// </summary>
         public PointF DeltaEndPoint
         {
             get => (PointF)GetValue(DeltaEndPointProperty);

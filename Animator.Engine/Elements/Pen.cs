@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Defines a way in which lines are being drawn.
+    /// </summary>
     public class Pen : BaseElement
     {
         // Internal methods ---------------------------------------------------
@@ -19,7 +22,10 @@ namespace Animator.Engine.Elements
         // Public properties --------------------------------------------------
 
         #region Color managed property
-
+        
+        /// <summary>
+        /// Color of the line.
+        /// </summary>
         public System.Drawing.Color Color
         {
             get => (System.Drawing.Color)GetValue(ColorProperty);
@@ -35,6 +41,9 @@ namespace Animator.Engine.Elements
 
         #region Width managed property
 
+        /// <summary>
+        /// Width of the line.
+        /// </summary>
         public float Width
         {
             get => (float)GetValue(WidthProperty);

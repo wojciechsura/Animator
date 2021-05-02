@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Draws rectangle on a scene.
+    /// </summary>
     public class Rectangle : Shape
     {
         protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
@@ -28,9 +31,12 @@ namespace Animator.Engine.Elements
                     buffer.Graphics.DrawRectangle(pen, 0.0f, 0.0f, Width, Height);
             }
         }
-
+        
         #region Width managed property
 
+        /// <summary>
+        /// Width of the rectangle.
+        /// </summary>
         public float Width
         {
             get => (float)GetValue(WidthProperty);
@@ -46,6 +52,9 @@ namespace Animator.Engine.Elements
 
         #region Height managed property
 
+        /// <summary>
+        /// Height of the rectangle.
+        /// </summary>
         public float Height
         {
             get => (float)GetValue(HeightProperty);

@@ -3,6 +3,11 @@ using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Informs, that the shape defined by a series of path elements
+    /// ends here. If needed, path is closed with a line leading to
+    /// its start.
+    /// </summary>
     public class CloseShapePathElement : PathElement
     {
         // Internal methods ---------------------------------------------------

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Brush, which fills an area with a single color.
+    /// </summary>
     public class SolidBrush : Brush
     {
         // Internal methods ---------------------------------------------------
@@ -20,6 +23,9 @@ namespace Animator.Engine.Elements
 
         #region Color managed property
 
+        /// <summary>
+        /// Color of the fill.
+        /// </summary>
         public System.Drawing.Color Color
         {
             get => (System.Drawing.Color)GetValue(ColorProperty);

@@ -4,6 +4,10 @@ using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Represents a path part, which is drawn as a line.
+    /// All points are expressed in absolute coordinates.
+    /// </summary>
     public class AbsoluteLinePathElement : PathElement
     {
         // Internal methods ---------------------------------------------------
@@ -21,6 +25,9 @@ namespace Animator.Engine.Elements
 
         #region EndPoint managed property
 
+        /// <summary>
+        /// End point of the line.
+        /// </summary>
         public PointF EndPoint
         {
             get => (PointF)GetValue(EndPointProperty);

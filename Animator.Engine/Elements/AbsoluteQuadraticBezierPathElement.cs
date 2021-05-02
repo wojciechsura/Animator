@@ -30,6 +30,9 @@ namespace Animator.Engine.Elements
 
         #region ControlPoint managed property
 
+        /// <summary>
+        /// Control point of the curve.
+        /// </summary>
         public PointF ControlPoint
         {
             get => (PointF)GetValue(ControlPointProperty);
@@ -45,6 +48,9 @@ namespace Animator.Engine.Elements
 
         #region EndPoint managed property
 
+        /// <summary>
+        /// End point of the curve.
+        /// </summary>
         public PointF EndPoint
         {
             get => (PointF)GetValue(EndPointProperty);

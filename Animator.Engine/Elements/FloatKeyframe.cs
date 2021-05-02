@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// A keyframe for a property of type float.
+    /// </summary>
     public class FloatKeyframe : BaseNumericKeyframe
     {
         // Public methods -----------------------------------------------------
@@ -27,6 +30,9 @@ namespace Animator.Engine.Elements
 
         #region Value managed property
 
+        /// <summary>
+        /// Value of the keyframe.
+        /// </summary>
         public float Value
         {
             get => (float)GetValue(ValueProperty);

@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Allows applying an animation to an int property of some
+    /// object. It is meant to be used only if you want to apply
+    /// single animation per whole scene. Otherwise, use Storyboard
+    /// and FloatKeyframe to define the whole animation.
+    /// </summary>
     public class IntPropertyAnimator : TimeDurationNumericPropertyAnimator
     {
         // Public methods -----------------------------------------------------
@@ -35,6 +41,9 @@ namespace Animator.Engine.Elements
 
         #region From managed property
 
+        /// <summary>
+        /// Initial value of the property when animation starts (at StartTime)
+        /// </summary>
         public int From
         {
             get => (int)GetValue(FromProperty);
@@ -50,6 +59,9 @@ namespace Animator.Engine.Elements
 
         #region To managed property
 
+        /// <summary>
+        /// Final value of the property when animation ends (at EndTime)
+        /// </summary>
         public int To
         {
             get => (int)GetValue(ToProperty);

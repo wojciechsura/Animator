@@ -7,10 +7,16 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Describes animation parameters.
+    /// </summary>
     public class AnimationConfig : ManagedObject
     {
         #region Width managed property
 
+        /// <summary>
+        /// Width of the result animation, in pixels.
+        /// </summary>
         public int Width
         {
             get => (int)GetValue(WidthProperty);
@@ -31,6 +37,9 @@ namespace Animator.Engine.Elements
 
         #region Height managed property
 
+        /// <summary>
+        /// Height of the result animation, in pixels.
+        /// </summary>
         public int Height
         {
             get => (int)GetValue(HeightProperty);
@@ -51,6 +60,9 @@ namespace Animator.Engine.Elements
 
         #region FramesPerSecond managed property
 
+        /// <summary>
+        /// Defines, how many frames should be in a second of animation.
+        /// </summary>
         public float FramesPerSecond
         {
             get => (float)GetValue(FramesPerSecondProperty);

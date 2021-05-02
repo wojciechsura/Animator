@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Base class for all brushes. A brush is an object, which
+    /// defines fill of a shape. If you need a simple, mono-color
+    /// fill, use SolidBrush.
+    /// </summary>
     public abstract class Brush : BaseElement
     {
         // Internal methods ---------------------------------------------------

@@ -11,6 +11,13 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Allows defining complex animations consisting of
+    /// multiple keyframes. Storyboard can contain definitions
+    /// of multiple animations (eg. multiple properties). You can
+    /// also use its properties, so that keyframes will inherit 
+    /// them.
+    /// </summary>
     [ContentProperty(nameof(Storyboard.Keyframes))]
     public class Storyboard : BaseAnimator
     {
@@ -80,6 +87,11 @@ namespace Animator.Engine.Elements
 
         #region TargetName managed property
 
+        /// <summary>
+        /// Defines name of an object, which property should be modified.
+        /// Storyboard does not use this value, but it may be set, so that
+        /// keyframes will inherit it (for a shorthand notation).
+        /// </summary>
         public string TargetName
         {
             get => (string)GetValue(TargetNameProperty);
@@ -95,6 +107,14 @@ namespace Animator.Engine.Elements
 
         #region Path managed property
 
+        /// <summary>
+        /// Defines path to a property, starting at the object pointed
+        /// to by TargetName. Path may be either a single property,
+        /// for example <code>Position</code>, or a chain of properties,
+        /// leading through subsequent object, like <code>Pen.Color</code>.
+        /// Storyboard does not use this value, but it may be set, so that
+        /// keyframes will inherit it (for a shorthand notation).
+        /// </summary>
         public string Path
         {
             get => (string)GetValue(PathProperty);
@@ -110,6 +130,34 @@ namespace Animator.Engine.Elements
 
         #region EasingFunction managed property
 
+        /// <summary>
+        /// Defines easing function used for animation. The role of
+        /// easing function is to define, how value should change
+        /// between previous and current keyframe. Possible
+        /// easing functions include the following:
+        /// 
+        /// <ul>
+        ///     <li>Linear</li>
+        ///     <li>EaseSineSpeedUp</li>
+        ///     <li>EaseSineSlowDown</li>
+        ///     <li>EaseSineBoth</li>
+        ///     <li>EaseQuadSpeedUp</li>
+        ///     <li>EaseQuadSlowDown</li>
+        ///     <li>EaseQuadBoth</li>
+        ///     <li>EaseCubicSpeedUp</li>
+        ///     <li>EaseCubicSlowDown</li>
+        ///     <li>EaseCubicBoth</li>
+        ///     <li>EaseQuartSpeedUp</li>
+        ///     <li>EaseQuartSlowDown</li>
+        ///     <li>EaseQuartBoth</li>
+        ///     <li>EaseBackSpeedUp</li>
+        ///     <li>EaseBackSlowDown</li>
+        ///     <li>EaseBackBoth</li>
+        /// </ul>
+        ///
+        /// Storyboard does not use this value, but it may be set, so that
+        /// keyframes will inherit it (for a shorthand notation).
+        /// </summary>
         public EasingFunction EasingFunction
         {
             get => (EasingFunction)GetValue(EasingFunctionProperty);
@@ -125,6 +173,9 @@ namespace Animator.Engine.Elements
 
         #region Keyframes managed collection
 
+        /// <summary>
+        /// List of keyframes, which define complex animation.
+        /// </summary>
         public ManagedCollection<BaseKeyframe> Keyframes
         {
             get => (ManagedCollection<BaseKeyframe>)GetValue(KeyframesProperty);

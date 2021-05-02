@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Draws a line on the scene.
+    /// </summary>
     public class Line : Visual
     {
         // Protected methods --------------------------------------------------
@@ -26,6 +29,9 @@ namespace Animator.Engine.Elements
 
         #region Start managed property
 
+        /// <summary>
+        /// Point defining start of the line.
+        /// </summary>
         public PointF Start
         {
             get => (PointF)GetValue(StartProperty);
@@ -41,6 +47,9 @@ namespace Animator.Engine.Elements
 
         #region End managed property
 
+        /// <summary>
+        /// Point defining end of the line.
+        /// </summary>
         public PointF End
         {
             get => (PointF)GetValue(EndProperty);
@@ -56,6 +65,9 @@ namespace Animator.Engine.Elements
 
         #region Pen managed property
 
+        /// <summary>
+        /// Describes visual properties of the drawn line.
+        /// </summary>
         public Pen Pen
         {
             get => (Pen)GetValue(PenProperty);

@@ -7,10 +7,17 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Base class for all property animator, which apply
+    /// animation to a property in specific period of time.
+    /// </summary>
     public abstract class TimeDurationPropertyAnimator : PropertyAnimator
     {
         #region StartTime managed property
 
+        /// <summary>
+        /// Time, when animation should be started.
+        /// </summary>
         public TimeSpan StartTime
         {
             get => (TimeSpan)GetValue(StartTimeProperty);
@@ -31,6 +38,9 @@ namespace Animator.Engine.Elements
 
         #region EndTime managed property
 
+        /// <summary>
+        /// Time, when animation should finish.
+        /// </summary>
         public TimeSpan EndTime
         {
             get => (TimeSpan)GetValue(EndTimeProperty);

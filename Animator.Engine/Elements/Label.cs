@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Draws a text on a scene.
+    /// </summary>
     public class Label : Visual
     {
         // Protected properties -----------------------------------------------
@@ -50,6 +53,9 @@ namespace Animator.Engine.Elements
 
         #region Brush managed property
 
+        /// <summary>
+        /// Defines fill of drawn text.
+        /// </summary>
         public Brush Brush
         {
             get => (Brush)GetValue(BrushProperty);
@@ -65,6 +71,9 @@ namespace Animator.Engine.Elements
 
         #region Text managed property
 
+        /// <summary>
+        /// Text to be drawn.
+        /// </summary>
         public string Text
         {
             get => (string)GetValue(TextProperty);
@@ -80,6 +89,9 @@ namespace Animator.Engine.Elements
 
         #region Font managed property
 
+        /// <summary>
+        /// Defines font family to be used while drawing text.
+        /// </summary>
         public string FontFamily
         {
             get => (string)GetValue(FontFamilyProperty);
@@ -95,6 +107,12 @@ namespace Animator.Engine.Elements
 
         #region FontSize managed property
 
+        /// <summary>
+        /// Defines font size of the drawn text.
+        /// </summary>
+        /// <remarks>
+        /// Use SizeUnit property to define unit (pixels or points)
+        /// </remarks>
         public float FontSize
         {
             get => (float)GetValue(FontSizeProperty);
@@ -110,6 +128,9 @@ namespace Animator.Engine.Elements
 
         #region Bold managed property
 
+        /// <summary>
+        /// Set this property to true to make text bold.
+        /// </summary>
         public bool Bold
         {
             get => (bool)GetValue(BoldProperty);
@@ -125,6 +146,9 @@ namespace Animator.Engine.Elements
 
         #region Italic managed property
 
+        /// <summary>
+        /// Set this property to true to make text italic.
+        /// </summary>
         public bool Italic
         {
             get => (bool)GetValue(ItalicProperty);
@@ -140,6 +164,9 @@ namespace Animator.Engine.Elements
 
         #region Underline managed property
 
+        /// <summary>
+        /// Set this property to true to make text underlined.
+        /// </summary>
         public bool Underline
         {
             get => (bool)GetValue(UnderlineProperty);
@@ -155,6 +182,14 @@ namespace Animator.Engine.Elements
 
         #region SizeUnit managed property
 
+        /// <summary>
+        /// Defines unit in which size of font is expressed.
+        /// Possible values:
+        /// <ul>
+        ///   <li>Points</li>
+        ///   <li>Pixels</li>
+        /// </ul>
+        /// </summary>
         public FontSizeUnit SizeUnit
         {
             get => (FontSizeUnit)GetValue(SizeUnitProperty);

@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Contains description of a single scene in animation.
+    /// </summary>
     [ContentProperty(nameof(Items))]
     public class Scene : BaseElement
     {
@@ -142,6 +145,9 @@ namespace Animator.Engine.Elements
 
         #region Duration managed property
 
+        /// <summary>
+        /// Defines duration of the scene.
+        /// </summary>
         public TimeSpan Duration
         {
             get => (TimeSpan)GetValue(DurationProperty);
@@ -157,6 +163,9 @@ namespace Animator.Engine.Elements
 
         #region Items managed collection
 
+        /// <summary>
+        /// Contains all visual elements placed on the scene.
+        /// </summary>
         public ManagedCollection<Visual> Items
         {
             get => (ManagedCollection<Visual>)GetValue(ItemsProperty);
@@ -170,6 +179,10 @@ namespace Animator.Engine.Elements
 
         #region Animators managed collection
 
+        /// <summary>
+        /// Contains list of all animators, which animate properties
+        /// of elements placed on the scene.
+        /// </summary>
         public ManagedCollection<BaseAnimator> Animators
         {
             get => (ManagedCollection<BaseAnimator>)GetValue(AnimatorsProperty);
@@ -183,6 +196,9 @@ namespace Animator.Engine.Elements
 
         #region Background managed property
 
+        /// <summary>
+        /// Defines fill of the background of the scene.
+        /// </summary>
         public Brush Background
         {
             get => (Brush)GetValue(BackgroundProperty);

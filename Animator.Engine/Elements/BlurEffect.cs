@@ -9,19 +9,25 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Adds a simple box blur to a visual.
+    /// </summary>
     public class BlurEffect : BaseEffect
     {
         internal override void Apply(BitmapBuffer framebuffer, BitmapBuffer backBuffer, BitmapBuffer frontBuffer, BitmapBufferRepository repository)
         {
             var data = framebuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, framebuffer.Bitmap.Width, framebuffer.Bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            ImageProcessing.Blur(data.Scan0, data.Stride, data.Width, data.Height, Radius);
+            ImageProcessing.Blur(data.Scan0, data.Stride, data.Width, data.Height, Radius * 2 + 1);
 
             framebuffer.Bitmap.UnlockBits(data);
         }
 
         #region Radius managed property
 
+        /// <summary>
+        /// Radius of the blur, in pixels.
+        /// </summary>
         public int Radius
         {
             get => (int)GetValue(RadiusProperty);
@@ -31,12 +37,11 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty RadiusProperty = ManagedProperty.Register(typeof(BlurEffect),
             nameof(Radius),
             typeof(int),
-            new ManagedSimplePropertyMetadata { DefaultValue = 5, CoerceValueHandler = CoerceRadius });
+            new ManagedSimplePropertyMetadata { DefaultValue = 3, CoerceValueHandler = CoerceRadius });
 
         private static object CoerceRadius(ManagedObject obj, object baseValue)
         {
-            // Change to the next grater odd value
-            return (int)baseValue + (1 - (int)baseValue % 2);
+            return Math.Max(0, (int)baseValue);
         }
 
         #endregion

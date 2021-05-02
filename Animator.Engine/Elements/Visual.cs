@@ -164,6 +164,9 @@ namespace Animator.Engine.Elements
 
         #region Position managed property
 
+        /// <summary>
+        /// Position of this visual on the scene.
+        /// </summary>
         public PointF Position
         {
             get => (PointF)GetValue(PositionProperty);
@@ -179,6 +182,13 @@ namespace Animator.Engine.Elements
 
         #region Origin managed property
 
+        /// <summary>
+        /// An anchor point of this visual. It affects numerous transforms, 
+        /// such as Position, Rotation and Scale. In general, it defines a
+        /// point of the visual, which will be placed on the scene in place
+        /// defined by Position property. Also, it defines center point
+        /// for rotation and scaling.
+        /// </summary>
         public PointF Origin
         {
             get => (PointF)GetValue(OriginProperty);
@@ -194,6 +204,9 @@ namespace Animator.Engine.Elements
 
         #region Rotation managed property
 
+        /// <summary>
+        /// Rotates visual by specific angle.
+        /// </summary>
         public float Rotation
         {
             get => (float)GetValue(RotationProperty);
@@ -209,6 +222,10 @@ namespace Animator.Engine.Elements
 
         #region Scale managed property
 
+        /// <summary>
+        /// Scales the visual by specified factor (separately
+        /// in X and Y axis).
+        /// </summary>
         public PointF Scale
         {
             get => (PointF)GetValue(ScaleProperty);
@@ -224,6 +241,9 @@ namespace Animator.Engine.Elements
 
         #region Alpha managed property
 
+        /// <summary>
+        /// Applies transparency to a visual.
+        /// </summary>
         public float Alpha
         {
             get => (float)GetValue(AlphaProperty);
@@ -238,7 +258,11 @@ namespace Animator.Engine.Elements
         #endregion
 
         #region Effects managed collection
-
+        
+        /// <summary>
+        /// List of effects, which will be applied to
+        /// a visual after rendering.
+        /// </summary>
         public ManagedCollection<BaseEffect> Effects
         {
             get => (ManagedCollection<BaseEffect>)GetValue(EffectsProperty);
@@ -252,6 +276,11 @@ namespace Animator.Engine.Elements
 
         #region InvertMask managed property
 
+        /// <summary>
+        /// Defines, if mask expresses areas, which should or should not
+        /// be drawn. Useful, if you want to e.g. draw everything
+        /// <em>except</em> some specific area.
+        /// </summary>
         public bool InvertMask
         {
             get => (bool)GetValue(InvertMaskProperty);
@@ -267,6 +296,17 @@ namespace Animator.Engine.Elements
 
         #region Mask managed collection
 
+        /// <summary>
+        /// Allows masking a visual, e.g. drawing only parts of it on
+        /// a screen. Use other visuals to describe the mask, although
+        /// only alpha-value of the final mask is used (colors does
+        /// not matter). If mask is not inverted (InvertMask property),
+        /// areas of the visual, where its mask has value of 1 are drawn
+        /// completely and areas, where the mask has value of 0 are not
+        /// drawn at all (with all values in between allowing partial 
+        /// drawing). If mask is inverted, this behavior works the other
+        /// way around.
+        /// </summary>
         public ManagedCollection<Visual> Mask
         {
             get => (ManagedCollection<Visual>)GetValue(MaskProperty);

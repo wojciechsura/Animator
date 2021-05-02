@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Base class for all keyframe classes. A keyframe
+    /// class describes fixed value for a property in 
+    /// specific time.
+    /// </summary>
     public abstract class BaseKeyframe : BaseElement
     {
         private string key;
@@ -30,6 +35,10 @@ namespace Animator.Engine.Elements
 
         #region Time managed property
 
+        /// <summary>
+        /// Define exact time since start of a scene, when a
+        /// property should be set to a fixed value.
+        /// </summary>
         public TimeSpan Time
         {
             get => (TimeSpan)GetValue(TimeProperty);
@@ -45,6 +54,9 @@ namespace Animator.Engine.Elements
 
         #region TargetName managed property
 
+        /// <summary>
+        /// Defines name of an object, which property should be modified.
+        /// </summary>
         public string TargetName
         {
             get => (string)GetValue(TargetNameProperty);
@@ -66,6 +78,12 @@ namespace Animator.Engine.Elements
 
         #region Path managed property
 
+        /// <summary>
+        /// Defines path to a property, starting at the object pointed
+        /// to by TargetName. Path may be either a single property,
+        /// for example <code>Position</code>, or a chain of properties,
+        /// leading through subsequent object, like <code>Pen.Color</code>.
+        /// </summary>
         public string Path
         {
             get => (string)GetValue(PathProperty);

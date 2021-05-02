@@ -5,6 +5,14 @@ using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Represents a path part, which is drawn as a quadratic Bezier curve.
+    /// Start point of the curve equals to the last point of previous
+    /// path element. The control point is deduced from the previous
+    /// path element as a mirror of its last control point against its
+    /// endpoint.
+    /// End point is expressed in relative coordinates.
+    /// </summary>
     public class RelativeQuadraticShorthandBezierPathElement : BaseQuadraticBezierPathElement
     {
         // Internal methods ---------------------------------------------------
@@ -29,6 +37,10 @@ namespace Animator.Engine.Elements
 
         #region DeltaEndPoint managed property
 
+        /// <summary>
+        /// End point of the curve, relative to end point of the previous
+        /// path element.
+        /// </summary>
         public PointF DeltaEndPoint
         {
             get => (PointF)GetValue(DeltaEndPointProperty);

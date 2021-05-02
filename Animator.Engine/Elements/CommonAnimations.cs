@@ -1,6 +1,7 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Base.Persistence;
 using Animator.Engine.Elements.Types;
+using Animator.Engine.Types;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +11,11 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Allows grouping a couple of animators, so that you don't have to specify
+    /// various properties multiple times. CommonAnimations itself does nothing,
+    /// but values of its properties are inherited by animators placed inside.
+    /// </summary>
     [ContentProperty(nameof(CommonAnimations.Animations))]
     public class CommonAnimations : BaseAnimator
     {
@@ -29,8 +35,12 @@ namespace Animator.Engine.Elements
 
         // Public properties --------------------------------------------------
 
+
         #region TargetName managed property
 
+        /// <summary>
+        /// Defines name of an object, which property should be modified.
+        /// </summary>
         public string TargetName
         {
             get => (string)GetValue(TargetNameProperty);
@@ -46,6 +56,12 @@ namespace Animator.Engine.Elements
 
         #region Path managed property
 
+        /// <summary>
+        /// Defines path to a property, starting at the object pointed
+        /// to by TargetName. Path may be either a single property,
+        /// for example <code>Position</code>, or a chain of properties,
+        /// leading through subsequent object, like <code>Pen.Color</code>.
+        /// </summary>
         public string Path
         {
             get => (string)GetValue(PathProperty);
@@ -61,6 +77,10 @@ namespace Animator.Engine.Elements
 
         #region StartTime managed property
 
+        /// <summary>
+        /// Defines time since start of scene, when value of
+        /// a property should start being changed.
+        /// </summary>
         public TimeSpan StartTime
         {
             get => (TimeSpan)GetValue(StartTimeProperty);
@@ -87,6 +107,10 @@ namespace Animator.Engine.Elements
 
         #region EndTime managed property
 
+        /// <summary>
+        /// Defines time since start of scene, when value of
+        /// a property reaches its final value.
+        /// </summary>
         public TimeSpan EndTime
         {
             get => (TimeSpan)GetValue(EndTimeProperty);
@@ -118,6 +142,31 @@ namespace Animator.Engine.Elements
 
         #region EasingFunction managed property
 
+        /// <summary>
+        /// Defines easing function used for animation. The role of
+        /// easing function is to define, how value should change
+        /// between previous and current keyframe. Possible
+        /// easing functions include the following:
+        /// 
+        /// <ul>
+        ///     <li>Linear</li>
+        ///     <li>EaseSineSpeedUp</li>
+        ///     <li>EaseSineSlowDown</li>
+        ///     <li>EaseSineBoth</li>
+        ///     <li>EaseQuadSpeedUp</li>
+        ///     <li>EaseQuadSlowDown</li>
+        ///     <li>EaseQuadBoth</li>
+        ///     <li>EaseCubicSpeedUp</li>
+        ///     <li>EaseCubicSlowDown</li>
+        ///     <li>EaseCubicBoth</li>
+        ///     <li>EaseQuartSpeedUp</li>
+        ///     <li>EaseQuartSlowDown</li>
+        ///     <li>EaseQuartBoth</li>
+        ///     <li>EaseBackSpeedUp</li>
+        ///     <li>EaseBackSlowDown</li>
+        ///     <li>EaseBackBoth</li>
+        /// </ul>
+        /// </summary>
         public EasingFunction EasingFunction
         {
             get => (EasingFunction)GetValue(EasingFunctionProperty);
@@ -135,6 +184,11 @@ namespace Animator.Engine.Elements
 
         #endregion
 
+        /// <summary>
+        /// A short-hand property, which allows you to specify
+        /// animation's duration instead of its end time.
+        /// </summary>
+        [DoNotDocument]
         public TimeSpan Duration
         {
             get => EndTime - StartTime;
@@ -143,6 +197,9 @@ namespace Animator.Engine.Elements
 
         #region Animations managed collection
 
+        /// <summary>
+        /// Defines a list of grouped animations.
+        /// </summary>
         public ManagedCollection<BaseAnimator> Animations
         {
             get => (ManagedCollection<BaseAnimator>)GetValue(AnimationsProperty);

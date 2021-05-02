@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Base class for all animators, which operates on object's
+    /// properties.
+    /// </summary>
     public abstract class PropertyAnimator : BaseAnimator
     {
         // Public methods -----------------------------------------------------
@@ -26,6 +30,9 @@ namespace Animator.Engine.Elements
 
         #region TargetName managed property
 
+        /// <summary>
+        /// Defines name of an object, which property should be modified.
+        /// </summary>
         public string TargetName
         {
             get => (string)GetValue(TargetNameProperty);
@@ -41,6 +48,12 @@ namespace Animator.Engine.Elements
 
         #region Path managed property
 
+        /// <summary>
+        /// Defines path to a property, starting at the object pointed
+        /// to by TargetName. Path may be either a single property,
+        /// for example <code>Position</code>, or a chain of properties,
+        /// leading through subsequent object, like <code>Pen.Color</code>.
+        /// </summary>
         public string Path
         {
             get => (string)GetValue(PathProperty);

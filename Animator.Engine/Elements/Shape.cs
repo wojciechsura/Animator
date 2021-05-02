@@ -7,11 +7,17 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Base class for all shapes drawn on the scene.
+    /// </summary>
     public abstract class Shape : Visual
     {
 
         #region Brush managed property
 
+        /// <summary>
+        /// Defines, how shape will be filled.
+        /// </summary>
         public Brush Brush
         {
             get => (Brush)GetValue(BrushProperty);
@@ -28,6 +34,9 @@ namespace Animator.Engine.Elements
 
         #region Pen managed property
 
+        /// <summary>
+        /// Defines, how edges of the shape will be drawn.
+        /// </summary>
         public Pen Pen
         {
             get => (Pen)GetValue(PenProperty);

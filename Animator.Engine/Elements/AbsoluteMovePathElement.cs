@@ -4,6 +4,9 @@ using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Begins a new path in specified absolute coordinates
+    /// </summary>
     public class AbsoluteMovePathElement : PathElement
     {
         // Internal methods ---------------------------------------------------
@@ -21,6 +24,9 @@ namespace Animator.Engine.Elements
 
         #region EndPoint managed property
 
+        /// <summary>
+        /// Coordinates at which new path should begin.
+        /// </summary>
         public PointF EndPoint
         {
             get => (PointF)GetValue(EndPointProperty);

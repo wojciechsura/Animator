@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Draws a circle on a scene.
+    /// </summary>
     public class Circle : Visual
     {
         protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
@@ -28,6 +31,9 @@ namespace Animator.Engine.Elements
 
         #region Center managed property
 
+        /// <summary>
+        /// Center point of the circle.
+        /// </summary>
         public PointF Center
         {
             get => (PointF)GetValue(CenterProperty);
@@ -43,6 +49,9 @@ namespace Animator.Engine.Elements
 
         #region Radius managed property
 
+        /// <summary>
+        /// Radius of the circle.
+        /// </summary>
         public float Radius
         {
             get => (float)GetValue(RadiusProperty);
@@ -56,9 +65,11 @@ namespace Animator.Engine.Elements
 
         #endregion
 
-
         #region Pen managed property
 
+        /// <summary>
+        /// Defines way in which border of the circle will be drawn.
+        /// </summary>
         public Pen Pen
         {
             get => (Pen)GetValue(PenProperty);
@@ -72,9 +83,11 @@ namespace Animator.Engine.Elements
 
         #endregion
 
-
         #region Brush managed property
 
+        /// <summary>
+        /// Defines way in which fill of the circle will be drawn.
+        /// </summary>
         public Brush Brush
         {
             get => (Brush)GetValue(BrushProperty);

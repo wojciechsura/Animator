@@ -11,6 +11,11 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Allows grouping visuals. You can use it to apply
+    /// transforms or effects to whole group of elements, or
+    /// add a common effect to all of them at once.
+    /// </summary>
     [ContentProperty(nameof(Layer.Items))]
     public class Layer : Visual
     {
@@ -36,6 +41,9 @@ namespace Animator.Engine.Elements
 
         #region Items managed collection
 
+        /// <summary>
+        /// Elements on a layer.
+        /// </summary>
         public ManagedCollection<Visual> Items
         {
             get => (ManagedCollection<Visual>)GetValue(ItemsProperty);

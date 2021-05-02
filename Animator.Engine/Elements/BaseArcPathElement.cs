@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// This is a base class for all arc path elements.
+    /// </summary>
     public abstract class BaseArcPathElement : PathElement
     {
         private const double RadiansPerDegree = Math.PI / 180.0;

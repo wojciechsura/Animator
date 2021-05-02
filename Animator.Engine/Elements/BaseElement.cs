@@ -11,6 +11,10 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Base class for all elements used to describe an
+    /// animation.
+    /// </summary>
     public abstract class BaseElement : ManagedObject
     {
         // Private methods ----------------------------------------------------

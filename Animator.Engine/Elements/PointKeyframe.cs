@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// A keyframe for a property of type PointF.
+    /// </summary>
     public class PointKeyframe : BaseNumericKeyframe
     {
         // Public methods -----------------------------------------------------
@@ -31,6 +34,9 @@ namespace Animator.Engine.Elements
 
         #region Value managed property
 
+        /// <summary>
+        /// Value of the keyframe.
+        /// </summary>
         public PointF Value
         {
             get => (PointF)GetValue(ValueProperty);

@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Draws an ellipse on the scene.
+    /// </summary>
     public class Ellipse : Visual
     {
         // Protected methods --------------------------------------------------
@@ -32,6 +35,10 @@ namespace Animator.Engine.Elements
 
         #region TopLeft managed property
 
+        /// <summary>
+        /// Defines top and left coordinates of the rectangle
+        /// circumscribing the desired ellipse.
+        /// </summary>
         public PointF TopLeft
         {
             get => (PointF)GetValue(TopLeftProperty);
@@ -47,6 +54,10 @@ namespace Animator.Engine.Elements
 
         #region BottomRight managed property
 
+        /// <summary>
+        /// Defines bottom and right coordinates of the rectangle
+        /// circumscribing the desired ellipse.
+        /// </summary>
         public PointF BottomRight
         {
             get => (PointF)GetValue(BottomRightProperty);
@@ -62,6 +73,9 @@ namespace Animator.Engine.Elements
 
         #region Pen managed property
 
+        /// <summary>
+        /// Defines way in which border of the circle will be drawn.
+        /// </summary>
         public Pen Pen
         {
             get => (Pen)GetValue(PenProperty);
@@ -77,6 +91,9 @@ namespace Animator.Engine.Elements
 
         #region Brush managed property
 
+        /// <summary>
+        /// Defines way in which fill of the circle will be drawn.
+        /// </summary>
         public Brush Brush
         {
             get => (Brush)GetValue(BrushProperty);

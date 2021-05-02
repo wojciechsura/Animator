@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {    
+    /// <summary>
+    /// Draws a path on a scene.
+    /// </summary>
     public class Path : Shape
     {
         // Protected methods --------------------------------------------------
@@ -41,6 +44,11 @@ namespace Animator.Engine.Elements
 
         #region Definition managed collection
 
+        /// <summary>
+        /// List containing path elements, which define its shape.
+        /// In XML, you may express value of this property in an
+        /// attribute as SVG-compatible path description.
+        /// </summary>
         public ManagedCollection<PathElement> Definition
         {
             get => (ManagedCollection<PathElement>)GetValue(DefinitionProperty);

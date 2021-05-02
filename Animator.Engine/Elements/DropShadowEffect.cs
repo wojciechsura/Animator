@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// An effect, which adds a shadow to a visual.
+    /// </summary>
     public class DropShadowEffect : BaseEffect
     {
         internal override void Apply(BitmapBuffer framebuffer, BitmapBuffer backBuffer, BitmapBuffer frontBuffer, BitmapBufferRepository repository)
@@ -27,7 +30,7 @@ namespace Animator.Engine.Elements
                 colorArgb,
                 DX,
                 DY,
-                Radius);
+                2 * Radius + 1);
 
             backBuffer.Bitmap.UnlockBits(backData);
             framebuffer.Bitmap.UnlockBits(frameData);
@@ -36,6 +39,9 @@ namespace Animator.Engine.Elements
 
         #region Color managed property
 
+        /// <summary>
+        /// Color of the shadow.
+        /// </summary>
         public System.Drawing.Color Color
         {
             get => (System.Drawing.Color)GetValue(ColorProperty);
@@ -51,6 +57,9 @@ namespace Animator.Engine.Elements
 
         #region DX managed property
 
+        /// <summary>
+        /// Horizontal offset of the shadow.
+        /// </summary>
         public int DX
         {
             get => (int)GetValue(DXProperty);
@@ -67,6 +76,9 @@ namespace Animator.Engine.Elements
 
         #region DY managed property
 
+        /// <summary>
+        /// Vertical offset of the shadow.
+        /// </summary>
         public int DY
         {
             get => (int)GetValue(DYProperty);
@@ -82,6 +94,9 @@ namespace Animator.Engine.Elements
 
         #region Radius managed property
 
+        /// <summary>
+        /// Blur radius of the shadow.
+        /// </summary>
         public int Radius
         {
             get => (int)GetValue(RadiusProperty);
@@ -96,7 +111,7 @@ namespace Animator.Engine.Elements
         private static object CoerceRadius(ManagedObject obj, object baseValue)
         {
             // Change to the next grater odd value
-            return (int)baseValue + (1 - (int)baseValue % 2);
+            return Math.Max(0, (int)baseValue);
         }
 
         #endregion

@@ -4,6 +4,10 @@ using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Represents a path part, which is drawn as a horizontal line.
+    /// All points are expressed in relative coordinates.
+    /// </summary>
     public class RelativeVerticalLinePathElement : PathElement
     {
         // Internal methods ---------------------------------------------------
@@ -23,6 +27,11 @@ namespace Animator.Engine.Elements
 
         #region DY managed property
 
+        /// <summary>
+        /// Y-coordinate of the end point relative to Y-coordinate of 
+        /// end point of the previous path element. X-coordinate equals
+        /// to end point's of the previous path element.
+        /// </summary>
         public float DY
         {
             get => (float)GetValue(DYProperty);

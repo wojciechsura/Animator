@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Base abstract class for all quadratic Bezier path elements.
+    /// </summary>
     public abstract class BaseQuadraticBezierPathElement : PathElement
     {
         protected (PointF controlPoint1, PointF controlPoint2) EstimateCubicControlPoints(PointF start, PointF controlPoint, PointF end)

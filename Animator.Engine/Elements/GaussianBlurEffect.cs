@@ -9,19 +9,29 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Adds a nice, Gaussian blur to a visual.
+    /// </summary>
     public class GaussianBlurEffect : BaseEffect
     {
         internal override void Apply(BitmapBuffer framebuffer, BitmapBuffer backBuffer, BitmapBuffer frontBuffer, BitmapBufferRepository repository)
         {
             var data = framebuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, framebuffer.Bitmap.Width, framebuffer.Bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-            ImageProcessing.GaussianBlur(data.Scan0, data.Stride, data.Width, data.Height, Radius);
+            ImageProcessing.GaussianBlur(data.Scan0, 
+                data.Stride, 
+                data.Width, 
+                data.Height, 
+                2 * Radius + 1);
 
             framebuffer.Bitmap.UnlockBits(data);
         }
 
         #region Radius managed property
 
+        /// <summary>
+        /// Radius of the blur.
+        /// </summary>
         public int Radius
         {
             get => (int)GetValue(RadiusProperty);
@@ -36,10 +46,9 @@ namespace Animator.Engine.Elements
         private static object CoerceRadius(ManagedObject obj, object baseValue)
         {
             // Change to the next grater odd value
-            return (int)baseValue + (1 - (int)baseValue % 2);
+            return Math.Max(0, (int)baseValue);
         }
 
         #endregion
-
     }
 }
