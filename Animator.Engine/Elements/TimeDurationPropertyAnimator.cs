@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,6 +66,7 @@ namespace Animator.Engine.Elements
 
         #endregion
 
+        [DoNotDocument]
         public TimeSpan Duration
         {
             get => EndTime - StartTime;

@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// Allows applying an animation to an int property of some
     /// object. It is meant to be used only if you want to apply
     /// single animation per whole scene. Otherwise, use Storyboard
-    /// and FloatKeyframe to define the whole animation.
+    /// and IntKeyframe to define the whole animation.
     /// </summary>
     public class IntPropertyAnimator : TimeDurationNumericPropertyAnimator
     {

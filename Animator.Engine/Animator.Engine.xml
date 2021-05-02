@@ -16,6 +16,8 @@
         <member name="T:Animator.Engine.Elements.AbsoluteArcPathElement">
             <summary>
             Represents a path part, which is drawn as an elliptical arc.
+            First point of the arc equals to the last point of previous
+            path element.
             Endpoint of the arc is expressed in absolute coordinates.
             </summary>
         </member>
@@ -49,9 +51,664 @@
             End point of the arc
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.AbsoluteCubicBezierPathElement">
+            <summary>
+            Represents a path part, which is drawn as a cubic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element.
+            All points are expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteCubicBezierPathElement.ControlPoint1">
+            <summary>
+            First control point of the curve.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteCubicBezierPathElement.ControlPoint2">
+            <summary>
+            Second control point of the curve.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteCubicBezierPathElement.EndPoint">
+            <summary>
+            End point of the curve.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AbsoluteCubicShorthandBezierPathElement">
+            <summary>
+            Represents a path part, which is drawn as a cubic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element. First control point is deduced from the previous
+            path element as a mirror of its last control point against its
+            endpoint.
+            All points are expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteCubicShorthandBezierPathElement.ControlPoint2">
+            <summary>
+            Second control point of the curve.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteCubicShorthandBezierPathElement.EndPoint">
+            <summary>
+            End point of the curve.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AbsoluteHorizontalLinePathElement">
+            <summary>
+            Represents a path part, which is drawn as a horizontal line.
+            All points are expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteHorizontalLinePathElement.X">
+            <summary>
+            X-coordinate of the end point. Y-coordinate equals to
+            the end point's of the previous path element.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AbsoluteLinePathElement">
+            <summary>
+            Represents a path part, which is drawn as a line.
+            All points are expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteLinePathElement.EndPoint">
+            <summary>
+            End point of the line.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AbsoluteMovePathElement">
+            <summary>
+            Begins a new path in specified absolute coordinates
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteMovePathElement.EndPoint">
+            <summary>
+            Coordinates at which new path should begin.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AbsoluteQuadraticBezierPathElement">
+            <summary>
+            Represents a path part, which is drawn as a quadratic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element.
+            All points are expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteQuadraticBezierPathElement.ControlPoint">
+            <summary>
+            Control point of the curve.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteQuadraticBezierPathElement.EndPoint">
+            <summary>
+            End point of the curve.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AbsoluteQuadraticShorthandBezierPathElement">
+            <summary>
+            Represents a path part, which is drawn as a quadratic Bezier curve.
+            Start point of the curve equals to the last point of previous
+            path element. The control point is deduced from the previous
+            path element as a mirror of its last control point against its
+            endpoint.
+            End point is expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteQuadraticShorthandBezierPathElement.EndPoint">
+            <summary>
+            End point of the curve.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AbsoluteVerticalLinePathElement">
+            <summary>
+            Represents a path part, which is drawn as a vertical line.
+            All points are expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AbsoluteVerticalLinePathElement.Y">
+            <summary>
+            Y-coordinate of the end point. X-coordinate equals to
+            the end point's of the previous path element.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Animation">
+            <summary>
+            Root element of the animation.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Animation.Config">
+            <summary>
+            Contains configuration of the animation.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Animation.Scenes">
+            <summary>
+            Contains scenes of the animation.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AnimationConfig">
+            <summary>
+            Describes animation parameters.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimationConfig.Width">
+            <summary>
+            Width of the result animation, in pixels.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimationConfig.Height">
+            <summary>
+            Height of the result animation, in pixels.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimationConfig.FramesPerSecond">
+            <summary>
+            Defines, how many frames should be in a second of animation.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.BaseAnimator">
+            <summary>
+            This is an abstract class serving as a base class for all animators.
+            An animator is an object, which animates properties of elements on
+            the scene.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.BaseArcPathElement">
+            <summary>
+            This is a base class for all arc path elements.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.BaseEffect">
+            <summary>
+            This class serves as an abstract base class for all
+            effects, which may be applied to rendered elements.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.BaseElement">
+            <summary>
+            Base class for all elements used to describe an
+            animation.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.BaseElement.Name">
+            <summary>
+            Defines name of this object, which may be then used to
+            reference it from various objects via their TargetName
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through TargetName properties only if
+            their names are unique.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.BaseKeyframe">
+            <summary>
+            Base class for all keyframe classes. A keyframe
+            class describes fixed value for a property in 
+            specific time.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.BaseKeyframe.Time">
+            <summary>
+            Define exact time since start of a scene, when a
+            property should be set to a fixed value.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.BaseKeyframe.TargetName">
+            <summary>
+            Defines name of an object, which property should be modified.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.BaseKeyframe.Path">
+            <summary>
+            Defines path to a property, starting at the object pointed
+            to by TargetName. Path may be either a single property,
+            for example <code>Position</code>, or a chain of properties,
+            leading through subsequent object, like <code>Pen.Color</code>.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.BaseNumericKeyframe">
+            <summary>
+            Base class for all keyframes, which define animation
+            of a numeric properties (ie. of type int, float, PointF etc.)
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.BaseNumericKeyframe.EasingFunction">
+            <summary>
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul>
+                <li>Linear</li>
+                <li>EaseSineSpeedUp</li>
+                <li>EaseSineSlowDown</li>
+                <li>EaseSineBoth</li>
+                <li>EaseQuadSpeedUp</li>
+                <li>EaseQuadSlowDown</li>
+                <li>EaseQuadBoth</li>
+                <li>EaseCubicSpeedUp</li>
+                <li>EaseCubicSlowDown</li>
+                <li>EaseCubicBoth</li>
+                <li>EaseQuartSpeedUp</li>
+                <li>EaseQuartSlowDown</li>
+                <li>EaseQuartBoth</li>
+                <li>EaseBackSpeedUp</li>
+                <li>EaseBackSlowDown</li>
+                <li>EaseBackBoth</li>
+            </ul>
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.BaseQuadraticBezierPathElement">
+            <summary>
+            Base abstract class for all quadratic Bezier path elements.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.BlurEffect">
+            <summary>
+            Adds a simple box blur to a visual.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.BlurEffect.Radius">
+            <summary>
+            Radius of the blur, in pixels.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Brush">
+            <summary>
+            Base class for all brushes. A brush is an object, which
+            defines fill of a shape. If you need a simple, mono-color
+            fill, use SolidBrush.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Circle">
+            <summary>
+            Draws a circle on a scene.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Circle.Center">
+            <summary>
+            Center point of the circle.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Circle.Radius">
+            <summary>
+            Radius of the circle.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Circle.Pen">
+            <summary>
+            Defines way in which border of the circle will be drawn.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Circle.Brush">
+            <summary>
+            Defines way in which fill of the circle will be drawn.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.CloseShapePathElement">
+            <summary>
+            Informs, that the shape defined by a series of path elements
+            ends here. If needed, path is closed with a line leading to
+            its start.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.CommonAnimations">
+            <summary>
+            Allows grouping a couple of animators, so that you don't have to specify
+            various properties multiple times. CommonAnimations itself does nothing,
+            but values of its properties are inherited by animators placed inside.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.CommonAnimations.TargetName">
+            <summary>
+            Defines name of an object, which property should be modified.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.CommonAnimations.Path">
+            <summary>
+            Defines path to a property, starting at the object pointed
+            to by TargetName. Path may be either a single property,
+            for example <code>Position</code>, or a chain of properties,
+            leading through subsequent object, like <code>Pen.Color</code>.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.CommonAnimations.StartTime">
+            <summary>
+            Defines time since start of scene, when value of
+            a property should start being changed.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.CommonAnimations.EndTime">
+            <summary>
+            Defines time since start of scene, when value of
+            a property reaches its final value.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.CommonAnimations.EasingFunction">
+            <summary>
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul>
+                <li>Linear</li>
+                <li>EaseSineSpeedUp</li>
+                <li>EaseSineSlowDown</li>
+                <li>EaseSineBoth</li>
+                <li>EaseQuadSpeedUp</li>
+                <li>EaseQuadSlowDown</li>
+                <li>EaseQuadBoth</li>
+                <li>EaseCubicSpeedUp</li>
+                <li>EaseCubicSlowDown</li>
+                <li>EaseCubicBoth</li>
+                <li>EaseQuartSpeedUp</li>
+                <li>EaseQuartSlowDown</li>
+                <li>EaseQuartBoth</li>
+                <li>EaseBackSpeedUp</li>
+                <li>EaseBackSlowDown</li>
+                <li>EaseBackBoth</li>
+            </ul>
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.CommonAnimations.Duration">
+            <summary>
+            A short-hand property, which allows you to specify
+            animation's duration instead of its end time.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.CommonAnimations.Animations">
+            <summary>
+            Defines a list of grouped animations.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.DropShadowEffect">
+            <summary>
+            An effect, which adds a shadow to a visual.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.DropShadowEffect.Color">
+            <summary>
+            Color of the shadow.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.DropShadowEffect.DX">
+            <summary>
+            Horizontal offset of the shadow.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.DropShadowEffect.DY">
+            <summary>
+            Vertical offset of the shadow.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.DropShadowEffect.Radius">
+            <summary>
+            Blur radius of the shadow.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Ellipse">
+            <summary>
+            Draws an ellipse on the scene.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Ellipse.TopLeft">
+            <summary>
+            Defines top and left coordinates of the rectangle
+            circumscribing the desired ellipse.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Ellipse.BottomRight">
+            <summary>
+            Defines bottom and right coordinates of the rectangle
+            circumscribing the desired ellipse.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Ellipse.Pen">
+            <summary>
+            Defines way in which border of the circle will be drawn.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Ellipse.Brush">
+            <summary>
+            Defines way in which fill of the circle will be drawn.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.FloatKeyframe">
+            <summary>
+            A keyframe for a property of type float.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.FloatKeyframe.Value">
+            <summary>
+            Value of the keyframe.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.FloatPropertyAnimator">
+            <summary>
+            Allows applying an animation to a float property of some
+            object. It is meant to be used only if you want to apply
+            single animation per whole scene. Otherwise, use Storyboard
+            and FloatKeyframe to define the whole animation.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.FloatPropertyAnimator.From">
+            <summary>
+            Initial value of the property when animation starts (at StartTime)
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.FloatPropertyAnimator.To">
+            <summary>
+            Final value of the property when animation ends (at EndTime)
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.GaussianBlurEffect">
+            <summary>
+            Adds a nice, Gaussian blur to a visual.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.GaussianBlurEffect.Radius">
+            <summary>
+            Radius of the blur.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.IntKeyframe">
+            <summary>
+            A keyframe for a property of type int.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.IntKeyframe.Value">
+            <summary>
+            Value of the keyframe.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.IntPropertyAnimator">
+            <summary>
+            Allows applying an animation to an int property of some
+            object. It is meant to be used only if you want to apply
+            single animation per whole scene. Otherwise, use Storyboard
+            and FloatKeyframe to define the whole animation.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.IntPropertyAnimator.From">
+            <summary>
+            Initial value of the property when animation starts (at StartTime)
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.IntPropertyAnimator.To">
+            <summary>
+            Final value of the property when animation ends (at EndTime)
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Label">
+            <summary>
+            Draws a text on a scene.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Label.Brush">
+            <summary>
+            Defines fill of drawn text.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Label.Text">
+            <summary>
+            Text to be drawn.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Label.FontFamily">
+            <summary>
+            Defines font family to be used while drawing text.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Label.FontSize">
+            <summary>
+            Defines font size of the drawn text.
+            </summary>
+            <remarks>
+            Use SizeUnit property to define unit (pixels or points)
+            </remarks>
+        </member>
+        <member name="P:Animator.Engine.Elements.Label.Bold">
+            <summary>
+            Set this property to true to make text bold.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Label.Italic">
+            <summary>
+            Set this property to true to make text italic.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Label.Underline">
+            <summary>
+            Set this property to true to make text underlined.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Label.SizeUnit">
+            <summary>
+            Defines unit in which size of font is expressed.
+            Possible values:
+            <ul>
+              <li>Points</li>
+              <li>Pixels</li>
+            </ul>
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Layer">
+            <summary>
+            Allows grouping visuals. You can use it to apply
+            transforms or effects to whole group of elements, or
+            add a common effect to all of them at once.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Layer.Items">
+            <summary>
+            Elements on a layer.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Line">
+            <summary>
+            Draws a line on the scene.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Line.Start">
+            <summary>
+            Point defining start of the line.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Line.End">
+            <summary>
+            Point defining end of the line.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Line.Pen">
+            <summary>
+            Describes visual properties of the drawn line.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Path">
+            <summary>
+            Draws a path on a scene.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Path.Definition">
+            <summary>
+            List containing path elements, which define its shape.
+            In XML, you may express value of this property in an
+            attribute as SVG-compatible path description.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.PathElement">
+            <summary>
+            Base class for all path elements.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.PathElement.RunningPoint">
             <summary>
             Utility class to simplify handling relative positions
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Pen">
+            <summary>
+            Defines a way in which lines are being drawn.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Pen.Color">
+            <summary>
+            Color of the line.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Pen.Width">
+            <summary>
+            Width of the line.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.PointKeyframe">
+            <summary>
+            A keyframe for a property of type PointF.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.PointKeyframe.Value">
+            <summary>
+            Value of the keyframe.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.PointPropertyAnimator">
+            <summary>
+            Allows applying an animation to an PointF property of some
+            object. It is meant to be used only if you want to apply
+            single animation per whole scene. Otherwise, use Storyboard
+            and FloatKeyframe to define the whole animation.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.PointPropertyAnimator.From">
+            <summary>
+            Initial value of the property when animation starts (at StartTime)
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.PointPropertyAnimator.To">
+            <summary>
+            Final value of the property when animation ends (at EndTime)
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.PropertyAnimator">
+            <summary>
+            Base class for all animators, which operates on object's
+            properties.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.PropertyAnimator.TargetName">
+            <summary>
+            Defines name of an object, which property should be modified.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.PropertyAnimator.Path">
+            <summary>
+            Defines path to a property, starting at the object pointed
+            to by TargetName. Path may be either a single property,
+            for example <code>Position</code>, or a chain of properties,
+            leading through subsequent object, like <code>Pen.Color</code>.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.PropertyExpressionAnimator">
@@ -80,10 +737,27 @@
             <code><pre>Expression="Rect.Position + [10,10] * EasedFactor"</pre></code>
             </example>
         </member>
+        <member name="T:Animator.Engine.Elements.Rectangle">
+            <summary>
+            Draws rectangle on a scene.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Rectangle.Width">
+            <summary>
+            Width of the rectangle.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Rectangle.Height">
+            <summary>
+            Height of the rectangle.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.RelativeArcPathElement">
             <summary>
             Represents a path part, which is drawn as an elliptical arc.
-            Endpoint of the arc is expressed in absolute coordinates.
+            First point of the arc equals to the last point of previous
+            path element.
+            Endpoint of the arc is expressed in relative coordinates.
             </summary>
         </member>
         <member name="P:Animator.Engine.Elements.RelativeArcPathElement.RX">
@@ -116,9 +790,363 @@
             End point of the arc, relative to the endpoint of previous path element.
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.RelativeCubicBezierPathElement">
+            <summary>
+            Represents a path part, which is drawn as a cubic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element.
+            All points are expressed in relative coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeCubicBezierPathElement.DeltaControlPoint1">
+            <summary>
+            First control point, relative to endpoint of the previous
+            path element.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeCubicBezierPathElement.DeltaControlPoint2">
+            <summary>
+            Second control point, relative to the first control
+            point.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeCubicBezierPathElement.DeltaEndPoint">
+            <summary>
+            End point, relative to the second control point.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.RelativeCubicShorthandBezierPathElement">
+            <summary>
+            Represents a path part, which is drawn as a cubic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element. First control point is deduced from the previous
+            path element as a mirror of its last control point against its
+            endpoint.
+            All points are expressed in relative coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeCubicShorthandBezierPathElement.DeltaControlPoint2">
+            <summary>
+            Second control point, relative to the deduced 
+            first control point.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeCubicShorthandBezierPathElement.DeltaEndPoint">
+            <summary>
+            End point, relative to the second control point.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.RelativeHorizontalLinePathElement">
+            <summary>
+            Represents a path part, which is drawn as a horizontal line.
+            All points are expressed in relative coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeHorizontalLinePathElement.DX">
+            <summary>
+            X-coordinate of the end point relative to X-coordinate of 
+            end point of the previous path element. Y-coordinate equals
+            to end point's of the previous path element.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.RelativeLinePathElement">
+            <summary>
+            Represents a path part, which is drawn as a line.
+            All points are expressed in relative coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeLinePathElement.DeltaEndPoint">
+            <summary>
+            End point of the line, relative to end point
+            of the previous path element.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.RelativeMovePathElement">
+            <summary>
+            Begins a new path in specified relative coordinates
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeMovePathElement.DeltaEndPoint">
+            <summary>
+            Coordinates at which new path should begin, relative
+            to end point of the previous path element.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.RelativeQuadraticBezierPathElement">
+            <summary>
+            Represents a path part, which is drawn as a quadratic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element. 
+            All points are expressed in relative coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeQuadraticBezierPathElement.DeltaControlPoint">
+            <summary>
+            Control point of the curve, relative to endpoint of the previous
+            path element.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeQuadraticBezierPathElement.DeltaEndPoint">
+            <summary>
+            End point of the curve, relative to endpoint of the previous
+            path element.
+            </summary>
+            <remarks>
+            As an exception, coordinates of end point od the quadratic curve
+            are expressed in relation to previous path element's end point
+            and <strong>not</strong> to the control point. This is to conform
+            to SVG's standard of defining paths.
+            </remarks>
+        </member>
+        <member name="T:Animator.Engine.Elements.RelativeQuadraticShorthandBezierPathElement">
+            <summary>
+            Represents a path part, which is drawn as a quadratic Bezier curve.
+            Start point of the curve equals to the last point of previous
+            path element. The control point is deduced from the previous
+            path element as a mirror of its last control point against its
+            endpoint.
+            End point is expressed in relative coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeQuadraticShorthandBezierPathElement.DeltaEndPoint">
+            <summary>
+            End point of the curve, relative to end point of the previous
+            path element.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.RelativeVerticalLinePathElement">
+            <summary>
+            Represents a path part, which is drawn as a horizontal line.
+            All points are expressed in relative coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeVerticalLinePathElement.DY">
+            <summary>
+            Y-coordinate of the end point relative to Y-coordinate of 
+            end point of the previous path element. X-coordinate equals
+            to end point's of the previous path element.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Scene">
+            <summary>
+            Contains description of a single scene in animation.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Scene.Duration">
+            <summary>
+            Defines duration of the scene.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Scene.Items">
+            <summary>
+            Contains all visual elements placed on the scene.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Scene.Animators">
+            <summary>
+            Contains list of all animators, which animate properties
+            of elements placed on the scene.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Scene.Background">
+            <summary>
+            Defines fill of the background of the scene.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Shape">
+            <summary>
+            Base class for all shapes drawn on the scene.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Shape.Brush">
+            <summary>
+            Defines, how shape will be filled.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Shape.Pen">
+            <summary>
+            Defines, how edges of the shape will be drawn.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.SolidBrush">
+            <summary>
+            Brush, which fills an area with a single color.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.SolidBrush.Color">
+            <summary>
+            Color of the fill.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Storyboard">
+            <summary>
+            Allows defining complex animations consisting of
+            multiple keyframes. Storyboard can contain definitions
+            of multiple animations (eg. multiple properties). You can
+            also use its properties, so that keyframes will inherit 
+            them.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Storyboard.TargetName">
+            <summary>
+            Defines name of an object, which property should be modified.
+            Storyboard does not use this value, but it may be set, so that
+            keyframes will inherit it (for a shorthand notation).
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Storyboard.Path">
+            <summary>
+            Defines path to a property, starting at the object pointed
+            to by TargetName. Path may be either a single property,
+            for example <code>Position</code>, or a chain of properties,
+            leading through subsequent object, like <code>Pen.Color</code>.
+            Storyboard does not use this value, but it may be set, so that
+            keyframes will inherit it (for a shorthand notation).
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Storyboard.EasingFunction">
+             <summary>
+             Defines easing function used for animation. The role of
+             easing function is to define, how value should change
+             between previous and current keyframe. Possible
+             easing functions include the following:
+             
+             <ul>
+                 <li>Linear</li>
+                 <li>EaseSineSpeedUp</li>
+                 <li>EaseSineSlowDown</li>
+                 <li>EaseSineBoth</li>
+                 <li>EaseQuadSpeedUp</li>
+                 <li>EaseQuadSlowDown</li>
+                 <li>EaseQuadBoth</li>
+                 <li>EaseCubicSpeedUp</li>
+                 <li>EaseCubicSlowDown</li>
+                 <li>EaseCubicBoth</li>
+                 <li>EaseQuartSpeedUp</li>
+                 <li>EaseQuartSlowDown</li>
+                 <li>EaseQuartBoth</li>
+                 <li>EaseBackSpeedUp</li>
+                 <li>EaseBackSlowDown</li>
+                 <li>EaseBackBoth</li>
+             </ul>
+            
+             Storyboard does not use this value, but it may be set, so that
+             keyframes will inherit it (for a shorthand notation).
+             </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Storyboard.Keyframes">
+            <summary>
+            List of keyframes, which define complex animation.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.TimeDurationNumericPropertyAnimator">
+            <summary>
+            Base class for all property animators, which are
+            modifying a numeric property (ie. int, float, PointF, etc.)
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.TimeDurationNumericPropertyAnimator.EasingFunction">
+            <summary>
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul>
+                <li>Linear</li>
+                <li>EaseSineSpeedUp</li>
+                <li>EaseSineSlowDown</li>
+                <li>EaseSineBoth</li>
+                <li>EaseQuadSpeedUp</li>
+                <li>EaseQuadSlowDown</li>
+                <li>EaseQuadBoth</li>
+                <li>EaseCubicSpeedUp</li>
+                <li>EaseCubicSlowDown</li>
+                <li>EaseCubicBoth</li>
+                <li>EaseQuartSpeedUp</li>
+                <li>EaseQuartSlowDown</li>
+                <li>EaseQuartBoth</li>
+                <li>EaseBackSpeedUp</li>
+                <li>EaseBackSlowDown</li>
+                <li>EaseBackBoth</li>
+            </ul>
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.TimeDurationPropertyAnimator">
+            <summary>
+            Base class for all property animator, which apply
+            animation to a property in specific period of time.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.TimeDurationPropertyAnimator.StartTime">
+            <summary>
+            Time, when animation should be started.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.TimeDurationPropertyAnimator.EndTime">
+            <summary>
+            Time, when animation should finish.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.Visual">
             <summary>
             Represents basic element, which can be drawn on the scene.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Visual.Position">
+            <summary>
+            Position of this visual on the scene.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Visual.Origin">
+            <summary>
+            An anchor point of this visual. It affects numerous transforms, 
+            such as Position, Rotation and Scale. In general, it defines a
+            point of the visual, which will be placed on the scene in place
+            defined by Position property. Also, it defines center point
+            for rotation and scaling.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Visual.Rotation">
+            <summary>
+            Rotates visual by specific angle.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Visual.Scale">
+            <summary>
+            Scales the visual by specified factor (separately
+            in X and Y axis).
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Visual.Alpha">
+            <summary>
+            Applies transparency to a visual.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Visual.Effects">
+            <summary>
+            List of effects, which will be applied to
+            a visual after rendering.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Visual.InvertMask">
+            <summary>
+            Defines, if mask expresses areas, which should or should not
+            be drawn. Useful, if you want to e.g. draw everything
+            <em>except</em> some specific area.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Visual.Mask">
+            <summary>
+            Allows masking a visual, e.g. drawing only parts of it on
+            a screen. Use other visuals to describe the mask, although
+            only alpha-value of the final mask is used (colors does
+            not matter). If mask is not inverted (InvertMask property),
+            areas of the visual, where its mask has value of 1 are drawn
+            completely and areas, where the mask has value of 0 are not
+            drawn at all (with all values in between allowing partial 
+            drawing). If mask is inverted, this behavior works the other
+            way around.
             </summary>
         </member>
     </members>

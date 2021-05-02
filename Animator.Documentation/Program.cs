@@ -33,6 +33,44 @@ namespace Animator.Documentation
             return $"{baseName}<{string.Join(',', genericArguments)}>";
         }
 
+        private static void BuildPropertiesDocumentation(StringBuilder sb, List<PropertyInfo> properties)
+        {
+            foreach (var property in properties)
+            {
+                sb.AppendLine("<tr>");
+                sb.AppendLine("<td>");
+                sb.AppendLine($"<pre><code>{HttpUtility.HtmlEncode(property.PropertyType.ToReadableName())}</code></pre>");
+                sb.AppendLine("</td>");
+                sb.AppendLine("<td>");
+                sb.AppendLine($"<pre><code><strong>{property.Name}</strong></code></pre>");
+                sb.AppendLine("</td>");
+                sb.AppendLine("<td>");
+
+                var propDocumentation = property.GetDocumentation();
+                if (propDocumentation != null)
+                {
+                    var isFirst = true;
+
+                    var summary = propDocumentation["member"]?["summary"];
+
+                    if (summary != null)
+                    {
+                        sb.AppendLine(summary.InnerXml);
+                    }
+
+                    var example = propDocumentation["member"]?["example"];
+
+                    if (example != null)
+                    {
+                        sb.Append("<p><strong>Example:</strong></p>");
+                        sb.AppendLine(example.InnerXml);
+                    }
+                }
+
+                sb.AppendLine("</td>");
+            }
+        }
+
         private static void BuildTypeDocumentation(Type type, Assembly engineAssembly, string elementsNamespace, StringBuilder sb)
         {
             // Header
@@ -107,50 +145,36 @@ namespace Animator.Documentation
 
             // Properties
 
-            var properties = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
-                .Where(p => !p.CustomAttributes.Any(a => a.AttributeType == typeof(DoNotDocumentAttribute)))
-                .ToList();
+            bool propertiesHeaderShown = false;
 
-            if (properties.Any())
+            Type currentType = type;
+
+            while (currentType != typeof(ManagedObject) && currentType != typeof(object))
             {
-                sb.AppendLine("<h2>Properties</h2>");
+                var properties = currentType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                    .Where(p => !p.CustomAttributes.Any(a => a.AttributeType == typeof(DoNotDocumentAttribute)))
+                    .ToList();
 
-                sb.AppendLine("<table class=\"properties\">");
-                foreach (var property in properties)
+                if (properties.Any())
                 {
-                    sb.AppendLine("<tr>");
-                    sb.AppendLine("<td>");
-                    sb.AppendLine($"<pre><code>{HttpUtility.HtmlEncode(property.PropertyType.ToReadableName())}</code></pre>");
-                    sb.AppendLine("</td>");
-                    sb.AppendLine("<td>");
-                    sb.AppendLine($"<pre><code><strong>{property.Name}</strong></code></pre>");
-                    sb.AppendLine("</td>");
-                    sb.AppendLine("<td>");
-
-                    var propDocumentation = property.GetDocumentation();
-                    if (propDocumentation != null)
+                    if (!propertiesHeaderShown)
                     {
-                        var isFirst = true;
-
-                        var summary = propDocumentation["member"]?["summary"];
-
-                        if (summary != null)
-                        {
-                            sb.AppendLine(summary.InnerXml);
-                        }
-
-                        var example = propDocumentation["member"]?["example"];
-
-                        if (example != null)
-                        {
-                            sb.Append("<p><strong>Example:</strong></p>");
-                            sb.AppendLine(example.InnerXml);
-                        }
+                        sb.AppendLine("<h2>Properties</h2>");
+                        sb.AppendLine("<table class=\"properties\">");
+                        propertiesHeaderShown = true;
                     }
 
-                    sb.AppendLine("</td>");
+                    if (currentType != type)
+                        sb.AppendLine($"<tr><td colspan=\"3\" class=\"table-separator\">Properties derived from <strong>{ToReadableName(currentType)}:</strong></td></tr>");
+
+                    BuildPropertiesDocumentation(sb, properties);
                 }
 
+                currentType = currentType.BaseType;
+            }
+
+            if (propertiesHeaderShown)
+            {
                 sb.AppendLine("</table>");
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Animator.Engine.Animation.Maths;
 using Animator.Engine.Base;
 using Animator.Engine.Elements.Types;
+using Animator.Engine.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -103,6 +104,7 @@ namespace Animator.Engine.Elements
 
         #endregion
 
+        [DoNotDocument]
         public string Key => key;
     }
 }

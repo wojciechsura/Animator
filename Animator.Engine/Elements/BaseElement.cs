@@ -96,6 +96,14 @@ namespace Animator.Engine.Elements
 
         #region Name managed property
 
+        /// <summary>
+        /// Defines name of this object, which may be then used to
+        /// reference it from various objects via their TargetName
+        /// properties. This value should be unique among the whole
+        /// scene, though this is not enforced. However, elements
+        /// are reachable through TargetName properties only if
+        /// their names are unique.
+        /// </summary>
         public string Name
         {
             get => (string)GetValue(NameProperty);
