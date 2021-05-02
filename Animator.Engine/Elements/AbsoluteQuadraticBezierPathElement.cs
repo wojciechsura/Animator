@@ -4,6 +4,12 @@ using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Represents a path part, which is drawn as a quadratic Bezier curve.
+    /// First point of the curve equals to the last point of previous
+    /// path element.
+    /// All points are expressed in absolute coordinates.
+    /// </summary>
     public class AbsoluteQuadraticBezierPathElement : BaseQuadraticBezierPathElement
     {
         // Internal methods ---------------------------------------------------

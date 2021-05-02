@@ -6,6 +6,8 @@ namespace Animator.Engine.Elements
 {
     /// <summary>
     /// Represents a path part, which is drawn as an elliptical arc.
+    /// First point of the arc equals to the last point of previous
+    /// path element.
     /// Endpoint of the arc is expressed in absolute coordinates.
     /// </summary>
     public class AbsoluteArcPathElement : BaseArcPathElement

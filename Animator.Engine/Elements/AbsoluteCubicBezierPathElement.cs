@@ -4,6 +4,12 @@ using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Represents a path part, which is drawn as a cubic Bezier curve.
+    /// First point of the curve equals to the last point of previous
+    /// path element.
+    /// All points are expressed in absolute coordinates.
+    /// </summary>
     public class AbsoluteCubicBezierPathElement : PathElement
     {
         // Protected methods --------------------------------------------------
@@ -23,6 +29,9 @@ namespace Animator.Engine.Elements
 
         #region ControlPoint1 managed property
 
+        /// <summary>
+        /// First control point of the curve.
+        /// </summary>
         public PointF ControlPoint1
         {
             get => (PointF)GetValue(ControlPoint1Property);
@@ -38,6 +47,9 @@ namespace Animator.Engine.Elements
 
         #region ControlPoint2 managed property
 
+        /// <summary>
+        /// Second control point of the curve.
+        /// </summary>
         public PointF ControlPoint2
         {
             get => (PointF)GetValue(ControlPoint2Property);
@@ -53,6 +65,9 @@ namespace Animator.Engine.Elements
 
         #region EndPoint managed property
 
+        /// <summary>
+        /// End point of the curve.
+        /// </summary>
         public PointF EndPoint
         {
             get => (PointF)GetValue(EndPointProperty);

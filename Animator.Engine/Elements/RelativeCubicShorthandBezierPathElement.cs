@@ -5,6 +5,14 @@ using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Represents a path part, which is drawn as a cubic Bezier curve.
+    /// First point of the curve equals to the last point of previous
+    /// path element. First control point is deduced from the previous
+    /// path element as a mirror of its last control point against its
+    /// endpoint.
+    /// All points are expressed in relative coordinates.
+    /// </summary>
     public class RelativeCubicShorthandBezierPathElement : PathElement
     {
         // Internal methods ---------------------------------------------------
@@ -14,7 +22,7 @@ namespace Animator.Engine.Elements
             var delta = start.Subtract(lastControlPoint);
             var controlPoint1 = start.Add(delta);
 
-            RunningPoint point = new RunningPoint(start);
+            RunningPoint point = new RunningPoint(controlPoint1);
 
             PointF controlPoint2 = point.Delta(DeltaControlPoint2);
             PointF endPoint = point.Delta(DeltaEndPoint);
@@ -29,6 +37,10 @@ namespace Animator.Engine.Elements
 
         #region DeltaControlPoint2 managed property
 
+        /// <summary>
+        /// Second control point, relative to the deduced 
+        /// first control point.
+        /// </summary>
         public PointF DeltaControlPoint2
         {
             get => (PointF)GetValue(DeltaControlPoint2Property);
@@ -44,6 +56,9 @@ namespace Animator.Engine.Elements
 
         #region DeltaEndPoint managed property
 
+        /// <summary>
+        /// End point, relative to the second control point.
+        /// </summary>
         public PointF DeltaEndPoint
         {
             get => (PointF)GetValue(DeltaEndPointProperty);
