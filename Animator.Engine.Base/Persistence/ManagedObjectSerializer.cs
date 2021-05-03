@@ -16,20 +16,31 @@ namespace Animator.Engine.Base.Persistence
 {
     public class ManagedObjectSerializer
     {
+        // Private constants --------------------------------------------------
+
+        private const string EngineNamespace = "https://spooksoft.pl/animator";
+
         // Private types ------------------------------------------------------
 
         private class DeserializationContext
         {
-            public DeserializationContext(CustomActivator customActivator, Dictionary<Type, TypeSerializer> customTypeSerializers)
+            public DeserializationContext(CustomActivator customActivator, 
+                Dictionary<Type, TypeSerializer> customTypeSerializers,
+                string documentPath,
+                DeserializationOptions originalOptions)
             {
                 CustomActivator = customActivator;
                 CustomTypeSerializers = customTypeSerializers;
+                DocumentPath = documentPath;
+                OriginalOptions = originalOptions;
             }
 
             public Dictionary<string, NamespaceDefinition> Namespaces { get; } = new();
             public HashSet<Type> StaticallyInitializedTypes { get; } = new();
             public CustomActivator CustomActivator { get; }
             public Dictionary<Type, TypeSerializer> CustomTypeSerializers { get; }
+            public string DocumentPath { get; }
+            public DeserializationOptions OriginalOptions { get; }
         }
 
         // Private constants --------------------------------------------------
@@ -314,93 +325,121 @@ namespace Animator.Engine.Base.Persistence
 
         private ManagedObject DeserializeElement(XmlNode node, DeserializationContext context)
         {
-            // 1. Figure out, which object to instantiate
+            // 1. Check control nodes
 
-            string className = node.LocalName;
-
-            if (!context.Namespaces.TryGetValue(node.NamespaceURI, out NamespaceDefinition namespaceDefinition))
+            if (string.Equals(node.NamespaceURI, EngineNamespace))
             {
-                namespaceDefinition = ParseNamespaceDefinition(node.NamespaceURI);
-                context.Namespaces[node.NamespaceURI] = namespaceDefinition;
+                if (node.LocalName == "Include")
+                {
+                    var sourceAttribute = node.Attributes["Source"];
+                    if (sourceAttribute == null)
+                        throw new SerializerException("Include element must contain attribute Source!", node.FindXPath());
+
+                    string filename = node.Attributes["Source"].Value;
+                    if (!Path.IsPathRooted(filename))
+                        filename = Path.Combine(context.DocumentPath, filename);
+
+                    // Deserialize separate file and return object from inside
+
+                    ManagedObject includedObject = null;
+
+                    try
+                    {
+                        includedObject = Deserialize(filename, context.OriginalOptions);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new SerializerException($"Cannot include file {filename}!", node.FindXPath(), e);
+                    }
+
+                    return includedObject;
+                }
+                else
+                {
+                    throw new SerializerException($"Not recognized internal node: {node.LocalName}", node.FindXPath());
+                }
             }
+            else
+            {
+                // 1. Figure out, which object to instantiate
 
-            // 2. Get type from the specified assembly + namespace + class name
+                string className = node.LocalName;
 
-            var assembly = AppDomain.CurrentDomain.GetAssemblies().
-                SingleOrDefault(assembly => assembly.GetName().Name == namespaceDefinition.Assembly);
+                if (!context.Namespaces.TryGetValue(node.NamespaceURI, out NamespaceDefinition namespaceDefinition))
+                {
+                    namespaceDefinition = ParseNamespaceDefinition(node.NamespaceURI);
+                    context.Namespaces[node.NamespaceURI] = namespaceDefinition;
+                }
 
-            if (assembly == null)
+                // 2. Get type from the specified assembly + namespace + class name
+
+                var assembly = AppDomain.CurrentDomain.GetAssemblies().
+                    SingleOrDefault(assembly => assembly.GetName().Name == namespaceDefinition.Assembly);
+
+                if (assembly == null)
+                    try
+                    {
+                        assembly = Assembly.Load(namespaceDefinition.Assembly);
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        // Intentionally left empty, will leave assembly as null.
+                    }
+
+                if (assembly == null)
+                    throw new SerializerException($"Cannot access assembly {namespaceDefinition.Assembly}\r\nMake sure, it is loaded or accessible to load.",
+                        node.FindXPath());
+
+                string fullClassTypeName = string.Join('.', namespaceDefinition.Namespace, className);
+                Type objType = assembly.GetType(fullClassTypeName, false);
+
+                if (objType == null)
+                    throw new SerializerException($"Cannot find type {fullClassTypeName} in assembly {namespaceDefinition.Assembly}",
+                        node.FindXPath());
+
+                // 3. Make sure, that object derives from ManagedObject - only those are supported
+
+                if (!objType.IsAssignableTo(typeof(ManagedObject)))
+                    throw new SerializerException($"Type {fullClassTypeName} does not derive from ManagedObject!",
+                        node.FindXPath());
+
+                // 4. Try to instantiate object
+
+                ManagedObject deserializedObject;
+
                 try
                 {
-                    assembly = Assembly.Load(namespaceDefinition.Assembly);
+                    if (context.CustomActivator != null)
+                        deserializedObject = (ManagedObject)context.CustomActivator.CreateInstance(objType);
+                    else
+                        deserializedObject = (ManagedObject)Activator.CreateInstance(objType);
                 }
-                catch (FileNotFoundException)
+                catch (Exception e)
                 {
-                    // Intentionally left empty, will leave assembly as null.
+                    throw new SerializerException($"Cannot instantiate type {fullClassTypeName}. Check inner exception for details.",
+                        node.FindXPath(),
+                        e);
                 }
 
-            if (assembly == null)
-                throw new SerializerException($"Cannot access assembly {namespaceDefinition.Assembly}\r\nMake sure, it is loaded or accessible to load.",
-                    node.FindXPath());
+                // 5. Load attributes
 
-            string fullClassTypeName = string.Join('.', namespaceDefinition.Namespace, className);
-            Type objType = assembly.GetType(fullClassTypeName, false);
+                var setProperties = new HashSet<string>();
 
-            if (objType == null)
-                throw new SerializerException($"Cannot find type {fullClassTypeName} in assembly {namespaceDefinition.Assembly}",
-                    node.FindXPath());
+                DeserializeAttributes(node, deserializedObject, context, setProperties);
 
-            // 3. Make sure, that object derives from ManagedObject - only those are supported
+                // 6. Load children
 
-            if (!objType.IsAssignableTo(typeof(ManagedObject)))
-                throw new SerializerException($"Type {fullClassTypeName} does not derive from ManagedObject!",
-                    node.FindXPath());
+                DeserializeChildren(node, deserializedObject, context, setProperties);
 
-            // 4. Try to instantiate object
+                // 7. Return deserialized object
 
-            ManagedObject deserializedObject;
-
-            try
-            {
-                if (context.CustomActivator != null)
-                    deserializedObject = (ManagedObject)context.CustomActivator.CreateInstance(objType);
-                else
-                    deserializedObject = (ManagedObject)Activator.CreateInstance(objType);
+                return deserializedObject;
             }
-            catch (Exception e)
-            {
-                throw new SerializerException($"Cannot instantiate type {fullClassTypeName}. Check inner exception for details.",
-                    node.FindXPath(),
-                    e);
-            }
-
-            // 5. Load attributes
-
-            var setProperties = new HashSet<string>();
-
-            DeserializeAttributes(node, deserializedObject, context, setProperties);
-
-            // 6. Load children
-
-            DeserializeChildren(node, deserializedObject, context, setProperties);
-
-            // 7. Return deserialized object
-
-            return deserializedObject;
         }
 
-        // Public methods -----------------------------------------------------
-
-        public ManagedObject Deserialize(string filename, DeserializationOptions options = null)
+        private ManagedObject InternalDeserialize(XmlDocument document, DeserializationOptions options, string documentPath)
         {
-            XmlDocument document = new XmlDocument();
-            document.Load(filename);
-            return Deserialize(document, options);
-        }
-
-        public ManagedObject Deserialize(XmlDocument document, DeserializationOptions options = null)
-        {
-            var context = new DeserializationContext(options?.CustomActivator, options?.CustomSerializers);
+            var context = new DeserializationContext(options?.CustomActivator, options?.CustomSerializers, documentPath, options);
 
             if (options != null)
             {
@@ -411,6 +450,25 @@ namespace Animator.Engine.Base.Persistence
             }
 
             return DeserializeElement(document.FirstChild, context);
+        }
+
+        // Public methods -----------------------------------------------------
+
+        public ManagedObject Deserialize(string filename, DeserializationOptions options = null)
+        {
+            XmlDocument document = new XmlDocument();
+            document.Load(filename);
+
+            string documentPath = System.IO.Path.GetDirectoryName(filename);
+            if (string.IsNullOrEmpty(documentPath))
+                documentPath = Directory.GetCurrentDirectory();
+
+            return InternalDeserialize(document, options, documentPath);
+        }
+
+        public ManagedObject Deserialize(XmlDocument document, DeserializationOptions options = null)
+        {            
+            return InternalDeserialize(document, options, Directory.GetCurrentDirectory());
         }
     }
 }

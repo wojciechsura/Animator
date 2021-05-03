@@ -16,13 +16,16 @@ namespace Animator.Engine.Elements
     /// various properties multiple times. CommonAnimations itself does nothing,
     /// but values of its properties are inherited by animators placed inside.
     /// </summary>
-    [ContentProperty(nameof(CommonAnimations.Animations))]
-    public class CommonAnimations : BaseAnimator
+    [ContentProperty(nameof(AnimationGroup.Animations))]
+    public class AnimationGroup : BaseAnimator
     {
         // Public methods -----------------------------------------------------
 
         public override void ApplyAnimation(float timeMs)
         {
+            if (IsPropertySet(TimeOffsetProperty))
+                timeMs -= (float)TimeOffset.TotalMilliseconds;
+
             foreach (var animation in Animations)
                 animation.ApplyAnimation(timeMs);
         }
@@ -47,7 +50,7 @@ namespace Animator.Engine.Elements
             set => SetValue(TargetNameProperty, value);
         }
 
-        public static readonly ManagedProperty TargetNameProperty = ManagedProperty.Register(typeof(CommonAnimations),
+        public static readonly ManagedProperty TargetNameProperty = ManagedProperty.Register(typeof(AnimationGroup),
             nameof(TargetName),
             typeof(string),
             new ManagedSimplePropertyMetadata { NotAnimatable = true, Inheritable = true, InheritedFromParent = true });
@@ -68,7 +71,7 @@ namespace Animator.Engine.Elements
             set => SetValue(PathProperty, value);
         }
 
-        public static readonly ManagedProperty PathProperty = ManagedProperty.Register(typeof(CommonAnimations),
+        public static readonly ManagedProperty PathProperty = ManagedProperty.Register(typeof(AnimationGroup),
             nameof(Path),
             typeof(string),
             new ManagedSimplePropertyMetadata { NotAnimatable = true, Inheritable = true, InheritedFromParent = true });
@@ -87,7 +90,7 @@ namespace Animator.Engine.Elements
             set => SetValue(StartTimeProperty, value);
         }
 
-        public static readonly ManagedProperty StartTimeProperty = ManagedProperty.Register(typeof(CommonAnimations),
+        public static readonly ManagedProperty StartTimeProperty = ManagedProperty.Register(typeof(AnimationGroup),
             nameof(StartTime),
             typeof(TimeSpan),
             new ManagedSimplePropertyMetadata { 
@@ -117,7 +120,7 @@ namespace Animator.Engine.Elements
             set => SetValue(EndTimeProperty, value);
         }
 
-        public static readonly ManagedProperty EndTimeProperty = ManagedProperty.Register(typeof(CommonAnimations),
+        public static readonly ManagedProperty EndTimeProperty = ManagedProperty.Register(typeof(AnimationGroup),
             nameof(EndTime),
             typeof(TimeSpan),
             new ManagedSimplePropertyMetadata { DefaultValue = TimeSpan.FromMilliseconds(0), 
@@ -173,7 +176,7 @@ namespace Animator.Engine.Elements
             set => SetValue(EasingFunctionProperty, value);
         }
 
-        public static readonly ManagedProperty EasingFunctionProperty = ManagedProperty.Register(typeof(CommonAnimations),
+        public static readonly ManagedProperty EasingFunctionProperty = ManagedProperty.Register(typeof(AnimationGroup),
             nameof(EasingFunction),
             typeof(EasingFunction),
             new ManagedSimplePropertyMetadata { 
@@ -205,9 +208,29 @@ namespace Animator.Engine.Elements
             get => (ManagedCollection<BaseAnimator>)GetValue(AnimationsProperty);
         }
 
-        public static readonly ManagedProperty AnimationsProperty = ManagedProperty.RegisterCollection(typeof(CommonAnimations),
+        public static readonly ManagedProperty AnimationsProperty = ManagedProperty.RegisterCollection(typeof(AnimationGroup),
             nameof(Animations),
             typeof(ManagedCollection<BaseAnimator>));
+
+        #endregion
+
+
+        #region TimeOffset managed property
+
+        /// <summary>
+        /// Offsets all inner animations by a specific duration. Negative values makes them happen earlier,
+        /// positive values - later.
+        /// </summary>
+        public TimeSpan TimeOffset
+        {
+            get => (TimeSpan)GetValue(TimeOffsetProperty);
+            set => SetValue(TimeOffsetProperty, value);
+        }
+
+        public static readonly ManagedProperty TimeOffsetProperty = ManagedProperty.Register(typeof(AnimationGroup),
+            nameof(TimeOffset),
+            typeof(TimeSpan),
+            new ManagedSimplePropertyMetadata { DefaultValue = TimeSpan.FromSeconds(0) });
 
         #endregion
     }
