@@ -77,6 +77,15 @@ Every visual is drawn in its own coordinate system - so for instance, if you dra
 </Animation>
 ```
 
+Currently the following `Visual`s are available:
+
+* Rectangle
+* Circle
+* Ellipse
+* Path (its definition is mostly SVG-compatible)
+* Line
+* Label (text)
+
 ## Effects
 
 You can add effects to a visual - at the time of writing, there are three different effects: `Blur`, `GaussianBlur` and `DropShadow`. Effects are applied after rendering, but before applying mask. If you want to apply effect after applying mask, place the `Visual` on a `Layer` and then add an effect to the `Layer` instead. The following example shows difference between those two scenarios.
@@ -108,11 +117,11 @@ You can add effects to a visual - at the time of writing, there are three differ
     </Layer>
 
     <Scene.Animators>
-        <PointPropertyAnimator TargetName="Rectangle" Path="Position" From="40;30" To="60;30" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
-        <FloatPropertyAnimator TargetName="Rectangle" Path="Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+      <PointPropertyAnimator TargetName="Rectangle" Path="Position" From="40;30" To="60;30" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+      <FloatPropertyAnimator TargetName="Rectangle" Path="Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
 
-        <PointPropertyAnimator TargetName="Layer" Path="Position" From="40;70" To="60;70" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
-        <FloatPropertyAnimator TargetName="Layer" Path="Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+      <PointPropertyAnimator TargetName="Layer" Path="Position" From="40;70" To="60;70" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+      <FloatPropertyAnimator TargetName="Layer" Path="Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
     </Scene.Animators>
   </Scene>
 </Animation>
@@ -120,4 +129,53 @@ You can add effects to a visual - at the time of writing, there are three differ
 
 ## Property animations
 
-Every 
+Almost every numeric field (float, int or PointF) may be animated. The simplest way to do so is to use `FloatPropertyAnimator`, `IntPropertyAnimator` or `PointPropertyAnimator`. All of those expose properties `From` and `To`, defining border values of the animation, `StartTime` and `EndTime` to denote the time period, when property is animated and `EasingFunction`, which defines way in which value is changed.
+
+Downside of `PropertyAnimator`s is that they are meant to be used only once per scene per property. If you use two, value of the last one will remain. If you want to design multiple animations for a property, use `Storyboard` instead.
+
+You have to explicitly say, which property is animated. For that you use `TargetName` to specify object and `Path` to specify property. Note though, that you may use complex notation to reach properties-of-properties, for instance `TargetName="Rectangle" Path="Pen.Width"`.
+
+To make a visual reachable for the animators, give itself a `Name`. Names should be unique, but no checks are performed, if they are. However, if you want to reach object with an animator, its name *has* to be unique. Otherwise rendering will be stopped with an error.
+
+You can quickly see, that often a lot of values of various properties of `PropertyAnimator`s are shared (for instance, in the previous example, all `PropertyAnimator`s share values of `StartTime`, `EndTime` and `EasingFunction`. To simplify notation, you may group animations with `AnimationGroup` and take advantage of property inheritance to shorten the code:
+
+```xml
+<Scene.Animators>
+  <AnimationGroup StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth">
+    <PointPropertyAnimator TargetName="Rectangle" Path="Position" From="40;30" To="60;30" />
+    <FloatPropertyAnimator TargetName="Rectangle" Path="Rotation" From="0" To="360" />
+
+    <PointPropertyAnimator TargetName="Layer" Path="Position" From="40;70" To="60;70" />
+    <FloatPropertyAnimator TargetName="Layer" Path="Rotation" From="0" To="360" />
+  </AnimationGroup>
+</Scene.Animators>
+```
+
+There's also one more `PropertyAnimator`, which may be used in advanced scenarios, namely `PropertyExpressionAnimator`. You may define mathematical expression, which will be evaluated and entered into specified property. The following example should explain, how does it work.
+
+```xml
+<Animation>
+  <Animation.Config>
+    <AnimationConfig Width="100" Height="100" FramesPerSecond="30"/>
+  </Animation.Config>
+  <Scene Name="Scene1" Duration="0:0:3.0" Background="White">
+    <Rectangle Name="Rectangle" Width="20" Height="20" Origin="10;10" Position="40;30" Brush="Red" />
+    <Rectangle Name="Rectangle2" Width="20" Height="20" Origin="10;10" Position="40;30" Brush="Green" />
+      
+    <Scene.Animators>
+      <PointPropertyAnimator TargetName="Rectangle" Path="Position" From="40;30" To="60;30" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+      <FloatPropertyAnimator TargetName="Rectangle" Path="Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+
+      <PropertyExpressionAnimator TargetName="Rectangle2" Path="Position" Expression="Rectangle.Position + [10,10]" /> 
+    </Scene.Animators>
+  </Scene>
+</Animation>
+```
+
+## Storyboard
+
+TODO.
+
+## Reusing parts of animation
+
+TODO.
