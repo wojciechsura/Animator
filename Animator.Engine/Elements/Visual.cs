@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Elements.Types;
 using Animator.Engine.Elements.Utilities;
 using Animator.Engine.Tools;
 using System;
@@ -112,7 +113,7 @@ namespace Animator.Engine.Elements
                     var frontBufferData = frontBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, frontBuffer.Bitmap.Width, frontBuffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
                     var bufferData = buffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, buffer.Bitmap.Width, buffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 
-                    ImageProcessing.Combine(backBufferData.Scan0, backBufferData.Stride, frameBufferData.Scan0, frameBufferData.Stride, frontBufferData.Scan0, frontBufferData.Stride, backBuffer.Bitmap.Width, backBuffer.Bitmap.Height);
+                    ImageProcessing.CombineThree(backBufferData.Scan0, backBufferData.Stride, frameBufferData.Scan0, frameBufferData.Stride, frontBufferData.Scan0, frontBufferData.Stride, backBuffer.Bitmap.Width, backBuffer.Bitmap.Height);
                     ImageProcessing.CopyData(backBufferData.Scan0, backBufferData.Stride, bufferData.Scan0, bufferData.Stride, frameBuffer.Bitmap.Width, frameBuffer.Bitmap.Height);
 
                     backBuffer.Bitmap.UnlockBits(backBufferData);
@@ -131,24 +132,28 @@ namespace Animator.Engine.Elements
             if (Mask.Any())
             {
                 var maskBuffer = buffers.Lease(new Matrix());
-                var itemBuffer = buffers.Lease(originalTransform);
+                var itemBuffer = buffers.Lease(MaskCoordinateSystem == MaskCoordinateSystem.Local ? transform : originalTransform);
 
                 try
                 {
+                    var maskData = maskBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, maskBuffer.Bitmap.Width, maskBuffer.Bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
                     foreach (var item in Mask)
                     {
                         itemBuffer.Graphics.Clear(Color.Transparent);
                         item.Render(itemBuffer, buffers);
-                        maskBuffer.Graphics.DrawImage(itemBuffer.Bitmap, 0, 0);
+
+                        var itemData = itemBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, itemBuffer.Bitmap.Width, itemBuffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                        ImageProcessing.CombineTwo(maskData.Scan0, maskData.Stride, itemData.Scan0, itemData.Stride, maskBuffer.Bitmap.Width, maskBuffer.Bitmap.Height);
+                        itemBuffer.Bitmap.UnlockBits(itemData);
                     }
 
-                    var maskData = maskBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, maskBuffer.Bitmap.Width, maskBuffer.Bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
                     var bufferData = buffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, buffer.Bitmap.Width, buffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 
                     ImageProcessing.ApplyMask(bufferData.Scan0, bufferData.Stride, maskData.Scan0, maskData.Stride, buffer.Bitmap.Width, buffer.Bitmap.Height, InvertMask);
 
-                    maskBuffer.Bitmap.UnlockBits(maskData);
                     buffer.Bitmap.UnlockBits(bufferData);
+                    maskBuffer.Bitmap.UnlockBits(maskData);
                 }
                 finally
                 {
@@ -291,6 +296,27 @@ namespace Animator.Engine.Elements
             nameof(InvertMask),
             typeof(bool),
             new ManagedSimplePropertyMetadata { DefaultValue = false });
+
+        #endregion
+
+
+        #region MaskCoordinateSystem managed property
+
+        /// <summary>
+        /// Defines, in which coordinates the Visual's mask is defined. If you set this property to Local,
+        /// mask will follow all transforms applied to the Visual. If you set to Global, it will be immune
+        /// to those transforms.
+        /// </summary>
+        public MaskCoordinateSystem MaskCoordinateSystem
+        {
+            get => (MaskCoordinateSystem)GetValue(MaskCoordinateSystemProperty);
+            set => SetValue(MaskCoordinateSystemProperty, value);
+        }
+
+        public static readonly ManagedProperty MaskCoordinateSystemProperty = ManagedProperty.Register(typeof(Visual),
+            nameof(MaskCoordinateSystem),
+            typeof(MaskCoordinateSystem),
+            new ManagedSimplePropertyMetadata { DefaultValue = MaskCoordinateSystem.Local });
 
         #endregion
 

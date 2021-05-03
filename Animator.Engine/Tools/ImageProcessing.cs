@@ -26,7 +26,15 @@ namespace Animator.Engine.Tools
             bool invertMask);
 
         [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void Combine(IntPtr @base,
+        public static extern void CombineTwo(IntPtr @base,
+            int baseStride,
+            IntPtr image,
+            int imageStride,
+            int width,
+            int height);
+
+        [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void CombineThree(IntPtr @base,
             int baseStride,
             IntPtr first,
             int firstStride,

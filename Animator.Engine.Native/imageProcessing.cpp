@@ -67,7 +67,7 @@ extern "C" void __cdecl CopyData(unsigned char* sourceData,
 	}
 }
 
-extern "C" void __cdecl Combine(unsigned char* base,
+extern "C" void __cdecl CombineThree(unsigned char* base,
 	int baseStride,
 	unsigned char* first,
 	int firstStride,
@@ -85,6 +85,25 @@ extern "C" void __cdecl Combine(unsigned char* base,
 
 			alphaBlend(baseColor, firstColor);
 			alphaBlend(baseColor, secondColor);
+
+			setColor(base, baseStride, x, y, baseColor);
+		}
+}
+
+extern "C" void __cdecl CombineTwo(unsigned char* base,
+	int baseStride,
+	unsigned char* image,
+	int imageStride,
+	int width,
+	int height)
+{
+	for (int y = 0; y < height; y++)
+		for (int x = 0; x < width; x++)
+		{
+			Color baseColor = getColor(base, baseStride, x, y);
+			Color imageColor = getColor(image, imageStride, x, y);
+
+			alphaBlend(baseColor, imageColor);
 
 			setColor(base, baseStride, x, y, baseColor);
 		}

@@ -207,6 +207,82 @@
             Defines, how many frames should be in a second of animation.
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.AnimationGroup">
+            <summary>
+            Allows grouping a couple of animators, so that you don't have to specify
+            various properties multiple times. CommonAnimations itself does nothing,
+            but values of its properties are inherited by animators placed inside.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimationGroup.TargetName">
+            <summary>
+            Defines name of an object, which property should be modified.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimationGroup.Path">
+            <summary>
+            Defines path to a property, starting at the object pointed
+            to by TargetName. Path may be either a single property,
+            for example <code>Position</code>, or a chain of properties,
+            leading through subsequent object, like <code>Pen.Color</code>.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimationGroup.StartTime">
+            <summary>
+            Defines time since start of scene, when value of
+            a property should start being changed.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimationGroup.EndTime">
+            <summary>
+            Defines time since start of scene, when value of
+            a property reaches its final value.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimationGroup.EasingFunction">
+            <summary>
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul>
+                <li>Linear</li>
+                <li>EaseSineSpeedUp</li>
+                <li>EaseSineSlowDown</li>
+                <li>EaseSineBoth</li>
+                <li>EaseQuadSpeedUp</li>
+                <li>EaseQuadSlowDown</li>
+                <li>EaseQuadBoth</li>
+                <li>EaseCubicSpeedUp</li>
+                <li>EaseCubicSlowDown</li>
+                <li>EaseCubicBoth</li>
+                <li>EaseQuartSpeedUp</li>
+                <li>EaseQuartSlowDown</li>
+                <li>EaseQuartBoth</li>
+                <li>EaseBackSpeedUp</li>
+                <li>EaseBackSlowDown</li>
+                <li>EaseBackBoth</li>
+            </ul>
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimationGroup.Duration">
+            <summary>
+            A short-hand property, which allows you to specify
+            animation's duration instead of its end time.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimationGroup.Animations">
+            <summary>
+            Defines a list of grouped animations.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimationGroup.TimeOffset">
+            <summary>
+            Offsets all inner animations by a specific duration. Negative values makes them happen earlier,
+            positive values - later.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.BaseAnimator">
             <summary>
             This is an abstract class serving as a base class for all animators.
@@ -352,76 +428,6 @@
             Informs, that the shape defined by a series of path elements
             ends here. If needed, path is closed with a line leading to
             its start.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.CommonAnimations">
-            <summary>
-            Allows grouping a couple of animators, so that you don't have to specify
-            various properties multiple times. CommonAnimations itself does nothing,
-            but values of its properties are inherited by animators placed inside.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.CommonAnimations.TargetName">
-            <summary>
-            Defines name of an object, which property should be modified.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.CommonAnimations.Path">
-            <summary>
-            Defines path to a property, starting at the object pointed
-            to by TargetName. Path may be either a single property,
-            for example <code>Position</code>, or a chain of properties,
-            leading through subsequent object, like <code>Pen.Color</code>.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.CommonAnimations.StartTime">
-            <summary>
-            Defines time since start of scene, when value of
-            a property should start being changed.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.CommonAnimations.EndTime">
-            <summary>
-            Defines time since start of scene, when value of
-            a property reaches its final value.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.CommonAnimations.EasingFunction">
-            <summary>
-            Defines easing function used for animation. The role of
-            easing function is to define, how value should change
-            between previous and current keyframe. Possible
-            easing functions include the following:
-            
-            <ul>
-                <li>Linear</li>
-                <li>EaseSineSpeedUp</li>
-                <li>EaseSineSlowDown</li>
-                <li>EaseSineBoth</li>
-                <li>EaseQuadSpeedUp</li>
-                <li>EaseQuadSlowDown</li>
-                <li>EaseQuadBoth</li>
-                <li>EaseCubicSpeedUp</li>
-                <li>EaseCubicSlowDown</li>
-                <li>EaseCubicBoth</li>
-                <li>EaseQuartSpeedUp</li>
-                <li>EaseQuartSlowDown</li>
-                <li>EaseQuartBoth</li>
-                <li>EaseBackSpeedUp</li>
-                <li>EaseBackSlowDown</li>
-                <li>EaseBackBoth</li>
-            </ul>
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.CommonAnimations.Duration">
-            <summary>
-            A short-hand property, which allows you to specify
-            animation's duration instead of its end time.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.CommonAnimations.Animations">
-            <summary>
-            Defines a list of grouped animations.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.DropShadowEffect">
@@ -1134,6 +1140,13 @@
             Defines, if mask expresses areas, which should or should not
             be drawn. Useful, if you want to e.g. draw everything
             <em>except</em> some specific area.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Visual.MaskCoordinateSystem">
+            <summary>
+            Defines, in which coordinates the Visual's mask is defined. If you set this property to Local,
+            mask will follow all transforms applied to the Visual. If you set to Global, it will be immune
+            to those transforms.
             </summary>
         </member>
         <member name="P:Animator.Engine.Elements.Visual.Mask">

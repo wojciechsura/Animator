@@ -1,6 +1,7 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Base.Persistence;
 using Animator.Engine.Elements.Utilities;
+using Animator.Engine.Tools;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,19 +26,25 @@ namespace Animator.Engine.Elements
 
             try
             {
+                var bufferData = buffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, buffer.Bitmap.Width, buffer.Bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
                 foreach (var item in Items)
                 {
                     itemBuffer.Graphics.Clear(Color.Transparent);
                     item.Render(itemBuffer, buffers);
-                    buffer.Graphics.DrawImage(itemBuffer.Bitmap, 0, 0);
+
+                    var itemData = itemBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, itemBuffer.Bitmap.Width, itemBuffer.Bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    ImageProcessing.CombineTwo(bufferData.Scan0, bufferData.Stride, itemData.Scan0, itemData.Stride, buffer.Bitmap.Width, buffer.Bitmap.Height);
+                    itemBuffer.Bitmap.UnlockBits(itemData);
                 }
+
+                buffer.Bitmap.UnlockBits(bufferData);
             }
             finally
             {
                 buffers.Return(itemBuffer);
             }
         }
-
 
         #region Items managed collection
 
