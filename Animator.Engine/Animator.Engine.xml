@@ -529,7 +529,7 @@
             Allows applying an animation to an int property of some
             object. It is meant to be used only if you want to apply
             single animation per whole scene. Otherwise, use Storyboard
-            and FloatKeyframe to define the whole animation.
+            and IntKeyframe to define the whole animation.
             </summary>
         </member>
         <member name="P:Animator.Engine.Elements.IntPropertyAnimator.From">
@@ -679,7 +679,7 @@
             Allows applying an animation to an PointF property of some
             object. It is meant to be used only if you want to apply
             single animation per whole scene. Otherwise, use Storyboard
-            and FloatKeyframe to define the whole animation.
+            and PointKeyframe to define the whole animation.
             </summary>
         </member>
         <member name="P:Animator.Engine.Elements.PointPropertyAnimator.From">

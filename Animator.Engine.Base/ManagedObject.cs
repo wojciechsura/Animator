@@ -290,7 +290,7 @@ namespace Animator.Engine.Base
 
                 foreach (var inheritedValue in inheritedValues)
                 {
-                    var simpleProperty = (ManagedSimpleProperty)ManagedProperty.ByGlobalIndex(inheritedValue.PropertyIndex);
+                    var simpleProperty = (ManagedSimpleProperty)ManagedProperty.FindByGlobalIndex(inheritedValue.PropertyIndex);
 
                     var oldValue = inheritedValue.FinalBaseValue;
                     var newValue = simpleProperty.Metadata.DefaultValue;
@@ -469,12 +469,12 @@ namespace Animator.Engine.Base
 
         public ManagedProperty GetProperty(string propertyName)
         {
-            return ManagedProperty.ByTypeAndName(GetType(), propertyName);
+            return ManagedProperty.FindByTypeAndName(GetType(), propertyName);
         }
 
         public IEnumerable<ManagedProperty> GetProperties(bool includingBaseClasses)
         {
-            return ManagedProperty.ByType(GetType(), includingBaseClasses);
+            return ManagedProperty.FindAllByType(GetType(), includingBaseClasses);
         }
 
         public bool IsPropertySet(ManagedProperty property)

@@ -66,23 +66,9 @@ namespace Animator.Engine.Base
 
         // Private static methods ---------------------------------------------
 
-        private static ManagedProperty FindWithInheritance(Type ownerClassType, string name)
-        {
-            while (ownerClassType != typeof(object))
-            {
-                var key = new PropertyKey(ownerClassType, name);
-                if (propertyDefinitions.TryGetValue(key, out ManagedProperty result))
-                    return result;
-
-                ownerClassType = ownerClassType.BaseType;
-            }
-
-            return null;
-        }
-
         private static void ValidateDuplicatedName(Type ownerClassType, string name)
         {
-            if (FindWithInheritance(ownerClassType, name) != null)
+            if (FindByTypeAndName(ownerClassType, name, true) != null)
                 throw new ArgumentException($"Property with name {name} is already registered for type {ownerClassType.Name} (possibly in base class)!", nameof(name));
         }
 
@@ -135,34 +121,6 @@ namespace Animator.Engine.Base
         // Protected methods --------------------------------------------------
 
         protected abstract BasePropertyMetadata ProvideBaseMetadata();
-
-        // Internal static methods --------------------------------------------
-
-        internal static ManagedProperty ByTypeAndName(Type ownerClassType, string name)
-        {
-            return FindWithInheritance(ownerClassType, name);
-        }
-
-        internal static IEnumerable<ManagedProperty> ByType(Type ownerClassType, bool includeBaseClasses)
-        {
-            IEnumerable<ManagedProperty> result = Enumerable.Empty<ManagedProperty>();
-
-            do
-            {
-                if (propertiesByType.ContainsKey(ownerClassType))
-                    result = result.Concat(propertiesByType[ownerClassType]);
-
-                ownerClassType = ownerClassType.BaseType;
-            }
-            while (includeBaseClasses && (ownerClassType != typeof(ManagedObject) && ownerClassType != typeof(object)));
-
-            return result;
-        }
-
-        internal static ManagedProperty ByGlobalIndex(int globalPropertyIndex)
-        {
-            return propertiesByIndex[globalPropertyIndex];
-        }
 
         // Internal methods ---------------------------------------------------
 
@@ -239,6 +197,49 @@ namespace Animator.Engine.Base
 
             return prop;
         }
+
+        public static ManagedProperty FindByTypeAndName(Type ownerClassType, string name, bool withInherited = true)
+        {
+            if (!ownerClassType.IsAssignableTo(typeof(ManagedObject)))
+                throw new ArgumentException(nameof(ownerClassType), "Owner class type must derive from ManagedObject!");
+
+            do
+            {
+                var key = new PropertyKey(ownerClassType, name);
+                if (propertyDefinitions.TryGetValue(key, out ManagedProperty result))
+                    return result;
+
+                ownerClassType = ownerClassType.BaseType;
+            }
+            while (withInherited && ownerClassType != typeof(ManagedObject) && ownerClassType != typeof(object));
+
+            return null;
+        }
+
+        public static IEnumerable<ManagedProperty> FindAllByType(Type ownerClassType, bool includeBaseClasses)
+        {
+            if (!ownerClassType.IsAssignableTo(typeof(ManagedObject)))
+                throw new ArgumentException(nameof(ownerClassType), "Owner class type must derive from ManagedObject!");
+
+            IEnumerable<ManagedProperty> result = Enumerable.Empty<ManagedProperty>();
+
+            do
+            {
+                if (propertiesByType.ContainsKey(ownerClassType))
+                    result = result.Concat(propertiesByType[ownerClassType]);
+
+                ownerClassType = ownerClassType.BaseType;
+            }
+            while (includeBaseClasses && (ownerClassType != typeof(ManagedObject) && ownerClassType != typeof(object)));
+
+            return result;
+        }
+
+        public static ManagedProperty FindByGlobalIndex(int globalPropertyIndex)
+        {
+            return propertiesByIndex[globalPropertyIndex];
+        }
+
 
         // Public properties --------------------------------------------------
 

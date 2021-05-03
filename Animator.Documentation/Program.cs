@@ -17,6 +17,8 @@ namespace Animator.Documentation
     {
         private static readonly Regex genericTypeRegex = new Regex("(.*)`([0-9]+)");
 
+        private static readonly HashSet<Type> staticallyInitializedTypes = new();
+
         private static string MakeLinkToType(string type) => $"<a href=\"#{type}\">{type}</a>";
 
         private static string ToReadableName(this Type type)
@@ -33,8 +35,10 @@ namespace Animator.Documentation
             return $"{baseName}<{string.Join(',', genericArguments)}>";
         }
 
-        private static void BuildPropertiesDocumentation(StringBuilder sb, List<PropertyInfo> properties)
+        private static void BuildPropertiesDocumentation(StringBuilder sb, Type type, List<PropertyInfo> properties)
         {
+            StaticInitializeRecursively(type);
+
             foreach (var property in properties)
             {
                 sb.AppendLine("<tr>");
@@ -57,6 +61,30 @@ namespace Animator.Documentation
                     {
                         sb.AppendLine(summary.InnerXml);
                     }
+
+                    var managedProperty = ManagedProperty.FindByTypeAndName(type, property.Name);
+                    if (managedProperty != null)
+                    {
+                        if (managedProperty is ManagedSimpleProperty simpleProperty)
+                        {
+                            sb.Append("<p>");
+
+                            if (simpleProperty.Metadata.Inheritable)
+                                sb.AppendLine("May be inherited by child elements. ");
+                            else
+                                sb.AppendLine("Not inheritable by child elements. ");
+
+                            if (simpleProperty.Metadata.InheritedFromParent)
+                                sb.AppendLine("Value is inherited from parent element if none provided explicitly. ");
+                            if (simpleProperty.Metadata.NotAnimatable)
+                                sb.AppendLine("Cannot be animated. ");
+
+                            sb.AppendLine($"Default value is {simpleProperty.Metadata.DefaultValue?.ToString()}.");
+
+                            sb.AppendLine("</p>");
+                        }
+                    }
+
 
                     var example = propDocumentation["member"]?["example"];
 
@@ -167,7 +195,7 @@ namespace Animator.Documentation
                     if (currentType != type)
                         sb.AppendLine($"<tr><td colspan=\"3\" class=\"table-separator\">Properties derived from <strong>{ToReadableName(currentType)}:</strong></td></tr>");
 
-                    BuildPropertiesDocumentation(sb, properties);
+                    BuildPropertiesDocumentation(sb, currentType, properties);
                 }
 
                 currentType = currentType.BaseType;
@@ -177,6 +205,24 @@ namespace Animator.Documentation
             {
                 sb.AppendLine("</table>");
             }
+        }
+
+        private static void StaticInitializeRecursively(Type type)
+        {
+            do
+            {
+                // If type is initialized, its base types must have been initialized too,
+                // don't waste time on them
+                if (staticallyInitializedTypes.Contains(type))
+                    return;
+
+                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
+
+                staticallyInitializedTypes.Add(type);
+
+                type = type.BaseType;
+            }
+            while (type != typeof(ManagedObject) && type != typeof(object));
         }
 
         private static StringBuilder BuildDocumentation(Assembly engineAssembly, string elementsNamespace)
