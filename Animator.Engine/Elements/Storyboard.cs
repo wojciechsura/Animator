@@ -34,7 +34,7 @@ namespace Animator.Engine.Elements
                 if (keyframes.Any(k => k.GetType() != keyframes[0].GetType()))
                     throw new AnimationException($"All keyframes for element {keyframes[0].Key} and path {keyframes[0].Path} must be of the same type!");
 
-                (var obj, var prop) = Scene.FindProperty(TargetName, Path);
+                (var obj, var prop) = Scene.FindProperty(keyframes.First().TargetName, keyframes.First().Path);
                 if (obj == null || prop == null)
                     continue;
                 if (prop is not ManagedSimpleProperty simpleProperty)

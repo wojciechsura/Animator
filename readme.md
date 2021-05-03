@@ -174,8 +174,68 @@ There's also one more `PropertyAnimator`, which may be used in advanced scenario
 
 ## Storyboard
 
-TODO.
+Storyboard allows you to define multiple keyframes with multiple easing functions for multiple properties. Each keyframe specifies a value at a time and easing function. The easing function is applied to segment *before* current keyframe. If there is none, one is assumed at time 0 with initial value of animated property. You can use `Storyboard` in the same way as `AnimationGroup` - to specify some values, which will be shared between all keyframes (if not overwritten explicitly).
+
+You may specify multiple storyboards for a scene.
+
+```xml
+<Animation xmlns:e="https://spooksoft.pl/animator">
+  <Animation.Config>
+    <AnimationConfig Width="100" Height="100"/>
+  </Animation.Config>
+  <Scene Name="Scene1" Duration="0:0:3.0" Background="White">
+    <Layer>
+        <Rectangle Name="Red" Width="20" Height="20" Origin="10;10" Brush="Red" />
+        <Rectangle Name="Green" Width="20" Height="20" Origin="10;10" Brush="Green" />
+    </Layer>
+    
+    <Scene.Animators>
+      <Storyboard Path="Position" EasingFunction="EaseQuadSlowDown">
+        <PointKeyframe TargetName="Red" Time="0:0:0.0" Value="10;10" />
+        <PointKeyframe TargetName="Red" Time="0:0:1.0" Value="10;50" />
+        <PointKeyframe TargetName="Red" Time="0:0:2.0" Value="50;50" />
+        <PointKeyframe TargetName="Red" Time="0:0:3.0" Value="50;10" />
+
+        <PointKeyframe TargetName="Green" Time="0:0:0.0" Value="10;10" />
+        <PointKeyframe TargetName="Green" Time="0:0:1.0" Value="50;10" />
+        <PointKeyframe TargetName="Green" Time="0:0:2.0" Value="50;50" />
+        <PointKeyframe TargetName="Green" Time="0:0:3.0" Value="10;50" />
+      </Storyboard>
+    </Scene.Animators>
+  </Scene>
+</Animation>
+```
 
 ## Reusing parts of animation
 
-TODO.
+You may use good-old include mechanism to reuse parts of the animation. To include a file, you have to define additional XML namespace first, and then use `Include` tag.
+
+```xml
+Animation.axml:
+
+<Animation xmlns:e="https://spooksoft.pl/animator">
+  <Animation.Config>
+    <AnimationConfig Width="100" Height="100"/>
+  </Animation.Config>
+  <Scene Name="Scene1" Duration="0:0:3.0" Background="White">
+    <Layer>
+        <e:Include Source="D:\Rectangle.axml" />
+    </Layer>
+    
+    <Scene.Animators>
+        <Storyboard TargetName="Red" Path="Position" EasingFunction="EaseQuadSlowDown">
+            <PointKeyframe Time="0:0:0.0" Value="10;10" />
+            <PointKeyframe Time="0:0:1.0" Value="10;50" />
+            <PointKeyframe Time="0:0:2.0" Value="50;50" />
+            <PointKeyframe Time="0:0:3.0" Value="50;10" />
+        </Storyboard>
+    </Scene.Animators>
+  </Scene>
+</Animation>
+
+Rectangle.axml:
+
+<Rectangle Name="Red" Position="30;30" Origin="10;10" Width="20" Height="20" Brush="Red" />
+```
+
+If you don't specify the absolute path for include file, the current path will be used.
