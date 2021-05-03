@@ -1,6 +1,7 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Base.Persistence;
 using Animator.Engine.Elements.Utilities;
+using Animator.Engine.Tools;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -77,12 +78,19 @@ namespace Animator.Engine.Elements
             
             try
             {
+                var bitmapData = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+
                 foreach (var item in Items)
                 {
                     buffer.Graphics.Clear(Color.Transparent);
                     item.Render(buffer, buffers);
-                    graphics.DrawImage(buffer.Bitmap, 0, 0);
+
+                    var bufferData = buffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                    ImageProcessing.CombineTwo(bitmapData.Scan0, bitmapData.Stride, bufferData.Scan0, bufferData.Stride, bitmap.Width, bitmap.Height);
+                    buffer.Bitmap.UnlockBits(bufferData);
                 }
+
+                bitmap.UnlockBits(bitmapData);
             }
             finally
             {
