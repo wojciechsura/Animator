@@ -1,4 +1,5 @@
 using Animator.Engine.Elements;
+using Animator.Engine.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Animator.Engine.Tests
@@ -22,7 +23,7 @@ namespace Animator.Engine.Tests
 
             // Assert
 
-            Assert.AreEqual(rectangle, scene.FindSingleByName("Rectangle"));
+            Assert.AreEqual(rectangle, scene.FindElement("Rectangle"));
         }
 
         [TestMethod]
@@ -41,7 +42,7 @@ namespace Animator.Engine.Tests
 
             // Assert
 
-            Assert.AreEqual(rectangle, scene.FindSingleByName("Rectangle"));
+            Assert.AreEqual(rectangle, scene.FindElement("Rectangle"));
         }
 
         [TestMethod]
@@ -61,8 +62,7 @@ namespace Animator.Engine.Tests
 
             // Assert
 
-            Assert.AreEqual(null, scene.FindSingleByName("Rectangle"));
-
+            Assert.ThrowsException<AnimationException>(() => scene.FindElement("Rectangle"));
         }
 
         [TestMethod]
@@ -73,9 +73,10 @@ namespace Animator.Engine.Tests
             Scene scene = new Scene();
             
             Rectangle rectangle = new Rectangle();
+            rectangle.Name = "Rectangle";
             scene.Items.Add(rectangle);
 
-            Pen pen = new Pen { Name = "Pen" };
+            Pen pen = new Pen { Name = "MyPen" };
 
             // Act
 
@@ -83,7 +84,7 @@ namespace Animator.Engine.Tests
 
             // Assert
 
-            Assert.AreEqual(pen, scene.FindSingleByName("Pen"));
+            Assert.AreEqual(pen, scene.FindElement("Rectangle.MyPen"));
         }
 
         [TestMethod]
@@ -96,7 +97,7 @@ namespace Animator.Engine.Tests
             Rectangle rectangle = new Rectangle();
             scene.Items.Add(rectangle);
 
-            Pen pen = new Pen { Name = "Pen" };
+            Pen pen = new Pen { Name = "MyPen" };
             rectangle.Pen = pen;
 
             // Act
@@ -105,7 +106,7 @@ namespace Animator.Engine.Tests
 
             // Assert
 
-            Assert.AreEqual(null, scene.FindSingleByName("Pen"));
+            Assert.ThrowsException<AnimationException>(() => scene.FindElement("Rectangle.MyPen"));
         }
     }
 }

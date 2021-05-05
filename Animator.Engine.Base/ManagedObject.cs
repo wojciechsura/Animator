@@ -570,6 +570,50 @@ namespace Animator.Engine.Base
             }
         }
 
+        public void ProcessChildren<T>(Action<T> action)
+        {
+            foreach (var prop in GetProperties(true).Where(p => IsPropertySet(p)))
+            {
+                if (prop is ManagedReferenceProperty refProp)
+                {
+                    var value = GetValue(prop);
+                    if (value is T t)
+                        action(t);
+                }
+                else if (prop is ManagedCollectionProperty collectionProp)
+                {
+                    var collection = GetValue(collectionProp) as ManagedCollection;
+
+                    foreach (var obj in collection)
+                        if (obj is T t)
+                            action(t);
+                }
+            }
+        }
+
+        public List<T> FindChildren<T>(Func<T, bool> predicate)
+            where T : ManagedObject
+        {
+            List<T> result = new();
+
+            ProcessChildren<T>(child =>
+            {
+                if (predicate(child))
+                    result.Add(child);
+            });
+
+            return result;
+        }
+
+        public void ProcessElementsRecursive<T>(Action<T> action)
+            where T : ManagedObject
+        {
+            if (this is T t)
+                action(t);
+
+            ProcessChildren<T>(child => child.ProcessElementsRecursive(action));
+        }
+
         // Public properties --------------------------------------------------
 
         public ManagedObject Parent

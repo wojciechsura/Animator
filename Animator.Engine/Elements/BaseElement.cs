@@ -1,5 +1,6 @@
 ﻿using Animator.Engine.Animation;
 using Animator.Engine.Base;
+using Animator.Engine.Exceptions;
 using Animator.Engine.Types;
 using System;
 using System.Collections;
@@ -17,79 +18,149 @@ namespace Animator.Engine.Elements
     /// </summary>
     public abstract class BaseElement : ManagedObject
     {
+        // Protected fields ---------------------------------------------------
+
+        protected readonly Dictionary<string, List<BaseElement>> names = new();
+
         // Private methods ----------------------------------------------------
 
-        private void AddNamesRecursiveToParent(Scene scene)
+        private void RegisterName(string name, BaseElement baseElement)
         {
-            ProcessElementsRecursive(baseElement =>
+            if (!names.TryGetValue(name, out List<BaseElement> list))
             {
-                if (baseElement.IsPropertySet(NameProperty) && baseElement.Name != null)
-                {
-                    scene.RegisterName(baseElement.Name, baseElement);
-                }
-            });
+                list = new List<BaseElement>();
+                names[name] = list;
+            }
+
+            list.Add(baseElement);
         }
 
-        private void RemoveNamesRecursiveFromParent(Scene scene)
+        private void UnregisterName(string name, BaseElement baseElement)
         {
-            ProcessElementsRecursive(baseElement =>
+            if (names.TryGetValue(name, out List<BaseElement> list))
             {
-                if (baseElement.IsPropertySet(NameProperty) && baseElement.Name != null)
+                list.Remove(baseElement);
+                if (!list.Any())
+                    names.Remove(name);
+            }
+        }
+
+        private BaseElement FindElement(string[] path)
+        {
+            BaseElement current = this;
+
+            for (int i = 0; i < path.Length; i++)
+            {
+                var property = current.GetProperty(path[i]);
+
+                current.names.TryGetValue(path[i], out List<BaseElement> children);
+
+                // Erroneus situation
+                if (property != null && (children != null))
+                    throw new AnimationException($"{path[i]} matches both property and child!");
+                else if (property == null && children == null)
+                    throw new AnimationException($"{path[i]} doesn't match any property or child!");
+                else if (property != null)
                 {
-                    scene.UnregisterName(baseElement.Name, baseElement);
+                    object value = current.GetValue(property);
+                    if (value == null)
+                        throw new AnimationException($"{path[i]} returns null element!");
+
+                    if (value is not BaseElement baseElement)
+                        throw new AnimationException($"Property {path[i]} yields object of type {value.GetType().Name}, which does not derive from BaseElement!");
+
+                    current = baseElement;
                 }
-            });
+                else if (children != null)
+                {
+                    if (children.Count > 1)
+                        throw new AnimationException($"{path[i]} yields more than one child element. Name is not unique.");
+
+                    if (children.Single() is not BaseElement baseElement)
+                        throw new AnimationException($"Child {path[i]} yields object of type {children.Single().GetType().Name}, which does not derive from BaseElement!");
+
+                    current = baseElement;
+                }
+                else
+                    throw new InvalidOperationException("Element seeking algorithm malfunction!");
+            }
+
+            return current;
         }
 
         // Protected methods --------------------------------------------------
 
         protected override void OnParentDetaching()
         {
-            if (Parent is Scene scene)
+            if (Parent is BaseElement baseElement)
             {
-                RemoveNamesRecursiveFromParent(scene);
+                baseElement.UnregisterName(Name, this);
             }
-            else if (Parent is BaseElement baseElement && baseElement.Scene != null)
-            {
-                RemoveNamesRecursiveFromParent(baseElement.Scene);
-            }
+
+            base.OnParentDetaching();
         }
 
         protected override void OnParentAttached()
         {
-            if (Parent != null)
+            base.OnParentAttached();
+
+            if (Parent is BaseElement baseElement && Name != null)
             {
-                if (Parent is Scene)
-                    AddNamesRecursiveToParent(Parent as Scene);
-                else if (Parent is BaseElement baseElement && baseElement.Scene != null)
-                    AddNamesRecursiveToParent(baseElement.Scene);
+                baseElement.RegisterName(Name, this);
             }
         }
 
         // Public methods -----------------------------------------------------
 
-        public void ProcessElementsRecursive(Action<BaseElement> action)
+        public BaseElement FindElement(string elementRef)
         {
-            action(this);
+            var path = elementRef.Split('.');
 
-            foreach (var prop in GetProperties(true).Where(p => IsPropertySet(p)))
+            BaseElement finalElement;
+
+            try
             {
-                if (prop is ManagedReferenceProperty refProp)
-                {
-                    var value = GetValue(prop);
-                    if (value is BaseElement baseElement)
-                        baseElement.ProcessElementsRecursive(action);
-                }
-                else if (prop is ManagedCollectionProperty collectionProp)
-                {
-                    var collection = GetValue(collectionProp) as ManagedCollection;
-
-                    foreach (var obj in collection)
-                        if (obj is BaseElement baseElement)
-                            baseElement.ProcessElementsRecursive(action);
-
-                }
+                finalElement = FindElement(path);
             }
+            catch (Exception e)
+            {
+                throw new AnimationException($"Failed to find element by reference {elementRef}!", e);
+            }
+
+            return finalElement;
+        }
+
+        public (BaseElement, ManagedProperty) FindProperty(string propertyRef)
+        {
+            var path = propertyRef.Split('.');
+
+            BaseElement finalElement;
+
+            try
+            {                
+                finalElement = FindElement(path[..^1]);
+            }
+            catch (Exception e)
+            {
+                throw new AnimationException($"Failed to process property reference { propertyRef }!", e);
+            }
+
+            var property = finalElement.GetProperty(path.Last());
+            if (property == null)
+                throw new AnimationException($"Failed to process property reference {propertyRef}: object {finalElement.GetType().Name} does not have property {path.Last()}!");
+
+            return (finalElement, property);
+        }
+
+        public void ApplyAnimation(float timeMs)
+        {
+            ProcessElementsRecursive<BaseElement>(baseElement =>
+            {
+                foreach (var animator in baseElement.Animators)
+                {
+                    animator.ApplyAnimation(timeMs);
+                }
+            });
         }
 
         // Public properties --------------------------------------------------
@@ -121,6 +192,23 @@ namespace Animator.Engine.Elements
             if (sender is BaseElement baseElement && baseElement.Scene != null)
                 baseElement.Scene.RegisterName((string)args.NewValue, baseElement);
         }
+
+        #endregion
+
+        #region Animators managed collection
+
+        /// <summary>
+        /// Contains list of all animators, which animate properties
+        /// of elements placed inside this element.
+        /// </summary>
+        public ManagedCollection<BaseAnimator> Animators
+        {
+            get => (ManagedCollection<BaseAnimator>)GetValue(AnimatorsProperty);
+        }
+
+        public static readonly ManagedProperty AnimatorsProperty = ManagedProperty.RegisterCollection(typeof(BaseElement),
+            nameof(Animators),
+            typeof(ManagedCollection<BaseAnimator>));
 
         #endregion
 

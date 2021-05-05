@@ -21,21 +21,15 @@ namespace Animator.Engine.Elements
 
         public override void ApplyAnimation(float timeMs)
         {
-            if (Scene == null)
-                throw new InvalidOperationException("Animation can be applied only when scene is available!");
+            (var obj, var prop) = AnimatedObject.FindProperty(PropertyRef);
 
-            (var obj, var prop) = Scene.FindProperty(TargetName, Path);
+            var factor = TimeCalculator.EvalAnimationFactor((float)StartTime.TotalMilliseconds, (float)EndTime.TotalMilliseconds, timeMs);
+            float easedValue = EasingFunctionRepository.Ease(EasingFunction, factor);
 
-            if (obj != null && prop != null)
-            {
-                var factor = TimeCalculator.EvalAnimationFactor((float)StartTime.TotalMilliseconds, (float)EndTime.TotalMilliseconds, timeMs);
-                float easedValue = EasingFunctionRepository.Ease(EasingFunction, factor);
+            PointF from = IsPropertySet(FromProperty) ? From : (PointF)obj.GetBaseValue(prop);
+            PointF to = IsPropertySet(ToProperty) ? To : (PointF)obj.GetBaseValue(prop);
 
-                PointF from = IsPropertySet(FromProperty) ? From : (PointF)obj.GetBaseValue(prop);
-                PointF to = IsPropertySet(ToProperty) ? To : (PointF)obj.GetBaseValue(prop);
-
-                obj.SetAnimatedValue(prop, new PointF(from.X + (to.X - from.X) * easedValue, from.Y + (to.Y - from.Y) * easedValue));
-            }
+            obj.SetAnimatedValue(prop, new PointF(from.X + (to.X - from.X) * easedValue, from.Y + (to.Y - from.Y) * easedValue));
         }
 
         // Public properties --------------------------------------------------

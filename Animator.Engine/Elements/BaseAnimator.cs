@@ -16,5 +16,18 @@ namespace Animator.Engine.Elements
         public abstract void ApplyAnimation(float timeMs);
 
         public abstract void ResetAnimation();
+
+        public BaseElement AnimatedObject
+        {
+            get
+            {
+                if (Parent is BaseAnimator baseAnimator)
+                    return baseAnimator.AnimatedObject;
+                else if (Parent is BaseElement animatedObject)
+                    return animatedObject;
+                else
+                    throw new InvalidOperationException("Cannot retrieve animated object!");
+            }
+        }
     }
 }

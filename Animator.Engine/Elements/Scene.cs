@@ -21,34 +21,6 @@ namespace Animator.Engine.Elements
     [ContentProperty(nameof(Items))]
     public class Scene : BaseElement
     {
-        // Private fields -----------------------------------------------------
-
-        private readonly Dictionary<string, List<BaseElement>> names = new();
-
-        // Internal methods ---------------------------------------------------
-
-        internal void RegisterName(string name, BaseElement baseElement)
-        {
-            if (!names.TryGetValue(name, out List<BaseElement> list))
-            {
-                list = new List<BaseElement>();
-                names[name] = list;
-            }
-
-            list.Add(baseElement);
-        }
-
-        internal void UnregisterName(string name, BaseElement baseElement)
-        {
-            if (names.TryGetValue(name, out List<BaseElement> list))
-            {
-                list.Remove(baseElement);                
-                if (!list.Any())
-                    names.Remove(name);
-            }
-        }
-
-
         // Public methods -----------------------------------------------------
 
         public void Render(Bitmap bitmap)
@@ -98,57 +70,6 @@ namespace Animator.Engine.Elements
             }
         }
 
-        public BaseElement FindSingleByName(string name)
-        {
-            if (names.TryGetValue(name, out List<BaseElement> elements))
-                return elements.SingleOrDefault();
-
-            return null;
-        }
-
-        public IEnumerable<BaseElement> FindElements(string name)
-        {
-            if (names.TryGetValue(name, out List<BaseElement> elements))
-                return elements;
-
-            return null;
-        }
-
-        public (ManagedObject, ManagedProperty) FindProperty(string targetName, string path)
-        {
-            // Find uniquely named component
-            ManagedObject element = FindSingleByName(targetName);
-
-            if (element == null)
-                return (null, null);
-
-            // Travel through properties in path (so that A.B.C property chaining is possible)
-            var props = path.Split('.');
-            if (props.Length == 0)
-                return (null, null);
-
-            // Get access to first property
-            var property = element.GetProperty(props[0]);
-            if (property == null)
-                return (null, null);
-
-            // Process next properties
-            for (int i = 1; i < props.Length; i++)
-            {
-                // Value of the property must be a ManagedObject
-                var value = element.GetValue(property);
-                if (value is not ManagedObject)
-                    return (null, null);
-
-                element = value as ManagedObject;
-                property = element.GetProperty(props[i]);
-                if (property == null)
-                    return (null, null);
-            }
-
-            return (element, property);
-        }
-
         // Public properties --------------------------------------------------
 
         #region Duration managed property
@@ -182,23 +103,6 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty ItemsProperty = ManagedProperty.RegisterCollection(typeof(Scene),
             nameof(Items),
             typeof(ManagedCollection<Visual>));
-
-        #endregion
-
-        #region Animators managed collection
-
-        /// <summary>
-        /// Contains list of all animators, which animate properties
-        /// of elements placed on the scene.
-        /// </summary>
-        public ManagedCollection<BaseAnimator> Animators
-        {
-            get => (ManagedCollection<BaseAnimator>)GetValue(AnimatorsProperty);
-        }
-
-        public static readonly ManagedProperty AnimatorsProperty = ManagedProperty.RegisterCollection(typeof(Scene),
-            nameof(Animators),
-            typeof(ManagedCollection<BaseAnimator>));
 
         #endregion
 

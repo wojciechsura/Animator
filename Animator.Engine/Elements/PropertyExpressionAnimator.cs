@@ -1,5 +1,6 @@
 ﻿using Animator.Engine.Animation.Maths;
 using Animator.Engine.Base;
+using Animator.Engine.Exceptions;
 using ProCalc.NET;
 using ProCalc.NET.Numerics;
 using ProCalc.NET.Resolvers;
@@ -42,10 +43,7 @@ namespace Animator.Engine.Elements
 
                 int dotPos = externalVariableName.IndexOf('.');
 
-                string target = externalVariableName[0..dotPos];
-                string path = externalVariableName[(dotPos + 1)..];
-
-                (ManagedObject obj, ManagedProperty prop) = animator.Scene.FindProperty(target, path);
+                (var obj, var prop) = animator.AnimatedObject.FindProperty(externalVariableName);
 
                 object value = obj.GetValue(prop);
                 if (value == null)
@@ -130,6 +128,10 @@ namespace Animator.Engine.Elements
 
         private static readonly ProCalcCore proCalc = new ProCalcCore();
 
+        // Private fields -----------------------------------------------------
+
+        private CompiledExpression compiled;
+
         // Private methods ----------------------------------------------------
 
         private object ValueFromNumeric(BaseNumeric result, Type propType)
@@ -201,9 +203,11 @@ namespace Animator.Engine.Elements
 
         public override void ApplyAnimation(float timeMs)
         {
-            (var obj, var prop) = Scene.FindProperty(TargetName, Path);
+            if (compiled == null)
+                throw new AnimationException("No expression provided for PropertyExpressionAnimator or expression is invalid!");
 
-            var compiled = proCalc.Compile(Expression, new IdentifierResolver());
+            (var obj, var prop) = AnimatedObject.FindProperty(PropertyRef);
+
             var result = proCalc.Execute(compiled, null, false, new ExternalVariableResolver(this, timeMs));
 
             var propType = prop.Type;
@@ -245,7 +249,25 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty ExpressionProperty = ManagedProperty.Register(typeof(PropertyExpressionAnimator),
             nameof(Expression),
             typeof(string),
-            new ManagedSimplePropertyMetadata { DefaultValue = "0" });
+            new ManagedSimplePropertyMetadata { DefaultValue = "0", ValueChangedHandler = HandleExpressionPropertyChanged });
+
+        private static void HandleExpressionPropertyChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
+        {
+            if (sender is PropertyExpressionAnimator animator)
+                animator.HandleExpressionChanged((string)args.NewValue);
+        }
+
+        private void HandleExpressionChanged(string newValue)
+        {
+            if (!string.IsNullOrEmpty(newValue))
+            {
+                compiled = proCalc.Compile(newValue, new IdentifierResolver());
+            }
+            else
+            {
+                compiled = null;
+            }
+        }
 
         #endregion
     }

@@ -17,15 +17,6 @@ namespace Animator.Engine.Elements
     /// </summary>
     public abstract class BaseKeyframe : BaseElement
     {
-        private string key;
-
-        // Private static methods ---------------------------------------------
-
-        private void UpdateKey()
-        {
-            key = $"{TargetName}.{Path}";
-        }
-
         // Public methods -----------------------------------------------------
 
         public abstract object GetValue();
@@ -53,58 +44,28 @@ namespace Animator.Engine.Elements
 
         #endregion
 
-        #region TargetName managed property
+        #region PropertyRef managed property
 
         /// <summary>
-        /// Defines name of an object, which property should be modified.
+        /// Reference to a property, relative to object owning this animator.
+        /// Subsequent elements must be separated by dots. You may call elements
+        /// from collections as well, as long as they have their Name property
+        /// set and it is unique in this collection.
         /// </summary>
-        public string TargetName
+        /// <example>
+        /// <code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
+        /// </example>
+        public string PropertyRef
         {
-            get => (string)GetValue(TargetNameProperty);
-            set => SetValue(TargetNameProperty, value);
+            get => (string)GetValue(PropertyRefProperty);
+            set => SetValue(PropertyRefProperty, value);
         }
 
-        public static readonly ManagedProperty TargetNameProperty = ManagedProperty.Register(typeof(BaseKeyframe),
-            nameof(TargetName),
+        public static readonly ManagedProperty PropertyRefProperty = ManagedProperty.Register(typeof(BaseKeyframe),
+            nameof(PropertyRef),
             typeof(string),
-            new ManagedSimplePropertyMetadata { NotAnimatable = true, Inheritable = true, InheritedFromParent = true, ValueChangedHandler = HandleTargetNameChanged });
+            new ManagedSimplePropertyMetadata { DefaultValue = null });
 
-        private static void HandleTargetNameChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
-        {
-            if (sender is BaseKeyframe baseKeyframe)
-                baseKeyframe.UpdateKey();
-        }
-
-        #endregion
-
-        #region Path managed property
-
-        /// <summary>
-        /// Defines path to a property, starting at the object pointed
-        /// to by TargetName. Path may be either a single property,
-        /// for example <code>Position</code>, or a chain of properties,
-        /// leading through subsequent object, like <code>Pen.Color</code>.
-        /// </summary>
-        public string Path
-        {
-            get => (string)GetValue(PathProperty);
-            set => SetValue(PathProperty, value);
-        }
-
-        public static readonly ManagedProperty PathProperty = ManagedProperty.Register(typeof(BaseKeyframe),
-            nameof(Path),
-            typeof(string),
-            new ManagedSimplePropertyMetadata { NotAnimatable = true, Inheritable = true, InheritedFromParent = true, ValueChangedHandler = HandlePathChanged });
-
-        private static void HandlePathChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
-        {
-            if (sender is BaseKeyframe baseKeyframe)
-                baseKeyframe.UpdateKey();
-        }
-
-        #endregion
-
-        [DoNotDocument]
-        public string Key => key;
+        #endregion               
     }
 }
