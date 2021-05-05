@@ -79,8 +79,7 @@ namespace Animator
 
             TimeSpan sceneTimeOffset = time - summedTime;
 
-            foreach (var animator in animation.Scenes[i].Animators)
-                animator.ApplyAnimation((float)sceneTimeOffset.TotalMilliseconds);
+            animation.Scenes[i].ApplyAnimation((float)sceneTimeOffset.TotalMilliseconds);
 
             var bitmap = new Bitmap(animation.Config.Width, animation.Config.Height, PixelFormat.Format32bppArgb);
 

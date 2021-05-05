@@ -15,14 +15,14 @@ Create a text file with following contents:
     <Rectangle Name="Rectangle" Width="20" Height="20" Origin="10;10" Position="40;50" Brush="Red" />
         
     <Scene.Animators>
-        <PointPropertyAnimator TargetName="Rectangle" Path="Position" From="40;50" To="60;50" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
-        <FloatPropertyAnimator TargetName="Rectangle" Path="Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+        <PointPropertyAnimator PropertyRef="Rectangle.Position" From="40;50" To="60;50" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+        <FloatPropertyAnimator PropertyRef="Rectangle.Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
     </Scene.Animators>
   </Scene>
 </Animation>
 ```
 
-Then, ececute Animator with the following parameters:
+Then, execute Animator with the following parameters:
 
 ```
 Animator.exe render -s D:\Animation.axml -o D:\frame.png
@@ -34,11 +34,46 @@ This will result in creating 90 frames with names D:\frame0.png, D:\frame1.png, 
 
 Animation is described in a custom XML file. Descriptions of all possible tags and their attributes can be found in Animator.html file available in this repository. Note, that you may also quite easily generate this file by yourself with help of Animator.Documentation project. Feed it with Animator.Engine.xml file generated during its build (you may need to adjust target path for that file).
 
-If you are familiar with WPF/Avalonia, you will find some concepts, which are similar, because the data structure behind animation file definition is built on similar principles.
+If you are familiar with WPF/Avalonia, you will find some concepts familiar, because the data structure behind animation file definition is built on similar principles.
 
 The root node of the animation file is `Animation`, which contains two attributes: `Config` and `Scenes`. The first one allows you to configure the animation (eg. dimensions of a frame, frames per second etc.), and the second allows you to prepare a list of scenes, which later will be turned into animation frames. Your animation should have at least one.
 
-Each scene consists of `Items`, which is a list of `Visual`s - objects, which may be rendered - and `Animators` - list of `BaseAnimator`s, which allow you to animate numeric properties of visuals in time. In general majority of float, int and PointF-typed properties are animatable, only with some minor exceptions.
+Each scene consists of `Items`, which is a list of `Visual`s - objects, which may be rendered. Every object in the animation may contain one or more `Animators` - list of objects deriving from `BaseAnimator`, which allows you to animate numeric properties of objects in time.
+
+Usually, you have to specify, which property is animated. All animator objects have property named `PropertyRef`, which should contain reference to a property, which will be animated. Such reference consists of series of identifiers separated by dots (.). Each identifier may either point to a property or a child, named object. Root of search is always object, on which you attach animators. Check the following example (especially `PropertyRef` values and placement of `FloatPropertyAnimator`s.
+
+```xml
+<Animation>
+  <Animation.Config>
+    <AnimationConfig Width="100" Height="100" FramesPerSecond="30"/>
+  </Animation.Config>
+  <Scene Name="Scene1" Duration="0:0:3.0" Background="White">
+    <Rectangle Name="Rectangle" Width="20" Height="20" Origin="10;10" Position="20;50" Brush="Red">
+      <Rectangle.Pen>
+        <Pen Color="Black" Width="1" />
+      </Rectangle.Pen>
+    </Rectangle>
+    <Rectangle Name="Rectangle2" Width="20" Height="20" Origin="10;10" Position="50;50" Brush="Red">
+      <Rectangle.Pen>
+        <Pen Name="MyPen" Color="Black" Width="1" />
+      </Rectangle.Pen>
+    </Rectangle>
+    <Rectangle Name="Rectangle3" Width="20" Height="20" Origin="10;10" Position="80;50" Brush="Red">
+      <Rectangle.Pen>
+        <Pen Name="MyPen" Color="Black" Width="1" />
+      </Rectangle.Pen>
+      <Rectangle.Animators>
+        <FloatPropertyAnimator PropertyRef="MyPen.Width" From="0" To="10" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="Linear" />
+      </Rectangle.Animators>
+    </Rectangle>
+        
+    <Scene.Animators>
+        <FloatPropertyAnimator PropertyRef="Rectangle.Pen.Width" From="0" To="10" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="Linear" />
+        <FloatPropertyAnimator PropertyRef="Rectangle2.MyPen.Width" From="0" To="10" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="Linear" />
+    </Scene.Animators>
+  </Scene>
+</Animation>
+```
 
 ## Visual
 
@@ -67,11 +102,11 @@ Every visual is drawn in its own coordinate system - so for instance, if you dra
     </Rectangle>
 
     <Scene.Animators>
-        <PointPropertyAnimator TargetName="Rectangle" Path="Position" From="40;30" To="60;30" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
-        <FloatPropertyAnimator TargetName="Rectangle" Path="Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+        <PointPropertyAnimator PropertyRef="Rectangle.Position" From="40;30" To="60;30" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+        <FloatPropertyAnimator PropertyRef="Rectangle.Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
 
-        <PointPropertyAnimator TargetName="Rectangle2" Path="Position" From="40;70" To="60;70" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
-        <FloatPropertyAnimator TargetName="Rectangle2" Path="Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+        <PointPropertyAnimator PropertyRef="Rectangle2.Position" From="40;70" To="60;70" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+        <FloatPropertyAnimator PropertyRef="Rectangle2.Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
     </Scene.Animators>
   </Scene>
 </Animation>
@@ -117,11 +152,11 @@ You can add effects to a visual - at the time of writing, there are three differ
     </Layer>
 
     <Scene.Animators>
-      <PointPropertyAnimator TargetName="Rectangle" Path="Position" From="40;30" To="60;30" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
-      <FloatPropertyAnimator TargetName="Rectangle" Path="Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+      <PointPropertyAnimator PropertyRef="Rectangle.Position" From="40;30" To="60;30" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+      <FloatPropertyAnimator PropertyRef="Rectangle.Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
 
-      <PointPropertyAnimator TargetName="Layer" Path="Position" From="40;70" To="60;70" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
-      <FloatPropertyAnimator TargetName="Layer" Path="Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+      <PointPropertyAnimator PropertyRef="Layer.Position" From="40;70" To="60;70" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+      <FloatPropertyAnimator PropertyRef="Layer.Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
     </Scene.Animators>
   </Scene>
 </Animation>
@@ -133,25 +168,32 @@ Almost every numeric field (float, int or PointF) may be animated. The simplest 
 
 Downside of `PropertyAnimator`s is that they are meant to be used only once per scene per property. If you use two, value of the last one will remain. If you want to design multiple animations for a property, use `Storyboard` instead.
 
-You have to explicitly say, which property is animated. For that you use `TargetName` to specify object and `Path` to specify property. Note though, that you may use complex notation to reach properties-of-properties, for instance `TargetName="Rectangle" Path="Pen.Width"`.
+You have to explicitly say, which property is animated. For that you use `PropertyRef` to specify object and its property to animate. You should do it with familiar dot-as-member-access notation, such as `Rectangle.Pen.Width`. You may walk through object's properties and child items (by child items we understand those kept in reference properties and collections).
 
-To make a visual reachable for the animators, give itself a `Name`. Names should be unique, but no checks are performed, if they are. However, if you want to reach object with an animator, its name *has* to be unique. Otherwise rendering will be stopped with an error.
+`PropertyRef` will fail to find property if:
+
+* None of properties or child items match given identifier, or
+* Multiple child items match given identifier, or
+* Both property and child match given identifier, or
+* Object on the path does not derive from `BaseElement` (you cannot reach simple, CLR properties, only managed ones)
+
+To make a visual reachable for the animators, give itself a `Name`. Names should be unique. No immediate checks are performed, if names are unique, but if you try to find object with non-unique name, animation will fail with an error.
 
 You can quickly see, that often a lot of values of various properties of `PropertyAnimator`s are shared (for instance, in the previous example, all `PropertyAnimator`s share values of `StartTime`, `EndTime` and `EasingFunction`. To simplify notation, you may group animations with `AnimationGroup` and take advantage of property inheritance to shorten the code:
 
 ```xml
 <Scene.Animators>
   <AnimationGroup StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth">
-    <PointPropertyAnimator TargetName="Rectangle" Path="Position" From="40;30" To="60;30" />
-    <FloatPropertyAnimator TargetName="Rectangle" Path="Rotation" From="0" To="360" />
+    <PointPropertyAnimator PropertyRef="Rectangle.Position" From="40;30" To="60;30" />
+    <FloatPropertyAnimator PropertyRef="Rectangle.Rotation" From="0" To="360" />
 
-    <PointPropertyAnimator TargetName="Layer" Path="Position" From="40;70" To="60;70" />
-    <FloatPropertyAnimator TargetName="Layer" Path="Rotation" From="0" To="360" />
+    <PointPropertyAnimator PropertyRef="Layer.Position" From="40;70" To="60;70" />
+    <FloatPropertyAnimator PropertyRef="Layer.Rotation" From="0" To="360" />
   </AnimationGroup>
 </Scene.Animators>
 ```
 
-There's also one more `PropertyAnimator`, which may be used in advanced scenarios, namely `PropertyExpressionAnimator`. You may define mathematical expression, which will be evaluated and entered into specified property. The following example should explain, how does it work.
+There's one `PropertyAnimator`, which may be used in advanced scenarios, namely `PropertyExpressionAnimator`. You may define mathematical expression, which will be evaluated and put into specified property. The following example should explain, how does it work.
 
 ```xml
 <Animation>
@@ -163,10 +205,10 @@ There's also one more `PropertyAnimator`, which may be used in advanced scenario
     <Rectangle Name="Rectangle2" Width="20" Height="20" Origin="10;10" Position="40;30" Brush="Green" />
       
     <Scene.Animators>
-      <PointPropertyAnimator TargetName="Rectangle" Path="Position" From="40;30" To="60;30" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
-      <FloatPropertyAnimator TargetName="Rectangle" Path="Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+      <PointPropertyAnimator PropertyRef="Rectangle.Position" From="40;30" To="60;30" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
+      <FloatPropertyAnimator PropertyRef="Rectangle.Rotation" From="0" To="360" StartTime="0:0:0.0" EndTime="0:0:3.0" EasingFunction="EaseCubicBoth" />
 
-      <PropertyExpressionAnimator TargetName="Rectangle2" Path="Position" Expression="Rectangle.Position + [10,10]" /> 
+      <PropertyExpressionAnimator PropertyRef="Rectangle2.Position" Expression="Rectangle.Position + [10,10]" /> 
     </Scene.Animators>
   </Scene>
 </Animation>
@@ -190,21 +232,23 @@ You may specify multiple storyboards for a scene.
     </Layer>
     
     <Scene.Animators>
-      <Storyboard Path="Position" EasingFunction="EaseQuadSlowDown">
-        <PointKeyframe TargetName="Red" Time="0:0:0.0" Value="10;10" />
-        <PointKeyframe TargetName="Red" Time="0:0:1.0" Value="10;50" />
-        <PointKeyframe TargetName="Red" Time="0:0:2.0" Value="50;50" />
-        <PointKeyframe TargetName="Red" Time="0:0:3.0" Value="50;10" />
-
-        <PointKeyframe TargetName="Green" Time="0:0:0.0" Value="10;10" />
-        <PointKeyframe TargetName="Green" Time="0:0:1.0" Value="50;10" />
-        <PointKeyframe TargetName="Green" Time="0:0:2.0" Value="50;50" />
-        <PointKeyframe TargetName="Green" Time="0:0:3.0" Value="10;50" />
+      <Storyboard EasingFunction="EaseQuadSlowDown">
+        <PointKeyframe PropertyRef="Red.Position" Time="0:0:0.0" Value="10;10" />
+        <PointKeyframe PropertyRef="Red.Position" Time="0:0:1.0" Value="10;50" />
+        <PointKeyframe PropertyRef="Red.Position" Time="0:0:2.0" Value="50;50" />
+        <PointKeyframe PropertyRef="Red.Position" Time="0:0:3.0" Value="50;10" />
+                       
+        <PointKeyframe PropertyRef="Green.Position" Time="0:0:0.0" Value="10;10" />
+        <PointKeyframe PropertyRef="Green.Position" Time="0:0:1.0" Value="50;10" />
+        <PointKeyframe PropertyRef="Green.Position" Time="0:0:2.0" Value="50;50" />
+        <PointKeyframe PropertyRef="Green.Position" Time="0:0:3.0" Value="10;50" />
       </Storyboard>
     </Scene.Animators>
   </Scene>
 </Animation>
 ```
+
+Keep in mind, that keyframes are grouped by their `PropertyRef`s. If you find a way to reach an object in two ways (ie. by property and by its name), such keyframes will be treated separately (most likely with unpredictable results).
 
 ## Reusing parts of animation
 
@@ -223,7 +267,7 @@ Animation.axml:
     </Layer>
     
     <Scene.Animators>
-        <Storyboard TargetName="Red" Path="Position" EasingFunction="EaseQuadSlowDown">
+        <Storyboard PropertyRef="Red.Position" EasingFunction="EaseQuadSlowDown">
             <PointKeyframe Time="0:0:0.0" Value="10;10" />
             <PointKeyframe Time="0:0:1.0" Value="10;50" />
             <PointKeyframe Time="0:0:2.0" Value="50;50" />
