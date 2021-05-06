@@ -92,7 +92,7 @@ namespace Animator.Engine.Elements
         /// set and it is unique in this collection.
         /// </summary>
         /// <example>
-        /// <code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
+        /// <code>PropertyRef="MyRectangle.Pen.Color"</code>
         /// </example>
         public string PropertyRef
         {

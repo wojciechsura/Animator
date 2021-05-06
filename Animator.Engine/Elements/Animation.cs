@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Animator.Engine.Types;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace Animator.Engine.Elements
 
         public abstract void ResetAnimation();
 
+        [DoNotDocument]
         public SceneElement AnimatedObject
         {
             get
