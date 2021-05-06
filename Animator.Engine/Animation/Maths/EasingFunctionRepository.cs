@@ -23,6 +23,12 @@ namespace Animator.Engine.Animation.Maths
 
         private static readonly Func<float, float> backSpeedUp = x => cubicSpeedUp(x) + NegativeNudge(2, 8)(x);
 
+        private static readonly Func<float, float> switchOnStart = x => (float)Math.Ceiling(x);
+
+        private static readonly Func<float, float> switchOnEnd = x => (float)Math.Floor(x);
+
+        private static readonly Func<float, float> switchInTheMiddle = x => (float)Math.Round(x);
+
         // Private static methods ---------------------------------------------
 
         /// <remarks>Assumes, that func is continuous, func(0) = 0 and func(1) = 1.</remarks>
@@ -42,35 +48,24 @@ namespace Animator.Engine.Animation.Maths
         {
             easingFunctions[EasingFunction.Linear] = x => x;
 
-            easingFunctions[EasingFunction.EaseSineSpeedUp] = sineSpeedUp;
-
-            easingFunctions[EasingFunction.EaseSineSlowDown] = SpeedUpToSlowDown(sineSpeedUp);
-
-            easingFunctions[EasingFunction.EaseSineBoth] = SpeedUpToBoth(sineSpeedUp);
-
-            easingFunctions[EasingFunction.EaseQuadSpeedUp] = squareSpeedUp;
-
-            easingFunctions[EasingFunction.EaseQuadSlowDown] = SpeedUpToSlowDown(squareSpeedUp);
-
-            easingFunctions[EasingFunction.EaseQuadBoth] = SpeedUpToBoth(squareSpeedUp);
-
-            easingFunctions[EasingFunction.EaseCubicSpeedUp] = cubicSpeedUp;
-
-            easingFunctions[EasingFunction.EaseCubicSlowDown] = SpeedUpToSlowDown(cubicSpeedUp);
-
-            easingFunctions[EasingFunction.EaseCubicBoth] = SpeedUpToBoth(cubicSpeedUp);
-
-            easingFunctions[EasingFunction.EaseQuartSpeedUp] = quartSpeedUp;
-
-            easingFunctions[EasingFunction.EaseQuartSlowDown] = SpeedUpToSlowDown(quartSpeedUp);
-
-            easingFunctions[EasingFunction.EaseQuartBoth] = SpeedUpToBoth(quartSpeedUp);
-
-            easingFunctions[EasingFunction.EaseBackSpeedUp] = backSpeedUp;
-
-            easingFunctions[EasingFunction.EaseBackSlowDown] = SpeedUpToSlowDown(backSpeedUp);
-
-            easingFunctions[EasingFunction.EaseBackBoth] = SpeedUpToBoth(backSpeedUp);
+            easingFunctions[EasingFunction.SwitchOnStart] = switchOnStart;
+            easingFunctions[EasingFunction.SwitchOnEnd] = switchOnEnd;
+            easingFunctions[EasingFunction.SwitchInTheMiddle] = switchInTheMiddle;
+            easingFunctions[EasingFunction.SineSpeedUp] = sineSpeedUp;
+            easingFunctions[EasingFunction.SineSlowDown] = SpeedUpToSlowDown(sineSpeedUp);
+            easingFunctions[EasingFunction.SineBoth] = SpeedUpToBoth(sineSpeedUp);
+            easingFunctions[EasingFunction.QuadSpeedUp] = squareSpeedUp;
+            easingFunctions[EasingFunction.QuadSlowDown] = SpeedUpToSlowDown(squareSpeedUp);
+            easingFunctions[EasingFunction.QuadBoth] = SpeedUpToBoth(squareSpeedUp);
+            easingFunctions[EasingFunction.CubicSpeedUp] = cubicSpeedUp;
+            easingFunctions[EasingFunction.CubicSlowDown] = SpeedUpToSlowDown(cubicSpeedUp);
+            easingFunctions[EasingFunction.CubicBoth] = SpeedUpToBoth(cubicSpeedUp);
+            easingFunctions[EasingFunction.QuartSpeedUp] = quartSpeedUp;
+            easingFunctions[EasingFunction.QuartSlowDown] = SpeedUpToSlowDown(quartSpeedUp);
+            easingFunctions[EasingFunction.QuartBoth] = SpeedUpToBoth(quartSpeedUp);
+            easingFunctions[EasingFunction.BackSpeedUp] = backSpeedUp;
+            easingFunctions[EasingFunction.BackSlowDown] = SpeedUpToSlowDown(backSpeedUp);
+            easingFunctions[EasingFunction.BackBoth] = SpeedUpToBoth(backSpeedUp);
         }
 
         // Public static methods ----------------------------------------------

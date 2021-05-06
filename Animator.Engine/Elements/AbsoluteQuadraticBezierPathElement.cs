@@ -10,7 +10,7 @@ namespace Animator.Engine.Elements
     /// path element.
     /// All points are expressed in absolute coordinates.
     /// </summary>
-    public class AbsoluteQuadraticBezierPathElement : BaseQuadraticBezierPathElement
+    public class AbsoluteQuadraticBezierPathElement : QuadraticBezierPathElement
     {
         // Internal methods ---------------------------------------------------
 

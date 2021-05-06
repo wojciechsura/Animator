@@ -23,7 +23,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Animator.Engine.Tests", "An
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Animator.Engine.Native", "Animator.Engine.Native\Animator.Engine.Native.vcxproj", "{7E22FBB7-983E-43C8-957D-97991DB40867}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Animator.Documentation", "Animator.Documentation\Animator.Documentation.csproj", "{E2E6EDE8-5D32-4600-A241-4F59A17A2CDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Animator.Documentation", "Animator.Documentation\Animator.Documentation.csproj", "{E2E6EDE8-5D32-4600-A241-4F59A17A2CDE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{1C6A8591-C51C-439B-9BFE-1DAFD99CBBCE}"
+	ProjectSection(SolutionItems) = preProject
+		Animator.dot = Animator.dot
+		Animator.dot.png = Animator.dot.png
+		Animator.html = Animator.html
+		readme.md = readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

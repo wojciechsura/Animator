@@ -313,7 +313,7 @@
 
 <h1><a name="AbsoluteArcPathElement"></a>AbsoluteArcPathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#BaseArcPathElement">BaseArcPathElement</a> » <a href="#AbsoluteArcPathElement">AbsoluteArcPathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » ArcPathElement » <a href="#AbsoluteArcPathElement">AbsoluteArcPathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as an elliptical arc.
             First point of the arc equals to the last point of previous
@@ -411,7 +411,7 @@ Default value is False.
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -431,19 +431,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="AbsoluteCubicBezierPathElement"></a>AbsoluteCubicBezierPathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#AbsoluteCubicBezierPathElement">AbsoluteCubicBezierPathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » <a href="#AbsoluteCubicBezierPathElement">AbsoluteCubicBezierPathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a cubic Bezier curve.
             First point of the curve equals to the last point of previous
@@ -496,7 +500,7 @@ Default value is {X=0, Y=0}.
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -516,19 +520,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="AbsoluteCubicShorthandBezierPathElement"></a>AbsoluteCubicShorthandBezierPathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#AbsoluteCubicShorthandBezierPathElement">AbsoluteCubicShorthandBezierPathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » <a href="#AbsoluteCubicShorthandBezierPathElement">AbsoluteCubicShorthandBezierPathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a cubic Bezier curve.
             First point of the curve equals to the last point of previous
@@ -568,7 +576,7 @@ Default value is {X=0, Y=0}.
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -588,19 +596,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="AbsoluteHorizontalLinePathElement"></a>AbsoluteHorizontalLinePathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#AbsoluteHorizontalLinePathElement">AbsoluteHorizontalLinePathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » <a href="#AbsoluteHorizontalLinePathElement">AbsoluteHorizontalLinePathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a horizontal line.
             All points are expressed in absolute coordinates.
@@ -622,7 +634,7 @@ Represents a path part, which is drawn as a horizontal line.
 Default value is 0.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -642,19 +654,23 @@ Default value is 0.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="AbsoluteLinePathElement"></a>AbsoluteLinePathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#AbsoluteLinePathElement">AbsoluteLinePathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » <a href="#AbsoluteLinePathElement">AbsoluteLinePathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a line.
             All points are expressed in absolute coordinates.
@@ -675,7 +691,7 @@ Represents a path part, which is drawn as a line.
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -695,19 +711,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="AbsoluteMovePathElement"></a>AbsoluteMovePathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#AbsoluteMovePathElement">AbsoluteMovePathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » <a href="#AbsoluteMovePathElement">AbsoluteMovePathElement</a></pre></code>
 <h2>Description</h2>
 Begins a new path in specified absolute coordinates
 <h2>Properties</h2>
@@ -727,7 +747,7 @@ Begins a new path in specified absolute coordinates
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -747,19 +767,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="AbsoluteQuadraticBezierPathElement"></a>AbsoluteQuadraticBezierPathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#BaseQuadraticBezierPathElement">BaseQuadraticBezierPathElement</a> » <a href="#AbsoluteQuadraticBezierPathElement">AbsoluteQuadraticBezierPathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » QuadraticBezierPathElement » <a href="#AbsoluteQuadraticBezierPathElement">AbsoluteQuadraticBezierPathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a quadratic Bezier curve.
             First point of the curve equals to the last point of previous
@@ -797,7 +821,7 @@ Default value is {X=0, Y=0}.
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -817,19 +841,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="AbsoluteQuadraticShorthandBezierPathElement"></a>AbsoluteQuadraticShorthandBezierPathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#BaseQuadraticBezierPathElement">BaseQuadraticBezierPathElement</a> » <a href="#AbsoluteQuadraticShorthandBezierPathElement">AbsoluteQuadraticShorthandBezierPathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » QuadraticBezierPathElement » <a href="#AbsoluteQuadraticShorthandBezierPathElement">AbsoluteQuadraticShorthandBezierPathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a quadratic Bezier curve.
             Start point of the curve equals to the last point of previous
@@ -854,7 +882,7 @@ Represents a path part, which is drawn as a quadratic Bezier curve.
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -874,19 +902,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="AbsoluteVerticalLinePathElement"></a>AbsoluteVerticalLinePathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#AbsoluteVerticalLinePathElement">AbsoluteVerticalLinePathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » <a href="#AbsoluteVerticalLinePathElement">AbsoluteVerticalLinePathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a vertical line.
             All points are expressed in absolute coordinates.
@@ -908,7 +940,7 @@ Represents a path part, which is drawn as a vertical line.
 Default value is 0.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -928,85 +960,170 @@ Default value is 0.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="Animation"></a>Animation</h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#Animation">Animation</a></pre></code>
-<h2>Description</h2>
-Root element of the animation.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>AnimationConfig</code></pre>
-</td>
-<td>
-<pre><code><strong>Config</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
 
-            Contains configuration of the animation.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Scene&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Scenes</strong></code></pre>
-</td>
-<td>
-
-            Contains scenes of the animation.
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
             
 </td>
 </table>
 <hr />
 
-<h1><a name="AnimationConfig"></a>AnimationConfig</h1>
+<h1><a name="AnimateBool"></a>AnimateBool</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#AnimationConfig">AnimationConfig</a></pre></code>
+<pre><code><a href="#Element">Element</a> » Animation » AnimateProperty » AnimatePropertyInTime » AnimateNumericPropertyInTime » <a href="#AnimateBool">AnimateBool</a></pre></code>
 <h2>Description</h2>
-Describes animation parameters.
+Allows applying an animation to a bool property of some
+            object. It is meant to be used only if you want to apply
+            single animation per whole scene. Otherwise, use Storyboard
+            and BoolKeyframe to define the whole animation.
 <h2>Properties</h2>
 <table class="properties">
 <tr>
 <td>
-<pre><code>Int32</code></pre>
+<pre><code>Boolean</code></pre>
 </td>
 <td>
-<pre><code><strong>Width</strong></code></pre>
+<pre><code><strong>From</strong></code></pre>
 </td>
 <td>
 
-            Width of the result animation, in pixels.
+            Initial value of the property when animation starts (at StartTime)
             
 <p>Not inheritable by child elements. 
-Default value is 1024.
+Default value is True.
 </p>
 </td>
 <tr>
 <td>
-<pre><code>Int32</code></pre>
+<pre><code>Boolean</code></pre>
 </td>
 <td>
-<pre><code><strong>Height</strong></code></pre>
+<pre><code><strong>To</strong></code></pre>
 </td>
 <td>
 
-            Height of the result animation, in pixels.
+            Final value of the property when animation ends (at EndTime)
             
 <p>Not inheritable by child elements. 
-Default value is 768.
+Default value is True.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimateNumericPropertyInTime:</strong></td></tr>
+<tr>
+<td>
+<pre><code>EasingFunction</code></pre>
+</td>
+<td>
+<pre><code><strong>EasingFunction</strong></code></pre>
+</td>
+<td>
+
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul><li>Linear</li><li>SwitchOnStart</li><li>SwitchInTheMiddle</li><li>SwitchOnEnd</li><li>SineSpeedUp</li><li>SineSlowDown</li><li>SineBoth</li><li>QuadSpeedUp</li><li>QuadSlowDown</li><li>QuadBoth</li><li>CubicSpeedUp</li><li>CubicSlowDown</li><li>CubicBoth</li><li>QuartSpeedUp</li><li>QuartSlowDown</li><li>QuartBoth</li><li>BackSpeedUp</li><li>BackSlowDown</li><li>BackBoth</li></ul>
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is Linear.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimatePropertyInTime:</strong></td></tr>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>StartTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should be started.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>EndTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should finish.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimateProperty:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>PropertyRef</strong></code></pre>
+</td>
+<td>
+
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
+            
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+<p><strong>Example:</strong></p><code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Animation:</strong></td></tr>
+<tr>
+<td>
+<pre><code>SceneElement</code></pre>
+</td>
+<td>
+<pre><code><strong>AnimatedObject</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="AnimateFloat"></a>AnimateFloat</h1>
+<h2>Inheritance</h2>
+<pre><code><a href="#Element">Element</a> » Animation » AnimateProperty » AnimatePropertyInTime » AnimateNumericPropertyInTime » <a href="#AnimateFloat">AnimateFloat</a></pre></code>
+<h2>Description</h2>
+Allows applying an animation to a float property of some
+            object. It is meant to be used only if you want to apply
+            single animation per whole scene. Otherwise, use Storyboard
+            and FloatKeyframe to define the whole animation.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>From</strong></code></pre>
+</td>
+<td>
+
+            Initial value of the property when animation starts (at StartTime)
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
 </p>
 </td>
 <tr>
@@ -1014,22 +1131,478 @@ Default value is 768.
 <pre><code>Single</code></pre>
 </td>
 <td>
-<pre><code><strong>FramesPerSecond</strong></code></pre>
+<pre><code><strong>To</strong></code></pre>
 </td>
 <td>
 
-            Defines, how many frames should be in a second of animation.
+            Final value of the property when animation ends (at EndTime)
             
 <p>Not inheritable by child elements. 
-Default value is 30.
+Default value is 0.
 </p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimateNumericPropertyInTime:</strong></td></tr>
+<tr>
+<td>
+<pre><code>EasingFunction</code></pre>
+</td>
+<td>
+<pre><code><strong>EasingFunction</strong></code></pre>
+</td>
+<td>
+
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul><li>Linear</li><li>SwitchOnStart</li><li>SwitchInTheMiddle</li><li>SwitchOnEnd</li><li>SineSpeedUp</li><li>SineSlowDown</li><li>SineBoth</li><li>QuadSpeedUp</li><li>QuadSlowDown</li><li>QuadBoth</li><li>CubicSpeedUp</li><li>CubicSlowDown</li><li>CubicBoth</li><li>QuartSpeedUp</li><li>QuartSlowDown</li><li>QuartBoth</li><li>BackSpeedUp</li><li>BackSlowDown</li><li>BackBoth</li></ul>
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is Linear.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimatePropertyInTime:</strong></td></tr>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>StartTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should be started.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>EndTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should finish.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimateProperty:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>PropertyRef</strong></code></pre>
+</td>
+<td>
+
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
+            
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+<p><strong>Example:</strong></p><code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Animation:</strong></td></tr>
+<tr>
+<td>
+<pre><code>SceneElement</code></pre>
+</td>
+<td>
+<pre><code><strong>AnimatedObject</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="AnimateInt"></a>AnimateInt</h1>
+<h2>Inheritance</h2>
+<pre><code><a href="#Element">Element</a> » Animation » AnimateProperty » AnimatePropertyInTime » AnimateNumericPropertyInTime » <a href="#AnimateInt">AnimateInt</a></pre></code>
+<h2>Description</h2>
+Allows applying an animation to an int property of some
+            object. It is meant to be used only if you want to apply
+            single animation per whole scene. Otherwise, use Storyboard
+            and IntKeyframe to define the whole animation.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Int32</code></pre>
+</td>
+<td>
+<pre><code><strong>From</strong></code></pre>
+</td>
+<td>
+
+            Initial value of the property when animation starts (at StartTime)
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Int32</code></pre>
+</td>
+<td>
+<pre><code><strong>To</strong></code></pre>
+</td>
+<td>
+
+            Final value of the property when animation ends (at EndTime)
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimateNumericPropertyInTime:</strong></td></tr>
+<tr>
+<td>
+<pre><code>EasingFunction</code></pre>
+</td>
+<td>
+<pre><code><strong>EasingFunction</strong></code></pre>
+</td>
+<td>
+
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul><li>Linear</li><li>SwitchOnStart</li><li>SwitchInTheMiddle</li><li>SwitchOnEnd</li><li>SineSpeedUp</li><li>SineSlowDown</li><li>SineBoth</li><li>QuadSpeedUp</li><li>QuadSlowDown</li><li>QuadBoth</li><li>CubicSpeedUp</li><li>CubicSlowDown</li><li>CubicBoth</li><li>QuartSpeedUp</li><li>QuartSlowDown</li><li>QuartBoth</li><li>BackSpeedUp</li><li>BackSlowDown</li><li>BackBoth</li></ul>
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is Linear.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimatePropertyInTime:</strong></td></tr>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>StartTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should be started.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>EndTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should finish.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimateProperty:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>PropertyRef</strong></code></pre>
+</td>
+<td>
+
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
+            
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+<p><strong>Example:</strong></p><code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Animation:</strong></td></tr>
+<tr>
+<td>
+<pre><code>SceneElement</code></pre>
+</td>
+<td>
+<pre><code><strong>AnimatedObject</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="AnimatePoint"></a>AnimatePoint</h1>
+<h2>Inheritance</h2>
+<pre><code><a href="#Element">Element</a> » Animation » AnimateProperty » AnimatePropertyInTime » AnimateNumericPropertyInTime » <a href="#AnimatePoint">AnimatePoint</a></pre></code>
+<h2>Description</h2>
+Allows applying an animation to an PointF property of some
+            object. It is meant to be used only if you want to apply
+            single animation per whole scene. Otherwise, use Storyboard
+            and PointKeyframe to define the whole animation.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>From</strong></code></pre>
+</td>
+<td>
+
+            Initial value of the property when animation starts (at StartTime)
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>To</strong></code></pre>
+</td>
+<td>
+
+            Final value of the property when animation ends (at EndTime)
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimateNumericPropertyInTime:</strong></td></tr>
+<tr>
+<td>
+<pre><code>EasingFunction</code></pre>
+</td>
+<td>
+<pre><code><strong>EasingFunction</strong></code></pre>
+</td>
+<td>
+
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul><li>Linear</li><li>SwitchOnStart</li><li>SwitchInTheMiddle</li><li>SwitchOnEnd</li><li>SineSpeedUp</li><li>SineSlowDown</li><li>SineBoth</li><li>QuadSpeedUp</li><li>QuadSlowDown</li><li>QuadBoth</li><li>CubicSpeedUp</li><li>CubicSlowDown</li><li>CubicBoth</li><li>QuartSpeedUp</li><li>QuartSlowDown</li><li>QuartBoth</li><li>BackSpeedUp</li><li>BackSlowDown</li><li>BackBoth</li></ul>
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is Linear.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimatePropertyInTime:</strong></td></tr>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>StartTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should be started.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>EndTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should finish.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimateProperty:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>PropertyRef</strong></code></pre>
+</td>
+<td>
+
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
+            
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+<p><strong>Example:</strong></p><code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Animation:</strong></td></tr>
+<tr>
+<td>
+<pre><code>SceneElement</code></pre>
+</td>
+<td>
+<pre><code><strong>AnimatedObject</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="AnimateWithExpression"></a>AnimateWithExpression</h1>
+<h2>Inheritance</h2>
+<pre><code><a href="#Element">Element</a> » Animation » AnimateProperty » AnimatePropertyInTime » AnimateNumericPropertyInTime » <a href="#AnimateWithExpression">AnimateWithExpression</a></pre></code>
+<h2>Description</h2>
+Allows evaluating animated value of an property basing on a mathematical expression.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Expression</strong></code></pre>
+</td>
+<td>
+
+            Expression for the property.
+            
+            You may use the following pre-defined values:
+            
+            <ul><li><strong>StartTime</strong> - value of StartTime property expressed in milliseconds (1/1000 of a second)</li><li><strong>EndTime</strong> - value of EndTime property expressed in milliseconds</li><li><strong>CurrentTime</strong> - time of current frame expressed in milliseconds</li><li><strong>EasedFactor</strong> - value ranging from 0 (when CurrentTime = StartTime) to 1 (when CurrentTime = EndTime)
+            with easing function applied.</li></ul>
+                
+            In addition, you can reach value of any named element's property with the simple
+            notation.
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+<p><strong>Example:</strong></p><code><pre>Expression="Rect.Position + [10,10] * EasedFactor"</pre></code>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimateNumericPropertyInTime:</strong></td></tr>
+<tr>
+<td>
+<pre><code>EasingFunction</code></pre>
+</td>
+<td>
+<pre><code><strong>EasingFunction</strong></code></pre>
+</td>
+<td>
+
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul><li>Linear</li><li>SwitchOnStart</li><li>SwitchInTheMiddle</li><li>SwitchOnEnd</li><li>SineSpeedUp</li><li>SineSlowDown</li><li>SineBoth</li><li>QuadSpeedUp</li><li>QuadSlowDown</li><li>QuadBoth</li><li>CubicSpeedUp</li><li>CubicSlowDown</li><li>CubicBoth</li><li>QuartSpeedUp</li><li>QuartSlowDown</li><li>QuartBoth</li><li>BackSpeedUp</li><li>BackSlowDown</li><li>BackBoth</li></ul>
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is Linear.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimatePropertyInTime:</strong></td></tr>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>StartTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should be started.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>EndTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should finish.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimateProperty:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>PropertyRef</strong></code></pre>
+</td>
+<td>
+
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
+            
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+<p><strong>Example:</strong></p><code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Animation:</strong></td></tr>
+<tr>
+<td>
+<pre><code>SceneElement</code></pre>
+</td>
+<td>
+<pre><code><strong>AnimatedObject</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
 
 <h1><a name="AnimationGroup"></a>AnimationGroup</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseAnimator">BaseAnimator</a> » <a href="#AnimationGroup">AnimationGroup</a></pre></code>
+<pre><code><a href="#Element">Element</a> » Animation » <a href="#AnimationGroup">AnimationGroup</a></pre></code>
 <h2>Description</h2>
 Allows grouping a couple of animators, so that you don't have to specify
             various properties multiple times. CommonAnimations itself does nothing,
@@ -1044,6 +1617,17 @@ Allows grouping a couple of animators, so that you don't have to specify
 <pre><code><strong>PropertyRef</strong></code></pre>
 </td>
 <td>
+
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
+            
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is .
+</p>
+<p><strong>Example:</strong></p><code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
 </td>
 <tr>
 <td>
@@ -1095,7 +1679,7 @@ Default value is 00:00:00.
             between previous and current keyframe. Possible
             easing functions include the following:
             
-            <ul><li>Linear</li><li>EaseSineSpeedUp</li><li>EaseSineSlowDown</li><li>EaseSineBoth</li><li>EaseQuadSpeedUp</li><li>EaseQuadSlowDown</li><li>EaseQuadBoth</li><li>EaseCubicSpeedUp</li><li>EaseCubicSlowDown</li><li>EaseCubicBoth</li><li>EaseQuartSpeedUp</li><li>EaseQuartSlowDown</li><li>EaseQuartBoth</li><li>EaseBackSpeedUp</li><li>EaseBackSlowDown</li><li>EaseBackBoth</li></ul>
+            <ul><li>Linear</li><li>SwitchOnStart</li><li>SwitchInTheMiddle</li><li>SwitchOnEnd</li><li>SineSpeedUp</li><li>SineSlowDown</li><li>SineBoth</li><li>QuadSpeedUp</li><li>QuadSlowDown</li><li>QuadBoth</li><li>CubicSpeedUp</li><li>CubicSlowDown</li><li>CubicBoth</li><li>QuartSpeedUp</li><li>QuartSlowDown</li><li>QuartBoth</li><li>BackSpeedUp</li><li>BackSlowDown</li><li>BackBoth</li></ul>
 <p>May be inherited by child elements. 
 Value is inherited from parent element if none provided explicitly. 
 Cannot be animated. 
@@ -1104,7 +1688,7 @@ Default value is Linear.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
 <pre><code><strong>Animations</strong></code></pre>
@@ -1130,430 +1714,13 @@ Default value is Linear.
 Default value is 00:00:00.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseAnimator:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Animation:</strong></td></tr>
 <tr>
 <td>
-<pre><code>BaseElement</code></pre>
+<pre><code>SceneElement</code></pre>
 </td>
 <td>
 <pre><code><strong>AnimatedObject</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="BaseAnimator"></a>BaseAnimator <em>(abstract)</em></h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseAnimator">BaseAnimator</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#AnimationGroup">AnimationGroup</a></li>
-<li><a href="#PropertyAnimator">PropertyAnimator</a></li>
-<li><a href="#Storyboard">Storyboard</a></li>
-</ul>
-<h2>Description</h2>
-This is an abstract class serving as a base class for all animators.
-            An animator is an object, which animates properties of elements on
-            the scene.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>BaseElement</code></pre>
-</td>
-<td>
-<pre><code><strong>AnimatedObject</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="BaseArcPathElement"></a>BaseArcPathElement <em>(abstract)</em></h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#BaseArcPathElement">BaseArcPathElement</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#AbsoluteArcPathElement">AbsoluteArcPathElement</a></li>
-<li><a href="#RelativeArcPathElement">RelativeArcPathElement</a></li>
-</ul>
-<h2>Description</h2>
-This is a base class for all arc path elements.
-<h2>Properties</h2>
-<table class="properties">
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="BaseEffect"></a>BaseEffect <em>(abstract)</em></h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseEffect">BaseEffect</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#BlurEffect">BlurEffect</a></li>
-<li><a href="#DropShadowEffect">DropShadowEffect</a></li>
-<li><a href="#GaussianBlurEffect">GaussianBlurEffect</a></li>
-</ul>
-<h2>Description</h2>
-This class serves as an abstract base class for all
-            effects, which may be applied to rendered elements.
-<h2>Properties</h2>
-<table class="properties">
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="BaseElement"></a>BaseElement <em>(abstract)</em></h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#BaseAnimator">BaseAnimator</a></li>
-<li><a href="#BaseEffect">BaseEffect</a></li>
-<li><a href="#BaseKeyframe">BaseKeyframe</a></li>
-<li><a href="#Brush">Brush</a></li>
-<li><a href="#PathElement">PathElement</a></li>
-<li><a href="#Pen">Pen</a></li>
-<li><a href="#Scene">Scene</a></li>
-<li><a href="#Visual">Visual</a></li>
-</ul>
-<h2>Description</h2>
-Base class for all elements used to describe an
-            animation.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="BaseKeyframe"></a>BaseKeyframe <em>(abstract)</em></h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseKeyframe">BaseKeyframe</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#BaseNumericKeyframe">BaseNumericKeyframe</a></li>
-</ul>
-<h2>Description</h2>
-Base class for all keyframe classes. A keyframe
-            class describes fixed value for a property in 
-            specific time.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>Time</strong></code></pre>
-</td>
-<td>
-
-            Define exact time since start of a scene, when a
-            property should be set to a fixed value.
-            
-<p>Not inheritable by child elements. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>PropertyRef</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="BaseNumericKeyframe"></a>BaseNumericKeyframe <em>(abstract)</em></h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseKeyframe">BaseKeyframe</a> » <a href="#BaseNumericKeyframe">BaseNumericKeyframe</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#FloatKeyframe">FloatKeyframe</a></li>
-<li><a href="#IntKeyframe">IntKeyframe</a></li>
-<li><a href="#PointKeyframe">PointKeyframe</a></li>
-</ul>
-<h2>Description</h2>
-Base class for all keyframes, which define animation
-            of a numeric properties (ie. of type int, float, PointF etc.)
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>EasingFunction</code></pre>
-</td>
-<td>
-<pre><code><strong>EasingFunction</strong></code></pre>
-</td>
-<td>
-
-            Defines easing function used for animation. The role of
-            easing function is to define, how value should change
-            between previous and current keyframe. Possible
-            easing functions include the following:
-            
-            <ul><li>Linear</li><li>EaseSineSpeedUp</li><li>EaseSineSlowDown</li><li>EaseSineBoth</li><li>EaseQuadSpeedUp</li><li>EaseQuadSlowDown</li><li>EaseQuadBoth</li><li>EaseCubicSpeedUp</li><li>EaseCubicSlowDown</li><li>EaseCubicBoth</li><li>EaseQuartSpeedUp</li><li>EaseQuartSlowDown</li><li>EaseQuartBoth</li><li>EaseBackSpeedUp</li><li>EaseBackSlowDown</li><li>EaseBackBoth</li></ul>
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is Linear.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseKeyframe:</strong></td></tr>
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>Time</strong></code></pre>
-</td>
-<td>
-
-            Define exact time since start of a scene, when a
-            property should be set to a fixed value.
-            
-<p>Not inheritable by child elements. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>PropertyRef</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="BaseQuadraticBezierPathElement"></a>BaseQuadraticBezierPathElement <em>(abstract)</em></h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#BaseQuadraticBezierPathElement">BaseQuadraticBezierPathElement</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#AbsoluteQuadraticBezierPathElement">AbsoluteQuadraticBezierPathElement</a></li>
-<li><a href="#AbsoluteQuadraticShorthandBezierPathElement">AbsoluteQuadraticShorthandBezierPathElement</a></li>
-<li><a href="#RelativeQuadraticBezierPathElement">RelativeQuadraticBezierPathElement</a></li>
-<li><a href="#RelativeQuadraticShorthandBezierPathElement">RelativeQuadraticShorthandBezierPathElement</a></li>
-</ul>
-<h2>Description</h2>
-Base abstract class for all quadratic Bezier path elements.
-<h2>Properties</h2>
-<table class="properties">
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
 </td>
 <td>
 </td>
@@ -1562,7 +1729,7 @@ Base abstract class for all quadratic Bezier path elements.
 
 <h1><a name="BlurEffect"></a>BlurEffect</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseEffect">BaseEffect</a> » <a href="#BlurEffect">BlurEffect</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » Effect » <a href="#BlurEffect">BlurEffect</a></pre></code>
 <h2>Description</h2>
 Adds a simple box blur to a visual.
 <h2>Properties</h2>
@@ -1582,7 +1749,7 @@ Adds a simple box blur to a visual.
 Default value is 3.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -1602,62 +1769,105 @@ Default value is 3.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
-<h1><a name="Brush"></a>Brush <em>(abstract)</em></h1>
+<h1><a name="BoolKeyframe"></a>BoolKeyframe</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#Brush">Brush</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#SolidBrush">SolidBrush</a></li>
-</ul>
+<pre><code><a href="#Element">Element</a> » Keyframe » NumericKeyframe » <a href="#BoolKeyframe">BoolKeyframe</a></pre></code>
 <h2>Description</h2>
-Base class for all brushes. A brush is an object, which
-            defines fill of a shape. If you need a simple, mono-color
-            fill, use SolidBrush.
+A keyframe for a property of type float.
 <h2>Properties</h2>
 <table class="properties">
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>Value</strong></code></pre>
+</td>
+<td>
+
+            Value of the keyframe.
+            
+<p>Not inheritable by child elements. 
+Default value is True.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>NumericKeyframe:</strong></td></tr>
+<tr>
+<td>
+<pre><code>EasingFunction</code></pre>
+</td>
+<td>
+<pre><code><strong>EasingFunction</strong></code></pre>
+</td>
+<td>
+
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul><li>Linear</li><li>SwitchOnStart</li><li>SwitchInTheMiddle</li><li>SwitchOnEnd</li><li>SineSpeedUp</li><li>SineSlowDown</li><li>SineBoth</li><li>QuadSpeedUp</li><li>QuadSlowDown</li><li>QuadBoth</li><li>CubicSpeedUp</li><li>CubicSlowDown</li><li>CubicBoth</li><li>QuartSpeedUp</li><li>QuartSlowDown</li><li>QuartBoth</li><li>BackSpeedUp</li><li>BackSlowDown</li><li>BackBoth</li></ul>
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is Linear.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Keyframe:</strong></td></tr>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>Time</strong></code></pre>
+</td>
+<td>
+
+            Define exact time since start of a scene, when a
+            property should be set to a fixed value.
+            
+<p>Not inheritable by child elements. 
+Default value is 00:00:00.
+</p>
+</td>
 <tr>
 <td>
 <pre><code>String</code></pre>
 </td>
 <td>
-<pre><code><strong>Name</strong></code></pre>
+<pre><code><strong>PropertyRef</strong></code></pre>
 </td>
 <td>
 
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
             
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+<p><strong>Example:</strong></p><code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
 </td>
 </table>
 <hr />
 
 <h1><a name="Circle"></a>Circle</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#Visual">Visual</a> » <a href="#Circle">Circle</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » Visual » Shape » <a href="#Circle">Circle</a></pre></code>
 <h2>Description</h2>
 Draws a circle on a scene.
 <h2>Properties</h2>
@@ -1692,18 +1902,7 @@ Default value is {X=0, Y=0}.
 Default value is 0.
 </p>
 </td>
-<tr>
-<td>
-<pre><code>Pen</code></pre>
-</td>
-<td>
-<pre><code><strong>Pen</strong></code></pre>
-</td>
-<td>
-
-            Defines way in which border of the circle will be drawn.
-            
-</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Shape:</strong></td></tr>
 <tr>
 <td>
 <pre><code>Brush</code></pre>
@@ -1713,10 +1912,31 @@ Default value is 0.
 </td>
 <td>
 
-            Defines way in which fill of the circle will be drawn.
+            Defines, how shape will be filled.
+            
+</td>
+<tr>
+<td>
+<pre><code>Pen</code></pre>
+</td>
+<td>
+<pre><code><strong>Pen</strong></code></pre>
+</td>
+<td>
+
+            Defines, how edges of the shape will be drawn.
             
 </td>
 <tr><td colspan="3" class="table-separator">Properties derived from <strong>Visual:</strong></td></tr>
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>Visible</strong></code></pre>
+</td>
+<td>
+</td>
 <tr>
 <td>
 <pre><code>PointF</code></pre>
@@ -1799,7 +2019,7 @@ Default value is 1.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseEffect&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Effect&gt;</code></pre>
 </td>
 <td>
 <pre><code><strong>Effects</strong></code></pre>
@@ -1864,7 +2084,7 @@ Default value is Local.
             way around.
             
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -1884,26 +2104,30 @@ Default value is Local.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="CloseShapePathElement"></a>CloseShapePathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#CloseShapePathElement">CloseShapePathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » <a href="#CloseShapePathElement">CloseShapePathElement</a></pre></code>
 <h2>Description</h2>
 Informs, that the shape defined by a series of path elements
             ends here. If needed, path is closed with a line leading to
             its start.
 <h2>Properties</h2>
 <table class="properties">
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -1923,19 +2147,23 @@ Informs, that the shape defined by a series of path elements
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="DropShadowEffect"></a>DropShadowEffect</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseEffect">BaseEffect</a> » <a href="#DropShadowEffect">DropShadowEffect</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » Effect » <a href="#DropShadowEffect">DropShadowEffect</a></pre></code>
 <h2>Description</h2>
 An effect, which adds a shadow to a visual.
 <h2>Properties</h2>
@@ -2000,7 +2228,7 @@ Default value is 5.
 Default value is 5.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -2020,19 +2248,34 @@ Default value is 5.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
+<h1><a name="Element"></a>Element</h1>
+<h2>Inheritance</h2>
+<pre><code><a href="#Element">Element</a></pre></code>
+<h2>Derived types</h2>
+<ul>
+<li><a href="#Animation">Animation</a></li>
+<li><a href="#Keyframe">Keyframe</a></li>
+<li><a href="#SceneElement">SceneElement</a></li>
+</ul>
+<hr />
+
 <h1><a name="Ellipse"></a>Ellipse</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#Visual">Visual</a> » <a href="#Ellipse">Ellipse</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » Visual » Shape » <a href="#Ellipse">Ellipse</a></pre></code>
 <h2>Description</h2>
 Draws an ellipse on the scene.
 <h2>Properties</h2>
@@ -2069,18 +2312,7 @@ Default value is 0.
 Default value is 0.
 </p>
 </td>
-<tr>
-<td>
-<pre><code>Pen</code></pre>
-</td>
-<td>
-<pre><code><strong>Pen</strong></code></pre>
-</td>
-<td>
-
-            Defines way in which border of the circle will be drawn.
-            
-</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Shape:</strong></td></tr>
 <tr>
 <td>
 <pre><code>Brush</code></pre>
@@ -2090,10 +2322,31 @@ Default value is 0.
 </td>
 <td>
 
-            Defines way in which fill of the circle will be drawn.
+            Defines, how shape will be filled.
+            
+</td>
+<tr>
+<td>
+<pre><code>Pen</code></pre>
+</td>
+<td>
+<pre><code><strong>Pen</strong></code></pre>
+</td>
+<td>
+
+            Defines, how edges of the shape will be drawn.
             
 </td>
 <tr><td colspan="3" class="table-separator">Properties derived from <strong>Visual:</strong></td></tr>
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>Visible</strong></code></pre>
+</td>
+<td>
+</td>
 <tr>
 <td>
 <pre><code>PointF</code></pre>
@@ -2176,7 +2429,7 @@ Default value is 1.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseEffect&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Effect&gt;</code></pre>
 </td>
 <td>
 <pre><code><strong>Effects</strong></code></pre>
@@ -2241,7 +2494,7 @@ Default value is Local.
             way around.
             
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -2261,19 +2514,23 @@ Default value is Local.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="FloatKeyframe"></a>FloatKeyframe</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseKeyframe">BaseKeyframe</a> » <a href="#BaseNumericKeyframe">BaseNumericKeyframe</a> » <a href="#FloatKeyframe">FloatKeyframe</a></pre></code>
+<pre><code><a href="#Element">Element</a> » Keyframe » NumericKeyframe » <a href="#FloatKeyframe">FloatKeyframe</a></pre></code>
 <h2>Description</h2>
 A keyframe for a property of type float.
 <h2>Properties</h2>
@@ -2293,7 +2550,7 @@ A keyframe for a property of type float.
 Default value is 0.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseNumericKeyframe:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>NumericKeyframe:</strong></td></tr>
 <tr>
 <td>
 <pre><code>EasingFunction</code></pre>
@@ -2308,13 +2565,13 @@ Default value is 0.
             between previous and current keyframe. Possible
             easing functions include the following:
             
-            <ul><li>Linear</li><li>EaseSineSpeedUp</li><li>EaseSineSlowDown</li><li>EaseSineBoth</li><li>EaseQuadSpeedUp</li><li>EaseQuadSlowDown</li><li>EaseQuadBoth</li><li>EaseCubicSpeedUp</li><li>EaseCubicSlowDown</li><li>EaseCubicBoth</li><li>EaseQuartSpeedUp</li><li>EaseQuartSlowDown</li><li>EaseQuartBoth</li><li>EaseBackSpeedUp</li><li>EaseBackSlowDown</li><li>EaseBackBoth</li></ul>
+            <ul><li>Linear</li><li>SwitchOnStart</li><li>SwitchInTheMiddle</li><li>SwitchOnEnd</li><li>SineSpeedUp</li><li>SineSlowDown</li><li>SineBoth</li><li>QuadSpeedUp</li><li>QuadSlowDown</li><li>QuadBoth</li><li>CubicSpeedUp</li><li>CubicSlowDown</li><li>CubicBoth</li><li>QuartSpeedUp</li><li>QuartSlowDown</li><li>QuartBoth</li><li>BackSpeedUp</li><li>BackSlowDown</li><li>BackBoth</li></ul>
 <p>Not inheritable by child elements. 
 Value is inherited from parent element if none provided explicitly. 
 Default value is Linear.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseKeyframe:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Keyframe:</strong></td></tr>
 <tr>
 <td>
 <pre><code>TimeSpan</code></pre>
@@ -2339,184 +2596,23 @@ Default value is 00:00:00.
 <pre><code><strong>PropertyRef</strong></code></pre>
 </td>
 <td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
 
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="FloatPropertyAnimator"></a>FloatPropertyAnimator</h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseAnimator">BaseAnimator</a> » <a href="#PropertyAnimator">PropertyAnimator</a> » <a href="#TimeDurationPropertyAnimator">TimeDurationPropertyAnimator</a> » <a href="#TimeDurationNumericPropertyAnimator">TimeDurationNumericPropertyAnimator</a> » <a href="#FloatPropertyAnimator">FloatPropertyAnimator</a></pre></code>
-<h2>Description</h2>
-Allows applying an animation to a float property of some
-            object. It is meant to be used only if you want to apply
-            single animation per whole scene. Otherwise, use Storyboard
-            and FloatKeyframe to define the whole animation.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>Single</code></pre>
-</td>
-<td>
-<pre><code><strong>From</strong></code></pre>
-</td>
-<td>
-
-            Initial value of the property when animation starts (at StartTime)
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
             
 <p>Not inheritable by child elements. 
-Default value is 0.
+Default value is .
 </p>
-</td>
-<tr>
-<td>
-<pre><code>Single</code></pre>
-</td>
-<td>
-<pre><code><strong>To</strong></code></pre>
-</td>
-<td>
-
-            Final value of the property when animation ends (at EndTime)
-            
-<p>Not inheritable by child elements. 
-Default value is 0.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>TimeDurationNumericPropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>EasingFunction</code></pre>
-</td>
-<td>
-<pre><code><strong>EasingFunction</strong></code></pre>
-</td>
-<td>
-
-            Defines easing function used for animation. The role of
-            easing function is to define, how value should change
-            between previous and current keyframe. Possible
-            easing functions include the following:
-            
-            <ul><li>Linear</li><li>EaseSineSpeedUp</li><li>EaseSineSlowDown</li><li>EaseSineBoth</li><li>EaseQuadSpeedUp</li><li>EaseQuadSlowDown</li><li>EaseQuadBoth</li><li>EaseCubicSpeedUp</li><li>EaseCubicSlowDown</li><li>EaseCubicBoth</li><li>EaseQuartSpeedUp</li><li>EaseQuartSlowDown</li><li>EaseQuartBoth</li><li>EaseBackSpeedUp</li><li>EaseBackSlowDown</li><li>EaseBackBoth</li></ul>
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is Linear.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>TimeDurationPropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>StartTime</strong></code></pre>
-</td>
-<td>
-
-            Time, when animation should be started.
-            
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>EndTime</strong></code></pre>
-</td>
-<td>
-
-            Time, when animation should finish.
-            
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>PropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>PropertyRef</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>BaseElement</code></pre>
-</td>
-<td>
-<pre><code><strong>AnimatedObject</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
+<p><strong>Example:</strong></p><code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
 </td>
 </table>
 <hr />
 
 <h1><a name="GaussianBlurEffect"></a>GaussianBlurEffect</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseEffect">BaseEffect</a> » <a href="#GaussianBlurEffect">GaussianBlurEffect</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » Effect » <a href="#GaussianBlurEffect">GaussianBlurEffect</a></pre></code>
 <h2>Description</h2>
 Adds a nice, Gaussian blur to a visual.
 <h2>Properties</h2>
@@ -2536,7 +2632,7 @@ Adds a nice, Gaussian blur to a visual.
 Default value is 5.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -2556,19 +2652,23 @@ Default value is 5.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="IntKeyframe"></a>IntKeyframe</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseKeyframe">BaseKeyframe</a> » <a href="#BaseNumericKeyframe">BaseNumericKeyframe</a> » <a href="#IntKeyframe">IntKeyframe</a></pre></code>
+<pre><code><a href="#Element">Element</a> » Keyframe » NumericKeyframe » <a href="#IntKeyframe">IntKeyframe</a></pre></code>
 <h2>Description</h2>
 A keyframe for a property of type int.
 <h2>Properties</h2>
@@ -2588,7 +2688,7 @@ A keyframe for a property of type int.
 Default value is 0.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseNumericKeyframe:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>NumericKeyframe:</strong></td></tr>
 <tr>
 <td>
 <pre><code>EasingFunction</code></pre>
@@ -2603,13 +2703,13 @@ Default value is 0.
             between previous and current keyframe. Possible
             easing functions include the following:
             
-            <ul><li>Linear</li><li>EaseSineSpeedUp</li><li>EaseSineSlowDown</li><li>EaseSineBoth</li><li>EaseQuadSpeedUp</li><li>EaseQuadSlowDown</li><li>EaseQuadBoth</li><li>EaseCubicSpeedUp</li><li>EaseCubicSlowDown</li><li>EaseCubicBoth</li><li>EaseQuartSpeedUp</li><li>EaseQuartSlowDown</li><li>EaseQuartBoth</li><li>EaseBackSpeedUp</li><li>EaseBackSlowDown</li><li>EaseBackBoth</li></ul>
+            <ul><li>Linear</li><li>SwitchOnStart</li><li>SwitchInTheMiddle</li><li>SwitchOnEnd</li><li>SineSpeedUp</li><li>SineSlowDown</li><li>SineBoth</li><li>QuadSpeedUp</li><li>QuadSlowDown</li><li>QuadBoth</li><li>CubicSpeedUp</li><li>CubicSlowDown</li><li>CubicBoth</li><li>QuartSpeedUp</li><li>QuartSlowDown</li><li>QuartBoth</li><li>BackSpeedUp</li><li>BackSlowDown</li><li>BackBoth</li></ul>
 <p>Not inheritable by child elements. 
 Value is inherited from parent element if none provided explicitly. 
 Default value is Linear.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseKeyframe:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Keyframe:</strong></td></tr>
 <tr>
 <td>
 <pre><code>TimeSpan</code></pre>
@@ -2634,184 +2734,23 @@ Default value is 00:00:00.
 <pre><code><strong>PropertyRef</strong></code></pre>
 </td>
 <td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
 
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="IntPropertyAnimator"></a>IntPropertyAnimator</h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseAnimator">BaseAnimator</a> » <a href="#PropertyAnimator">PropertyAnimator</a> » <a href="#TimeDurationPropertyAnimator">TimeDurationPropertyAnimator</a> » <a href="#TimeDurationNumericPropertyAnimator">TimeDurationNumericPropertyAnimator</a> » <a href="#IntPropertyAnimator">IntPropertyAnimator</a></pre></code>
-<h2>Description</h2>
-Allows applying an animation to an int property of some
-            object. It is meant to be used only if you want to apply
-            single animation per whole scene. Otherwise, use Storyboard
-            and IntKeyframe to define the whole animation.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>Int32</code></pre>
-</td>
-<td>
-<pre><code><strong>From</strong></code></pre>
-</td>
-<td>
-
-            Initial value of the property when animation starts (at StartTime)
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
             
 <p>Not inheritable by child elements. 
-Default value is 0.
+Default value is .
 </p>
-</td>
-<tr>
-<td>
-<pre><code>Int32</code></pre>
-</td>
-<td>
-<pre><code><strong>To</strong></code></pre>
-</td>
-<td>
-
-            Final value of the property when animation ends (at EndTime)
-            
-<p>Not inheritable by child elements. 
-Default value is 0.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>TimeDurationNumericPropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>EasingFunction</code></pre>
-</td>
-<td>
-<pre><code><strong>EasingFunction</strong></code></pre>
-</td>
-<td>
-
-            Defines easing function used for animation. The role of
-            easing function is to define, how value should change
-            between previous and current keyframe. Possible
-            easing functions include the following:
-            
-            <ul><li>Linear</li><li>EaseSineSpeedUp</li><li>EaseSineSlowDown</li><li>EaseSineBoth</li><li>EaseQuadSpeedUp</li><li>EaseQuadSlowDown</li><li>EaseQuadBoth</li><li>EaseCubicSpeedUp</li><li>EaseCubicSlowDown</li><li>EaseCubicBoth</li><li>EaseQuartSpeedUp</li><li>EaseQuartSlowDown</li><li>EaseQuartBoth</li><li>EaseBackSpeedUp</li><li>EaseBackSlowDown</li><li>EaseBackBoth</li></ul>
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is Linear.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>TimeDurationPropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>StartTime</strong></code></pre>
-</td>
-<td>
-
-            Time, when animation should be started.
-            
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>EndTime</strong></code></pre>
-</td>
-<td>
-
-            Time, when animation should finish.
-            
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>PropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>PropertyRef</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>BaseElement</code></pre>
-</td>
-<td>
-<pre><code><strong>AnimatedObject</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
+<p><strong>Example:</strong></p><code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
 </td>
 </table>
 <hr />
 
 <h1><a name="Label"></a>Label</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#Visual">Visual</a> » <a href="#Label">Label</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » Visual » <a href="#Label">Label</a></pre></code>
 <h2>Description</h2>
 Draws a text on a scene.
 <h2>Properties</h2>
@@ -2937,6 +2876,15 @@ Default value is Points.
 <tr><td colspan="3" class="table-separator">Properties derived from <strong>Visual:</strong></td></tr>
 <tr>
 <td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>Visible</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
 <pre><code>PointF</code></pre>
 </td>
 <td>
@@ -3017,7 +2965,7 @@ Default value is 1.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseEffect&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Effect&gt;</code></pre>
 </td>
 <td>
 <pre><code><strong>Effects</strong></code></pre>
@@ -3082,7 +3030,7 @@ Default value is Local.
             way around.
             
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -3102,19 +3050,23 @@ Default value is Local.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="Layer"></a>Layer</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#Visual">Visual</a> » <a href="#Layer">Layer</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » Visual » <a href="#Layer">Layer</a></pre></code>
 <h2>Description</h2>
 Allows grouping visuals. You can use it to apply
             transforms or effects to whole group of elements, or
@@ -3136,6 +3088,15 @@ Allows grouping visuals. You can use it to apply
 <tr><td colspan="3" class="table-separator">Properties derived from <strong>Visual:</strong></td></tr>
 <tr>
 <td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>Visible</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
 <pre><code>PointF</code></pre>
 </td>
 <td>
@@ -3216,7 +3177,7 @@ Default value is 1.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseEffect&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Effect&gt;</code></pre>
 </td>
 <td>
 <pre><code><strong>Effects</strong></code></pre>
@@ -3281,7 +3242,7 @@ Default value is Local.
             way around.
             
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -3301,19 +3262,23 @@ Default value is Local.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="Line"></a>Line</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#Visual">Visual</a> » <a href="#Line">Line</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » Visual » <a href="#Line">Line</a></pre></code>
 <h2>Description</h2>
 Draws a line on the scene.
 <h2>Properties</h2>
@@ -3363,6 +3328,15 @@ Default value is 0.
 <tr><td colspan="3" class="table-separator">Properties derived from <strong>Visual:</strong></td></tr>
 <tr>
 <td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>Visible</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
 <pre><code>PointF</code></pre>
 </td>
 <td>
@@ -3443,7 +3417,7 @@ Default value is 1.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseEffect&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Effect&gt;</code></pre>
 </td>
 <td>
 <pre><code><strong>Effects</strong></code></pre>
@@ -3508,7 +3482,7 @@ Default value is Local.
             way around.
             
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -3528,19 +3502,112 @@ Default value is Local.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+</table>
+<hr />
+
+<h1><a name="Movie"></a>Movie</h1>
+<h2>Inheritance</h2>
+<pre><code><a href="#Movie">Movie</a></pre></code>
+<h2>Description</h2>
+Root element of the movie.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>MovieConfig</code></pre>
+</td>
+<td>
+<pre><code><strong>Config</strong></code></pre>
+</td>
+<td>
+
+            Contains configuration of the movie.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Scene&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Scenes</strong></code></pre>
+</td>
+<td>
+
+            Contains scenes of the movie.
+            
+</td>
+</table>
+<hr />
+
+<h1><a name="MovieConfig"></a>MovieConfig</h1>
+<h2>Inheritance</h2>
+<pre><code><a href="#MovieConfig">MovieConfig</a></pre></code>
+<h2>Description</h2>
+Describes animation parameters.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Int32</code></pre>
+</td>
+<td>
+<pre><code><strong>Width</strong></code></pre>
+</td>
+<td>
+
+            Width of the result animation, in pixels.
+            
+<p>Not inheritable by child elements. 
+Default value is 1024.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Int32</code></pre>
+</td>
+<td>
+<pre><code><strong>Height</strong></code></pre>
+</td>
+<td>
+
+            Height of the result animation, in pixels.
+            
+<p>Not inheritable by child elements. 
+Default value is 768.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>FramesPerSecond</strong></code></pre>
+</td>
+<td>
+
+            Defines, how many frames should be in a second of animation.
+            
+<p>Not inheritable by child elements. 
+Default value is 30.
+</p>
 </td>
 </table>
 <hr />
 
 <h1><a name="Path"></a>Path</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#Visual">Visual</a> » <a href="#Shape">Shape</a> » <a href="#Path">Path</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » Visual » Shape » <a href="#Path">Path</a></pre></code>
 <h2>Description</h2>
 Draws a path on a scene.
 <h2>Properties</h2>
@@ -3587,6 +3654,15 @@ Draws a path on a scene.
 <tr><td colspan="3" class="table-separator">Properties derived from <strong>Visual:</strong></td></tr>
 <tr>
 <td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>Visible</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
 <pre><code>PointF</code></pre>
 </td>
 <td>
@@ -3667,7 +3743,7 @@ Default value is 1.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseEffect&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Effect&gt;</code></pre>
 </td>
 <td>
 <pre><code><strong>Effects</strong></code></pre>
@@ -3732,7 +3808,7 @@ Default value is Local.
             way around.
             
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -3752,74 +3828,23 @@ Default value is Local.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="PathElement"></a>PathElement <em>(abstract)</em></h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#AbsoluteCubicBezierPathElement">AbsoluteCubicBezierPathElement</a></li>
-<li><a href="#AbsoluteCubicShorthandBezierPathElement">AbsoluteCubicShorthandBezierPathElement</a></li>
-<li><a href="#AbsoluteHorizontalLinePathElement">AbsoluteHorizontalLinePathElement</a></li>
-<li><a href="#AbsoluteLinePathElement">AbsoluteLinePathElement</a></li>
-<li><a href="#AbsoluteMovePathElement">AbsoluteMovePathElement</a></li>
-<li><a href="#AbsoluteVerticalLinePathElement">AbsoluteVerticalLinePathElement</a></li>
-<li><a href="#BaseArcPathElement">BaseArcPathElement</a></li>
-<li><a href="#BaseQuadraticBezierPathElement">BaseQuadraticBezierPathElement</a></li>
-<li><a href="#CloseShapePathElement">CloseShapePathElement</a></li>
-<li><a href="#RelativeCubicBezierPathElement">RelativeCubicBezierPathElement</a></li>
-<li><a href="#RelativeCubicShorthandBezierPathElement">RelativeCubicShorthandBezierPathElement</a></li>
-<li><a href="#RelativeHorizontalLinePathElement">RelativeHorizontalLinePathElement</a></li>
-<li><a href="#RelativeLinePathElement">RelativeLinePathElement</a></li>
-<li><a href="#RelativeMovePathElement">RelativeMovePathElement</a></li>
-<li><a href="#RelativeVerticalLinePathElement">RelativeVerticalLinePathElement</a></li>
-</ul>
-<h2>Description</h2>
-Base class for all path elements.
-<h2>Properties</h2>
-<table class="properties">
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
 
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
             
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
 </td>
 </table>
 <hr />
 
 <h1><a name="Pen"></a>Pen</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#Pen">Pen</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » <a href="#Pen">Pen</a></pre></code>
 <h2>Description</h2>
 Defines a way in which lines are being drawn.
 <h2>Properties</h2>
@@ -3854,7 +3879,7 @@ Default value is Color [Black].
 Default value is 1.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -3874,19 +3899,23 @@ Default value is 1.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="PointKeyframe"></a>PointKeyframe</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseKeyframe">BaseKeyframe</a> » <a href="#BaseNumericKeyframe">BaseNumericKeyframe</a> » <a href="#PointKeyframe">PointKeyframe</a></pre></code>
+<pre><code><a href="#Element">Element</a> » Keyframe » NumericKeyframe » <a href="#PointKeyframe">PointKeyframe</a></pre></code>
 <h2>Description</h2>
 A keyframe for a property of type PointF.
 <h2>Properties</h2>
@@ -3906,7 +3935,7 @@ A keyframe for a property of type PointF.
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseNumericKeyframe:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>NumericKeyframe:</strong></td></tr>
 <tr>
 <td>
 <pre><code>EasingFunction</code></pre>
@@ -3921,13 +3950,13 @@ Default value is {X=0, Y=0}.
             between previous and current keyframe. Possible
             easing functions include the following:
             
-            <ul><li>Linear</li><li>EaseSineSpeedUp</li><li>EaseSineSlowDown</li><li>EaseSineBoth</li><li>EaseQuadSpeedUp</li><li>EaseQuadSlowDown</li><li>EaseQuadBoth</li><li>EaseCubicSpeedUp</li><li>EaseCubicSlowDown</li><li>EaseCubicBoth</li><li>EaseQuartSpeedUp</li><li>EaseQuartSlowDown</li><li>EaseQuartBoth</li><li>EaseBackSpeedUp</li><li>EaseBackSlowDown</li><li>EaseBackBoth</li></ul>
+            <ul><li>Linear</li><li>SwitchOnStart</li><li>SwitchInTheMiddle</li><li>SwitchOnEnd</li><li>SineSpeedUp</li><li>SineSlowDown</li><li>SineBoth</li><li>QuadSpeedUp</li><li>QuadSlowDown</li><li>QuadBoth</li><li>CubicSpeedUp</li><li>CubicSlowDown</li><li>CubicBoth</li><li>QuartSpeedUp</li><li>QuartSlowDown</li><li>QuartBoth</li><li>BackSpeedUp</li><li>BackSlowDown</li><li>BackBoth</li></ul>
 <p>Not inheritable by child elements. 
 Value is inherited from parent element if none provided explicitly. 
 Default value is Linear.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseKeyframe:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Keyframe:</strong></td></tr>
 <tr>
 <td>
 <pre><code>TimeSpan</code></pre>
@@ -3952,380 +3981,23 @@ Default value is 00:00:00.
 <pre><code><strong>PropertyRef</strong></code></pre>
 </td>
 <td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
 
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="PointPropertyAnimator"></a>PointPropertyAnimator</h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseAnimator">BaseAnimator</a> » <a href="#PropertyAnimator">PropertyAnimator</a> » <a href="#TimeDurationPropertyAnimator">TimeDurationPropertyAnimator</a> » <a href="#TimeDurationNumericPropertyAnimator">TimeDurationNumericPropertyAnimator</a> » <a href="#PointPropertyAnimator">PointPropertyAnimator</a></pre></code>
-<h2>Description</h2>
-Allows applying an animation to an PointF property of some
-            object. It is meant to be used only if you want to apply
-            single animation per whole scene. Otherwise, use Storyboard
-            and PointKeyframe to define the whole animation.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>From</strong></code></pre>
-</td>
-<td>
-
-            Initial value of the property when animation starts (at StartTime)
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
             
 <p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
+Default value is .
 </p>
-</td>
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>To</strong></code></pre>
-</td>
-<td>
-
-            Final value of the property when animation ends (at EndTime)
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>TimeDurationNumericPropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>EasingFunction</code></pre>
-</td>
-<td>
-<pre><code><strong>EasingFunction</strong></code></pre>
-</td>
-<td>
-
-            Defines easing function used for animation. The role of
-            easing function is to define, how value should change
-            between previous and current keyframe. Possible
-            easing functions include the following:
-            
-            <ul><li>Linear</li><li>EaseSineSpeedUp</li><li>EaseSineSlowDown</li><li>EaseSineBoth</li><li>EaseQuadSpeedUp</li><li>EaseQuadSlowDown</li><li>EaseQuadBoth</li><li>EaseCubicSpeedUp</li><li>EaseCubicSlowDown</li><li>EaseCubicBoth</li><li>EaseQuartSpeedUp</li><li>EaseQuartSlowDown</li><li>EaseQuartBoth</li><li>EaseBackSpeedUp</li><li>EaseBackSlowDown</li><li>EaseBackBoth</li></ul>
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is Linear.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>TimeDurationPropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>StartTime</strong></code></pre>
-</td>
-<td>
-
-            Time, when animation should be started.
-            
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>EndTime</strong></code></pre>
-</td>
-<td>
-
-            Time, when animation should finish.
-            
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>PropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>PropertyRef</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>BaseElement</code></pre>
-</td>
-<td>
-<pre><code><strong>AnimatedObject</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="PropertyAnimator"></a>PropertyAnimator <em>(abstract)</em></h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseAnimator">BaseAnimator</a> » <a href="#PropertyAnimator">PropertyAnimator</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#TimeDurationPropertyAnimator">TimeDurationPropertyAnimator</a></li>
-</ul>
-<h2>Description</h2>
-Base class for all animators, which operates on object's
-            properties.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>PropertyRef</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>BaseElement</code></pre>
-</td>
-<td>
-<pre><code><strong>AnimatedObject</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="PropertyExpressionAnimator"></a>PropertyExpressionAnimator</h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseAnimator">BaseAnimator</a> » <a href="#PropertyAnimator">PropertyAnimator</a> » <a href="#TimeDurationPropertyAnimator">TimeDurationPropertyAnimator</a> » <a href="#TimeDurationNumericPropertyAnimator">TimeDurationNumericPropertyAnimator</a> » <a href="#PropertyExpressionAnimator">PropertyExpressionAnimator</a></pre></code>
-<h2>Description</h2>
-Allows evaluating animated value of an property basing on a mathematical expression.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Expression</strong></code></pre>
-</td>
-<td>
-
-            Expression for the property.
-            
-            You may use the following pre-defined values:
-            
-            <ul><li><strong>StartTime</strong> - value of StartTime property expressed in milliseconds (1/1000 of a second)</li><li><strong>EndTime</strong> - value of EndTime property expressed in milliseconds</li><li><strong>CurrentTime</strong> - time of current frame expressed in milliseconds</li><li><strong>EasedFactor</strong> - value ranging from 0 (when CurrentTime = StartTime) to 1 (when CurrentTime = EndTime)
-            with easing function applied.</li></ul>
-                
-            In addition, you can reach value of any named element's property with the simple
-            notation.
-            
-<p>Not inheritable by child elements. 
-Default value is 0.
-</p>
-<p><strong>Example:</strong></p><code><pre>Expression="Rect.Position + [10,10] * EasedFactor"</pre></code>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>TimeDurationNumericPropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>EasingFunction</code></pre>
-</td>
-<td>
-<pre><code><strong>EasingFunction</strong></code></pre>
-</td>
-<td>
-
-            Defines easing function used for animation. The role of
-            easing function is to define, how value should change
-            between previous and current keyframe. Possible
-            easing functions include the following:
-            
-            <ul><li>Linear</li><li>EaseSineSpeedUp</li><li>EaseSineSlowDown</li><li>EaseSineBoth</li><li>EaseQuadSpeedUp</li><li>EaseQuadSlowDown</li><li>EaseQuadBoth</li><li>EaseCubicSpeedUp</li><li>EaseCubicSlowDown</li><li>EaseCubicBoth</li><li>EaseQuartSpeedUp</li><li>EaseQuartSlowDown</li><li>EaseQuartBoth</li><li>EaseBackSpeedUp</li><li>EaseBackSlowDown</li><li>EaseBackBoth</li></ul>
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is Linear.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>TimeDurationPropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>StartTime</strong></code></pre>
-</td>
-<td>
-
-            Time, when animation should be started.
-            
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>EndTime</strong></code></pre>
-</td>
-<td>
-
-            Time, when animation should finish.
-            
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>PropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>PropertyRef</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>BaseElement</code></pre>
-</td>
-<td>
-<pre><code><strong>AnimatedObject</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
+<p><strong>Example:</strong></p><code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
 </td>
 </table>
 <hr />
 
 <h1><a name="Rectangle"></a>Rectangle</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#Visual">Visual</a> » <a href="#Shape">Shape</a> » <a href="#Rectangle">Rectangle</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » Visual » Shape » <a href="#Rectangle">Rectangle</a></pre></code>
 <h2>Description</h2>
 Draws rectangle on a scene.
 <h2>Properties</h2>
@@ -4388,6 +4060,15 @@ Default value is 0.
 <tr><td colspan="3" class="table-separator">Properties derived from <strong>Visual:</strong></td></tr>
 <tr>
 <td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>Visible</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
 <pre><code>PointF</code></pre>
 </td>
 <td>
@@ -4468,7 +4149,7 @@ Default value is 1.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseEffect&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Effect&gt;</code></pre>
 </td>
 <td>
 <pre><code><strong>Effects</strong></code></pre>
@@ -4533,7 +4214,7 @@ Default value is Local.
             way around.
             
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -4553,19 +4234,23 @@ Default value is Local.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="RelativeArcPathElement"></a>RelativeArcPathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#BaseArcPathElement">BaseArcPathElement</a> » <a href="#RelativeArcPathElement">RelativeArcPathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » ArcPathElement » <a href="#RelativeArcPathElement">RelativeArcPathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as an elliptical arc.
             First point of the arc equals to the last point of previous
@@ -4663,7 +4348,7 @@ Default value is False.
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -4683,19 +4368,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="RelativeCubicBezierPathElement"></a>RelativeCubicBezierPathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#RelativeCubicBezierPathElement">RelativeCubicBezierPathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » <a href="#RelativeCubicBezierPathElement">RelativeCubicBezierPathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a cubic Bezier curve.
             First point of the curve equals to the last point of previous
@@ -4750,7 +4439,7 @@ Default value is {X=0, Y=0}.
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -4770,19 +4459,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="RelativeCubicShorthandBezierPathElement"></a>RelativeCubicShorthandBezierPathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#RelativeCubicShorthandBezierPathElement">RelativeCubicShorthandBezierPathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » <a href="#RelativeCubicShorthandBezierPathElement">RelativeCubicShorthandBezierPathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a cubic Bezier curve.
             First point of the curve equals to the last point of previous
@@ -4823,7 +4516,7 @@ Default value is {X=0, Y=0}.
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -4843,19 +4536,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="RelativeHorizontalLinePathElement"></a>RelativeHorizontalLinePathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#RelativeHorizontalLinePathElement">RelativeHorizontalLinePathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » <a href="#RelativeHorizontalLinePathElement">RelativeHorizontalLinePathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a horizontal line.
             All points are expressed in relative coordinates.
@@ -4878,7 +4575,7 @@ Represents a path part, which is drawn as a horizontal line.
 Default value is 0.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -4898,19 +4595,23 @@ Default value is 0.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="RelativeLinePathElement"></a>RelativeLinePathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#RelativeLinePathElement">RelativeLinePathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » <a href="#RelativeLinePathElement">RelativeLinePathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a line.
             All points are expressed in relative coordinates.
@@ -4932,7 +4633,7 @@ Represents a path part, which is drawn as a line.
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -4952,19 +4653,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="RelativeMovePathElement"></a>RelativeMovePathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#RelativeMovePathElement">RelativeMovePathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » <a href="#RelativeMovePathElement">RelativeMovePathElement</a></pre></code>
 <h2>Description</h2>
 Begins a new path in specified relative coordinates
 <h2>Properties</h2>
@@ -4985,7 +4690,7 @@ Begins a new path in specified relative coordinates
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -5005,19 +4710,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="RelativeQuadraticBezierPathElement"></a>RelativeQuadraticBezierPathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#BaseQuadraticBezierPathElement">BaseQuadraticBezierPathElement</a> » <a href="#RelativeQuadraticBezierPathElement">RelativeQuadraticBezierPathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » QuadraticBezierPathElement » <a href="#RelativeQuadraticBezierPathElement">RelativeQuadraticBezierPathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a quadratic Bezier curve.
             First point of the curve equals to the last point of previous
@@ -5057,7 +4766,7 @@ Default value is {X=0, Y=0}.
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -5077,19 +4786,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="RelativeQuadraticShorthandBezierPathElement"></a>RelativeQuadraticShorthandBezierPathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#BaseQuadraticBezierPathElement">BaseQuadraticBezierPathElement</a> » <a href="#RelativeQuadraticShorthandBezierPathElement">RelativeQuadraticShorthandBezierPathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » QuadraticBezierPathElement » <a href="#RelativeQuadraticShorthandBezierPathElement">RelativeQuadraticShorthandBezierPathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a quadratic Bezier curve.
             Start point of the curve equals to the last point of previous
@@ -5115,7 +4828,7 @@ Represents a path part, which is drawn as a quadratic Bezier curve.
 Default value is {X=0, Y=0}.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -5135,19 +4848,23 @@ Default value is {X=0, Y=0}.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="RelativeVerticalLinePathElement"></a>RelativeVerticalLinePathElement</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#PathElement">PathElement</a> » <a href="#RelativeVerticalLinePathElement">RelativeVerticalLinePathElement</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » PathElement » <a href="#RelativeVerticalLinePathElement">RelativeVerticalLinePathElement</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a horizontal line.
             All points are expressed in relative coordinates.
@@ -5170,7 +4887,7 @@ Represents a path part, which is drawn as a horizontal line.
 Default value is 0.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -5190,19 +4907,23 @@ Default value is 0.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="Scene"></a>Scene</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#Scene">Scene</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » <a href="#Scene">Scene</a></pre></code>
 <h2>Description</h2>
 Contains description of a single scene in animation.
 <h2>Properties</h2>
@@ -5246,7 +4967,7 @@ Default value is 00:00:10.
             Defines fill of the background of the scene.
             
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -5266,233 +4987,23 @@ Default value is 00:00:10.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="Shape"></a>Shape <em>(abstract)</em></h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#Visual">Visual</a> » <a href="#Shape">Shape</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#Path">Path</a></li>
-<li><a href="#Rectangle">Rectangle</a></li>
-</ul>
-<h2>Description</h2>
-Base class for all shapes drawn on the scene.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>Brush</code></pre>
-</td>
-<td>
-<pre><code><strong>Brush</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
 
-            Defines, how shape will be filled.
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
             
-</td>
-<tr>
-<td>
-<pre><code>Pen</code></pre>
-</td>
-<td>
-<pre><code><strong>Pen</strong></code></pre>
-</td>
-<td>
-
-            Defines, how edges of the shape will be drawn.
-            
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>Visual:</strong></td></tr>
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>Position</strong></code></pre>
-</td>
-<td>
-
-            Position of this visual on the scene.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>Origin</strong></code></pre>
-</td>
-<td>
-
-            An anchor point of this visual. It affects numerous transforms, 
-            such as Position, Rotation and Scale. In general, it defines a
-            point of the visual, which will be placed on the scene in place
-            defined by Position property. Also, it defines center point
-            for rotation and scaling.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>Single</code></pre>
-</td>
-<td>
-<pre><code><strong>Rotation</strong></code></pre>
-</td>
-<td>
-
-            Rotates visual by specific angle.
-            
-<p>Not inheritable by child elements. 
-Default value is 0.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>Scale</strong></code></pre>
-</td>
-<td>
-
-            Scales the visual by specified factor (separately
-            in X and Y axis).
-            
-<p>Not inheritable by child elements. 
-Default value is {X=1, Y=1}.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>Single</code></pre>
-</td>
-<td>
-<pre><code><strong>Alpha</strong></code></pre>
-</td>
-<td>
-
-            Applies transparency to a visual.
-            
-<p>Not inheritable by child elements. 
-Default value is 1.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseEffect&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Effects</strong></code></pre>
-</td>
-<td>
-
-            List of effects, which will be applied to
-            a visual after rendering.
-            
-</td>
-<tr>
-<td>
-<pre><code>Boolean</code></pre>
-</td>
-<td>
-<pre><code><strong>InvertMask</strong></code></pre>
-</td>
-<td>
-
-            Defines, if mask expresses areas, which should or should not
-            be drawn. Useful, if you want to e.g. draw everything
-            <em>except</em> some specific area.
-            
-<p>Not inheritable by child elements. 
-Default value is False.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>MaskCoordinateSystem</code></pre>
-</td>
-<td>
-<pre><code><strong>MaskCoordinateSystem</strong></code></pre>
-</td>
-<td>
-
-            Defines, in which coordinates the Visual's mask is defined. If you set this property to Local,
-            mask will follow all transforms applied to the Visual. If you set to Global, it will be immune
-            to those transforms.
-            
-<p>Not inheritable by child elements. 
-Default value is Local.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Visual&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Mask</strong></code></pre>
-</td>
-<td>
-
-            Allows masking a visual, e.g. drawing only parts of it on
-            a screen. Use other visuals to describe the mask, although
-            only alpha-value of the final mask is used (colors does
-            not matter). If mask is not inverted (InvertMask property),
-            areas of the visual, where its mask has value of 1 are drawn
-            completely and areas, where the mask has value of 0 are not
-            drawn at all (with all values in between allowing partial 
-            drawing). If mask is inverted, this behavior works the other
-            way around.
-            
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
 </td>
 </table>
 <hr />
 
 <h1><a name="SolidBrush"></a>SolidBrush</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#Brush">Brush</a> » <a href="#SolidBrush">SolidBrush</a></pre></code>
+<pre><code><a href="#Element">Element</a> » SceneElement » Brush » <a href="#SolidBrush">SolidBrush</a></pre></code>
 <h2>Description</h2>
 Brush, which fills an area with a single color.
 <h2>Properties</h2>
@@ -5512,7 +5023,7 @@ Brush, which fills an area with a single color.
 Default value is Color [Transparent].
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>
 <td>
 <pre><code>String</code></pre>
@@ -5532,19 +5043,23 @@ Default value is Color [Transparent].
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>Animators</strong></code></pre>
+<pre><code><strong>Animations</strong></code></pre>
 </td>
 <td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
 </td>
 </table>
 <hr />
 
 <h1><a name="Storyboard"></a>Storyboard</h1>
 <h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseAnimator">BaseAnimator</a> » <a href="#Storyboard">Storyboard</a></pre></code>
+<pre><code><a href="#Element">Element</a> » Animation » <a href="#Storyboard">Storyboard</a></pre></code>
 <h2>Description</h2>
 Allows defining complex animations consisting of
             multiple keyframes. Storyboard can contain definitions
@@ -5561,6 +5076,17 @@ Allows defining complex animations consisting of
 <pre><code><strong>PropertyRef</strong></code></pre>
 </td>
 <td>
+
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
+            
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is .
+</p>
+<p><strong>Example:</strong></p><code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
 </td>
 <tr>
 <td>
@@ -5576,7 +5102,7 @@ Allows defining complex animations consisting of
              between previous and current keyframe. Possible
              easing functions include the following:
              
-             <ul><li>Linear</li><li>EaseSineSpeedUp</li><li>EaseSineSlowDown</li><li>EaseSineBoth</li><li>EaseQuadSpeedUp</li><li>EaseQuadSlowDown</li><li>EaseQuadBoth</li><li>EaseCubicSpeedUp</li><li>EaseCubicSlowDown</li><li>EaseCubicBoth</li><li>EaseQuartSpeedUp</li><li>EaseQuartSlowDown</li><li>EaseQuartBoth</li><li>EaseBackSpeedUp</li><li>EaseBackSlowDown</li><li>EaseBackBoth</li></ul>
+             <ul><li>Linear</li><li>SwitchOnStart</li><li>SwitchInTheMiddle</li><li>SwitchOnEnd</li><li>SineSpeedUp</li><li>SineSlowDown</li><li>SineBoth</li><li>QuadSpeedUp</li><li>QuadSlowDown</li><li>QuadBoth</li><li>CubicSpeedUp</li><li>CubicSlowDown</li><li>CubicBoth</li><li>QuartSpeedUp</li><li>QuartSlowDown</li><li>QuartBoth</li><li>BackSpeedUp</li><li>BackSlowDown</li><li>BackBoth</li></ul>
             
              Storyboard does not use this value, but it may be set, so that
              keyframes will inherit it (for a shorthand notation).
@@ -5588,7 +5114,7 @@ Default value is Linear.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;BaseKeyframe&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Keyframe&gt;</code></pre>
 </td>
 <td>
 <pre><code><strong>Keyframes</strong></code></pre>
@@ -5598,445 +5124,13 @@ Default value is Linear.
             List of keyframes, which define complex animation.
             
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseAnimator:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Animation:</strong></td></tr>
 <tr>
 <td>
-<pre><code>BaseElement</code></pre>
+<pre><code>SceneElement</code></pre>
 </td>
 <td>
 <pre><code><strong>AnimatedObject</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="TimeDurationNumericPropertyAnimator"></a>TimeDurationNumericPropertyAnimator <em>(abstract)</em></h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseAnimator">BaseAnimator</a> » <a href="#PropertyAnimator">PropertyAnimator</a> » <a href="#TimeDurationPropertyAnimator">TimeDurationPropertyAnimator</a> » <a href="#TimeDurationNumericPropertyAnimator">TimeDurationNumericPropertyAnimator</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#FloatPropertyAnimator">FloatPropertyAnimator</a></li>
-<li><a href="#IntPropertyAnimator">IntPropertyAnimator</a></li>
-<li><a href="#PointPropertyAnimator">PointPropertyAnimator</a></li>
-<li><a href="#PropertyExpressionAnimator">PropertyExpressionAnimator</a></li>
-</ul>
-<h2>Description</h2>
-Base class for all property animators, which are
-            modifying a numeric property (ie. int, float, PointF, etc.)
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>EasingFunction</code></pre>
-</td>
-<td>
-<pre><code><strong>EasingFunction</strong></code></pre>
-</td>
-<td>
-
-            Defines easing function used for animation. The role of
-            easing function is to define, how value should change
-            between previous and current keyframe. Possible
-            easing functions include the following:
-            
-            <ul><li>Linear</li><li>EaseSineSpeedUp</li><li>EaseSineSlowDown</li><li>EaseSineBoth</li><li>EaseQuadSpeedUp</li><li>EaseQuadSlowDown</li><li>EaseQuadBoth</li><li>EaseCubicSpeedUp</li><li>EaseCubicSlowDown</li><li>EaseCubicBoth</li><li>EaseQuartSpeedUp</li><li>EaseQuartSlowDown</li><li>EaseQuartBoth</li><li>EaseBackSpeedUp</li><li>EaseBackSlowDown</li><li>EaseBackBoth</li></ul>
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is Linear.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>TimeDurationPropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>StartTime</strong></code></pre>
-</td>
-<td>
-
-            Time, when animation should be started.
-            
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>EndTime</strong></code></pre>
-</td>
-<td>
-
-            Time, when animation should finish.
-            
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>PropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>PropertyRef</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>BaseElement</code></pre>
-</td>
-<td>
-<pre><code><strong>AnimatedObject</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="TimeDurationPropertyAnimator"></a>TimeDurationPropertyAnimator <em>(abstract)</em></h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#BaseAnimator">BaseAnimator</a> » <a href="#PropertyAnimator">PropertyAnimator</a> » <a href="#TimeDurationPropertyAnimator">TimeDurationPropertyAnimator</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#TimeDurationNumericPropertyAnimator">TimeDurationNumericPropertyAnimator</a></li>
-</ul>
-<h2>Description</h2>
-Base class for all property animator, which apply
-            animation to a property in specific period of time.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>StartTime</strong></code></pre>
-</td>
-<td>
-
-            Time, when animation should be started.
-            
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>TimeSpan</code></pre>
-</td>
-<td>
-<pre><code><strong>EndTime</strong></code></pre>
-</td>
-<td>
-
-            Time, when animation should finish.
-            
-<p>Not inheritable by child elements. 
-Value is inherited from parent element if none provided explicitly. 
-Default value is 00:00:00.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>PropertyAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>PropertyRef</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseAnimator:</strong></td></tr>
-<tr>
-<td>
-<pre><code>BaseElement</code></pre>
-</td>
-<td>
-<pre><code><strong>AnimatedObject</strong></code></pre>
-</td>
-<td>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
-</td>
-<td>
-</td>
-</table>
-<hr />
-
-<h1><a name="Visual"></a>Visual <em>(abstract)</em></h1>
-<h2>Inheritance</h2>
-<pre><code><a href="#BaseElement">BaseElement</a> » <a href="#Visual">Visual</a></pre></code>
-<h2>Derived types</h2>
-<ul>
-<li><a href="#Circle">Circle</a></li>
-<li><a href="#Ellipse">Ellipse</a></li>
-<li><a href="#Label">Label</a></li>
-<li><a href="#Layer">Layer</a></li>
-<li><a href="#Line">Line</a></li>
-<li><a href="#Shape">Shape</a></li>
-</ul>
-<h2>Description</h2>
-Represents basic element, which can be drawn on the scene.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>Position</strong></code></pre>
-</td>
-<td>
-
-            Position of this visual on the scene.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>Origin</strong></code></pre>
-</td>
-<td>
-
-            An anchor point of this visual. It affects numerous transforms, 
-            such as Position, Rotation and Scale. In general, it defines a
-            point of the visual, which will be placed on the scene in place
-            defined by Position property. Also, it defines center point
-            for rotation and scaling.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>Single</code></pre>
-</td>
-<td>
-<pre><code><strong>Rotation</strong></code></pre>
-</td>
-<td>
-
-            Rotates visual by specific angle.
-            
-<p>Not inheritable by child elements. 
-Default value is 0.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>Scale</strong></code></pre>
-</td>
-<td>
-
-            Scales the visual by specified factor (separately
-            in X and Y axis).
-            
-<p>Not inheritable by child elements. 
-Default value is {X=1, Y=1}.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>Single</code></pre>
-</td>
-<td>
-<pre><code><strong>Alpha</strong></code></pre>
-</td>
-<td>
-
-            Applies transparency to a visual.
-            
-<p>Not inheritable by child elements. 
-Default value is 1.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseEffect&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Effects</strong></code></pre>
-</td>
-<td>
-
-            List of effects, which will be applied to
-            a visual after rendering.
-            
-</td>
-<tr>
-<td>
-<pre><code>Boolean</code></pre>
-</td>
-<td>
-<pre><code><strong>InvertMask</strong></code></pre>
-</td>
-<td>
-
-            Defines, if mask expresses areas, which should or should not
-            be drawn. Useful, if you want to e.g. draw everything
-            <em>except</em> some specific area.
-            
-<p>Not inheritable by child elements. 
-Default value is False.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>MaskCoordinateSystem</code></pre>
-</td>
-<td>
-<pre><code><strong>MaskCoordinateSystem</strong></code></pre>
-</td>
-<td>
-
-            Defines, in which coordinates the Visual's mask is defined. If you set this property to Local,
-            mask will follow all transforms applied to the Visual. If you set to Global, it will be immune
-            to those transforms.
-            
-<p>Not inheritable by child elements. 
-Default value is Local.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Visual&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Mask</strong></code></pre>
-</td>
-<td>
-
-            Allows masking a visual, e.g. drawing only parts of it on
-            a screen. Use other visuals to describe the mask, although
-            only alpha-value of the final mask is used (colors does
-            not matter). If mask is not inverted (InvertMask property),
-            areas of the visual, where its mask has value of 1 are drawn
-            completely and areas, where the mask has value of 0 are not
-            drawn at all (with all values in between allowing partial 
-            drawing). If mask is inverted, this behavior works the other
-            way around.
-            
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>BaseElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;BaseAnimator&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animators</strong></code></pre>
 </td>
 <td>
 </td>

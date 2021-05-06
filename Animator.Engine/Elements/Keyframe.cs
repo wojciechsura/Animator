@@ -15,7 +15,7 @@ namespace Animator.Engine.Elements
     /// class describes fixed value for a property in 
     /// specific time.
     /// </summary>
-    public abstract class BaseKeyframe : BaseElement
+    public abstract class Keyframe : Element
     {
         // Public methods -----------------------------------------------------
 
@@ -37,7 +37,7 @@ namespace Animator.Engine.Elements
             set => SetValue(TimeProperty, value);
         }
 
-        public static readonly ManagedProperty TimeProperty = ManagedProperty.Register(typeof(BaseKeyframe),
+        public static readonly ManagedProperty TimeProperty = ManagedProperty.Register(typeof(Keyframe),
             nameof(Time),
             typeof(TimeSpan),
             new ManagedSimplePropertyMetadata { DefaultValue = TimeSpan.FromMilliseconds(0) });
@@ -61,7 +61,7 @@ namespace Animator.Engine.Elements
             set => SetValue(PropertyRefProperty, value);
         }
 
-        public static readonly ManagedProperty PropertyRefProperty = ManagedProperty.Register(typeof(BaseKeyframe),
+        public static readonly ManagedProperty PropertyRefProperty = ManagedProperty.Register(typeof(Keyframe),
             nameof(PropertyRef),
             typeof(string),
             new ManagedSimplePropertyMetadata { DefaultValue = null });

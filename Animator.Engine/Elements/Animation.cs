@@ -1,8 +1,5 @@
-﻿using Animator.Engine.Base;
-using Animator.Engine.Base.Persistence;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,42 +7,27 @@ using System.Threading.Tasks;
 namespace Animator.Engine.Elements
 {
     /// <summary>
-    /// Root element of the animation.
+    /// This is an abstract class serving as a base class for all animations.
+    /// An animation is an object, which animates properties of elements on
+    /// the scene.
     /// </summary>
-    [ContentProperty(nameof(Scenes))]
-    public class Animation : ManagedObject
+    public abstract class Animation : Element
     {
-        #region Config managed property
+        public abstract void ApplyAnimation(float timeMs);
 
-        /// <summary>
-        /// Contains configuration of the animation.
-        /// </summary>
-        public AnimationConfig Config
+        public abstract void ResetAnimation();
+
+        public SceneElement AnimatedObject
         {
-            get => (AnimationConfig)GetValue(ConfigProperty);
-            set => SetValue(ConfigProperty, value);
+            get
+            {
+                if (Parent is Animation baseAnimation)
+                    return baseAnimation.AnimatedObject;
+                else if (Parent is SceneElement animatedObject)
+                    return animatedObject;
+                else
+                    throw new InvalidOperationException("Cannot retrieve animated object!");
+            }
         }
-
-        public static readonly ManagedProperty ConfigProperty = ManagedProperty.RegisterReference(typeof(Animation),
-            nameof(Config),
-            typeof(AnimationConfig));
-
-        #endregion
-
-        #region Scenes managed collection
-
-        /// <summary>
-        /// Contains scenes of the animation.
-        /// </summary>
-        public ManagedCollection<Scene> Scenes
-        {
-            get => (ManagedCollection<Scene>)GetValue(ScenesProperty);
-        }
-
-        public static readonly ManagedProperty ScenesProperty = ManagedProperty.RegisterCollection(typeof(Animation),
-            nameof(Scenes),
-            typeof(ManagedCollection<Scene>));
-
-        #endregion
     }
 }

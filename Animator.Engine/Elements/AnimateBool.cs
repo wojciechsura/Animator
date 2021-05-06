@@ -2,7 +2,6 @@
 using Animator.Engine.Base;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,12 +9,12 @@ using System.Threading.Tasks;
 namespace Animator.Engine.Elements
 {
     /// <summary>
-    /// Allows applying an animation to an PointF property of some
+    /// Allows applying an animation to a bool property of some
     /// object. It is meant to be used only if you want to apply
     /// single animation per whole scene. Otherwise, use Storyboard
-    /// and PointKeyframe to define the whole animation.
+    /// and BoolKeyframe to define the whole animation.
     /// </summary>
-    public class PointPropertyAnimator : TimeDurationNumericPropertyAnimator
+    public class AnimateBool : AnimateNumericPropertyInTime
     {
         // Public methods -----------------------------------------------------
 
@@ -24,51 +23,49 @@ namespace Animator.Engine.Elements
             (var obj, var prop) = AnimatedObject.FindProperty(PropertyRef);
 
             var factor = TimeCalculator.EvalAnimationFactor((float)StartTime.TotalMilliseconds, (float)EndTime.TotalMilliseconds, timeMs);
-            float easedValue = EasingFunctionRepository.Ease(EasingFunction, factor);
+            var easedValue = EasingFunctionRepository.Ease(EasingFunction, factor);
 
-            PointF from = IsPropertySet(FromProperty) ? From : (PointF)obj.GetBaseValue(prop);
-            PointF to = IsPropertySet(ToProperty) ? To : (PointF)obj.GetBaseValue(prop);
+            float from = (IsPropertySet(FromProperty) ? From : (bool)obj.GetBaseValue(prop)) ? 1.0f : 0.0f;
+            float to = (IsPropertySet(ToProperty) ? To : (bool)obj.GetBaseValue(prop)) ? 1.0f : 0.0f;
 
-            obj.SetAnimatedValue(prop, new PointF(from.X + (to.X - from.X) * easedValue, from.Y + (to.Y - from.Y) * easedValue));
+            obj.SetAnimatedValue(prop, (from + (to - from) * easedValue) >= 0.5f);
         }
 
         // Public properties --------------------------------------------------
-
 
         #region From managed property
 
         /// <summary>
         /// Initial value of the property when animation starts (at StartTime)
         /// </summary>
-        public PointF From
+        public bool From
         {
-            get => (PointF)GetValue(FromProperty);
+            get => (bool)GetValue(FromProperty);
             set => SetValue(FromProperty, value);
         }
 
-        public static readonly ManagedProperty FromProperty = ManagedProperty.Register(typeof(PointPropertyAnimator),
+        public static readonly ManagedProperty FromProperty = ManagedProperty.Register(typeof(AnimateBool),
             nameof(From),
-            typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
+            typeof(bool),
+            new ManagedSimplePropertyMetadata { DefaultValue = true });
 
         #endregion
-
 
         #region To managed property
 
         /// <summary>
         /// Final value of the property when animation ends (at EndTime)
         /// </summary>
-        public PointF To
+        public bool To
         {
-            get => (PointF)GetValue(ToProperty);
+            get => (bool)GetValue(ToProperty);
             set => SetValue(ToProperty, value);
         }
 
-        public static readonly ManagedProperty ToProperty = ManagedProperty.Register(typeof(PointPropertyAnimator),
+        public static readonly ManagedProperty ToProperty = ManagedProperty.Register(typeof(AnimateBool),
             nameof(To),
-            typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
+            typeof(bool),
+            new ManagedSimplePropertyMetadata { DefaultValue = true });
 
         #endregion
     }

@@ -172,39 +172,178 @@
             the end point's of the previous path element.
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.AnimateBool">
+            <summary>
+            Allows applying an animation to a bool property of some
+            object. It is meant to be used only if you want to apply
+            single animation per whole scene. Otherwise, use Storyboard
+            and BoolKeyframe to define the whole animation.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimateBool.From">
+            <summary>
+            Initial value of the property when animation starts (at StartTime)
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimateBool.To">
+            <summary>
+            Final value of the property when animation ends (at EndTime)
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AnimateFloat">
+            <summary>
+            Allows applying an animation to a float property of some
+            object. It is meant to be used only if you want to apply
+            single animation per whole scene. Otherwise, use Storyboard
+            and FloatKeyframe to define the whole animation.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimateFloat.From">
+            <summary>
+            Initial value of the property when animation starts (at StartTime)
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimateFloat.To">
+            <summary>
+            Final value of the property when animation ends (at EndTime)
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AnimateInt">
+            <summary>
+            Allows applying an animation to an int property of some
+            object. It is meant to be used only if you want to apply
+            single animation per whole scene. Otherwise, use Storyboard
+            and IntKeyframe to define the whole animation.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimateInt.From">
+            <summary>
+            Initial value of the property when animation starts (at StartTime)
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimateInt.To">
+            <summary>
+            Final value of the property when animation ends (at EndTime)
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AnimateNumericPropertyInTime">
+            <summary>
+            Base class for all property animators, which are
+            modifying a numeric property (ie. int, float, PointF, etc.)
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimateNumericPropertyInTime.EasingFunction">
+            <summary>
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul>
+                <li>Linear</li>
+                <li>SwitchOnStart</li>
+                <li>SwitchInTheMiddle</li>
+                <li>SwitchOnEnd</li>
+                <li>SineSpeedUp</li>
+                <li>SineSlowDown</li>
+                <li>SineBoth</li>
+                <li>QuadSpeedUp</li>
+                <li>QuadSlowDown</li>
+                <li>QuadBoth</li>
+                <li>CubicSpeedUp</li>
+                <li>CubicSlowDown</li>
+                <li>CubicBoth</li>
+                <li>QuartSpeedUp</li>
+                <li>QuartSlowDown</li>
+                <li>QuartBoth</li>
+                <li>BackSpeedUp</li>
+                <li>BackSlowDown</li>
+                <li>BackBoth</li>
+            </ul>
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AnimatePoint">
+            <summary>
+            Allows applying an animation to an PointF property of some
+            object. It is meant to be used only if you want to apply
+            single animation per whole scene. Otherwise, use Storyboard
+            and PointKeyframe to define the whole animation.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimatePoint.From">
+            <summary>
+            Initial value of the property when animation starts (at StartTime)
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimatePoint.To">
+            <summary>
+            Final value of the property when animation ends (at EndTime)
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AnimateProperty">
+            <summary>
+            Base class for all animators, which operates on object's
+            properties.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimateProperty.PropertyRef">
+            <summary>
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
+            </summary>
+            <example>
+            <code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
+            </example>
+        </member>
+        <member name="T:Animator.Engine.Elements.AnimatePropertyInTime">
+            <summary>
+            Base class for all property animator, which apply
+            animation to a property in specific period of time.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimatePropertyInTime.StartTime">
+            <summary>
+            Time, when animation should be started.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimatePropertyInTime.EndTime">
+            <summary>
+            Time, when animation should finish.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.AnimateWithExpression">
+            <summary>
+            Allows evaluating animated value of an property basing on a mathematical expression.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimateWithExpression.Expression">
+            <summary>
+            Expression for the property.
+            
+            You may use the following pre-defined values:
+            
+            <ul>
+            <li><strong>StartTime</strong> - value of StartTime property expressed in milliseconds (1/1000 of a second)</li>
+            <li><strong>EndTime</strong> - value of EndTime property expressed in milliseconds</li>
+            <li><strong>CurrentTime</strong> - time of current frame expressed in milliseconds</li>
+            <li><strong>EasedFactor</strong> - value ranging from 0 (when CurrentTime = StartTime) to 1 (when CurrentTime = EndTime)
+            with easing function applied.</li>
+            </ul>
+                
+            In addition, you can reach value of any named element's property with the simple
+            notation.
+            </summary>
+            <example>
+            <code><pre>Expression="Rect.Position + [10,10] * EasedFactor"</pre></code>
+            </example>
+        </member>
         <member name="T:Animator.Engine.Elements.Animation">
             <summary>
-            Root element of the animation.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.Animation.Config">
-            <summary>
-            Contains configuration of the animation.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.Animation.Scenes">
-            <summary>
-            Contains scenes of the animation.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.AnimationConfig">
-            <summary>
-            Describes animation parameters.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AnimationConfig.Width">
-            <summary>
-            Width of the result animation, in pixels.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AnimationConfig.Height">
-            <summary>
-            Height of the result animation, in pixels.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AnimationConfig.FramesPerSecond">
-            <summary>
-            Defines, how many frames should be in a second of animation.
+            This is an abstract class serving as a base class for all animations.
+            An animation is an object, which animates properties of elements on
+            the scene.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.AnimationGroup">
@@ -214,18 +353,16 @@
             but values of its properties are inherited by animators placed inside.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.AnimationGroup.TargetName">
+        <member name="P:Animator.Engine.Elements.AnimationGroup.PropertyRef">
             <summary>
-            Defines name of an object, which property should be modified.
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
             </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AnimationGroup.Path">
-            <summary>
-            Defines path to a property, starting at the object pointed
-            to by TargetName. Path may be either a single property,
-            for example <code>Position</code>, or a chain of properties,
-            leading through subsequent object, like <code>Pen.Color</code>.
-            </summary>
+            <example>
+            <code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
+            </example>
         </member>
         <member name="P:Animator.Engine.Elements.AnimationGroup.StartTime">
             <summary>
@@ -248,21 +385,24 @@
             
             <ul>
                 <li>Linear</li>
-                <li>EaseSineSpeedUp</li>
-                <li>EaseSineSlowDown</li>
-                <li>EaseSineBoth</li>
-                <li>EaseQuadSpeedUp</li>
-                <li>EaseQuadSlowDown</li>
-                <li>EaseQuadBoth</li>
-                <li>EaseCubicSpeedUp</li>
-                <li>EaseCubicSlowDown</li>
-                <li>EaseCubicBoth</li>
-                <li>EaseQuartSpeedUp</li>
-                <li>EaseQuartSlowDown</li>
-                <li>EaseQuartBoth</li>
-                <li>EaseBackSpeedUp</li>
-                <li>EaseBackSlowDown</li>
-                <li>EaseBackBoth</li>
+                <li>SwitchOnStart</li>
+                <li>SwitchInTheMiddle</li>
+                <li>SwitchOnEnd</li>
+                <li>SineSpeedUp</li>
+                <li>SineSlowDown</li>
+                <li>SineBoth</li>
+                <li>QuadSpeedUp</li>
+                <li>QuadSlowDown</li>
+                <li>QuadBoth</li>
+                <li>CubicSpeedUp</li>
+                <li>CubicSlowDown</li>
+                <li>CubicBoth</li>
+                <li>QuartSpeedUp</li>
+                <li>QuartSlowDown</li>
+                <li>QuartBoth</li>
+                <li>BackSpeedUp</li>
+                <li>BackSlowDown</li>
+                <li>BackBoth</li>
             </ul>
             </summary>
         </member>
@@ -283,102 +423,9 @@
             positive values - later.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.BaseAnimator">
-            <summary>
-            This is an abstract class serving as a base class for all animators.
-            An animator is an object, which animates properties of elements on
-            the scene.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.BaseArcPathElement">
+        <member name="T:Animator.Engine.Elements.ArcPathElement">
             <summary>
             This is a base class for all arc path elements.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.BaseEffect">
-            <summary>
-            This class serves as an abstract base class for all
-            effects, which may be applied to rendered elements.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.BaseElement">
-            <summary>
-            Base class for all elements used to describe an
-            animation.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.BaseElement.Name">
-            <summary>
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.BaseKeyframe">
-            <summary>
-            Base class for all keyframe classes. A keyframe
-            class describes fixed value for a property in 
-            specific time.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.BaseKeyframe.Time">
-            <summary>
-            Define exact time since start of a scene, when a
-            property should be set to a fixed value.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.BaseKeyframe.TargetName">
-            <summary>
-            Defines name of an object, which property should be modified.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.BaseKeyframe.Path">
-            <summary>
-            Defines path to a property, starting at the object pointed
-            to by TargetName. Path may be either a single property,
-            for example <code>Position</code>, or a chain of properties,
-            leading through subsequent object, like <code>Pen.Color</code>.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.BaseNumericKeyframe">
-            <summary>
-            Base class for all keyframes, which define animation
-            of a numeric properties (ie. of type int, float, PointF etc.)
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.BaseNumericKeyframe.EasingFunction">
-            <summary>
-            Defines easing function used for animation. The role of
-            easing function is to define, how value should change
-            between previous and current keyframe. Possible
-            easing functions include the following:
-            
-            <ul>
-                <li>Linear</li>
-                <li>EaseSineSpeedUp</li>
-                <li>EaseSineSlowDown</li>
-                <li>EaseSineBoth</li>
-                <li>EaseQuadSpeedUp</li>
-                <li>EaseQuadSlowDown</li>
-                <li>EaseQuadBoth</li>
-                <li>EaseCubicSpeedUp</li>
-                <li>EaseCubicSlowDown</li>
-                <li>EaseCubicBoth</li>
-                <li>EaseQuartSpeedUp</li>
-                <li>EaseQuartSlowDown</li>
-                <li>EaseQuartBoth</li>
-                <li>EaseBackSpeedUp</li>
-                <li>EaseBackSlowDown</li>
-                <li>EaseBackBoth</li>
-            </ul>
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.BaseQuadraticBezierPathElement">
-            <summary>
-            Base abstract class for all quadratic Bezier path elements.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.BlurEffect">
@@ -389,6 +436,16 @@
         <member name="P:Animator.Engine.Elements.BlurEffect.Radius">
             <summary>
             Radius of the blur, in pixels.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.BoolKeyframe">
+            <summary>
+            A keyframe for a property of type float.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.BoolKeyframe.Value">
+            <summary>
+            Value of the keyframe.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.Brush">
@@ -411,16 +468,6 @@
         <member name="P:Animator.Engine.Elements.Circle.Radius">
             <summary>
             Radius of the circle.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.Circle.Pen">
-            <summary>
-            Defines way in which border of the circle will be drawn.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.Circle.Brush">
-            <summary>
-            Defines way in which fill of the circle will be drawn.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.CloseShapePathElement">
@@ -455,6 +502,12 @@
             Blur radius of the shadow.
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.Effect">
+            <summary>
+            This class serves as an abstract base class for all
+            effects, which may be applied to rendered elements.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.Ellipse">
             <summary>
             Draws an ellipse on the scene.
@@ -472,16 +525,6 @@
             circumscribing the desired ellipse.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.Ellipse.Pen">
-            <summary>
-            Defines way in which border of the circle will be drawn.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.Ellipse.Brush">
-            <summary>
-            Defines way in which fill of the circle will be drawn.
-            </summary>
-        </member>
         <member name="T:Animator.Engine.Elements.FloatKeyframe">
             <summary>
             A keyframe for a property of type float.
@@ -490,24 +533,6 @@
         <member name="P:Animator.Engine.Elements.FloatKeyframe.Value">
             <summary>
             Value of the keyframe.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.FloatPropertyAnimator">
-            <summary>
-            Allows applying an animation to a float property of some
-            object. It is meant to be used only if you want to apply
-            single animation per whole scene. Otherwise, use Storyboard
-            and FloatKeyframe to define the whole animation.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.FloatPropertyAnimator.From">
-            <summary>
-            Initial value of the property when animation starts (at StartTime)
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.FloatPropertyAnimator.To">
-            <summary>
-            Final value of the property when animation ends (at EndTime)
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.GaussianBlurEffect">
@@ -530,23 +555,29 @@
             Value of the keyframe.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.IntPropertyAnimator">
+        <member name="T:Animator.Engine.Elements.Keyframe">
             <summary>
-            Allows applying an animation to an int property of some
-            object. It is meant to be used only if you want to apply
-            single animation per whole scene. Otherwise, use Storyboard
-            and IntKeyframe to define the whole animation.
+            Base class for all keyframe classes. A keyframe
+            class describes fixed value for a property in 
+            specific time.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.IntPropertyAnimator.From">
+        <member name="P:Animator.Engine.Elements.Keyframe.Time">
             <summary>
-            Initial value of the property when animation starts (at StartTime)
+            Define exact time since start of a scene, when a
+            property should be set to a fixed value.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.IntPropertyAnimator.To">
+        <member name="P:Animator.Engine.Elements.Keyframe.PropertyRef">
             <summary>
-            Final value of the property when animation ends (at EndTime)
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
             </summary>
+            <example>
+            <code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
+            </example>
         </member>
         <member name="T:Animator.Engine.Elements.Label">
             <summary>
@@ -633,6 +664,77 @@
             Describes visual properties of the drawn line.
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.Movie">
+            <summary>
+            Root element of the movie.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Movie.Config">
+            <summary>
+            Contains configuration of the movie.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Movie.Scenes">
+            <summary>
+            Contains scenes of the movie.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.MovieConfig">
+            <summary>
+            Describes animation parameters.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.MovieConfig.Width">
+            <summary>
+            Width of the result animation, in pixels.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.MovieConfig.Height">
+            <summary>
+            Height of the result animation, in pixels.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.MovieConfig.FramesPerSecond">
+            <summary>
+            Defines, how many frames should be in a second of animation.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.NumericKeyframe">
+            <summary>
+            Base class for all keyframes, which define animation
+            of a numeric properties (ie. of type int, float, PointF etc.)
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.NumericKeyframe.EasingFunction">
+            <summary>
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul>
+                <li>Linear</li>
+                <li>SwitchOnStart</li>
+                <li>SwitchInTheMiddle</li>
+                <li>SwitchOnEnd</li>
+                <li>SineSpeedUp</li>
+                <li>SineSlowDown</li>
+                <li>SineBoth</li>
+                <li>QuadSpeedUp</li>
+                <li>QuadSlowDown</li>
+                <li>QuadBoth</li>
+                <li>CubicSpeedUp</li>
+                <li>CubicSlowDown</li>
+                <li>CubicBoth</li>
+                <li>QuartSpeedUp</li>
+                <li>QuartSlowDown</li>
+                <li>QuartBoth</li>
+                <li>BackSpeedUp</li>
+                <li>BackSlowDown</li>
+                <li>BackBoth</li>
+            </ul>
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.Path">
             <summary>
             Draws a path on a scene.
@@ -680,68 +782,10 @@
             Value of the keyframe.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.PointPropertyAnimator">
+        <member name="T:Animator.Engine.Elements.QuadraticBezierPathElement">
             <summary>
-            Allows applying an animation to an PointF property of some
-            object. It is meant to be used only if you want to apply
-            single animation per whole scene. Otherwise, use Storyboard
-            and PointKeyframe to define the whole animation.
+            Base abstract class for all quadratic Bezier path elements.
             </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.PointPropertyAnimator.From">
-            <summary>
-            Initial value of the property when animation starts (at StartTime)
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.PointPropertyAnimator.To">
-            <summary>
-            Final value of the property when animation ends (at EndTime)
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.PropertyAnimator">
-            <summary>
-            Base class for all animators, which operates on object's
-            properties.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.PropertyAnimator.TargetName">
-            <summary>
-            Defines name of an object, which property should be modified.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.PropertyAnimator.Path">
-            <summary>
-            Defines path to a property, starting at the object pointed
-            to by TargetName. Path may be either a single property,
-            for example <code>Position</code>, or a chain of properties,
-            leading through subsequent object, like <code>Pen.Color</code>.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.PropertyExpressionAnimator">
-            <summary>
-            Allows evaluating animated value of an property basing on a mathematical expression.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.PropertyExpressionAnimator.Expression">
-            <summary>
-            Expression for the property.
-            
-            You may use the following pre-defined values:
-            
-            <ul>
-            <li><strong>StartTime</strong> - value of StartTime property expressed in milliseconds (1/1000 of a second)</li>
-            <li><strong>EndTime</strong> - value of EndTime property expressed in milliseconds</li>
-            <li><strong>CurrentTime</strong> - time of current frame expressed in milliseconds</li>
-            <li><strong>EasedFactor</strong> - value ranging from 0 (when CurrentTime = StartTime) to 1 (when CurrentTime = EndTime)
-            with easing function applied.</li>
-            </ul>
-                
-            In addition, you can reach value of any named element's property with the simple
-            notation.
-            </summary>
-            <example>
-            <code><pre>Expression="Rect.Position + [10,10] * EasedFactor"</pre></code>
-            </example>
         </member>
         <member name="T:Animator.Engine.Elements.Rectangle">
             <summary>
@@ -948,15 +992,31 @@
             Contains all visual elements placed on the scene.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.Scene.Animators">
-            <summary>
-            Contains list of all animators, which animate properties
-            of elements placed on the scene.
-            </summary>
-        </member>
         <member name="P:Animator.Engine.Elements.Scene.Background">
             <summary>
             Defines fill of the background of the scene.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.SceneElement">
+            <summary>
+            Base class for all elements used to describe an
+            animation.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.SceneElement.Name">
+            <summary>
+            Defines name of this object, which may be then used to
+            reference it from various objects via their TargetName
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through TargetName properties only if
+            their names are unique.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.SceneElement.Animations">
+            <summary>
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.Shape">
@@ -993,22 +1053,16 @@
             them.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.Storyboard.TargetName">
+        <member name="P:Animator.Engine.Elements.Storyboard.PropertyRef">
             <summary>
-            Defines name of an object, which property should be modified.
-            Storyboard does not use this value, but it may be set, so that
-            keyframes will inherit it (for a shorthand notation).
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
             </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.Storyboard.Path">
-            <summary>
-            Defines path to a property, starting at the object pointed
-            to by TargetName. Path may be either a single property,
-            for example <code>Position</code>, or a chain of properties,
-            leading through subsequent object, like <code>Pen.Color</code>.
-            Storyboard does not use this value, but it may be set, so that
-            keyframes will inherit it (for a shorthand notation).
-            </summary>
+            <example>
+            <code>PropertyRef=\"MyRectangle.Pen.Color\"</code>
+            </example>
         </member>
         <member name="P:Animator.Engine.Elements.Storyboard.EasingFunction">
              <summary>
@@ -1019,21 +1073,24 @@
              
              <ul>
                  <li>Linear</li>
-                 <li>EaseSineSpeedUp</li>
-                 <li>EaseSineSlowDown</li>
-                 <li>EaseSineBoth</li>
-                 <li>EaseQuadSpeedUp</li>
-                 <li>EaseQuadSlowDown</li>
-                 <li>EaseQuadBoth</li>
-                 <li>EaseCubicSpeedUp</li>
-                 <li>EaseCubicSlowDown</li>
-                 <li>EaseCubicBoth</li>
-                 <li>EaseQuartSpeedUp</li>
-                 <li>EaseQuartSlowDown</li>
-                 <li>EaseQuartBoth</li>
-                 <li>EaseBackSpeedUp</li>
-                 <li>EaseBackSlowDown</li>
-                 <li>EaseBackBoth</li>
+                 <li>SwitchOnStart</li>
+                 <li>SwitchInTheMiddle</li>
+                 <li>SwitchOnEnd</li>
+                 <li>SineSpeedUp</li>
+                 <li>SineSlowDown</li>
+                 <li>SineBoth</li>
+                 <li>QuadSpeedUp</li>
+                 <li>QuadSlowDown</li>
+                 <li>QuadBoth</li>
+                 <li>CubicSpeedUp</li>
+                 <li>CubicSlowDown</li>
+                 <li>CubicBoth</li>
+                 <li>QuartSpeedUp</li>
+                 <li>QuartSlowDown</li>
+                 <li>QuartBoth</li>
+                 <li>BackSpeedUp</li>
+                 <li>BackSlowDown</li>
+                 <li>BackBoth</li>
              </ul>
             
              Storyboard does not use this value, but it may be set, so that
@@ -1043,55 +1100,6 @@
         <member name="P:Animator.Engine.Elements.Storyboard.Keyframes">
             <summary>
             List of keyframes, which define complex animation.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.TimeDurationNumericPropertyAnimator">
-            <summary>
-            Base class for all property animators, which are
-            modifying a numeric property (ie. int, float, PointF, etc.)
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.TimeDurationNumericPropertyAnimator.EasingFunction">
-            <summary>
-            Defines easing function used for animation. The role of
-            easing function is to define, how value should change
-            between previous and current keyframe. Possible
-            easing functions include the following:
-            
-            <ul>
-                <li>Linear</li>
-                <li>EaseSineSpeedUp</li>
-                <li>EaseSineSlowDown</li>
-                <li>EaseSineBoth</li>
-                <li>EaseQuadSpeedUp</li>
-                <li>EaseQuadSlowDown</li>
-                <li>EaseQuadBoth</li>
-                <li>EaseCubicSpeedUp</li>
-                <li>EaseCubicSlowDown</li>
-                <li>EaseCubicBoth</li>
-                <li>EaseQuartSpeedUp</li>
-                <li>EaseQuartSlowDown</li>
-                <li>EaseQuartBoth</li>
-                <li>EaseBackSpeedUp</li>
-                <li>EaseBackSlowDown</li>
-                <li>EaseBackBoth</li>
-            </ul>
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.TimeDurationPropertyAnimator">
-            <summary>
-            Base class for all property animator, which apply
-            animation to a property in specific period of time.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.TimeDurationPropertyAnimator.StartTime">
-            <summary>
-            Time, when animation should be started.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.TimeDurationPropertyAnimator.EndTime">
-            <summary>
-            Time, when animation should finish.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.Visual">

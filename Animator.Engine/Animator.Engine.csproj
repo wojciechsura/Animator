@@ -7,7 +7,11 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile>D:\Dokumenty\Dev\Animator\Animator.Engine\Animator.Engine.xml</DocumentationFile>
+    <DocumentationFile>Animator.Engine.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DocumentationFile>$(ProjectDir)Animator.Engine.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

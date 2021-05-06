@@ -16,28 +16,28 @@ namespace Animator.Engine.Elements
     /// Base class for all elements used to describe an
     /// animation.
     /// </summary>
-    public abstract class BaseElement : ManagedObject
+    public abstract class SceneElement : Element
     {
         // Protected fields ---------------------------------------------------
 
-        protected readonly Dictionary<string, List<BaseElement>> names = new();
+        protected readonly Dictionary<string, List<SceneElement>> names = new();
 
         // Private methods ----------------------------------------------------
 
-        private void RegisterName(string name, BaseElement baseElement)
+        private void RegisterName(string name, SceneElement baseElement)
         {
-            if (!names.TryGetValue(name, out List<BaseElement> list))
+            if (!names.TryGetValue(name, out List<SceneElement> list))
             {
-                list = new List<BaseElement>();
+                list = new List<SceneElement>();
                 names[name] = list;
             }
 
             list.Add(baseElement);
         }
 
-        private void UnregisterName(string name, BaseElement baseElement)
+        private void UnregisterName(string name, SceneElement baseElement)
         {
-            if (names.TryGetValue(name, out List<BaseElement> list))
+            if (names.TryGetValue(name, out List<SceneElement> list))
             {
                 list.Remove(baseElement);
                 if (!list.Any())
@@ -45,15 +45,15 @@ namespace Animator.Engine.Elements
             }
         }
 
-        private BaseElement FindElement(string[] path)
+        private SceneElement FindElement(string[] path)
         {
-            BaseElement current = this;
+            SceneElement current = this;
 
             for (int i = 0; i < path.Length; i++)
             {
                 var property = current.GetProperty(path[i]);
 
-                current.names.TryGetValue(path[i], out List<BaseElement> children);
+                current.names.TryGetValue(path[i], out List<SceneElement> children);
 
                 // Erroneus situation
                 if (property != null && (children != null))
@@ -66,7 +66,7 @@ namespace Animator.Engine.Elements
                     if (value == null)
                         throw new AnimationException($"{path[i]} returns null element!");
 
-                    if (value is not BaseElement baseElement)
+                    if (value is not SceneElement baseElement)
                         throw new AnimationException($"Property {path[i]} yields object of type {value.GetType().Name}, which does not derive from BaseElement!");
 
                     current = baseElement;
@@ -76,7 +76,7 @@ namespace Animator.Engine.Elements
                     if (children.Count > 1)
                         throw new AnimationException($"{path[i]} yields more than one child element. Name is not unique.");
 
-                    if (children.Single() is not BaseElement baseElement)
+                    if (children.Single() is not SceneElement baseElement)
                         throw new AnimationException($"Child {path[i]} yields object of type {children.Single().GetType().Name}, which does not derive from BaseElement!");
 
                     current = baseElement;
@@ -92,7 +92,7 @@ namespace Animator.Engine.Elements
 
         protected override void OnParentDetaching()
         {
-            if (Parent is BaseElement baseElement)
+            if (Parent is SceneElement baseElement)
             {
                 baseElement.UnregisterName(Name, this);
             }
@@ -104,7 +104,7 @@ namespace Animator.Engine.Elements
         {
             base.OnParentAttached();
 
-            if (Parent is BaseElement baseElement && Name != null)
+            if (Parent is SceneElement baseElement && Name != null)
             {
                 baseElement.RegisterName(Name, this);
             }
@@ -112,11 +112,11 @@ namespace Animator.Engine.Elements
 
         // Public methods -----------------------------------------------------
 
-        public BaseElement FindElement(string elementRef)
+        public SceneElement FindElement(string elementRef)
         {
             var path = elementRef.Split('.');
 
-            BaseElement finalElement;
+            SceneElement finalElement;
 
             try
             {
@@ -130,11 +130,11 @@ namespace Animator.Engine.Elements
             return finalElement;
         }
 
-        public (BaseElement, ManagedProperty) FindProperty(string propertyRef)
+        public (SceneElement, ManagedProperty) FindProperty(string propertyRef)
         {
             var path = propertyRef.Split('.');
 
-            BaseElement finalElement;
+            SceneElement finalElement;
 
             try
             {                
@@ -154,9 +154,9 @@ namespace Animator.Engine.Elements
 
         public void ApplyAnimation(float timeMs)
         {
-            ProcessElementsRecursive<BaseElement>(baseElement =>
+            ProcessElementsRecursive<SceneElement>(baseElement =>
             {
-                foreach (var animator in baseElement.Animators)
+                foreach (var animator in baseElement.Animations)
                 {
                     animator.ApplyAnimation(timeMs);
                 }
@@ -181,7 +181,7 @@ namespace Animator.Engine.Elements
             set => SetValue(NameProperty, value);
         }
 
-        public static readonly ManagedProperty NameProperty = ManagedProperty.RegisterReference(typeof(BaseElement),
+        public static readonly ManagedProperty NameProperty = ManagedProperty.RegisterReference(typeof(SceneElement),
             nameof(Name),
             typeof(string),
             new ManagedReferencePropertyMetadata { ValueIsPermanent = true, ValueChangedHandler = HandleNameChanged });
@@ -189,7 +189,7 @@ namespace Animator.Engine.Elements
         private static void HandleNameChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
             // Value is permanent, so the change may be done only once
-            if (sender is BaseElement baseElement && baseElement.Scene != null)
+            if (sender is SceneElement baseElement && baseElement.Scene != null)
                 baseElement.Scene.RegisterName((string)args.NewValue, baseElement);
         }
 
@@ -201,14 +201,14 @@ namespace Animator.Engine.Elements
         /// Contains list of all animators, which animate properties
         /// of elements placed inside this element.
         /// </summary>
-        public ManagedCollection<BaseAnimator> Animators
+        public ManagedCollection<Animation> Animations
         {
-            get => (ManagedCollection<BaseAnimator>)GetValue(AnimatorsProperty);
+            get => (ManagedCollection<Animation>)GetValue(AnimationsProperty);
         }
 
-        public static readonly ManagedProperty AnimatorsProperty = ManagedProperty.RegisterCollection(typeof(BaseElement),
-            nameof(Animators),
-            typeof(ManagedCollection<BaseAnimator>));
+        public static readonly ManagedProperty AnimationsProperty = ManagedProperty.RegisterCollection(typeof(SceneElement),
+            nameof(Animations),
+            typeof(ManagedCollection<Animation>));
 
         #endregion
 
@@ -219,7 +219,7 @@ namespace Animator.Engine.Elements
             {
                 if (Parent is Scene scene)
                     return scene;
-                else if (Parent is BaseElement baseElement)
+                else if (Parent is SceneElement baseElement)
                     return baseElement.Scene;
                 else
                     return null;

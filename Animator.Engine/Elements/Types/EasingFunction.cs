@@ -9,20 +9,23 @@ namespace Animator.Engine.Elements.Types
     public enum EasingFunction
     {
         Linear,
-        EaseSineSpeedUp,
-        EaseSineSlowDown,
-        EaseSineBoth,
-        EaseQuadSpeedUp,
-        EaseQuadSlowDown,
-        EaseQuadBoth,
-        EaseCubicSpeedUp,
-        EaseCubicSlowDown,
-        EaseCubicBoth,
-        EaseQuartSpeedUp,
-        EaseQuartSlowDown,
-        EaseQuartBoth,
-        EaseBackSpeedUp,
-        EaseBackSlowDown,
-        EaseBackBoth
+        SwitchOnStart,
+        SwitchInTheMiddle,
+        SwitchOnEnd,
+        SineSpeedUp,
+        SineSlowDown,
+        SineBoth,
+        QuadSpeedUp,
+        QuadSlowDown,
+        QuadBoth,
+        CubicSpeedUp,
+        CubicSlowDown,
+        CubicBoth,
+        QuartSpeedUp,
+        QuartSlowDown,
+        QuartBoth,
+        BackSpeedUp,
+        BackSlowDown,
+        BackBoth
     }
 }

@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// Base class for all property animator, which apply
     /// animation to a property in specific period of time.
     /// </summary>
-    public abstract class TimeDurationPropertyAnimator : PropertyAnimator
+    public abstract class AnimatePropertyInTime : AnimateProperty
     {
         #region StartTime managed property
 
@@ -25,7 +25,7 @@ namespace Animator.Engine.Elements
             set => SetValue(StartTimeProperty, value);
         }
 
-        public static readonly ManagedProperty StartTimeProperty = ManagedProperty.Register(typeof(TimeDurationPropertyAnimator),
+        public static readonly ManagedProperty StartTimeProperty = ManagedProperty.Register(typeof(AnimatePropertyInTime),
             nameof(StartTime),
             typeof(TimeSpan),
             new ManagedSimplePropertyMetadata { DefaultValue = TimeSpan.FromMilliseconds(0), ValueChangedHandler = HandleStartTimeChanged, InheritedFromParent = true });
@@ -48,7 +48,7 @@ namespace Animator.Engine.Elements
             set => SetValue(EndTimeProperty, value);
         }
 
-        public static readonly ManagedProperty EndTimeProperty = ManagedProperty.Register(typeof(TimeDurationPropertyAnimator),
+        public static readonly ManagedProperty EndTimeProperty = ManagedProperty.Register(typeof(AnimatePropertyInTime),
             nameof(EndTime),
             typeof(TimeSpan),
             new ManagedSimplePropertyMetadata { DefaultValue = TimeSpan.FromMilliseconds(0), CoerceValueHandler = CoerceEndTime, InheritedFromParent = true });

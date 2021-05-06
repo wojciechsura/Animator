@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Draws a circle on a scene.
     /// </summary>
-    public class Circle : Visual
+    public class Circle : Shape
     {
         protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
         {
@@ -62,42 +62,6 @@ namespace Animator.Engine.Elements
             nameof(Radius),
             typeof(float),
             new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
-
-        #endregion
-
-        #region Pen managed property
-
-        /// <summary>
-        /// Defines way in which border of the circle will be drawn.
-        /// </summary>
-        public Pen Pen
-        {
-            get => (Pen)GetValue(PenProperty);
-            set => SetValue(PenProperty, value);
-        }
-
-        public static readonly ManagedProperty PenProperty = ManagedProperty.RegisterReference(typeof(Circle),
-            nameof(Pen),
-            typeof(Pen),
-            new ManagedReferencePropertyMetadata());
-
-        #endregion
-
-        #region Brush managed property
-
-        /// <summary>
-        /// Defines way in which fill of the circle will be drawn.
-        /// </summary>
-        public Brush Brush
-        {
-            get => (Brush)GetValue(BrushProperty);
-            set => SetValue(BrushProperty, value);
-        }
-
-        public static readonly ManagedProperty BrushProperty = ManagedProperty.RegisterReference(typeof(Circle),
-            nameof(Brush),
-            typeof(Brush),
-            new ManagedReferencePropertyMetadata());
 
         #endregion
     }

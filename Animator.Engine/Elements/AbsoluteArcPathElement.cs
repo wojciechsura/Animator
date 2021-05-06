@@ -10,7 +10,7 @@ namespace Animator.Engine.Elements
     /// path element.
     /// Endpoint of the arc is expressed in absolute coordinates.
     /// </summary>
-    public class AbsoluteArcPathElement : BaseArcPathElement
+    public class AbsoluteArcPathElement : ArcPathElement
     {
         // Public methods -----------------------------------------------------
 

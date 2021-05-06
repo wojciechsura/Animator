@@ -11,16 +11,16 @@ using System.Xml;
 
 namespace Animator.Engine.Elements.Persistence
 {
-    public class AnimationSerializer
+    public class MovieSerializer
     {
         private readonly DeserializationOptions deserializationOptions;
 
-        public AnimationSerializer()
+        public MovieSerializer()
         {
             deserializationOptions = new DeserializationOptions
             {
                 DefaultNamespace = new NamespaceDefinition(Assembly.GetExecutingAssembly().FullName,
-                    typeof(Animation).Namespace),
+                    typeof(Movie).Namespace),
                 CustomSerializers = new Dictionary<Type, TypeSerializer>
                 {
                     { typeof(Brush), new BrushSerializer() }
@@ -28,16 +28,16 @@ namespace Animator.Engine.Elements.Persistence
             };
         }
 
-        public Animation Deserialize(string filename)
+        public Movie Deserialize(string filename)
         {
             var serializer = new ManagedObjectSerializer();
-            return (Animation)serializer.Deserialize(filename, deserializationOptions);
+            return (Movie)serializer.Deserialize(filename, deserializationOptions);
         }
 
-        public Animation Deserialize(XmlDocument document)
+        public Movie Deserialize(XmlDocument document)
         {
             var serializer = new ManagedObjectSerializer();
-            return (Animation)serializer.Deserialize(document, deserializationOptions);
+            return (Movie)serializer.Deserialize(document, deserializationOptions);
         }
     }
 }

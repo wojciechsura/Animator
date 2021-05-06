@@ -15,13 +15,13 @@ namespace Animator
 {
     class Program
     {
-        private static Animation LoadAnimation(string path)
+        private static Movie LoadAnimation(string path)
         {
             XmlDocument document = new();
             document.Load(path);
 
-            AnimationSerializer animationSerializer = new AnimationSerializer();
-            Animation animation = animationSerializer.Deserialize(document);
+            MovieSerializer animationSerializer = new MovieSerializer();
+            Movie animation = animationSerializer.Deserialize(document);
 
             return animation;
         }
@@ -61,7 +61,7 @@ namespace Animator
             }
         }
 
-        private static void RenderAnimationAt(Animation animation, TimeSpan time, string outFile)
+        private static void RenderAnimationAt(Movie animation, TimeSpan time, string outFile)
         {
             // Determine scene
 
@@ -90,7 +90,7 @@ namespace Animator
 
         private static void RenderFrame(RenderFrameOptions options)
         {
-            Animation animation = null;
+            Movie animation = null;
 
 
             if (!IsSuccessful(() => { animation = LoadAnimation(options.Source); }, "Loaded animation"))
@@ -115,7 +115,7 @@ namespace Animator
 
         private static void Render(RenderOptions options)
         {
-            Animation animation = null;
+            Movie animation = null;
 
             if (!IsSuccessful(() => { animation = LoadAnimation(options.Source); }))
                 return;

@@ -15,7 +15,7 @@ namespace Animator.Engine.Elements
     /// single animation per whole scene. Otherwise, use Storyboard
     /// and FloatKeyframe to define the whole animation.
     /// </summary>
-    public class FloatPropertyAnimator : TimeDurationNumericPropertyAnimator
+    public class AnimateFloat : AnimateNumericPropertyInTime
     {
         // Public methods -----------------------------------------------------
 
@@ -45,7 +45,7 @@ namespace Animator.Engine.Elements
             set => SetValue(FromProperty, value);
         }
 
-        public static readonly ManagedProperty FromProperty = ManagedProperty.Register(typeof(FloatPropertyAnimator),
+        public static readonly ManagedProperty FromProperty = ManagedProperty.Register(typeof(AnimateFloat),
             nameof(From),
             typeof(float),
             new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
@@ -63,7 +63,7 @@ namespace Animator.Engine.Elements
             set => SetValue(ToProperty, value);
         }
 
-        public static readonly ManagedProperty ToProperty = ManagedProperty.Register(typeof(FloatPropertyAnimator),
+        public static readonly ManagedProperty ToProperty = ManagedProperty.Register(typeof(AnimateFloat),
             nameof(To),
             typeof(float),
             new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });

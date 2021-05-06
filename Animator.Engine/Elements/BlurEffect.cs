@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Adds a simple box blur to a visual.
     /// </summary>
-    public class BlurEffect : BaseEffect
+    public class BlurEffect : Effect
     {
         internal override void Apply(BitmapBuffer framebuffer, BitmapBuffer backBuffer, BitmapBuffer frontBuffer, BitmapBufferRepository repository)
         {

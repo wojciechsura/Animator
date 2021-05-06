@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// An effect, which adds a shadow to a visual.
     /// </summary>
-    public class DropShadowEffect : BaseEffect
+    public class DropShadowEffect : Effect
     {
         internal override void Apply(BitmapBuffer framebuffer, BitmapBuffer backBuffer, BitmapBuffer frontBuffer, BitmapBufferRepository repository)
         {

@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Adds a nice, Gaussian blur to a visual.
     /// </summary>
-    public class GaussianBlurEffect : BaseEffect
+    public class GaussianBlurEffect : Effect
     {
         internal override void Apply(BitmapBuffer framebuffer, BitmapBuffer backBuffer, BitmapBuffer frontBuffer, BitmapBufferRepository repository)
         {

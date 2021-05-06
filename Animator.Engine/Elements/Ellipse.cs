@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Draws an ellipse on the scene.
     /// </summary>
-    public class Ellipse : Visual
+    public class Ellipse : Shape
     {
         // Protected methods --------------------------------------------------
 
@@ -68,42 +68,6 @@ namespace Animator.Engine.Elements
             nameof(BottomRight),
             typeof(PointF),
             new ManagedSimplePropertyMetadata { DefaultValue = 0 });
-
-        #endregion
-
-        #region Pen managed property
-
-        /// <summary>
-        /// Defines way in which border of the circle will be drawn.
-        /// </summary>
-        public Pen Pen
-        {
-            get => (Pen)GetValue(PenProperty);
-            set => SetValue(PenProperty, value);
-        }
-
-        public static readonly ManagedProperty PenProperty = ManagedProperty.RegisterReference(typeof(Ellipse),
-            nameof(Pen),
-            typeof(Pen),
-            new ManagedReferencePropertyMetadata());
-
-        #endregion
-
-        #region Brush managed property
-
-        /// <summary>
-        /// Defines way in which fill of the circle will be drawn.
-        /// </summary>
-        public Brush Brush
-        {
-            get => (Brush)GetValue(BrushProperty);
-            set => SetValue(BrushProperty, value);
-        }
-
-        public static readonly ManagedProperty BrushProperty = ManagedProperty.RegisterReference(typeof(Ellipse),
-            nameof(Brush),
-            typeof(Brush),
-            new ManagedReferencePropertyMetadata());
 
         #endregion
     }

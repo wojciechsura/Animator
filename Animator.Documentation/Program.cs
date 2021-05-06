@@ -116,17 +116,21 @@ namespace Animator.Documentation
             sb.AppendLine("<h2>Inheritance</h2>");
 
             sb.Append("<pre><code>");
-            var inheritedTypes = new List<string>();
+            var inheritedTypes = new List<Type>();
             Type parentType = type;
             while (parentType != typeof(ManagedObject))
             {
-                inheritedTypes.Add(parentType.ToReadableName());
+                inheritedTypes.Add(parentType);
                 parentType = parentType.BaseType;
             }
 
             for (int i = inheritedTypes.Count - 1; i >= 0; i--)
             {
-                sb.Append(MakeLinkToType(inheritedTypes[i]));
+                if (inheritedTypes[i].IsAbstract)
+                    sb.Append(inheritedTypes[i].ToReadableName());
+                else
+                    sb.Append(MakeLinkToType(inheritedTypes[i].ToReadableName()));
+
                 if (i > 0)
                     sb.Append(" » ");
             }
@@ -234,7 +238,7 @@ namespace Animator.Documentation
                 sb.AppendLine(sr.ReadToEnd());
 
             var elementTypes = engineAssembly.GetTypes()
-                .Where(t => t.IsPublic && t.Namespace == elementsNamespace && !t.CustomAttributes.Any(a => a.AttributeType == typeof(DoNotDocumentAttribute)))
+                .Where(t => t.IsPublic && !t.IsAbstract && t.Namespace == elementsNamespace && !t.CustomAttributes.Any(a => a.AttributeType == typeof(DoNotDocumentAttribute)))
                 .ToList();
 
             for (int i = 0; i < elementTypes.Count; i++)
@@ -254,13 +258,45 @@ namespace Animator.Documentation
             return sb;
         }
 
+        private static StringBuilder BuildClassTree(Assembly engineAssembly, string elementsNamespace)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("digraph {");
+            sb.AppendLine("  rankdir=LR");
+
+            var elementTypes = engineAssembly.GetTypes()
+                .Where(t => t.IsPublic && t.Namespace == elementsNamespace && !t.CustomAttributes.Any(a => a.AttributeType == typeof(DoNotDocumentAttribute)))
+                .ToList();
+
+            int index = 0;
+            Dictionary<Type, int> types = new();
+
+            var allTypes = elementTypes.Union(elementTypes.Select(t => t.BaseType)).ToList();
+            allTypes.ForEach(t => types[t] = index++);
+
+            foreach (var type in allTypes)
+            {
+                sb.AppendLine($"{types[type]} [ label = \"{type.ToReadableName()}\" ]");
+            }
+
+            foreach (var type in elementTypes)
+            {
+                sb.AppendLine($"{types[type.BaseType]} -> {types[type]}");
+            }
+
+            sb.AppendLine("}");
+
+            return sb;
+        }
+
         static void Main(string[] args)
         {
-            if (args.Length < 2)
+            if (args.Length < 3)
             {
                 Console.WriteLine("Usage: ");
                 Console.WriteLine("");
-                Console.WriteLine("Animator.Documentation <path to Animator.Engine.xml> <outfile.markdown>");
+                Console.WriteLine("Animator.Documentation <path to Animator.Engine.xml> <outfile.html> <outfile.dot>");
 
                 Console.WriteLine("Run with full path to Animator.Engine.xml documentation file.");
                 return;
@@ -271,7 +307,7 @@ namespace Animator.Documentation
 
             // Find assembly with elements and its current namespace
 
-            var elementsNamespace = typeof(Animation).Namespace;
+            var elementsNamespace = typeof(Movie).Namespace;
             var engineAssembly = AppDomain.CurrentDomain.GetAssemblies()
                 .Single(a => a.GetName().Name == "Animator.Engine");
 
@@ -282,6 +318,14 @@ namespace Animator.Documentation
             // Save documentation
 
             File.WriteAllText(args[1], sb.ToString());
+
+            // Build class tree
+
+            sb = BuildClassTree(engineAssembly, elementsNamespace);
+
+            // Save class tree
+
+            File.WriteAllText(args[2], sb.ToString());
         }
     }
 }

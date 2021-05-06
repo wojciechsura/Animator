@@ -13,7 +13,7 @@ namespace Animator.Engine.Elements
     /// endpoint.
     /// End point is expressed in absolute coordinates.
     /// </summary>
-    public class AbsoluteQuadraticShorthandBezierPathElement : BaseQuadraticBezierPathElement
+    public class AbsoluteQuadraticShorthandBezierPathElement : QuadraticBezierPathElement
     {
         // Internal methods ---------------------------------------------------
 

@@ -8,7 +8,7 @@ namespace Animator.Engine.Elements
     /// Base class for all keyframes, which define animation
     /// of a numeric properties (ie. of type int, float, PointF etc.)
     /// </summary>
-    public abstract class BaseNumericKeyframe : BaseKeyframe
+    public abstract class NumericKeyframe : Keyframe
     {
         // Public methods -----------------------------------------------------
 
@@ -22,21 +22,24 @@ namespace Animator.Engine.Elements
         /// 
         /// <ul>
         ///     <li>Linear</li>
-        ///     <li>EaseSineSpeedUp</li>
-        ///     <li>EaseSineSlowDown</li>
-        ///     <li>EaseSineBoth</li>
-        ///     <li>EaseQuadSpeedUp</li>
-        ///     <li>EaseQuadSlowDown</li>
-        ///     <li>EaseQuadBoth</li>
-        ///     <li>EaseCubicSpeedUp</li>
-        ///     <li>EaseCubicSlowDown</li>
-        ///     <li>EaseCubicBoth</li>
-        ///     <li>EaseQuartSpeedUp</li>
-        ///     <li>EaseQuartSlowDown</li>
-        ///     <li>EaseQuartBoth</li>
-        ///     <li>EaseBackSpeedUp</li>
-        ///     <li>EaseBackSlowDown</li>
-        ///     <li>EaseBackBoth</li>
+        ///     <li>SwitchOnStart</li>
+        ///     <li>SwitchInTheMiddle</li>
+        ///     <li>SwitchOnEnd</li>
+        ///     <li>SineSpeedUp</li>
+        ///     <li>SineSlowDown</li>
+        ///     <li>SineBoth</li>
+        ///     <li>QuadSpeedUp</li>
+        ///     <li>QuadSlowDown</li>
+        ///     <li>QuadBoth</li>
+        ///     <li>CubicSpeedUp</li>
+        ///     <li>CubicSlowDown</li>
+        ///     <li>CubicBoth</li>
+        ///     <li>QuartSpeedUp</li>
+        ///     <li>QuartSlowDown</li>
+        ///     <li>QuartBoth</li>
+        ///     <li>BackSpeedUp</li>
+        ///     <li>BackSlowDown</li>
+        ///     <li>BackBoth</li>
         /// </ul>
         /// </summary>
         public EasingFunction EasingFunction
@@ -45,7 +48,7 @@ namespace Animator.Engine.Elements
             set => SetValue(EasingFunctionProperty, value);
         }
 
-        public static readonly ManagedProperty EasingFunctionProperty = ManagedProperty.Register(typeof(BaseNumericKeyframe),
+        public static readonly ManagedProperty EasingFunctionProperty = ManagedProperty.Register(typeof(NumericKeyframe),
             nameof(EasingFunction),
             typeof(EasingFunction),
             new ManagedSimplePropertyMetadata { DefaultValue = EasingFunction.Linear, InheritedFromParent = true });

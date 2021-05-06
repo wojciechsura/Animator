@@ -19,7 +19,7 @@ namespace Animator.Engine.Elements
     /// them.
     /// </summary>
     [ContentProperty(nameof(Storyboard.Keyframes))]
-    public class Storyboard : BaseAnimator
+    public class Storyboard : Animation
     {
         // Public methods -----------------------------------------------------
 
@@ -118,21 +118,24 @@ namespace Animator.Engine.Elements
         /// 
         /// <ul>
         ///     <li>Linear</li>
-        ///     <li>EaseSineSpeedUp</li>
-        ///     <li>EaseSineSlowDown</li>
-        ///     <li>EaseSineBoth</li>
-        ///     <li>EaseQuadSpeedUp</li>
-        ///     <li>EaseQuadSlowDown</li>
-        ///     <li>EaseQuadBoth</li>
-        ///     <li>EaseCubicSpeedUp</li>
-        ///     <li>EaseCubicSlowDown</li>
-        ///     <li>EaseCubicBoth</li>
-        ///     <li>EaseQuartSpeedUp</li>
-        ///     <li>EaseQuartSlowDown</li>
-        ///     <li>EaseQuartBoth</li>
-        ///     <li>EaseBackSpeedUp</li>
-        ///     <li>EaseBackSlowDown</li>
-        ///     <li>EaseBackBoth</li>
+        ///     <li>SwitchOnStart</li>
+        ///     <li>SwitchInTheMiddle</li>
+        ///     <li>SwitchOnEnd</li>
+        ///     <li>SineSpeedUp</li>
+        ///     <li>SineSlowDown</li>
+        ///     <li>SineBoth</li>
+        ///     <li>QuadSpeedUp</li>
+        ///     <li>QuadSlowDown</li>
+        ///     <li>QuadBoth</li>
+        ///     <li>CubicSpeedUp</li>
+        ///     <li>CubicSlowDown</li>
+        ///     <li>CubicBoth</li>
+        ///     <li>QuartSpeedUp</li>
+        ///     <li>QuartSlowDown</li>
+        ///     <li>QuartBoth</li>
+        ///     <li>BackSpeedUp</li>
+        ///     <li>BackSlowDown</li>
+        ///     <li>BackBoth</li>
         /// </ul>
         ///
         /// Storyboard does not use this value, but it may be set, so that
@@ -156,14 +159,14 @@ namespace Animator.Engine.Elements
         /// <summary>
         /// List of keyframes, which define complex animation.
         /// </summary>
-        public ManagedCollection<BaseKeyframe> Keyframes
+        public ManagedCollection<Keyframe> Keyframes
         {
-            get => (ManagedCollection<BaseKeyframe>)GetValue(KeyframesProperty);
+            get => (ManagedCollection<Keyframe>)GetValue(KeyframesProperty);
         }
 
         public static readonly ManagedProperty KeyframesProperty = ManagedProperty.RegisterCollection(typeof(Storyboard),
             nameof(Keyframes),
-            typeof(ManagedCollection<BaseKeyframe>));
+            typeof(ManagedCollection<Keyframe>));
 
         #endregion
     }

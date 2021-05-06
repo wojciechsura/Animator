@@ -11,7 +11,7 @@ namespace Animator.Engine.Elements
     /// This class serves as an abstract base class for all
     /// effects, which may be applied to rendered elements.
     /// </summary>
-    public abstract class BaseEffect : BaseElement
+    public abstract class Effect : SceneElement
     {
         internal abstract void Apply(BitmapBuffer framebuffer, BitmapBuffer backBuffer, BitmapBuffer frontBuffer, BitmapBufferRepository repository);        
     }

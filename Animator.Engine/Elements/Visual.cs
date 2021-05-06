@@ -18,7 +18,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Represents basic element, which can be drawn on the scene.
     /// </summary>
-    public abstract class Visual : BaseElement
+    public abstract class Visual : SceneElement
     {
         // Private methods ----------------------------------------------------
 
@@ -82,6 +82,9 @@ namespace Animator.Engine.Elements
 
         internal void Render(BitmapBuffer buffer, BitmapBufferRepository buffers)
         {
+            if (!Visible)
+                return;
+
             var originalTransform = buffer.Graphics.Transform;
 
             var transform = originalTransform.Clone();
@@ -166,6 +169,22 @@ namespace Animator.Engine.Elements
         }
 
         // Public properties --------------------------------------------------
+
+
+        #region Visible managed property
+
+        public bool Visible
+        {
+            get => (bool)GetValue(VisibleProperty);
+            set => SetValue(VisibleProperty, value);
+        }
+
+        public static readonly ManagedProperty VisibleProperty = ManagedProperty.Register(typeof(Visual),
+            nameof(Visible),
+            typeof(bool),
+            new ManagedSimplePropertyMetadata { DefaultValue = true });
+
+        #endregion
 
         #region Position managed property
 
@@ -268,14 +287,14 @@ namespace Animator.Engine.Elements
         /// List of effects, which will be applied to
         /// a visual after rendering.
         /// </summary>
-        public ManagedCollection<BaseEffect> Effects
+        public ManagedCollection<Effect> Effects
         {
-            get => (ManagedCollection<BaseEffect>)GetValue(EffectsProperty);
+            get => (ManagedCollection<Effect>)GetValue(EffectsProperty);
         }
 
         public static readonly ManagedProperty EffectsProperty = ManagedProperty.RegisterCollection(typeof(Visual),
             nameof(Effects),
-            typeof(ManagedCollection<BaseEffect>));
+            typeof(ManagedCollection<Effect>));
 
         #endregion
 

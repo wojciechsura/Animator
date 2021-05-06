@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// Base class for all animators, which operates on object's
     /// properties.
     /// </summary>
-    public abstract class PropertyAnimator : BaseAnimator
+    public abstract class AnimateProperty : Animation
     {
         // Public methods -----------------------------------------------------
 
@@ -42,7 +42,7 @@ namespace Animator.Engine.Elements
             set => SetValue(PropertyRefProperty, value);
         }
 
-        public static readonly ManagedProperty PropertyRefProperty = ManagedProperty.Register(typeof(PropertyAnimator),
+        public static readonly ManagedProperty PropertyRefProperty = ManagedProperty.Register(typeof(AnimateProperty),
             nameof(PropertyRef),
             typeof(string),
             new ManagedSimplePropertyMetadata { DefaultValue = null });

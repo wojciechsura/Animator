@@ -17,7 +17,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Allows evaluating animated value of an property basing on a mathematical expression.
     /// </summary>
-    public class PropertyExpressionAnimator : TimeDurationNumericPropertyAnimator
+    public class AnimateWithExpression : AnimateNumericPropertyInTime
     {
         // Private types ------------------------------------------------------
 
@@ -31,7 +31,7 @@ namespace Animator.Engine.Elements
 
         private class ExternalVariableResolver : BaseExternalVariableResolver
         {
-            private readonly PropertyExpressionAnimator animator;
+            private readonly AnimateWithExpression animator;
             private readonly float currentTime;
 
             private readonly Regex ReferenceRegex = new Regex("[a-zA-Z_][a-zA-Z0-9_]*(\\.[a-zA-Z_][a-zA-Z0-9_])+");
@@ -102,7 +102,7 @@ namespace Animator.Engine.Elements
                 }
             }
 
-            public ExternalVariableResolver(PropertyExpressionAnimator animator, float currentTime)
+            public ExternalVariableResolver(AnimateWithExpression animator, float currentTime)
             {
                 this.animator = animator;
                 this.currentTime = currentTime;
@@ -246,14 +246,14 @@ namespace Animator.Engine.Elements
             set => SetValue(ExpressionProperty, value);
         }
 
-        public static readonly ManagedProperty ExpressionProperty = ManagedProperty.Register(typeof(PropertyExpressionAnimator),
+        public static readonly ManagedProperty ExpressionProperty = ManagedProperty.Register(typeof(AnimateWithExpression),
             nameof(Expression),
             typeof(string),
             new ManagedSimplePropertyMetadata { DefaultValue = "0", ValueChangedHandler = HandleExpressionPropertyChanged });
 
         private static void HandleExpressionPropertyChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
-            if (sender is PropertyExpressionAnimator animator)
+            if (sender is AnimateWithExpression animator)
                 animator.HandleExpressionChanged((string)args.NewValue);
         }
 
