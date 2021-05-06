@@ -62,7 +62,7 @@ namespace Animator.Documentation
                         sb.AppendLine(summary.InnerXml);
                     }
 
-                    var managedProperty = ManagedProperty.FindByTypeAndName(type, property.Name);
+                    var managedProperty = ManagedProperty.FindByTypeAndName(property.DeclaringType, property.Name);
                     if (managedProperty != null)
                     {
                         if (managedProperty is ManagedSimpleProperty simpleProperty)

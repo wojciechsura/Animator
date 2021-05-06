@@ -1107,6 +1107,11 @@
             Represents basic element, which can be drawn on the scene.
             </summary>
         </member>
+        <member name="P:Animator.Engine.Elements.Visual.Visible">
+            <summary>
+            Defines, whether element is visible or not.
+            </summary>
+        </member>
         <member name="P:Animator.Engine.Elements.Visual.Position">
             <summary>
             Position of this visual on the scene.

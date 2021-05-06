@@ -173,6 +173,9 @@ namespace Animator.Engine.Elements
 
         #region Visible managed property
 
+        /// <summary>
+        /// Defines, whether element is visible or not.
+        /// </summary>
         public bool Visible
         {
             get => (bool)GetValue(VisibleProperty);
