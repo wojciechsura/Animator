@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public class Element : ManagedObject
+    public abstract class Element : ManagedObject
     {
 
     }
