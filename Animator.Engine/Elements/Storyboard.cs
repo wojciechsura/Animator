@@ -32,12 +32,12 @@ namespace Animator.Engine.Elements
                 var keyframes = group.OrderBy(k => k.Time).ToList();
 
                 if (keyframes.Any(k => k.GetType() != keyframes[0].GetType()))
-                    throw new AnimationException($"All keyframes for property reference {keyframes[0].PropertyRef} must be of the same type!");
+                    throw new AnimationException($"All keyframes for property reference {keyframes[0].PropertyRef} must be of the same type!", GetPath());
 
                 (var obj, var prop) = AnimatedObject.FindProperty(group.Key);
 
                 if (prop is not ManagedSimpleProperty simpleProperty)
-                    throw new AnimationException($"Property {prop.Name} of object {obj.GetType().Name} is not simple property and thus can not be animated!");
+                    throw new AnimationException($"Property {prop.Name} of object {obj.GetType().Name} is not simple property and thus can not be animated!", GetPath());
 
                 int i = -1;
                 while (i + 1 < keyframes.Count && keyframes[i + 1].Time.TotalMilliseconds <= timeMs)
@@ -75,7 +75,7 @@ namespace Animator.Engine.Elements
                 (var obj, var prop) = AnimatedObject.FindProperty(group.Key);
 
                 if (prop is not ManagedSimpleProperty simpleProperty)
-                    throw new AnimationException($"Property {prop.Name} of object {obj.GetType().Name} is not simple property and thus can not be animated!");
+                    throw new AnimationException($"Property {prop.Name} of object {obj.GetType().Name} is not simple property and thus can not be animated!", GetPath());
 
                 obj.ClearAnimatedValue(prop);
             }

@@ -1,7 +1,9 @@
 ﻿using Animator.Engine.Animation;
 using Animator.Engine.Animation.Maths;
+using Animator.Engine.Base.Exceptions;
 using Animator.Engine.Elements;
 using Animator.Engine.Elements.Persistence;
+using Animator.Engine.Exceptions;
 using Animator.Options;
 using CommandLine;
 using System;
@@ -28,13 +30,30 @@ namespace Animator
 
         private static void DisplayError(Exception e)
         {
-            Console.WriteLine("Reason:");
+            Console.WriteLine("--- Reason: ---");
+            Console.WriteLine();
 
             while (e != null)
             {
-                Console.WriteLine(e.Message);
+                if (e is SerializerException serializerException)
+                {
+                    Console.WriteLine(serializerException.Message);
+                    Console.WriteLine($"(on {serializerException.XPath})");
+                }
+                else if (e is AnimationException animationException)
+                {
+                    Console.WriteLine(animationException.Message);
+                    Console.WriteLine($"(on {animationException.Path})");
+                }
+                else
+                    Console.WriteLine(e.Message);
+
                 if (e.InnerException != null)
-                    Console.WriteLine("Because:");
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("--- Because: ---");
+                    Console.WriteLine();
+                }
 
                 e = e.InnerException;
             }

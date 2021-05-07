@@ -28,7 +28,7 @@ namespace Animator.Engine.Elements
 
             System.Drawing.FontFamily fontFamily = System.Drawing.FontFamily.Families.FirstOrDefault(ff => ff.Name == FontFamily);
             if (fontFamily == null)
-                throw new AnimationException($"Cannot find font family {FontFamily}.");
+                throw new AnimationException($"Cannot find font family {FontFamily}.", GetPath());
 
             FontStyle fontStyle = 0;
             if (Bold)

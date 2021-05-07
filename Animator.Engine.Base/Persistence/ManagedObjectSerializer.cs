@@ -275,8 +275,16 @@ namespace Animator.Engine.Base.Persistence
                 if (managedProperty is ManagedValueProperty valueProperty)
                 {
                     string propertyValue = attribute.Value;
+                    object value;
 
-                    object value = DeserializePropertyValue(context, valueProperty, attribute.Value);
+                    try
+                    {
+                        value = DeserializePropertyValue(context, valueProperty, attribute.Value);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new SerializerException($"Failed to deserialize attribute {attribute}", attribute.FindXPath(), e);
+                    }
 
                     deserializedObject.SetValue(valueProperty, value);
                     propertiesSet.Add(attribute.LocalName);
@@ -306,11 +314,19 @@ namespace Animator.Engine.Base.Persistence
         private object DeserializePropertyValue(DeserializationContext context, ManagedValueProperty valueProperty, string propertyValue)
         {
             if (valueProperty.Metadata.CustomSerializer != null && valueProperty.Metadata.CustomSerializer.CanDeserialize(propertyValue))
+            {
                 return valueProperty.Metadata.CustomSerializer.Deserialize(propertyValue);
+            }
             else if (context.CustomTypeSerializers != null && context.CustomTypeSerializers.TryGetValue(valueProperty.Type, out TypeSerializer customSerializer) && customSerializer.CanDeserialize(propertyValue))
+            {
                 return customSerializer.Deserialize(propertyValue);
-            else
+            }
+            else if (TypeSerialization.CanDeserialize(propertyValue, valueProperty.Type))
+            {
                 return TypeSerialization.Deserialize(propertyValue, valueProperty.Type);
+            }
+            else
+                throw new InvalidCastException($"Cannot deserialize value {propertyValue} to type {valueProperty.Type.Name}!");
         }
 
         private static IList DeserializeCollectionPropertyValue(DeserializationContext context, ManagedCollectionProperty collectionProperty, string propertyValue)
