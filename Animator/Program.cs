@@ -74,7 +74,7 @@ namespace Animator
             }
             catch (Exception e)
             {
-                Console.WriteLine("Failed to perform requested operation!");
+                Console.WriteLine("Generating animation stopped with an error.");
                 DisplayError(e);
                 return false;
             }

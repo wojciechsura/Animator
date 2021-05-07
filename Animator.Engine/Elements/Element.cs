@@ -20,6 +20,8 @@ namespace Animator.Engine.Elements
                     parents.Add($"{sceneElement.GetType().Name} ({sceneElement.Name})");
                 else
                     parents.Add($"{obj.GetType().Name}");
+
+                obj = obj.Parent;
             }
 
             parents.Reverse();

@@ -93,6 +93,9 @@ namespace Animator.Engine.Base.Persistence
         {
             foreach (XmlNode child in node.ChildNodes)
             {
+                if (child is XmlComment)
+                    continue;
+
                 // 1. Check if it is a property with extended notation
 
                 if (child.NamespaceURI == node.NamespaceURI &&
@@ -192,7 +195,7 @@ namespace Animator.Engine.Base.Persistence
                 }
                 else if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 1)
                 {
-                    var content = DeserializeElement(propertyNode.FirstChild, context);
+                    var content = DeserializeElement(propertyNode.ChildNodes.OfType<XmlElement>().Single(), context);
                     deserializedObject.SetValue(property, content);
 
                     propertiesSet.Add(property.Name);
@@ -224,7 +227,7 @@ namespace Animator.Engine.Base.Persistence
                 {
                     var collection = (ManagedCollection)deserializedObject.GetValue(property);
 
-                    foreach (XmlNode child in propertyNode.ChildNodes)
+                    foreach (XmlNode child in propertyNode.ChildNodes.OfType<XmlElement>())
                     {
                         var content = DeserializeElement(child, context);
                         ((IList)collection).Add(content);
@@ -283,7 +286,7 @@ namespace Animator.Engine.Base.Persistence
                     }
                     catch (Exception e)
                     {
-                        throw new SerializerException($"Failed to deserialize attribute {attribute}", attribute.FindXPath(), e);
+                        throw new SerializerException($"Failed to deserialize attribute {attribute.LocalName}", attribute.FindXPath(), e);
                     }
 
                     deserializedObject.SetValue(valueProperty, value);
@@ -465,7 +468,7 @@ namespace Animator.Engine.Base.Persistence
                 }
             }
 
-            return DeserializeElement(document.FirstChild, context);
+            return DeserializeElement(document.ChildNodes.OfType<XmlElement>().Single(), context);
         }
 
         // Public methods -----------------------------------------------------

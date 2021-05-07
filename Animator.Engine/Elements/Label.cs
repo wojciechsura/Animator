@@ -46,7 +46,7 @@ namespace Animator.Engine.Elements
             };
 
             using var font = new Font(fontFamily, FontSize, fontStyle, unit);
-            buffer.Graphics.DrawString(Text, font, brush, Position);
+            buffer.Graphics.DrawString(Text, font, brush, new PointF(0.0f, 0.0f));
         }
 
         // Public properties --------------------------------------------------
