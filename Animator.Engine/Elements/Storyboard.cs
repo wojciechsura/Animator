@@ -107,7 +107,6 @@ namespace Animator.Engine.Elements
 
         #endregion
 
-
         #region EasingFunction managed property
 
         /// <summary>

@@ -54,8 +54,10 @@ inline void setColor(unsigned char* bitmap, int stride, int x, int y, Color valu
 
 inline void alphaBlend(Color& baseColor, Color targetColor)
 {
-	baseColor.A = (1 - targetColor.A) * baseColor.A + targetColor.A;
-	baseColor.R = ((1 - targetColor.A) * baseColor.A * baseColor.R + targetColor.A * targetColor.R) / baseColor.A;
-	baseColor.G = ((1 - targetColor.A) * baseColor.A * baseColor.G + targetColor.A * targetColor.G) / baseColor.A;
-	baseColor.B = ((1 - targetColor.A) * baseColor.A * baseColor.B + targetColor.A * targetColor.B) / baseColor.A;
+	float newAlpha = (1 - targetColor.A) * baseColor.A + targetColor.A;
+
+	baseColor.R = ((1 - targetColor.A) * baseColor.A * baseColor.R + targetColor.A * targetColor.R) / newAlpha;
+	baseColor.G = ((1 - targetColor.A) * baseColor.A * baseColor.G + targetColor.A * targetColor.G) / newAlpha;
+	baseColor.B = ((1 - targetColor.A) * baseColor.A * baseColor.B + targetColor.A * targetColor.B) / newAlpha;
+	baseColor.A = newAlpha;
 }
