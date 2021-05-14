@@ -11,7 +11,6 @@
     <ProjectReference Include="..\Animator.Editor.Common\Animator.Editor.Common.csproj" />
     <ProjectReference Include="..\Animator.Editor.Configuration\Animator.Editor.Configuration.csproj" />
     <ProjectReference Include="..\Animator.Editor.Resources\Animator.Editor.Resources.csproj" />
-    <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Highlighting\xml.xshd" />
@@ -119,6 +118,7 @@
     <EmbeddedResource Include="Resources\FileTypeIcons\Folder_Obj_16x.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.1.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="Unity" Version="5.10.3" />

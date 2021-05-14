@@ -15,7 +15,6 @@
     <ProjectReference Include="..\Animator.Editor.Dependencies\Animator.Editor.Dependencies.csproj" />
     <ProjectReference Include="..\Animator.Editor.Resources\Animator.Editor.Resources.csproj" />
     <ProjectReference Include="..\ICSharpCode.AvalonEdit.Dev.Editor\ICSharpCode.AvalonEdit.Animator.Editor.csproj" />
-    <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\New16.png" />
@@ -73,6 +72,7 @@
     <Resource Include="Resources\Images\Up32.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.1.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Unity" Version="5.10.3" />
     <PackageReference Include="Fluent.Ribbon" Version="7.1.0" />
