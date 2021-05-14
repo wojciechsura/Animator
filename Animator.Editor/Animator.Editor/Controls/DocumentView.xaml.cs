@@ -58,6 +58,7 @@ namespace Animator.Editor.Controls
         private IDocumentHandler handler;
 
         private DispatcherTimer foldingTimer;
+        private DispatcherTimer movieTimer;
 
         // Private methods ----------------------------------------------------
 
@@ -80,6 +81,9 @@ namespace Animator.Editor.Controls
         {
             foldingTimer?.Stop();
             foldingTimer?.Start();
+
+            movieTimer?.Stop();
+            movieTimer?.Start();
         }
 
         private void UpdateFolding(object sender, EventArgs e)
@@ -185,9 +189,9 @@ namespace Animator.Editor.Controls
                 if (state.FoldSections != null && foldingManager != null)
                 {
                     foldingManager.AllFoldings
-                        .Join(state.FoldSections, 
-                            fs => new FoldingIndex(fs), 
-                            fss => new FoldingIndex(fss), 
+                        .Join(state.FoldSections,
+                            fs => new FoldingIndex(fs),
+                            fss => new FoldingIndex(fss),
                             (fs, fss) => new Tuple<FoldingSection, FoldSectionState>(fs, fss))
                         .ToList()
                         .ForEach(t => t.Item1.IsFolded = t.Item2.IsFolded);
@@ -195,9 +199,15 @@ namespace Animator.Editor.Controls
             }
         }
 
+        private void UpdateMovie(object sender, EventArgs args)
+        {
+            movieTimer.Stop();
+            viewModel.UpdateMovie();
+        }
+
         private void InitializeViewModel(DocumentViewModel newViewModel)
         {
-            Handler = newViewModel.Handler;
+            Handler = viewModel.Handler;
 
             teEditor.Document = viewModel.Document;
             teEditor.SyntaxHighlighting = viewModel.Highlighting.Definition;
@@ -216,10 +226,15 @@ namespace Animator.Editor.Controls
             // Hooking text editor
             teEditor.TextArea.SelectionChanged += HandleSelectionChanged;
             UpdateSelectionInfo();
+
+            movieTimer = new DispatcherTimer(TimeSpan.FromSeconds(3), DispatcherPriority.Background, UpdateMovie, Dispatcher);
         }
 
         private void DeinitializeViewModel(DocumentViewModel viewModel)
         {
+            movieTimer?.Stop();
+            movieTimer = null;
+
             // Unhooking editor
             teEditor.TextArea.SelectionChanged -= HandleSelectionChanged;
 
@@ -242,8 +257,8 @@ namespace Animator.Editor.Controls
 
         private void HandleLoaded(object sender, RoutedEventArgs e)
         {
-            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => teEditor.Focus()), 
-                DispatcherPriority.Normal);            
+            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => teEditor.Focus()),
+                DispatcherPriority.Normal);
         }
 
         private void HandleDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)

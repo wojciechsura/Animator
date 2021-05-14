@@ -15,7 +15,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
 
         private static string GenerateBlankFileName(int i)
         {
-            return $"{Strings.BlankDocumentName}{i}.txt";
+            return $"{Strings.BlankDocumentName}{i}.xml";
         }
 
         private void InternalAddDocument(Action<DocumentViewModel> initAction)
@@ -125,7 +125,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
 
                 string newFilename = GenerateBlankFileName(i);
                 newDocument.SetFilename(newFilename, fileIconProvider.GetImageForFile(newFilename));
-                newDocument.Highlighting = highlightingProvider.EmptyHighlighting;
+                newDocument.Highlighting = highlightingProvider.GetDefinitionByExtension(".xml");
             });            
         }
 

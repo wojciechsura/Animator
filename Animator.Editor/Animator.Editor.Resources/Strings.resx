@@ -154,7 +154,7 @@
     <value>Undo</value>
   </data>
   <data name="BlankDocName" xml:space="preserve">
-    <value>Document</value>
+    <value>Movie</value>
   </data>
   <data name="Ribbon.Group.Search" xml:space="preserve">
     <value>Search</value>
@@ -229,7 +229,7 @@
     <value>Find next</value>
   </data>
   <data name="BlankDocumentName" xml:space="preserve">
-    <value>Document</value>
+    <value>Movie</value>
   </data>
   <data name="Message.CannotOpenFile" xml:space="preserve">
     <value>Cannot open file {0}. Error: {1}</value>

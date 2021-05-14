@@ -7,12 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml;
 using Animator.Editor.BusinessLogic.Models.Documents;
 using Animator.Editor.BusinessLogic.Models.Highlighting;
 using Animator.Editor.BusinessLogic.Models.Search;
 using Animator.Editor.BusinessLogic.ViewModels.Base;
 using Animator.Editor.Common.Commands;
 using Animator.Editor.Common.Conditions;
+using Animator.Engine.Elements;
+using Animator.Engine.Elements.Persistence;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
 
@@ -20,6 +23,67 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 {
     public class DocumentViewModel : BaseViewModel
     {
+        // Private classes ----------------------------------------------------
+
+        private class UpdateMovieInput
+        {
+            public UpdateMovieInput(string movieXml)
+            {
+                MovieXml = movieXml;
+            }
+
+            public string MovieXml { get; }
+        }
+
+        private class MovieUpdatedResult
+        {
+            public MovieUpdatedResult(Movie animation)
+            {
+                Movie = animation;
+            }
+
+            public Movie Movie { get; }
+        }
+
+        private class MovieUpdateFailed
+        {
+            public Exception Exception { get; }
+
+            public MovieUpdateFailed(Exception exception)
+            {
+                Exception = exception;
+            }
+        }
+
+        private class UpdateMovieWorker : BackgroundWorker
+        {
+            private static readonly MovieSerializer movieSerializer = new();
+
+            protected override void OnDoWork(DoWorkEventArgs e)
+            {
+                var input = e.Argument as UpdateMovieInput;
+
+                Movie movie = null;
+                try
+                {
+                    XmlDocument document = new XmlDocument();
+                    document.LoadXml(input.MovieXml);
+
+                    movie = movieSerializer.Deserialize(document);
+                    e.Result = new MovieUpdatedResult(movie);
+                }
+                catch (Exception ex)
+                {
+                    e.Result = new MovieUpdateFailed(ex);
+                }
+            }
+
+            public UpdateMovieWorker()
+            {
+                WorkerSupportsCancellation = true;
+            }
+        }
+
         // Private fields -----------------------------------------------------
 
         private readonly TextDocument document;
@@ -39,6 +103,9 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
         private SearchModel lastSearch;
         private HighlightingInfo highlighting;
         private ImageSource icon;
+
+        private Movie movie;
+        private UpdateMovieWorker updateMovieWorker;
 
         // Private methods ----------------------------------------------------
 
@@ -66,6 +133,25 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
         private void DoClose()
         {
             handler.RequestClose(this);
+        }
+
+        private void UpdateMovieFinished(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Result is MovieUpdatedResult movieUpdated)
+            {
+                movie = movieUpdated.Movie;
+
+                System.Diagnostics.Debug.WriteLine("Movie update succeeded");
+
+                // TODO update timeline ranges
+                // TODO render current frame
+            }
+            else if (e.Result is MovieUpdateFailed movieUpdateFailed)
+            {
+                System.Diagnostics.Debug.WriteLine("Movie update failed");
+
+                // TODO display errors in appropriate place
+            }
         }
 
         // Public methods -----------------------------------------------------
@@ -165,6 +251,22 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             editorAccess.FocusDocument();
         }
 
+        public void UpdateMovie()
+        {
+            if (updateMovieWorker != null && updateMovieWorker.IsBusy)
+            {
+                updateMovieWorker.CancelAsync();
+                updateMovieWorker = null;
+            }
+
+            var text = document.Text;
+            var argument = new UpdateMovieInput(text);
+
+            updateMovieWorker = new UpdateMovieWorker();
+            updateMovieWorker.RunWorkerCompleted += UpdateMovieFinished;
+            updateMovieWorker.RunWorkerAsync(argument);
+        }
+
         // Public properties --------------------------------------------------
 
         public ICommand CloseCommand { get; }
@@ -191,7 +293,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             get => icon;
         }
 
-        public string Title => Path.GetFileName(document.FileName);
+        public string Title => System.IO.Path.GetFileName(document.FileName);
             
         public bool Changed
         {

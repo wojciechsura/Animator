@@ -154,7 +154,7 @@
     <value>Cofnij</value>
   </data>
   <data name="BlankDocName" xml:space="preserve">
-    <value>Dokument</value>
+    <value>Animacja</value>
   </data>
   <data name="Ribbon.Group.Search" xml:space="preserve">
     <value>Szukanie</value>
@@ -229,7 +229,7 @@
     <value>Znajdź następny</value>
   </data>
   <data name="BlankDocumentName" xml:space="preserve">
-    <value>Dokument</value>
+    <value>Animacja</value>
   </data>
   <data name="Message.CannotOpenFile" xml:space="preserve">
     <value>Nie mogę otworzyć pliku {0}. Błąd: {1}</value>

@@ -61,7 +61,7 @@ namespace Animator.Editor.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Document.
+        ///   Looks up a localized string similar to Movie.
         /// </summary>
         public static string BlankDocName {
             get {
@@ -70,7 +70,7 @@ namespace Animator.Editor.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Document.
+        ///   Looks up a localized string similar to Movie.
         /// </summary>
         public static string BlankDocumentName {
             get {
