@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Engine.Animation
+namespace Animator.Editor.BusinessLogic.Types.Folding
 {
-    public class AnimationEngine
+    public enum FoldingKind
     {
-
+        None,
+        Braces,
+        Xml
     }
 }

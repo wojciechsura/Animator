@@ -1,0 +1,127 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Animator.Engine\Animator.Engine.csproj" />
+    <ProjectReference Include="..\Animator.Editor.Common\Animator.Editor.Common.csproj" />
+    <ProjectReference Include="..\Animator.Editor.Configuration\Animator.Editor.Configuration.csproj" />
+    <ProjectReference Include="..\Animator.Editor.Resources\Animator.Editor.Resources.csproj" />
+    <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Highlighting\xml.xshd" />
+    <EmbeddedResource Include="Resources\Highlighting\ModeV2.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Highlighting\xml.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\FileTypeIcons\AdobeIllustrator_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\AdobeIndesign_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\AdobePhotoshop_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\AndroidFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Application_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\ASPXFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\AssemblerSourceFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\AudioOn_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\BuildStyle_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Certificate_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\CFile_16x_color.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\ConfigurationFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Console_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\CPPApplication_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\CPPATLWebService_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\CPPHeaderFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\CPP_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\CSApplication_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\CS_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\CursorFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Database_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Document_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\ExtensionManagerManifest_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Extension_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\FileGroup_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\FolderOpen_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Folder_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Font_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\FSApplication_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\FS_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\GitLogo_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\HTMLFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\IconFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\ImageMapFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Image_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\JADEScript_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\JARFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\JavaFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\JSCoffeeScript_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\JSONScript_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\JSScript_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\JSXScript_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Key_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\LessStyleSheet_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Library_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Lock_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Mail_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\MakeFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\MasterPage_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Media_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\NextDocument_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\NodeJS_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\OfficeAccess2013Logo_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\OfficeExcel2013Logo_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\OfficePowerPoint2013Logo_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\OfficeProject2013Logo_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\OfficeVisio2013Logo_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\OfficeWord2013Logo_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Parameter_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\PDFFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\PHPFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Property_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\PugScript_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\PY_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\RB_FileSENode_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Reference_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\RustFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\SassStyleSheet_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\SettingsFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Settings_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\SitemapFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\SpecialFolderOpen_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\SpecialFolder_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\StyleSheet_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Table_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\TextFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Text_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\TS_FileSENode_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\VBApplication_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\VirtualMachine_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\VisualStudioSettingFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\WebFolderOpen_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\WebFolder_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\WebService_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\WebURL_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\WebUserControl_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\XMLFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\XMLSchema_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\XSLTTransformFile_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\ZipFile_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\FileTypeIcons\Folder_Bin_16x.png" />
+    <EmbeddedResource Include="Resources\FileTypeIcons\Folder_Obj_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Unity" Version="5.10.3" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+  </ItemGroup>
+</Project>

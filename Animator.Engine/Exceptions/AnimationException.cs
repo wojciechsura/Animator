@@ -11,10 +11,21 @@ namespace Animator.Engine.Exceptions
     public class AnimationException : Exception
     {
         public AnimationException() { }
-        public AnimationException(string message) : base(message) { }
-        public AnimationException(string message, Exception inner) : base(message, inner) { }
+        
+        public AnimationException(string message, string path) : base(message)
+        {
+            Path = path;
+        }
+        
+        public AnimationException(string message, string path, Exception inner) : base(message, inner)
+        {
+            Path = path;
+        }
+        
         protected AnimationException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+
+        public string Path { get; }
     }
 }

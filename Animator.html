@@ -2607,6 +2607,217 @@ Default value is 5.
 </table>
 <hr />
 
+<h1><a name="Image"></a>Image</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Visual » <a href="#Image">Image</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Source</strong></code></pre>
+</td>
+<td>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Visual:</strong></td></tr>
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>Visible</strong></code></pre>
+</td>
+<td>
+
+            Defines, whether element is visible or not.
+            
+<p>Not inheritable by child elements. 
+Default value is True.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>Position</strong></code></pre>
+</td>
+<td>
+
+            Position of this visual on the scene.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>Origin</strong></code></pre>
+</td>
+<td>
+
+            An anchor point of this visual. It affects numerous transforms, 
+            such as Position, Rotation and Scale. In general, it defines a
+            point of the visual, which will be placed on the scene in place
+            defined by Position property. Also, it defines center point
+            for rotation and scaling.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>Rotation</strong></code></pre>
+</td>
+<td>
+
+            Rotates visual by specific angle.
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>Scale</strong></code></pre>
+</td>
+<td>
+
+            Scales the visual by specified factor (separately
+            in X and Y axis).
+            
+<p>Not inheritable by child elements. 
+Default value is {X=1, Y=1}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>Alpha</strong></code></pre>
+</td>
+<td>
+
+            Applies transparency to a visual.
+            
+<p>Not inheritable by child elements. 
+Default value is 1.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Effect&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Effects</strong></code></pre>
+</td>
+<td>
+
+            List of effects, which will be applied to
+            a visual after rendering.
+            
+</td>
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>InvertMask</strong></code></pre>
+</td>
+<td>
+
+            Defines, if mask expresses areas, which should or should not
+            be drawn. Useful, if you want to e.g. draw everything
+            <em>except</em> some specific area.
+            
+<p>Not inheritable by child elements. 
+Default value is False.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>MaskCoordinateSystem</code></pre>
+</td>
+<td>
+<pre><code><strong>MaskCoordinateSystem</strong></code></pre>
+</td>
+<td>
+
+            Defines, in which coordinates the Visual's mask is defined. If you set this property to Local,
+            mask will follow all transforms applied to the Visual. If you set to Global, it will be immune
+            to those transforms.
+            
+<p>Not inheritable by child elements. 
+Default value is Local.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Visual&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Mask</strong></code></pre>
+</td>
+<td>
+
+            Allows masking a visual, e.g. drawing only parts of it on
+            a screen. Use other visuals to describe the mask, although
+            only alpha-value of the final mask is used (colors does
+            not matter). If mask is not inverted (InvertMask property),
+            areas of the visual, where its mask has value of 1 are drawn
+            completely and areas, where the mask has value of 0 are not
+            drawn at all (with all values in between allowing partial 
+            drawing). If mask is inverted, this behavior works the other
+            way around.
+            
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their TargetName
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through TargetName properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+</table>
+<hr />
+
 <h1><a name="IntKeyframe"></a>IntKeyframe</h1>
 <h2>Inheritance</h2>
 <pre><code>Element » Keyframe » NumericKeyframe » <a href="#IntKeyframe">IntKeyframe</a></pre></code>

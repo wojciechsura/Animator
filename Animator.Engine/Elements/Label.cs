@@ -28,7 +28,7 @@ namespace Animator.Engine.Elements
 
             System.Drawing.FontFamily fontFamily = System.Drawing.FontFamily.Families.FirstOrDefault(ff => ff.Name == FontFamily);
             if (fontFamily == null)
-                throw new AnimationException($"Cannot find font family {FontFamily}.");
+                throw new AnimationException($"Cannot find font family {FontFamily}.", GetPath());
 
             FontStyle fontStyle = 0;
             if (Bold)
@@ -46,7 +46,7 @@ namespace Animator.Engine.Elements
             };
 
             using var font = new Font(fontFamily, FontSize, fontStyle, unit);
-            buffer.Graphics.DrawString(Text, font, brush, Position);
+            buffer.Graphics.DrawString(Text, font, brush, new PointF(0.0f, 0.0f));
         }
 
         // Public properties --------------------------------------------------

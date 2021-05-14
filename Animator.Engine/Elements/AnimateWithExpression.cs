@@ -204,7 +204,7 @@ namespace Animator.Engine.Elements
         public override void ApplyAnimation(float timeMs)
         {
             if (compiled == null)
-                throw new AnimationException("No expression provided for PropertyExpressionAnimator or expression is invalid!");
+                throw new AnimationException("No expression provided for PropertyExpressionAnimator or expression is invalid!", GetPath());
 
             (var obj, var prop) = AnimatedObject.FindProperty(PropertyRef);
 

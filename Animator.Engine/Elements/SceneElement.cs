@@ -57,27 +57,27 @@ namespace Animator.Engine.Elements
 
                 // Erroneus situation
                 if (property != null && (children != null))
-                    throw new AnimationException($"{path[i]} matches both property and child!");
+                    throw new AnimationException($"{path[i]} matches both property and child!", GetPath());
                 else if (property == null && children == null)
-                    throw new AnimationException($"{path[i]} doesn't match any property or child!");
+                    throw new AnimationException($"{path[i]} doesn't match any property or child!", GetPath());
                 else if (property != null)
                 {
                     object value = current.GetValue(property);
                     if (value == null)
-                        throw new AnimationException($"{path[i]} returns null element!");
+                        throw new AnimationException($"{path[i]} returns null element!", GetPath());
 
                     if (value is not SceneElement baseElement)
-                        throw new AnimationException($"Property {path[i]} yields object of type {value.GetType().Name}, which does not derive from BaseElement!");
+                        throw new AnimationException($"Property {path[i]} yields object of type {value.GetType().Name}, which does not derive from BaseElement!", GetPath());
 
                     current = baseElement;
                 }
                 else if (children != null)
                 {
                     if (children.Count > 1)
-                        throw new AnimationException($"{path[i]} yields more than one child element. Name is not unique.");
+                        throw new AnimationException($"{path[i]} yields more than one child element. Name is not unique.", GetPath());
 
                     if (children.Single() is not SceneElement baseElement)
-                        throw new AnimationException($"Child {path[i]} yields object of type {children.Single().GetType().Name}, which does not derive from BaseElement!");
+                        throw new AnimationException($"Child {path[i]} yields object of type {children.Single().GetType().Name}, which does not derive from BaseElement!", GetPath());
 
                     current = baseElement;
                 }
@@ -124,7 +124,7 @@ namespace Animator.Engine.Elements
             }
             catch (Exception e)
             {
-                throw new AnimationException($"Failed to find element by reference {elementRef}!", e);
+                throw new AnimationException($"Failed to find element by reference {elementRef}!", GetPath(), e);
             }
 
             return finalElement;
@@ -145,12 +145,12 @@ namespace Animator.Engine.Elements
             }
             catch (Exception e)
             {
-                throw new AnimationException($"Failed to process property reference { propertyRef }!", e);
+                throw new AnimationException($"Failed to process property reference { propertyRef }!", GetPath(), e);
             }
 
             var property = finalElement.GetProperty(path.Last());
             if (property == null)
-                throw new AnimationException($"Failed to process property reference {propertyRef}: object {finalElement.GetType().Name} does not have property {path.Last()}!");
+                throw new AnimationException($"Failed to process property reference {propertyRef}: object {finalElement.GetType().Name} does not have property {path.Last()}!", GetPath());
 
             return (finalElement, property);
         }
