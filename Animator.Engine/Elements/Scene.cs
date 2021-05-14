@@ -36,8 +36,7 @@ namespace Animator.Engine.Elements
 
             // Prepare bitmap
             using Graphics graphics = Graphics.FromImage(bitmap);
-            graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            graphics.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+            GraphicsInitializer.Initialize(graphics);
             graphics.Clear(Color.Transparent);
 
             if (IsPropertySet(BackgroundProperty))

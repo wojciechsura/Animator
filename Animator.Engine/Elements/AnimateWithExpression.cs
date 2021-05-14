@@ -34,7 +34,7 @@ namespace Animator.Engine.Elements
             private readonly AnimateWithExpression animator;
             private readonly float currentTime;
 
-            private readonly Regex ReferenceRegex = new Regex("[a-zA-Z_][a-zA-Z0-9_]*(\\.[a-zA-Z_][a-zA-Z0-9_])+");
+            private readonly Regex ReferenceRegex = new Regex("[a-zA-Z_@][a-zA-Z0-9_@]*(\\.[a-zA-Z_@][a-zA-Z0-9_@])+");
 
             private (bool resolved, BaseNumeric result) ReferenceToValue(string externalVariableName)
             {

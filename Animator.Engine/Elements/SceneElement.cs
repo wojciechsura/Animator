@@ -132,6 +132,9 @@ namespace Animator.Engine.Elements
 
         public (SceneElement, ManagedProperty) FindProperty(string propertyRef)
         {
+            if (String.IsNullOrEmpty(propertyRef))
+                throw new AnimationException("Property reference is empty!");
+
             var path = propertyRef.Split('.');
 
             SceneElement finalElement;
