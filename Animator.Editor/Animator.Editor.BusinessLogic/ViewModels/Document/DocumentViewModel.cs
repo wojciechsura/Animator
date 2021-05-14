@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Xml;
 using Animator.Editor.BusinessLogic.Models.Documents;
 using Animator.Editor.BusinessLogic.Models.Highlighting;
@@ -84,6 +88,88 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             }
         }
 
+        private class FrameRenderInput
+        {
+            public FrameRenderInput(Movie movie, int frameIndex)
+            {
+                Movie = movie;
+                FrameIndex = frameIndex;
+            }
+
+            public Movie Movie { get; }
+            public int FrameIndex { get; }
+        }
+
+        private class FrameRenderedResult
+        {
+            public FrameRenderedResult(Bitmap frame)
+            {
+                Frame = frame;
+            }
+
+            public Bitmap Frame { get; }
+        }
+
+        private class FrameRenderingFailure
+        {
+            public FrameRenderingFailure(Exception exception)
+            {
+                Exception = exception;
+            }
+
+            public Exception Exception { get; }
+        }
+
+        private class FrameRendererWorker : BackgroundWorker
+        {
+            private Bitmap RenderFrameAt(Movie movie, TimeSpan time)
+            {
+                TimeSpan summedTime = TimeSpan.FromSeconds(0);
+                int i = 0;
+                while (i < movie.Scenes.Count && summedTime + movie.Scenes[i].Duration < time)
+                {
+                    summedTime += movie.Scenes[i].Duration;
+                    i++;
+                }
+
+                if (i >= movie.Scenes.Count)
+                    throw new InvalidOperationException("Given time exceedes whole movie time!");
+
+                TimeSpan sceneTimeOffset = time - summedTime;
+
+                movie.Scenes[i].ApplyAnimation((float)sceneTimeOffset.TotalMilliseconds);
+
+                var result = new Bitmap(movie.Config.Width, movie.Config.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                movie.Scenes[i].Render(result);
+
+                return result;
+            }
+
+            protected override void OnDoWork(DoWorkEventArgs e)
+            {
+                var input = e.Argument as FrameRenderInput;
+
+                try
+                {
+                    var framesPerSecond = input.Movie.Config.FramesPerSecond;
+                    TimeSpan time = TimeSpan.FromSeconds(1 / framesPerSecond * input.FrameIndex);
+                    Bitmap result = RenderFrameAt(input.Movie, time);
+
+                    e.Result = new FrameRenderedResult(result);
+                }
+                catch (Exception ex)
+                {
+                    e.Result = new FrameRenderingFailure(ex);
+                }
+            }
+
+            public FrameRendererWorker()
+            {
+                WorkerSupportsCancellation = true;
+            }
+        }
+
         // Private fields -----------------------------------------------------
 
         private readonly TextDocument document;
@@ -106,8 +192,16 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 
         private Movie movie;
         private UpdateMovieWorker updateMovieWorker;
+        private BitmapSource frame;
+        private FrameRendererWorker frameRendererWorker;
+        private int minFrame;
+        private int frameIndex;
+        private int maxFrame;
 
         // Private methods ----------------------------------------------------
+
+        [DllImport("gdi32")]
+        private static extern int DeleteObject(IntPtr o);
 
         private void HandleFileNameChanged(object sender, EventArgs e)
         {
@@ -137,14 +231,27 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 
         private void UpdateMovieFinished(object sender, RunWorkerCompletedEventArgs e)
         {
+            if (e.Cancelled)
+                return;
+
             if (e.Result is MovieUpdatedResult movieUpdated)
             {
                 movie = movieUpdated.Movie;
 
                 System.Diagnostics.Debug.WriteLine("Movie update succeeded");
 
-                // TODO update timeline ranges
-                // TODO render current frame
+                MinFrame = 0;
+
+                if (movie.Scenes.Count > 0)
+                {
+                    MaxFrame = (int)(movie.Scenes.Sum(s => s.Duration.TotalSeconds) * movie.Config.FramesPerSecond);
+                }
+                else
+                {
+                    MaxFrame = 0;
+                }
+
+                FrameIndex = Math.Max(MinFrame, Math.Min(maxFrame, FrameIndex));
             }
             else if (e.Result is MovieUpdateFailed movieUpdateFailed)
             {
@@ -153,6 +260,54 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
                 // TODO display errors in appropriate place
             }
         }
+
+        private void HandleFrameIndexChanged()
+        {
+            UpdateFrame();
+        }
+
+        private void FrameRendered(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+                return;
+
+            if (e.Result is FrameRenderedResult frameRenderedResult)
+            {
+                IntPtr ip = frameRenderedResult.Frame.GetHbitmap();
+                BitmapSource bs = null;
+                try
+                {
+                    bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(ip,
+                        IntPtr.Zero, 
+                        Int32Rect.Empty,
+                        BitmapSizeOptions.FromEmptyOptions());
+                }
+                finally
+                {
+                    DeleteObject(ip);
+                }
+
+                Frame = bs;
+            }
+            else if (e.Result is FrameRenderingFailure frameRenderingFailure)
+            {
+                // TODO
+            }
+        }
+
+        private void UpdateFrame()
+        {
+            if (frameRendererWorker != null && frameRendererWorker.IsBusy)
+            {
+                frameRendererWorker.CancelAsync();
+                frameRendererWorker = null;
+            }
+
+            frameRendererWorker = new FrameRendererWorker();
+            frameRendererWorker.RunWorkerCompleted += FrameRendered;
+            frameRendererWorker.RunWorkerAsync(new FrameRenderInput(movie, frameIndex));
+        }
+
 
         // Public methods -----------------------------------------------------
 
@@ -260,11 +415,10 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             }
 
             var text = document.Text;
-            var argument = new UpdateMovieInput(text);
 
             updateMovieWorker = new UpdateMovieWorker();
             updateMovieWorker.RunWorkerCompleted += UpdateMovieFinished;
-            updateMovieWorker.RunWorkerAsync(argument);
+            updateMovieWorker.RunWorkerAsync(new UpdateMovieInput(text));
         }
 
         // Public properties --------------------------------------------------
@@ -355,6 +509,30 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
         {
             get => isPinned;
             set => Set(ref isPinned, () => IsPinned, value);
+        }
+
+        public int MinFrame
+        {
+            get => minFrame;
+            set => Set(ref minFrame, () => MinFrame, value);
+        }
+
+        public int FrameIndex
+        {
+            get => frameIndex;
+            set => Set(ref frameIndex, () => FrameIndex, value, HandleFrameIndexChanged, true);
+        }
+
+        public int MaxFrame
+        {
+            get => maxFrame;
+            set => Set(ref maxFrame, () => MaxFrame, value);
+        }
+
+        public BitmapSource Frame
+        {
+            get => frame;
+            set => Set(ref frame, () => Frame, value);
         }
     }
 }
