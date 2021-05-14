@@ -31,45 +31,46 @@ digraph {
 28 [ label = "Ellipse" ]
 29 [ label = "FloatKeyframe" ]
 30 [ label = "GaussianBlurEffect" ]
-31 [ label = "IntKeyframe" ]
-32 [ label = "Keyframe" ]
-33 [ label = "Label" ]
-34 [ label = "Layer" ]
-35 [ label = "Line" ]
-36 [ label = "Movie" ]
-37 [ label = "MovieConfig" ]
-38 [ label = "NumericKeyframe" ]
-39 [ label = "Path" ]
-40 [ label = "PathElement" ]
-41 [ label = "Pen" ]
-42 [ label = "PointKeyframe" ]
-43 [ label = "QuadraticBezierPathElement" ]
-44 [ label = "Rectangle" ]
-45 [ label = "RelativeArcPathElement" ]
-46 [ label = "RelativeCubicBezierPathElement" ]
-47 [ label = "RelativeCubicShorthandBezierPathElement" ]
-48 [ label = "RelativeHorizontalLinePathElement" ]
-49 [ label = "RelativeLinePathElement" ]
-50 [ label = "RelativeMovePathElement" ]
-51 [ label = "RelativeQuadraticBezierPathElement" ]
-52 [ label = "RelativeQuadraticShorthandBezierPathElement" ]
-53 [ label = "RelativeVerticalLinePathElement" ]
-54 [ label = "Scene" ]
-55 [ label = "SceneElement" ]
-56 [ label = "Shape" ]
-57 [ label = "SolidBrush" ]
-58 [ label = "Storyboard" ]
-59 [ label = "Visual" ]
-60 [ label = "ManagedObject" ]
+31 [ label = "Image" ]
+32 [ label = "IntKeyframe" ]
+33 [ label = "Keyframe" ]
+34 [ label = "Label" ]
+35 [ label = "Layer" ]
+36 [ label = "Line" ]
+37 [ label = "Movie" ]
+38 [ label = "MovieConfig" ]
+39 [ label = "NumericKeyframe" ]
+40 [ label = "Path" ]
+41 [ label = "PathElement" ]
+42 [ label = "Pen" ]
+43 [ label = "PointKeyframe" ]
+44 [ label = "QuadraticBezierPathElement" ]
+45 [ label = "Rectangle" ]
+46 [ label = "RelativeArcPathElement" ]
+47 [ label = "RelativeCubicBezierPathElement" ]
+48 [ label = "RelativeCubicShorthandBezierPathElement" ]
+49 [ label = "RelativeHorizontalLinePathElement" ]
+50 [ label = "RelativeLinePathElement" ]
+51 [ label = "RelativeMovePathElement" ]
+52 [ label = "RelativeQuadraticBezierPathElement" ]
+53 [ label = "RelativeQuadraticShorthandBezierPathElement" ]
+54 [ label = "RelativeVerticalLinePathElement" ]
+55 [ label = "Scene" ]
+56 [ label = "SceneElement" ]
+57 [ label = "Shape" ]
+58 [ label = "SolidBrush" ]
+59 [ label = "Storyboard" ]
+60 [ label = "Visual" ]
+61 [ label = "ManagedObject" ]
 19 -> 0
-40 -> 1
-40 -> 2
-40 -> 3
-40 -> 4
-40 -> 5
-43 -> 6
-43 -> 7
-40 -> 8
+41 -> 1
+41 -> 2
+41 -> 3
+41 -> 4
+41 -> 5
+44 -> 6
+44 -> 7
+41 -> 8
 12 -> 9
 12 -> 10
 12 -> 11
@@ -80,45 +81,46 @@ digraph {
 12 -> 16
 27 -> 17
 17 -> 18
-40 -> 19
+41 -> 19
 26 -> 20
-38 -> 21
-55 -> 22
-56 -> 23
-40 -> 24
+39 -> 21
+56 -> 22
+57 -> 23
+41 -> 24
 26 -> 25
-55 -> 26
-60 -> 27
-56 -> 28
-38 -> 29
+56 -> 26
+61 -> 27
+57 -> 28
+39 -> 29
 26 -> 30
-38 -> 31
-27 -> 32
-59 -> 33
-59 -> 34
-59 -> 35
+60 -> 31
+39 -> 32
+27 -> 33
+60 -> 34
+60 -> 35
 60 -> 36
-60 -> 37
-32 -> 38
-56 -> 39
-55 -> 40
-55 -> 41
-38 -> 42
-40 -> 43
-56 -> 44
-19 -> 45
-40 -> 46
-40 -> 47
-40 -> 48
-40 -> 49
-40 -> 50
-43 -> 51
-43 -> 52
-40 -> 53
-55 -> 54
-27 -> 55
-59 -> 56
-22 -> 57
-17 -> 58
-55 -> 59
+61 -> 37
+61 -> 38
+33 -> 39
+57 -> 40
+56 -> 41
+56 -> 42
+39 -> 43
+41 -> 44
+57 -> 45
+19 -> 46
+41 -> 47
+41 -> 48
+41 -> 49
+41 -> 50
+41 -> 51
+44 -> 52
+44 -> 53
+41 -> 54
+56 -> 55
+27 -> 56
+60 -> 57
+22 -> 58
+17 -> 59
+56 -> 60
 }
