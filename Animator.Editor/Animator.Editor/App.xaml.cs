@@ -18,7 +18,7 @@ namespace Animator.Editor
     {
         public App()
         {
-            Configuration.Configure(Container.Instance);            
+            Dependencies.Configuration.Configure(Container.Instance);            
         }
 
         private void HandleApplicationStartup(object sender, StartupEventArgs e)
