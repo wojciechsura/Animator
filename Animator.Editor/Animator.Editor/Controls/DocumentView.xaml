@@ -32,9 +32,9 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="6" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         
         <ae:TextEditor x:Name="teEditor"
@@ -44,26 +44,61 @@
                    WordWrap="{Binding ElementName=Root, Path=Handler.WordWrap}"
                    ShowLineNumbers="{Binding ElementName=Root, Path=Handler.LineNumbers}" />
 
-        <GridSplitter Grid.Column="1" Style="{StaticResource VerticalRootGridSplitter}" />
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <DockPanel Grid.Column="2">
-            <Grid DockPanel.Dock="Bottom">
+            <Grid Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                <Grid.Background>
+                    <DrawingBrush Stretch="None" TileMode="Tile" Viewport="0,0,16,16" ViewportUnits="Absolute">
+
+                        <!-- a drawing of 4 checkerboard tiles -->
+                        <DrawingBrush.Drawing>
+                            <DrawingGroup>
+
+                                <!-- checkerboard background -->
+                                <GeometryDrawing Brush="#e0e0e0">
+                                    <GeometryDrawing.Geometry>
+                                        <RectangleGeometry Rect="0,0,16,16" />
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+
+                                <!-- two checkerboard foreground tiles -->
+                                <GeometryDrawing Brush="#f0f0f0">
+                                    <GeometryDrawing.Geometry>
+                                        <GeometryGroup>
+                                            <RectangleGeometry Rect="0,0,8,8" />
+                                            <RectangleGeometry Rect="8,8,8,8" />
+                                        </GeometryGroup>
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+
+                            </DrawingGroup>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Grid.Background>
+                
+                <Image Source="{Binding Frame}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" StretchDirection="DownOnly"/>
+            </Grid>
+
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="100" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Content="{Binding MinFrame}" />
+                <Label Grid.Column="0" Content="{Binding FrameIndex}"/>
 
                 <Slider Grid.Column="1" Minimum="{Binding MinFrame}" Maximum="{Binding MaxFrame}" Value="{Binding FrameIndex, Mode=TwoWay, Delay=100}" 
-                        Margin="{StaticResource DefaultMargin}"/>
+                        Margin="{StaticResource DefaultMargin}" SmallChange="1" TickPlacement="BottomRight" TickFrequency="10" LargeChange="10"/>
 
-                <Label Grid.Column="2" Content="{Binding MaxFrame}" />
             </Grid>
-            
-            <Image Source="{Binding Frame}" />
-        </DockPanel>
+        </Grid>
+
+        <GridSplitter Grid.Column="1" Style="{StaticResource VerticalRootGridSplitter}" VerticalAlignment="Stretch" 
+                      HorizontalAlignment="Center" Width="6"/>
 
     </Grid>
 </UserControl>

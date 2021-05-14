@@ -244,7 +244,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 
                 if (movie.Scenes.Count > 0)
                 {
-                    MaxFrame = (int)(movie.Scenes.Sum(s => s.Duration.TotalSeconds) * movie.Config.FramesPerSecond);
+                    MaxFrame = (int)(movie.Scenes.Sum(s => s.Duration.TotalSeconds) * movie.Config.FramesPerSecond) - 1;
                 }
                 else
                 {
