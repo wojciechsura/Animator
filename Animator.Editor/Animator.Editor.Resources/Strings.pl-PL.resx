@@ -315,4 +315,16 @@
   <data name="Tool.Explorer.Title" xml:space="preserve">
     <value>Pliki</value>
   </data>
+  <data name="Error.Reason" xml:space="preserve">
+    <value>Powód:</value>
+  </data>
+  <data name="Error.At" xml:space="preserve">
+    <value>w</value>
+  </data>
+  <data name="Error.ParsingFailed" xml:space="preserve">
+    <value>Parsowanie nieudane!</value>
+  </data>
+  <data name="Error.RenderingFailed" xml:space="preserve">
+    <value>Renderowanie nieudane!</value>
+  </data>
 </root>

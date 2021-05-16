@@ -15,6 +15,11 @@ namespace Animator.Engine.Elements
     [ContentProperty(nameof(Scenes))]
     public class Movie : ManagedObject
     {
+        public Movie()
+        {
+            Config = new MovieConfig();
+        }
+
         #region Config managed property
 
         /// <summary>
@@ -28,7 +33,12 @@ namespace Animator.Engine.Elements
 
         public static readonly ManagedProperty ConfigProperty = ManagedProperty.RegisterReference(typeof(Movie),
             nameof(Config),
-            typeof(MovieConfig));
+            typeof(MovieConfig), new ManagedReferencePropertyMetadata { ValueValidationHandler = ValidateConfig });
+
+        private static bool ValidateConfig(ManagedObject sender, ValueValidationEventArgs args)
+        {
+            return args.NewValue != null;
+        }
 
         #endregion
 

@@ -81,8 +81,11 @@
                 </Grid.Background>
                 
                 <Image Source="{Binding Frame}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" StretchDirection="DownOnly"/>
-            </Grid>
 
+                <TextBox HorizontalAlignment="Stretch" VerticalContentAlignment="Top" Background="#a0ffffff" Visibility="{Binding ShowError, Converter={StaticResource BooleanToVisibilityConverter}}"
+                       VerticalAlignment="Stretch" Margin="0" Text="{Binding Error, Mode=OneWay}" IsReadOnly="True" Foreground="#ff0060" FontFamily="Consolas"/>
+            </Grid>
+           
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100" />

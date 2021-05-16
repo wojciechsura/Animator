@@ -6,6 +6,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <StartupObject>Animator.Editor.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\New32.png" />

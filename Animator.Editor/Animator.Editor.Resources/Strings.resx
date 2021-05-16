@@ -315,4 +315,16 @@
   <data name="Tool.Explorer.Title" xml:space="preserve">
     <value>Files</value>
   </data>
+  <data name="Error.Reason" xml:space="preserve">
+    <value>Reason:</value>
+  </data>
+  <data name="Error.At" xml:space="preserve">
+    <value>at</value>
+  </data>
+  <data name="Error.ParsingFailed" xml:space="preserve">
+    <value>Parsing failed!</value>
+  </data>
+  <data name="Error.RenderingFailed" xml:space="preserve">
+    <value>Rendering failed!</value>
+  </data>
 </root>

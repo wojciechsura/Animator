@@ -18,8 +18,10 @@ using Animator.Editor.BusinessLogic.Models.Search;
 using Animator.Editor.BusinessLogic.ViewModels.Base;
 using Animator.Editor.Common.Commands;
 using Animator.Editor.Common.Conditions;
+using Animator.Engine.Base.Exceptions;
 using Animator.Engine.Elements;
 using Animator.Engine.Elements.Persistence;
+using Animator.Engine.Exceptions;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
 
@@ -124,7 +126,11 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
         {
             private Bitmap RenderFrameAt(Movie movie, TimeSpan time)
             {
+                if (movie.Scenes.Count == 0)
+                    throw new InvalidOperationException("No scenes to render!");
+
                 TimeSpan summedTime = TimeSpan.FromSeconds(0);
+
                 int i = 0;
                 while (i < movie.Scenes.Count && summedTime + movie.Scenes[i].Duration < time)
                 {
@@ -197,6 +203,8 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
         private int minFrame;
         private int frameIndex;
         private int maxFrame;
+        private string parsingError;
+        private string renderingError;
 
         // Private methods ----------------------------------------------------
 
@@ -229,16 +237,60 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             handler.RequestClose(this);
         }
 
+        private string BuildError(string message, Exception exception)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(message);
+            sb.AppendLine(Resources.Strings.Error_Reason);
+            do
+            {
+                if (exception is ParseException parseException)
+                    sb.AppendLine($"    {parseException.Message}");
+                else if (exception is SerializerException serializerException)
+                    sb.AppendLine($"    {serializerException.Message} {Resources.Strings.Error_At} {serializerException.XPath}");
+                else if (exception is AnimationException animationException)
+                    sb.AppendLine($"    {animationException.Message} {Resources.Strings.Error_At} {animationException.Path}");
+                else
+                    sb.AppendLine($"    {exception.Message}");
+
+                exception = exception.InnerException;
+                if (exception != null)
+                    sb.AppendLine(Resources.Strings.Error_Reason);
+            }
+            while (exception != null);
+
+            return sb.ToString();
+        }
+
+        private string BuildErrors(params string[] errors)
+        {
+            var sb = new StringBuilder();
+            bool first = true;
+
+            foreach (var error in errors)
+            {
+                if (first)
+                    first = false;
+                else
+                    sb.AppendLine();
+
+                sb.AppendLine(error);
+            }
+
+            return sb.ToString();
+        }
+
         private void UpdateMovieFinished(object sender, RunWorkerCompletedEventArgs e)
         {
+            ParsingError = null;
+            RenderingError = null;
+
             if (e.Cancelled)
                 return;
 
             if (e.Result is MovieUpdatedResult movieUpdated)
             {
                 movie = movieUpdated.Movie;
-
-                System.Diagnostics.Debug.WriteLine("Movie update succeeded");
 
                 MinFrame = 0;
 
@@ -255,9 +307,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             }
             else if (e.Result is MovieUpdateFailed movieUpdateFailed)
             {
-                System.Diagnostics.Debug.WriteLine("Movie update failed");
-
-                // TODO display errors in appropriate place
+                ParsingError = BuildError(Resources.Strings.Error_ParsingFailed, movieUpdateFailed.Exception);
             }
         }
 
@@ -266,10 +316,18 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             UpdateFrame();
         }
 
+        private void HandleErrorChanged()
+        {
+            OnPropertyChanged(() => Error);
+            OnPropertyChanged(() => ShowError);
+        }
+
         private void FrameRendered(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Cancelled)
                 return;
+
+            RenderingError = null;
 
             if (e.Result is FrameRenderedResult frameRenderedResult)
             {
@@ -291,7 +349,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             }
             else if (e.Result is FrameRenderingFailure frameRenderingFailure)
             {
-                // TODO
+                RenderingError = BuildError(Resources.Strings.Error_RenderingFailed, frameRenderingFailure.Exception);
             }
         }
 
@@ -533,6 +591,25 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
         {
             get => frame;
             set => Set(ref frame, () => Frame, value);
+        }
+
+        public string ParsingError
+        {
+            get => parsingError;
+            set => Set(ref parsingError, () => ParsingError, value, HandleErrorChanged);
+        }
+
+        public string RenderingError
+        {
+            get => renderingError;
+            set => Set(ref renderingError, () => RenderingError, value, HandleErrorChanged);
+        }
+
+        public string Error => BuildErrors(ParsingError, RenderingError);
+
+        public bool ShowError
+        {
+            get => !String.IsNullOrEmpty(ParsingError) || !String.IsNullOrEmpty(RenderingError);
         }
     }
 }
