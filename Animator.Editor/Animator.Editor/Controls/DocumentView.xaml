@@ -42,7 +42,8 @@
                    FontFamily="Consolas"                   
                    Loaded="HandleLoaded" 
                    WordWrap="{Binding ElementName=Root, Path=Handler.WordWrap}"
-                   ShowLineNumbers="{Binding ElementName=Root, Path=Handler.LineNumbers}" />
+                   ShowLineNumbers="{Binding ElementName=Root, Path=Handler.LineNumbers}" 
+                       KeyDown="HandleEditorKeyDown"/>
 
         <Grid Grid.Column="2">
             <Grid.RowDefinitions>

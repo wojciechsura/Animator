@@ -2,7 +2,9 @@
 using Animator.Editor.BusinessLogic.Types.Folding;
 using Animator.Editor.BusinessLogic.ViewModels.Document;
 using ICSharpCode.AvalonEdit.Animator.Editor.Folding.Strategies;
+using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Folding;
 using System;
 using System.Collections.Generic;
@@ -348,5 +350,26 @@ namespace Animator.Editor.Controls
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void HandleEditorKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                var completionList = viewModel.GetCompletionList(teEditor.SelectionStart);
+
+                if (completionList != null && completionList.Any())
+                {
+                    var completionWindow = new CompletionWindow(teEditor.TextArea);
+                    IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
+
+                    foreach (var entry in completionList)
+                        data.Add(new CompletionData(entry));
+
+                    completionWindow.Show();
+                }
+
+                e.Handled = true;
+            }
+        }
     }
 }
