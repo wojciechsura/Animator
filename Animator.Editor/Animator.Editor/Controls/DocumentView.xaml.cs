@@ -363,7 +363,7 @@ namespace Animator.Editor.Controls
                     IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
 
                     foreach (var entry in completionList)
-                        data.Add(new CompletionData(entry));
+                        data.Add(new CompletionData(entry.Content, entry.Display, entry.Offset));
 
                     completionWindow.Show();
                 }

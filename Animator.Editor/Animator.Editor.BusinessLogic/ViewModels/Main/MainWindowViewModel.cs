@@ -34,6 +34,7 @@ using Animator.Editor.BusinessLogic.Services.FileIcons;
 using Animator.Editor.BusinessLogic.Types.UI;
 using Animator.Editor.BusinessLogic.Models.UI;
 using ICSharpCode.AvalonEdit.Document;
+using Animator.Engine.Base;
 
 namespace Animator.Editor.BusinessLogic.ViewModels.Main
 {
@@ -247,6 +248,29 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
             return false;
         }
 
+        private void InitializeStaticCtorsForAnimator()
+        {
+            // Ensures, that all static ctors for animation element classes are called.
+            // This is required for proper functioning of code completion.
+
+            var movieType = typeof(Animator.Engine.Elements.Movie);
+            var movieAssembly = movieType.Assembly;
+            var elementsNamespace = movieType.Namespace;
+
+            foreach (var elementType in movieAssembly.GetTypes().Where(t => t.IsPublic && t.Namespace == elementsNamespace))
+            {
+                var type = elementType;
+
+                // Initialize all base classes too
+                do
+                {
+                    System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(elementType.TypeHandle);
+                    type = type.BaseType;
+                }
+                while (type != typeof(ManagedObject) && type != typeof(object));
+            }
+        }
+
         // IDocumentHandler implementation ------------------------------------
 
         void IDocumentHandler.RequestClose(DocumentViewModel documentViewModel)
@@ -278,6 +302,8 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
             this.commandRepositoryService = commandRepositoryService;
             this.imageResources = imageResources;
             this.fileIconProvider = fileIconProvider;
+
+            InitializeStaticCtorsForAnimator();
 
             wordWrap = configurationService.Configuration.Editor.WordWrap.Value;
             lineNumbers = configurationService.Configuration.Editor.LineNumbers.Value;

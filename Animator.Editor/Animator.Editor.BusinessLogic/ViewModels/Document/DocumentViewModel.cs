@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -20,6 +21,7 @@ using Animator.Editor.Common.Commands;
 using Animator.Editor.Common.Conditions;
 using Animator.Engine.Base;
 using Animator.Engine.Base.Exceptions;
+using Animator.Engine.Base.Persistence;
 using Animator.Engine.Elements;
 using Animator.Engine.Elements.Persistence;
 using Animator.Engine.Exceptions;
@@ -368,56 +370,109 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             frameRendererWorker.RunWorkerAsync(new FrameRenderInput(movie, frameIndex));
         }
 
-        private List<string> CollectRootLevelSuggestions()
+        private CompletionInfo TagToCompletionInfo(string tag)
         {
-            return new List<string> { nameof(Movie) };
+            return new CompletionInfo(tag, $"<{tag}></{tag}>", tag.Length + 2);
         }
 
-        private List<string> CollectChildElementSuggestionsFor(string name)
+        private CompletionInfo AttributeToCompletionInfo(string attr)
         {
-            // Find type for name
+            return new CompletionInfo(attr, $"{attr}=\"\"", attr.Length + 2);
+        }
 
+        private List<CompletionInfo> CollectRootLevelSuggestions()
+        {
+            return new List<CompletionInfo> { TagToCompletionInfo(nameof(Movie)) };
+        }
+
+        private List<CompletionInfo> CollectPropertySuggestions(Type type, string propertyName)
+        {
             var movieType = typeof(Movie);
             var movieAssembly = movieType.Assembly;
             var elementsNamespace = movieType.Namespace;
 
-            var result = new List<string>();
+            var property = ManagedProperty.FindByTypeAndName(type, propertyName);
+            if (property == null)
+                return null;
 
-            var type = movieAssembly.GetType($"{elementsNamespace}.{name}");
-            if (type != null)
+            if (property is ManagedCollectionProperty collectionProperty)
             {
-                // Collect properties
+                var propertyType = collectionProperty.Type;
+                if (!propertyType.IsGenericType || propertyType.GetGenericTypeDefinition() != typeof(ManagedCollection<>))
+                    return null;
 
-                StaticInitializeRecursively(type);
-                var properties = ManagedProperty.FindAllByType(type, true);
-                foreach (var property in properties.OrderBy(p => p.Name))
+                var genericType = propertyType.GenericTypeArguments[0];
+
+                var result = new List<CompletionInfo>();
+
+                foreach (var derivedType in movieAssembly.GetTypes()
+                    .Where(t => t.IsPublic && !t.IsAbstract && t.Namespace == elementsNamespace && genericType.IsAssignableFrom(t)))
+                    result.Add(TagToCompletionInfo(derivedType.Name));
+
+                return result;
+            }
+            else if (property is ManagedReferenceProperty refProperty)
+            {
+                var propertyType = refProperty.Type;
+
+                var result = new List<CompletionInfo>();
+
+                foreach (var derivedType in movieAssembly.GetTypes()
+                    .Where(t => t.IsPublic && !t.IsAbstract && t.Namespace == elementsNamespace && propertyType.IsAssignableFrom(t)))
+                    result.Add(TagToCompletionInfo(derivedType.Name));
+
+                return result;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private List<CompletionInfo> CollectChildSuggestionsFor(string name)
+        {
+            // Find type for name
+            var movieType = typeof(Movie);
+            var movieAssembly = movieType.Assembly;
+            var elementsNamespace = movieType.Namespace;
+
+
+            if (Regex.IsMatch(name, @"[^\.]+\.[^\.]+"))
+            {
+                string[] splitted = name.Split('.');
+                string typeName = splitted[0];
+                string propName = splitted[1];
+
+                var type = movieAssembly.GetType($"{elementsNamespace}.{typeName}");
+                if (type == null)
+                    return null;
+
+                return CollectPropertySuggestions(type, propName);
+            }
+            else
+            {
+                var type = movieAssembly.GetType($"{elementsNamespace}.{name}");
+                var contentPropertyAttribute = (ContentPropertyAttribute[])type.GetCustomAttributes(typeof(ContentPropertyAttribute), false);
+                if (contentPropertyAttribute.Length == 1)
                 {
-                    result.Add($"{type.Name}.{property.Name}");
+                    List<CompletionInfo> result = new();
+
+                    foreach (var property in ManagedProperty.FindAllByType(type, true))
+                        result.Add(TagToCompletionInfo($"{type.Name}.{property.Name}"));
+
+                    var defaultPropertyName = contentPropertyAttribute[0].PropertyName;
+                    var collectionSuggestions = CollectPropertySuggestions(type, defaultPropertyName);
+                    if (collectionSuggestions != null)
+                        result.AddRange(collectionSuggestions);
+
+                    return result;
                 }
             }
 
-            // Collect all types from the elements namespace
-
-            var types = movieAssembly.GetTypes().Where(t => t.Namespace == elementsNamespace && t.IsPublic);
-            foreach (var elementType in types.OrderBy(t => t.Name))
-            {
-                result.Add($"{elementType.Name}");
-            }
-
-            return result;
+            return null;
         }
 
-        private static void StaticInitializeRecursively(Type type)
-        {
-            do
-            {
-                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
-                type = type.BaseType;
-            }
-            while (type != typeof(ManagedObject) && type != typeof(object));
-        }
-
-        private List<string> CollectPropertySuggestionsFor(string name)
+        private List<CompletionInfo> CollectPropertySuggestionsFor(string name)
         {
             // Find type for name
 
@@ -427,17 +482,16 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 
             var type = movieAssembly.GetType($"{elementsNamespace}.{name}");
             if (type == null)
-                return new List<string>();
+                return new List<CompletionInfo>();
 
             // Collect properties
 
-            var result = new List<string>();
+            var result = new List<CompletionInfo>();
 
-            StaticInitializeRecursively(type);
             var properties = ManagedProperty.FindAllByType(type, true);
             foreach (var property in properties.OrderBy(p => p.Name))
             {
-                result.Add($"{property.Name}");
+                result.Add(AttributeToCompletionInfo($"{property.Name}"));
             }
 
             return result;
@@ -555,7 +609,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             updateMovieWorker.RunWorkerAsync(new UpdateMovieInput(text));
         }
 
-        public List<string> GetCompletionList(int selectionStart)
+        public List<CompletionInfo> GetCompletionList(int selectionStart)
         {
             string text = document.Text;
 
@@ -568,9 +622,13 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
                 {
                     return CollectPropertySuggestionsFor(xmlStart.Name);
                 }
+                else if (currentNode is XmlEmptyElementSyntax xmlEmpty)
+                {
+                    return CollectPropertySuggestionsFor(xmlEmpty.Name);
+                }
                 else if (currentNode is XmlElementSyntax xmlElement)
                 {
-                    return CollectChildElementSuggestionsFor(xmlElement.Name);
+                    return CollectChildSuggestionsFor(xmlElement.Name);
                 }
 
                 currentNode = currentNode.Parent;
@@ -579,7 +637,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             if (currentNode == null)
                 return CollectRootLevelSuggestions();
 
-            return new List<string>();
+            return new List<CompletionInfo>();
         }
 
         // Public properties --------------------------------------------------

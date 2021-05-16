@@ -12,10 +12,13 @@ namespace Animator.Editor.Controls
 {
     public class CompletionData : ICompletionData
     {
-        public CompletionData(string text)
+        private readonly int offset;
+
+        public CompletionData(string text, string display, int offset)
         {
             Text = text;
-            Content = text;
+            Content = display;
+            this.offset = offset;
         }
 
         public ImageSource Image { get; set; }
@@ -30,7 +33,9 @@ namespace Animator.Editor.Controls
 
         public void Complete(TextArea textArea, ISegment completionSegment, EventArgs insertionRequestEventArgs)
         {
+            int start = completionSegment.Offset;
             textArea.Document.Replace(completionSegment, this.Text);
+            textArea.Caret.Offset = start + offset;
         }
     }
 }
