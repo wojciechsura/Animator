@@ -26,7 +26,7 @@ Color::Color(int colorArgb)
 
 std::shared_ptr<float[]> generateGaussKernel(int diameter)
 {
-	float sigma = 1;
+	float sigma = diameter / 4.0f;
 	std::shared_ptr<float[]> kernel(new float[diameter * diameter]);
 	int mean = diameter / 2;
 	float sum = 0.0; // For accumulating the kernel values
