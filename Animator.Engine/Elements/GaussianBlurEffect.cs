@@ -22,7 +22,7 @@ namespace Animator.Engine.Elements
                 data.Stride, 
                 data.Width, 
                 data.Height, 
-                2 * Radius + 1);
+                Radius);
 
             framebuffer.Bitmap.UnlockBits(data);
         }

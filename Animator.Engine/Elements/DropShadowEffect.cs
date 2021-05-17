@@ -30,7 +30,7 @@ namespace Animator.Engine.Elements
                 colorArgb,
                 DX,
                 DY,
-                2 * Radius + 1);
+                Radius);
 
             backBuffer.Bitmap.UnlockBits(backData);
             framebuffer.Bitmap.UnlockBits(frameData);
