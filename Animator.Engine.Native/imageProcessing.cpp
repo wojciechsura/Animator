@@ -301,7 +301,7 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 
 					int kernelX = x1 - xStart;
 					int kernelY = y1 - yStart;
-					float kernelValue = kernel[kernelY * radius + kernelX];
+					float kernelValue = kernel[kernelY * diameter + kernelX];
 
 					// Premultiply alpha
 
