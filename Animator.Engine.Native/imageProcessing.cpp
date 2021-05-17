@@ -294,8 +294,8 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 			int yStart = y - radius;
 			int yEnd = y + radius;
 
-			for (int x1 = xStart; x1 <= width; x1++)
-				for (int y1 = yStart; y1 <= height; y1++)
+			for (int x1 = xStart; x1 <= xEnd; x1++)
+				for (int y1 = yStart; y1 <= yEnd; y1++)
 				{
 					// Find weight
 
