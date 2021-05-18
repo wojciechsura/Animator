@@ -218,7 +218,7 @@ namespace Animator.Engine.Base.Persistence.Types
 
         private class PointSerializer : TypeSerializer
 		{
-			private readonly Regex pointRegex = new Regex("^\\-?[0-9]+;\\-?[0-9]+$");
+			private readonly Regex pointRegex = new Regex("^\\-?[0-9]+[,;]\\-?[0-9]+$");
 
 			public override bool CanSerialize (object obj) => obj is Point;
 			public override bool CanDeserialize(string str) => pointRegex.IsMatch(str);
@@ -227,7 +227,7 @@ namespace Animator.Engine.Base.Persistence.Types
 			{
 				if (pointRegex.IsMatch(str))
 				{
-					string[] values = str.Split(';');
+					string[] values = str.Split(new char[] {',', ';'});
 
 					var x = int.Parse(values[0], CultureInfo.InvariantCulture);
 					var y = int.Parse(values[1], CultureInfo.InvariantCulture);
@@ -248,7 +248,7 @@ namespace Animator.Engine.Base.Persistence.Types
 
         private class PointFSerializer : TypeSerializer
 		{
-			private readonly Regex pointRegex = new Regex("^\\-?[0-9]+(\\.[0-9]+)?;\\-?[0-9]+(\\.[0-9]+)?$");
+			private readonly Regex pointRegex = new Regex("^\\-?[0-9]+(\\.[0-9]+)?[,;]\\-?[0-9]+(\\.[0-9]+)?$");
 
 			public override bool CanSerialize (object obj) => obj is PointF;
 			public override bool CanDeserialize(string str) => pointRegex.IsMatch(str);
@@ -257,7 +257,7 @@ namespace Animator.Engine.Base.Persistence.Types
 			{
 				if (pointRegex.IsMatch(str))
 				{
-					string[] values = str.Split(';');
+					string[] values = str.Split(new char[] {',', ';'});
 
 					var x = float.Parse(values[0], CultureInfo.InvariantCulture);
 					var y = float.Parse(values[1], CultureInfo.InvariantCulture);

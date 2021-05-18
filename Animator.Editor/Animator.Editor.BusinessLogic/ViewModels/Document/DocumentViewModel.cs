@@ -370,9 +370,12 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             frameRendererWorker.RunWorkerAsync(new FrameRenderInput(movie, frameIndex));
         }
 
-        private CompletionInfo TagToCompletionInfo(string tag)
+        private CompletionInfo TagToCompletionInfo(string tag, bool autoClosed = false)
         {
-            return new CompletionInfo(tag, $"<{tag}></{tag}>", tag.Length + 2);
+            if (autoClosed)
+                return new CompletionInfo(tag, $"<{tag} />", tag.Length + 2);
+            else
+                return new CompletionInfo(tag, $"<{tag}></{tag}>", tag.Length + 2);
         }
 
         private CompletionInfo AttributeToCompletionInfo(string attr)
@@ -382,7 +385,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 
         private List<CompletionInfo> CollectRootLevelSuggestions()
         {
-            return new List<CompletionInfo> { TagToCompletionInfo(nameof(Movie)) };
+            return new List<CompletionInfo> { TagToCompletionInfo(nameof(Movie), false) };
         }
 
         private List<CompletionInfo> CollectPropertySuggestions(Type type, string propertyName)
@@ -407,7 +410,11 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 
                 foreach (var derivedType in movieAssembly.GetTypes()
                     .Where(t => t.IsPublic && !t.IsAbstract && t.Namespace == elementsNamespace && genericType.IsAssignableFrom(t)))
-                    result.Add(TagToCompletionInfo(derivedType.Name));
+                {
+                    var contentPropertyAttributes = derivedType.GetCustomAttributes(typeof(ContentPropertyAttribute), false);
+
+                    result.Add(TagToCompletionInfo(derivedType.Name, !contentPropertyAttributes.Any()));
+                }
 
                 return result;
             }
@@ -419,7 +426,11 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 
                 foreach (var derivedType in movieAssembly.GetTypes()
                     .Where(t => t.IsPublic && !t.IsAbstract && t.Namespace == elementsNamespace && propertyType.IsAssignableFrom(t)))
-                    result.Add(TagToCompletionInfo(derivedType.Name));
+                {
+                    var contentPropertyAttributes = derivedType.GetCustomAttributes(typeof(ContentPropertyAttribute), false);
+
+                    result.Add(TagToCompletionInfo(derivedType.Name, !contentPropertyAttributes.Any()));
+                }
 
                 return result;
             }
@@ -452,21 +463,21 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             else
             {
                 var type = movieAssembly.GetType($"{elementsNamespace}.{name}");
+
+                List<CompletionInfo> result = new();
+                foreach (var property in ManagedProperty.FindAllByType(type, true))
+                    result.Add(TagToCompletionInfo($"{type.Name}.{property.Name}", false));
+
                 var contentPropertyAttribute = (ContentPropertyAttribute[])type.GetCustomAttributes(typeof(ContentPropertyAttribute), false);
                 if (contentPropertyAttribute.Length == 1)
                 {
-                    List<CompletionInfo> result = new();
-
-                    foreach (var property in ManagedProperty.FindAllByType(type, true))
-                        result.Add(TagToCompletionInfo($"{type.Name}.{property.Name}"));
-
                     var defaultPropertyName = contentPropertyAttribute[0].PropertyName;
                     var collectionSuggestions = CollectPropertySuggestions(type, defaultPropertyName);
                     if (collectionSuggestions != null)
                         result.AddRange(collectionSuggestions);
-
-                    return result;
                 }
+
+                return result;
             }
 
             return null;
