@@ -190,6 +190,22 @@
             Final value of the property when animation ends (at EndTime)
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.AnimateColor">
+            Allows applying an animation to a float property of some
+            object. It is meant to be used only if you want to apply
+            single animation per whole scene. Otherwise, use Storyboard
+            and ColorKeyframe to define the whole animation.
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimateColor.From">
+            <summary>
+            Initial color
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimateColor.To">
+            <summary>
+            Final color
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.AnimateFloat">
             <summary>
             Allows applying an animation to a float property of some
@@ -477,6 +493,11 @@
             its start.
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.ColorKeyframe">
+            <summary>
+            A keyframe for a property of type Color.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.DropShadowEffect">
             <summary>
             An effect, which adds a shadow to a visual.
@@ -662,6 +683,54 @@
         <member name="P:Animator.Engine.Elements.Line.Pen">
             <summary>
             Describes visual properties of the drawn line.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.LinearGradientBrush">
+            <summary>
+            Brush, which fills shape with a linear gradient.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.LinearGradientBrush.Point1">
+            <summary>
+            Start point of the gradient
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.LinearGradientBrush.Point2">
+            <summary>
+            End point of the gradient
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.LinearGradientBrush.Color1">
+            <summary>
+            Start color of the gradient
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.LinearGradientBrush.Color2">
+            <summary>
+            End color of the gradient
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.LinearGradientBrush.Stops">
+            <summary>
+            Defines additional stops for the gradient. Note, that if you
+            use Steps, values of Color1 and Color2 are ignored.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.LinearGradientStop">
+            <summary>
+            Defines a stop in complex linear gradient.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.LinearGradientStop.Position">
+            <summary>
+            Position of the stop. 0.0f equals to start point, 1.0f - to end point.
+            Values outside this range are allowed to define gradient on the outside
+            as well.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.LinearGradientStop.Color">
+            <summary>
+            Color of this gradient stop.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.Movie">
