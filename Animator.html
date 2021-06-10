@@ -1091,6 +1091,118 @@ Default value is .
 </table>
 <hr />
 
+<h1><a name="AnimateColor"></a>AnimateColor</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » Animation » AnimateProperty » AnimatePropertyInTime » AnimateNumericPropertyInTime » <a href="#AnimateColor">AnimateColor</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Color</code></pre>
+</td>
+<td>
+<pre><code><strong>From</strong></code></pre>
+</td>
+<td>
+
+            Initial color
+            
+<p>Not inheritable by child elements. 
+Default value is Color [White].
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Color</code></pre>
+</td>
+<td>
+<pre><code><strong>To</strong></code></pre>
+</td>
+<td>
+
+            Final color
+            
+<p>Not inheritable by child elements. 
+Default value is Color [Black].
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimateNumericPropertyInTime:</strong></td></tr>
+<tr>
+<td>
+<pre><code>EasingFunction</code></pre>
+</td>
+<td>
+<pre><code><strong>EasingFunction</strong></code></pre>
+</td>
+<td>
+
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul><li>Linear</li><li>SwitchOnStart</li><li>SwitchInTheMiddle</li><li>SwitchOnEnd</li><li>SineSpeedUp</li><li>SineSlowDown</li><li>SineBoth</li><li>QuadSpeedUp</li><li>QuadSlowDown</li><li>QuadBoth</li><li>CubicSpeedUp</li><li>CubicSlowDown</li><li>CubicBoth</li><li>QuartSpeedUp</li><li>QuartSlowDown</li><li>QuartBoth</li><li>BackSpeedUp</li><li>BackSlowDown</li><li>BackBoth</li></ul>
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is Linear.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimatePropertyInTime:</strong></td></tr>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>StartTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should be started.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>EndTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should finish.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimateProperty:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>PropertyRef</strong></code></pre>
+</td>
+<td>
+
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
+            
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+<p><strong>Example:</strong></p><code>PropertyRef="MyRectangle.Pen.Color"</code>
+</td>
+</table>
+<hr />
+
 <h1><a name="AnimateFloat"></a>AnimateFloat</h1>
 <h2>Inheritance</h2>
 <pre><code>Element » Animation » AnimateProperty » AnimatePropertyInTime » AnimateNumericPropertyInTime » <a href="#AnimateFloat">AnimateFloat</a></pre></code>
@@ -2103,6 +2215,82 @@ Informs, that the shape defined by a series of path elements
             Contains list of all animators, which animate properties
             of elements placed inside this element.
             
+</td>
+</table>
+<hr />
+
+<h1><a name="ColorKeyframe"></a>ColorKeyframe</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » Keyframe » NumericKeyframe » <a href="#ColorKeyframe">ColorKeyframe</a></pre></code>
+<h2>Description</h2>
+A keyframe for a property of type Color.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Color</code></pre>
+</td>
+<td>
+<pre><code><strong>Color</strong></code></pre>
+</td>
+<td>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>NumericKeyframe:</strong></td></tr>
+<tr>
+<td>
+<pre><code>EasingFunction</code></pre>
+</td>
+<td>
+<pre><code><strong>EasingFunction</strong></code></pre>
+</td>
+<td>
+
+            Defines easing function used for animation. The role of
+            easing function is to define, how value should change
+            between previous and current keyframe. Possible
+            easing functions include the following:
+            
+            <ul><li>Linear</li><li>SwitchOnStart</li><li>SwitchInTheMiddle</li><li>SwitchOnEnd</li><li>SineSpeedUp</li><li>SineSlowDown</li><li>SineBoth</li><li>QuadSpeedUp</li><li>QuadSlowDown</li><li>QuadBoth</li><li>CubicSpeedUp</li><li>CubicSlowDown</li><li>CubicBoth</li><li>QuartSpeedUp</li><li>QuartSlowDown</li><li>QuartBoth</li><li>BackSpeedUp</li><li>BackSlowDown</li><li>BackBoth</li></ul>
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is Linear.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Keyframe:</strong></td></tr>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>Time</strong></code></pre>
+</td>
+<td>
+
+            Define exact time since start of a scene, when a
+            property should be set to a fixed value.
+            
+<p>Not inheritable by child elements. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>PropertyRef</strong></code></pre>
+</td>
+<td>
+
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
+            
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+<p><strong>Example:</strong></p><code>PropertyRef="MyRectangle.Pen.Color"</code>
 </td>
 </table>
 <hr />
@@ -3651,6 +3839,193 @@ Default value is Local.
             drawing). If mask is inverted, this behavior works the other
             way around.
             
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their TargetName
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through TargetName properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+</table>
+<hr />
+
+<h1><a name="LinearGradientBrush"></a>LinearGradientBrush</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Brush » <a href="#LinearGradientBrush">LinearGradientBrush</a></pre></code>
+<h2>Description</h2>
+Brush, which fills shape with a linear gradient.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>Point1</strong></code></pre>
+</td>
+<td>
+
+            Start point of the gradient
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>Point2</strong></code></pre>
+</td>
+<td>
+
+            End point of the gradient
+            
+<p>Not inheritable by child elements. 
+Default value is {X=1, Y=1}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Color</code></pre>
+</td>
+<td>
+<pre><code><strong>Color1</strong></code></pre>
+</td>
+<td>
+
+            Start color of the gradient
+            
+<p>Not inheritable by child elements. 
+Default value is Color [Black].
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Color</code></pre>
+</td>
+<td>
+<pre><code><strong>Color2</strong></code></pre>
+</td>
+<td>
+
+            End color of the gradient
+            
+<p>Not inheritable by child elements. 
+Default value is Color [White].
+</p>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;LinearGradientStop&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Stops</strong></code></pre>
+</td>
+<td>
+
+            Defines additional stops for the gradient. Note, that if you
+            use Steps, values of Color1 and Color2 are ignored.
+            
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their TargetName
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through TargetName properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+</table>
+<hr />
+
+<h1><a name="LinearGradientStop"></a>LinearGradientStop</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » <a href="#LinearGradientStop">LinearGradientStop</a></pre></code>
+<h2>Description</h2>
+Defines a stop in complex linear gradient.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>Position</strong></code></pre>
+</td>
+<td>
+
+            Position of the stop. 0.0f equals to start point, 1.0f - to end point.
+            Values outside this range are allowed to define gradient on the outside
+            as well.
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Color</code></pre>
+</td>
+<td>
+<pre><code><strong>Color</strong></code></pre>
+</td>
+<td>
+
+            Color of this gradient stop.
+            
+<p>Not inheritable by child elements. 
+Default value is Color [White].
+</p>
 </td>
 <tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
 <tr>

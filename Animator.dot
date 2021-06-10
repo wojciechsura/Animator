@@ -10,117 +10,125 @@ digraph {
 7 [ label = "AbsoluteQuadraticShorthandBezierPathElement" ]
 8 [ label = "AbsoluteVerticalLinePathElement" ]
 9 [ label = "AnimateBool" ]
-10 [ label = "AnimateFloat" ]
-11 [ label = "AnimateInt" ]
-12 [ label = "AnimateNumericPropertyInTime" ]
-13 [ label = "AnimatePoint" ]
-14 [ label = "AnimateProperty" ]
-15 [ label = "AnimatePropertyInTime" ]
-16 [ label = "AnimateWithExpression" ]
-17 [ label = "Animation" ]
-18 [ label = "AnimationGroup" ]
-19 [ label = "ArcPathElement" ]
-20 [ label = "BlurEffect" ]
-21 [ label = "BoolKeyframe" ]
-22 [ label = "Brush" ]
-23 [ label = "Circle" ]
-24 [ label = "CloseShapePathElement" ]
-25 [ label = "DropShadowEffect" ]
-26 [ label = "Effect" ]
-27 [ label = "Element" ]
-28 [ label = "Ellipse" ]
-29 [ label = "FloatKeyframe" ]
-30 [ label = "GaussianBlurEffect" ]
-31 [ label = "Image" ]
-32 [ label = "IntKeyframe" ]
-33 [ label = "Keyframe" ]
-34 [ label = "Label" ]
-35 [ label = "Layer" ]
-36 [ label = "Line" ]
-37 [ label = "Movie" ]
-38 [ label = "MovieConfig" ]
-39 [ label = "NumericKeyframe" ]
-40 [ label = "Path" ]
-41 [ label = "PathElement" ]
-42 [ label = "Pen" ]
-43 [ label = "PointKeyframe" ]
-44 [ label = "QuadraticBezierPathElement" ]
-45 [ label = "Rectangle" ]
-46 [ label = "RelativeArcPathElement" ]
-47 [ label = "RelativeCubicBezierPathElement" ]
-48 [ label = "RelativeCubicShorthandBezierPathElement" ]
-49 [ label = "RelativeHorizontalLinePathElement" ]
-50 [ label = "RelativeLinePathElement" ]
-51 [ label = "RelativeMovePathElement" ]
-52 [ label = "RelativeQuadraticBezierPathElement" ]
-53 [ label = "RelativeQuadraticShorthandBezierPathElement" ]
-54 [ label = "RelativeVerticalLinePathElement" ]
-55 [ label = "Scene" ]
-56 [ label = "SceneElement" ]
-57 [ label = "Shape" ]
-58 [ label = "SolidBrush" ]
-59 [ label = "Storyboard" ]
-60 [ label = "Visual" ]
-61 [ label = "ManagedObject" ]
-19 -> 0
-41 -> 1
-41 -> 2
-41 -> 3
-41 -> 4
-41 -> 5
-44 -> 6
-44 -> 7
-41 -> 8
-12 -> 9
-12 -> 10
-12 -> 11
-15 -> 12
-12 -> 13
-17 -> 14
-14 -> 15
-12 -> 16
-27 -> 17
-17 -> 18
-41 -> 19
-26 -> 20
-39 -> 21
-56 -> 22
-57 -> 23
-41 -> 24
-26 -> 25
-56 -> 26
-61 -> 27
-57 -> 28
-39 -> 29
-26 -> 30
-60 -> 31
-39 -> 32
-27 -> 33
-60 -> 34
-60 -> 35
-60 -> 36
-61 -> 37
-61 -> 38
-33 -> 39
-57 -> 40
-56 -> 41
-56 -> 42
-39 -> 43
-41 -> 44
-57 -> 45
-19 -> 46
-41 -> 47
-41 -> 48
-41 -> 49
-41 -> 50
-41 -> 51
-44 -> 52
-44 -> 53
-41 -> 54
-56 -> 55
-27 -> 56
-60 -> 57
-22 -> 58
-17 -> 59
-56 -> 60
+10 [ label = "AnimateColor" ]
+11 [ label = "AnimateFloat" ]
+12 [ label = "AnimateInt" ]
+13 [ label = "AnimateNumericPropertyInTime" ]
+14 [ label = "AnimatePoint" ]
+15 [ label = "AnimateProperty" ]
+16 [ label = "AnimatePropertyInTime" ]
+17 [ label = "AnimateWithExpression" ]
+18 [ label = "Animation" ]
+19 [ label = "AnimationGroup" ]
+20 [ label = "ArcPathElement" ]
+21 [ label = "BlurEffect" ]
+22 [ label = "BoolKeyframe" ]
+23 [ label = "Brush" ]
+24 [ label = "Circle" ]
+25 [ label = "CloseShapePathElement" ]
+26 [ label = "ColorKeyframe" ]
+27 [ label = "DropShadowEffect" ]
+28 [ label = "Effect" ]
+29 [ label = "Element" ]
+30 [ label = "Ellipse" ]
+31 [ label = "FloatKeyframe" ]
+32 [ label = "GaussianBlurEffect" ]
+33 [ label = "Image" ]
+34 [ label = "IntKeyframe" ]
+35 [ label = "Keyframe" ]
+36 [ label = "Label" ]
+37 [ label = "Layer" ]
+38 [ label = "Line" ]
+39 [ label = "LinearGradientBrush" ]
+40 [ label = "LinearGradientStop" ]
+41 [ label = "Movie" ]
+42 [ label = "MovieConfig" ]
+43 [ label = "NumericKeyframe" ]
+44 [ label = "Path" ]
+45 [ label = "PathElement" ]
+46 [ label = "Pen" ]
+47 [ label = "PointKeyframe" ]
+48 [ label = "QuadraticBezierPathElement" ]
+49 [ label = "Rectangle" ]
+50 [ label = "RelativeArcPathElement" ]
+51 [ label = "RelativeCubicBezierPathElement" ]
+52 [ label = "RelativeCubicShorthandBezierPathElement" ]
+53 [ label = "RelativeHorizontalLinePathElement" ]
+54 [ label = "RelativeLinePathElement" ]
+55 [ label = "RelativeMovePathElement" ]
+56 [ label = "RelativeQuadraticBezierPathElement" ]
+57 [ label = "RelativeQuadraticShorthandBezierPathElement" ]
+58 [ label = "RelativeVerticalLinePathElement" ]
+59 [ label = "Scene" ]
+60 [ label = "SceneElement" ]
+61 [ label = "Shape" ]
+62 [ label = "SolidBrush" ]
+63 [ label = "Storyboard" ]
+64 [ label = "Visual" ]
+65 [ label = "ManagedObject" ]
+20 -> 0
+45 -> 1
+45 -> 2
+45 -> 3
+45 -> 4
+45 -> 5
+48 -> 6
+48 -> 7
+45 -> 8
+13 -> 9
+13 -> 10
+13 -> 11
+13 -> 12
+16 -> 13
+13 -> 14
+18 -> 15
+15 -> 16
+13 -> 17
+29 -> 18
+18 -> 19
+45 -> 20
+28 -> 21
+43 -> 22
+60 -> 23
+61 -> 24
+45 -> 25
+43 -> 26
+28 -> 27
+60 -> 28
+65 -> 29
+61 -> 30
+43 -> 31
+28 -> 32
+64 -> 33
+43 -> 34
+29 -> 35
+64 -> 36
+64 -> 37
+64 -> 38
+23 -> 39
+60 -> 40
+65 -> 41
+65 -> 42
+35 -> 43
+61 -> 44
+60 -> 45
+60 -> 46
+43 -> 47
+45 -> 48
+61 -> 49
+20 -> 50
+45 -> 51
+45 -> 52
+45 -> 53
+45 -> 54
+45 -> 55
+48 -> 56
+48 -> 57
+45 -> 58
+60 -> 59
+29 -> 60
+64 -> 61
+23 -> 62
+18 -> 63
+60 -> 64
 }
