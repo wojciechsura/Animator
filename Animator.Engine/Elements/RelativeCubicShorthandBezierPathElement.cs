@@ -13,11 +13,11 @@ namespace Animator.Engine.Elements
     /// endpoint.
     /// All points are expressed in relative coordinates.
     /// </summary>
-    public class RelativeCubicShorthandBezierPathElement : PathElement
+    public class RelativeCubicShorthandBezierPathElement : CubicBezierBasedPathElement
     {
-        // Internal methods ---------------------------------------------------
+        // Protected methods --------------------------------------------------
 
-        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
+        protected override PointF[] BuildBezier(PointF start, PointF lastControlPoint)
         {
             var delta = start.Subtract(lastControlPoint);
             var controlPoint1 = start.Add(delta);
@@ -26,10 +26,11 @@ namespace Animator.Engine.Elements
 
             PointF controlPoint2 = point.Delta(DeltaControlPoint2);
             PointF endPoint = point.Delta(DeltaEndPoint);
-            path.AddBezier(point.Current, controlPoint1, controlPoint2, endPoint);
-
-            return (endPoint, controlPoint2);
+            
+            return new[] { point.Current, controlPoint1, controlPoint2, endPoint };
         }
+
+        // Internal methods ---------------------------------------------------
 
         internal override string ToPathString() => $"s {F(DeltaControlPoint2.X)} {F(DeltaControlPoint2.Y)} {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
@@ -50,7 +51,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty DeltaControlPoint2Property = ManagedProperty.Register(typeof(RelativeCubicShorthandBezierPathElement),
             nameof(DeltaControlPoint2),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
 
         #endregion
 
@@ -68,7 +69,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeCubicShorthandBezierPathElement),
             nameof(DeltaEndPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
 
         #endregion
     }

@@ -12,19 +12,18 @@ namespace Animator.Engine.Elements
     /// </summary>
     public class AbsoluteQuadraticBezierPathElement : QuadraticBezierPathElement
     {
-        // Internal methods ---------------------------------------------------
+        // Protected methods --------------------------------------------------
 
-        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
+        protected override PointF[] BuildBezier(PointF start, PointF lastControlPoint)
         {
             (var controlPoint1, var controlPoint2) = EstimateCubicControlPoints(start, ControlPoint, EndPoint);
 
-            path.AddBezier(start, controlPoint1, controlPoint2, EndPoint);
-
-            return (EndPoint, ControlPoint);
+            return new[] { start, controlPoint1, controlPoint2, EndPoint };
         }
 
-        internal override string ToPathString() => $"Q {F(ControlPoint.X)} {F(ControlPoint.Y)} {F(EndPoint.X)} {F(EndPoint.Y)}";
+        // Internal methods ---------------------------------------------------
 
+        internal override string ToPathString() => $"Q {F(ControlPoint.X)} {F(ControlPoint.Y)} {F(EndPoint.X)} {F(EndPoint.Y)}";
 
         // Public properties --------------------------------------------------
 
@@ -42,7 +41,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty ControlPointProperty = ManagedProperty.Register(typeof(AbsoluteQuadraticBezierPathElement),
             nameof(ControlPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
 
         #endregion
 
@@ -60,7 +59,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(AbsoluteQuadraticBezierPathElement),
             nameof(EndPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
 
         #endregion
     }

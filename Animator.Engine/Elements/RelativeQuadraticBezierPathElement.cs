@@ -13,9 +13,9 @@ namespace Animator.Engine.Elements
     /// </summary>
     public class RelativeQuadraticBezierPathElement : QuadraticBezierPathElement
     {
-        // Internal methods ---------------------------------------------------
+        // Protected methods --------------------------------------------------
 
-        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
+        protected override PointF[] BuildBezier(PointF start, PointF lastControlPoint)
         {
             // Note: deltas are evaluated differently in case of this element
             // See: https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#b%C3%A9zier_curves
@@ -24,10 +24,10 @@ namespace Animator.Engine.Elements
             var end = start.Add(DeltaEndPoint);
 
             (var controlPoint1, var controlPoint2) = EstimateCubicControlPoints(start, controlPoint, end);
-            path.AddBezier(start, controlPoint1, controlPoint2, end);
-
-            return (end, controlPoint);
+            return new[] { start, controlPoint1, controlPoint2, end };
         }
+
+        // Internal methods ---------------------------------------------------
 
         internal override string ToPathString() => $"q {F(DeltaControlPoint.X)} {F(DeltaControlPoint.Y)} {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
@@ -48,10 +48,9 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty DeltaControlPointProperty = ManagedProperty.Register(typeof(RelativeQuadraticBezierPathElement),
             nameof(DeltaControlPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
 
         #endregion
-
 
         #region DeltaEndPoint managed property
 
@@ -74,7 +73,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeQuadraticBezierPathElement),
             nameof(DeltaEndPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
 
         #endregion
     }

@@ -23,6 +23,13 @@ namespace Animator.Engine.Elements
             return (endPoint, endPoint);
         }
 
+        internal override (float length, PointF endPoint, PointF lastControlPoint) EvalLength(PointF start, PointF lastControlPoint)
+        {
+            PointF endPoint = start.Add(DeltaEndPoint);
+
+            return (0.0f, endPoint, endPoint);
+        }
+
         // Public properties --------------------------------------------------
 
         #region DeltaEndPoint managed property

@@ -8,17 +8,15 @@ namespace Animator.Engine.Elements
     /// Represents a path part, which is drawn as a vertical line.
     /// All points are expressed in absolute coordinates.
     /// </summary>
-    public class AbsoluteVerticalLinePathElement : PathElement
+    public class AbsoluteVerticalLinePathElement : LineBasedPathElement
     {
-        // Internal methods ---------------------------------------------------
+        // Protected methods --------------------------------------------------
 
-        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
+        protected override PointF[] BuildLine(PointF start)
         {
             PointF end = new PointF(start.X, Y);
 
-            path.AddLine(start, end);
-
-            return (end, end);
+            return new[] { start, end };
         }
 
         internal override string ToPathString() => $"V {F(Y)}";
@@ -40,7 +38,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty YProperty = ManagedProperty.Register(typeof(AbsoluteVerticalLinePathElement),
             nameof(Y),
             typeof(float),
-            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
+            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f, ValueChangedHandler = HandleLineChanged });
 
         #endregion
     }

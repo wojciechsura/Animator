@@ -20,6 +20,11 @@ namespace Animator.Engine.Elements
 
         internal override string ToPathString() => $"M {F(EndPoint.X)} {F(EndPoint.Y)}";
 
+        internal override (float length, PointF endPoint, PointF lastControlPoint) EvalLength(PointF start, PointF lastControlPoint)
+        {
+            return (0.0f, EndPoint, EndPoint);
+        }
+
         // Public properties --------------------------------------------------
 
         #region EndPoint managed property

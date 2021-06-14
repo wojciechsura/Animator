@@ -8,18 +8,18 @@ namespace Animator.Engine.Elements
     /// Represents a path part, which is drawn as a horizontal line.
     /// All points are expressed in relative coordinates.
     /// </summary>
-    public class RelativeVerticalLinePathElement : PathElement
+    public class RelativeVerticalLinePathElement : LineBasedPathElement
     {
-        // Internal methods ---------------------------------------------------
+        // Protected methods --------------------------------------------------
 
-        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
+        protected override PointF[] BuildLine(PointF start)
         {
             PointF end = new PointF(start.X, start.Y + DY);
 
-            path.AddLine(start, end);
-
-            return (end, end);
+            return new[] { start, end };
         }
+
+        // Internal methods ---------------------------------------------------
 
         internal override string ToPathString() => $"v {F(DY)}";
 
@@ -41,7 +41,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty DYProperty = ManagedProperty.Register(typeof(RelativeVerticalLinePathElement),
             nameof(DY),
             typeof(float),
-            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
+            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f, ValueChangedHandler = HandleLineChanged });
 
         #endregion
     }

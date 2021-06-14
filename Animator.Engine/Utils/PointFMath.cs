@@ -23,5 +23,10 @@ namespace Animator.Engine.Utils
         {
             return new PointF(point.X * factor, point.Y * factor);
         }
+
+        public static float DistanceTo(this PointF point, PointF other)
+        {
+            return (float)Math.Sqrt(Math.Pow(point.X - other.X, 2.0) + Math.Pow(point.Y - other.Y, 2.0));
+        }
     }
 }

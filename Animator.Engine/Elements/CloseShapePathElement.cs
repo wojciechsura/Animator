@@ -30,7 +30,12 @@ namespace Animator.Engine.Elements
                 path.CloseFigure();
             }
 
-            return (new PointF(0.0f, 0.0f), new PointF(0.0f, 0.0f));
+            return (PointF.Empty, PointF.Empty);
+        }
+
+        internal override (float length, PointF endPoint, PointF lastControlPoint) EvalLength(PointF start, PointF lastControlPoint)
+        {
+            return (0.0f, PointF.Empty, PointF.Empty);
         }
 
         internal override string ToPathString() => "Z";

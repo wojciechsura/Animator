@@ -15,9 +15,9 @@ namespace Animator.Engine.Elements
     /// </summary>
     public class RelativeQuadraticShorthandBezierPathElement : QuadraticBezierPathElement
     {
-        // Internal methods ---------------------------------------------------
+        // Protected methods --------------------------------------------------
 
-        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
+        protected override PointF[] BuildBezier(PointF start, PointF lastControlPoint)
         {
             var delta = start.Subtract(lastControlPoint);
             var controlPoint = start.Add(delta);
@@ -26,10 +26,10 @@ namespace Animator.Engine.Elements
 
             (var controlPoint1, var controlPoint2) = EstimateCubicControlPoints(start, controlPoint, end);
 
-            path.AddBezier(start, controlPoint1, controlPoint2, end);
-
-            return (end, controlPoint);
+            return new[] { start, controlPoint1, controlPoint2, end };
         }
+
+        // Internal methods ---------------------------------------------------
 
         internal override string ToPathString() => $"t {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
@@ -50,7 +50,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeQuadraticShorthandBezierPathElement),
             nameof(DeltaEndPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
 
         #endregion
     }

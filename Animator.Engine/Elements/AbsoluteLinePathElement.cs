@@ -8,16 +8,16 @@ namespace Animator.Engine.Elements
     /// Represents a path part, which is drawn as a line.
     /// All points are expressed in absolute coordinates.
     /// </summary>
-    public class AbsoluteLinePathElement : PathElement
+    public class AbsoluteLinePathElement : LineBasedPathElement
     {
-        // Internal methods ---------------------------------------------------
+        // Protected methods --------------------------------------------------
 
-        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
+        protected override PointF[] BuildLine(PointF start)
         {
-            path.AddLine(start, EndPoint);
-
-            return (EndPoint, EndPoint);
+            return new[] { start, EndPoint };
         }
+
+        // Internal methods ---------------------------------------------------
 
         internal override string ToPathString() => $"L {F(EndPoint.X)} {F(EndPoint.Y)}";        
 
@@ -37,7 +37,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(AbsoluteLinePathElement),
             nameof(EndPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleLineChanged });
 
         #endregion
     }

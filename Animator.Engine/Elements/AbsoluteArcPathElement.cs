@@ -12,15 +12,16 @@ namespace Animator.Engine.Elements
     /// </summary>
     public class AbsoluteArcPathElement : ArcPathElement
     {
-        // Public methods -----------------------------------------------------
+        // Protected methods --------------------------------------------------
+
+        protected override PointF[][] BuildBeziers(PointF start)
+        {
+            return InternalBuildBeziers(start, RX, RY, Angle, LargeArcFlag, SweepFlag, EndPoint);
+        }
+
+        // Internal methods ---------------------------------------------------
 
         internal override string ToPathString() => $"A {F(RX)} {F(RY)} {F(Angle)} {(LargeArcFlag ? 1 : 0)} {(SweepFlag ? 1 : 0)} {F(EndPoint.X)} {F(EndPoint.Y)}";
-
-        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
-        {
-            InternalAddToGeometry(start, RX, RY, Angle, LargeArcFlag, SweepFlag, EndPoint, path);
-            return (EndPoint, EndPoint);
-        }
 
         // Public properties --------------------------------------------------
 
@@ -38,7 +39,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty RXProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
             nameof(RX),
             typeof(float),
-            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
+            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f, ValueChangedHandler = HandleCurveChanged });
 
         #endregion
 
@@ -56,7 +57,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty RYProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
             nameof(RY),
             typeof(float),
-            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
+            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f, ValueChangedHandler = HandleCurveChanged });
 
         #endregion
 
@@ -74,7 +75,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty AngleProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
             nameof(Angle),
             typeof(float),
-            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f });
+            new ManagedSimplePropertyMetadata { DefaultValue = 0.0f, ValueChangedHandler = HandleCurveChanged });
 
         #endregion
 
@@ -92,7 +93,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty LargeArcFlagProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
             nameof(LargeArcFlag),
             typeof(bool),
-            new ManagedSimplePropertyMetadata { DefaultValue = false });
+            new ManagedSimplePropertyMetadata { DefaultValue = false, ValueChangedHandler = HandleCurveChanged });
 
         #endregion
 
@@ -110,7 +111,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty SweepFlagProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
             nameof(SweepFlag),
             typeof(bool),
-            new ManagedSimplePropertyMetadata { DefaultValue = false });
+            new ManagedSimplePropertyMetadata { DefaultValue = false, ValueChangedHandler = HandleCurveChanged });
 
         #endregion
 
@@ -128,7 +129,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
             nameof(EndPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
 
         #endregion
     }

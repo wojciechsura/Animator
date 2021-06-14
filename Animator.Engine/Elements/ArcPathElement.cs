@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// This is a base class for all arc path elements.
     /// </summary>
-    public abstract class ArcPathElement : PathElement
+    public abstract class ArcPathElement : MultipleCubicBezierBasedPathElement
     {
         private const double RadiansPerDegree = Math.PI / 180.0;
         private const double DoublePI = Math.PI * 2;
@@ -30,23 +30,19 @@ namespace Animator.Engine.Elements
             return DoublePI - (ta - tb);
         }
 
-        protected static void InternalAddToGeometry(PointF start,
+        protected static PointF[][] InternalBuildBeziers(PointF start,
             float radiusX,
             float radiusY,
             float angle,
             bool size,
             bool sweep,
-            PointF end,
-            GraphicsPath graphicsPath)
+            PointF end)
         {
             if (start == end)
-                return;
+                return new PointF[][] { new PointF[] { start, start, start, start } };
 
             if (radiusX == 0.0f && radiusY == 0.0f)
-            {
-                graphicsPath.AddLine(start, end);
-                return;
-            }
+                return new PointF[][] { new PointF[] { start, start, end, end } };
 
             var sinPhi = Math.Sin(angle * RadiansPerDegree);
             var cosPhi = Math.Cos(angle * RadiansPerDegree);
@@ -98,6 +94,8 @@ namespace Animator.Engine.Elements
             var startX = start.X;
             var startY = start.Y;
 
+            PointF[][] result = new PointF[segments][];
+
             for (var i = 0; i < segments; ++i)
             {
                 var cosTheta1 = Math.Cos(theta1);
@@ -115,13 +113,19 @@ namespace Animator.Engine.Elements
                 var dxe = t * (cosPhi * rx * sinTheta2 + sinPhi * ry * cosTheta2);
                 var dye = t * (sinPhi * rx * sinTheta2 - cosPhi * ry * cosTheta2);
 
-                graphicsPath.AddBezier(startX, startY, (float)(startX + dx1), (float)(startY + dy1),
-                    (float)(endpointX + dxe), (float)(endpointY + dye), (float)endpointX, (float)endpointY);
+                result[i] = new PointF[4] {
+                    new PointF(startX, startY),
+                    new PointF((float)(startX + dx1), (float)(startY + dy1)),
+                    new PointF((float)(endpointX + dxe), (float)(endpointY + dye)),
+                    new PointF((float)endpointX, (float)endpointY)
+                };
 
                 theta1 = theta2;
                 startX = (float)endpointX;
                 startY = (float)endpointY;
             }
+
+            return result;
         }
     }
 }

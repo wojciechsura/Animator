@@ -9,18 +9,18 @@ namespace Animator.Engine.Elements
     /// Represents a path part, which is drawn as a line.
     /// All points are expressed in relative coordinates.
     /// </summary>
-    public class RelativeLinePathElement : PathElement
+    public class RelativeLinePathElement : LineBasedPathElement
     {
-        // Internal methods ---------------------------------------------------
+        // Protected methods --------------------------------------------------
 
-        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
+        protected override PointF[] BuildLine(PointF start)
         {
             var end = start.Add(DeltaEndPoint);
 
-            path.AddLine(start, end);
-
-            return (end, end);
+            return new[] { start, end };
         }
+
+        // Internal methods ---------------------------------------------------
 
         internal override string ToPathString() => $"l {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
@@ -41,7 +41,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeLinePathElement),
             nameof(DeltaEndPoint),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleLineChanged });
 
         #endregion
     }

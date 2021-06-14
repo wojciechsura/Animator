@@ -498,6 +498,22 @@
             A keyframe for a property of type Color.
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.CubicBezierBasedPathElement">
+            <summary>
+            Base class for all path elements, which are interpolated
+            by a cubic Bezier curve
+            </summary>
+        </member>
+        <member name="M:Animator.Engine.Elements.CubicBezierBasedPathElement.BuildBezier(System.Drawing.PointF,System.Drawing.PointF)">
+            <summary>
+            Builds cubic Bezier curve equivalent for current path fragment.
+            </summary>
+        </member>
+        <member name="M:Animator.Engine.Elements.CubicBezierBasedPathElement.GetBezier(System.Drawing.PointF,System.Drawing.PointF)">
+            <summary>
+            Gets cubic Bezier curve equivalent for current path fragment.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.DropShadowEffect">
             <summary>
             An effect, which adds a shadow to a visual.
@@ -768,6 +784,22 @@
             Defines, how many frames should be in a second of animation.
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.MultipleCubicBezierBasedPathElement">
+            <summary>
+            Base class for all path elements, which are interpolated
+            by a series of cubic Bezier curves
+            </summary>
+        </member>
+        <member name="M:Animator.Engine.Elements.MultipleCubicBezierBasedPathElement.BuildBeziers(System.Drawing.PointF)">
+            <summary>
+            Builds cubic Bezier curve equivalent for current path fragment.
+            </summary>
+        </member>
+        <member name="M:Animator.Engine.Elements.MultipleCubicBezierBasedPathElement.GetBeziers(System.Drawing.PointF)">
+            <summary>
+            Gets cubic Bezier curve equivalent for current path fragment.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.NumericKeyframe">
             <summary>
             Base class for all keyframes, which define animation
@@ -821,9 +853,58 @@
             Base class for all path elements.
             </summary>
         </member>
+        <member name="F:Animator.Engine.Elements.PathElement.LENGTH_ESTIMATION_ACCURACY">
+            <summary>
+            Defines a threshold for Bezier curve length estimation. If a new
+            estimation differs by previous less than this value, algorithm
+            stops.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.PathElement.RunningPoint">
             <summary>
             Utility class to simplify handling relative positions
+            </summary>
+        </member>
+        <member name="M:Animator.Engine.Elements.PathElement.GetPointOnBezier(System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Single)">
+            <summary>
+            Gets position of a point on a cubic Bezier curve
+            </summary>
+            <param name="P1">First point</param>
+            <param name="C1">First control point</param>
+            <param name="C2">Second control point</param>
+            <param name="P2">Second point</param>
+            <param name="t">Position on curve, 0 &lt;= t &lt;= 1</param>
+            <returns>Point on a curve</returns>
+        </member>
+        <member name="M:Animator.Engine.Elements.PathElement.SplitBezier(System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Single)">
+            <summary>
+            Splits Bezier curve into two parts at given point
+            </summary>
+            <param name="P1">First point</param>
+            <param name="C1">First control point</param>
+            <param name="C2">Second control point</param>
+            <param name="P2">Second point</param>
+            <param name="t">Position on curve, 0 &lt;= t &lt;= 1</param>
+            <returns>Two sets of four control points</returns>
+        </member>
+        <member name="M:Animator.Engine.Elements.PathElement.SplitBezier(System.Drawing.PointF[],System.Single)">
+            <summary>
+            Splits Bezier curve into two parts at given point
+            </summary>
+            <param name="bezier">Array consisting of exactly four points</param>
+            <param name="t">Position on curve, 0 &lt;= t &lt;= 1</param>
+            <returns>Two sets of four control points</returns>
+        </member>
+        <member name="M:Animator.Engine.Elements.PathElement.EstimateBezierLength(System.Drawing.PointF[])">
+            <summary>
+            Estimates Bezier curve length by subdividing it into smaller segments.
+            </summary>
+            <param name="bezier">Cubic Bezier path points</param>
+            <returns>Estimated length and equally divided segments, which were used to evaluate it.</returns>
+        </member>
+        <member name="M:Animator.Engine.Elements.PathElement.F(System.Single)">
+            <summary>
+            Formats a float into a SVG path-compatible string.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.Pen">
