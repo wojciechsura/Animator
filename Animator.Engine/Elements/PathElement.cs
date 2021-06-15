@@ -194,10 +194,8 @@ namespace Animator.Engine.Elements
 
         internal abstract (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path);
 
+        internal abstract (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path, float? cutFrom, float? cutTo);
+
         internal abstract string ToPathString();        
-
-        // Internal properties ------------------------------------------------
-
-
     }
 }
