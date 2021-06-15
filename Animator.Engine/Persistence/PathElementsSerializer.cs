@@ -56,7 +56,7 @@ namespace Animator.Engine.Elements.Persistence
 
             int start = index;
 
-            while (index < str.Length && str[index] >= '0' && str[index] <= 9)
+            while (index < str.Length && str[index] >= '0' && str[index] <= '9')
                 index++;
 
             if (index == start)

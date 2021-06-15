@@ -18,7 +18,7 @@ namespace Animator.Engine.Elements
             var delta1 = controlPoint.Subtract(start);
             PointF controlPoint1 = start.Add(delta1.Multiply(2.0f / 3.0f));
 
-            var delta2 = end.Subtract(controlPoint);
+            var delta2 = controlPoint.Subtract(end);
             PointF controlPoint2 = end.Add(delta2.Multiply(2.0f / 3.0f));
 
             return (controlPoint1, controlPoint2);

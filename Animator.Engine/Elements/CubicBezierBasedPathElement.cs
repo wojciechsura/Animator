@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -49,7 +50,7 @@ namespace Animator.Engine.Elements
         {
             ValidateBezier(start, lastControlPoint);
 
-            (length, lengthSegments) = EstimateBezierLength(bezier);
+            (length, lengthSegments) = Bezier.EstimateLength(bezier);
             lengthValid = true;
         }
 
@@ -105,9 +106,79 @@ namespace Animator.Engine.Elements
         {
             PointF[] bezier = GetBezier(start, lastControlPoint);
 
-            path.AddBezier(bezier[0], bezier[1], bezier[2], bezier[3]);
+            if (path != null)
+                path.AddBezier(bezier[0], bezier[1], bezier[2], bezier[3]);
 
             return (bezier[3], bezier[2]);
+        }
+
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path, float? cutFrom, float? cutTo)
+        {
+            if (cutFrom == null && cutTo == null)
+            {
+                return AddToGeometry(start, lastControlPoint, path);
+            }
+
+            if (!lengthValid)
+                ValidateLength(start, lastControlPoint);
+
+            // Factors passed to this method represent fraction of Bezier spline
+            // length. However, Bezier splines tend to have varying speeds, so
+            // length factors does not always reflect spline factor. This method
+            // estimates curve factor based on given length factor.
+            float FactorToBezierFactor(float factor)
+            {
+                var lengthPos = length * factor;
+
+                int i = 0;
+                float lengthAcc = 0.0f;
+
+                while (i < lengthSegments.Length && lengthAcc + lengthSegments[i] < lengthPos)
+                {
+                    lengthAcc += lengthSegments[i];
+                    i++;
+                }
+
+                if (i >= lengthSegments.Length)
+                    return 1.0f;
+
+                // The answer is i-th segment, but we may return a little more precise value
+                lengthPos -= lengthAcc;
+
+                return (i + lengthPos / lengthSegments[i]) / lengthSegments.Length;
+            }
+
+            if (cutFrom != null && cutTo == null)
+            {
+                float t = FactorToBezierFactor(cutFrom.Value);
+
+                (_, PointF[] bezier2) = Bezier.Split(bezier, t);
+
+                if (path != null)
+                    path.AddBezier(bezier2[0], bezier2[1], bezier2[2], bezier2[3]);
+                return (bezier2[3], bezier2[2]);
+            }
+            else if (cutFrom == null && cutTo != null)
+            {
+                float t = FactorToBezierFactor(cutTo.Value);
+
+                (PointF[] bezier1, _) = Bezier.Split(bezier, t);
+
+                if (path != null)
+                    path.AddBezier(bezier1[0], bezier1[1], bezier1[2], bezier1[3]);
+                return (bezier1[3], bezier1[2]);
+            }
+            else
+            {
+                float t1 = FactorToBezierFactor(cutFrom.Value);
+                float t2 = FactorToBezierFactor(cutTo.Value);
+
+                (_, PointF[] middle, _) = Bezier.Split(bezier, t1, t2);
+
+                if (path != null)
+                    path.AddBezier(middle[0], middle[1], middle[2], middle[3]);
+                return (middle[3], middle[2]);
+            }
         }
 
         internal override (float length, PointF endPoint, PointF lastControlPoint) EvalLength(PointF start, PointF lastControlPoint)

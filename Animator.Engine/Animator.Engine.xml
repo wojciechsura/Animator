@@ -848,59 +848,29 @@
             attribute as SVG-compatible path description.
             </summary>
         </member>
+        <member name="P:Animator.Engine.Elements.Path.CutFrom">
+            <summary>
+            If set, defines first split point of the path. The path
+            before this value will not be drawn. CutFrom must fit
+            between 0 and 1, inclusive.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Path.CutTo">
+            <summary>
+            If set, defines last split point of the path. The path
+            after this value will not be drawn. CutTo must fit
+            between 0 and 1, inclusive.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.PathElement">
             <summary>
             Base class for all path elements.
-            </summary>
-        </member>
-        <member name="F:Animator.Engine.Elements.PathElement.LENGTH_ESTIMATION_ACCURACY">
-            <summary>
-            Defines a threshold for Bezier curve length estimation. If a new
-            estimation differs by previous less than this value, algorithm
-            stops.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.PathElement.RunningPoint">
             <summary>
             Utility class to simplify handling relative positions
             </summary>
-        </member>
-        <member name="M:Animator.Engine.Elements.PathElement.GetPointOnBezier(System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Single)">
-            <summary>
-            Gets position of a point on a cubic Bezier curve
-            </summary>
-            <param name="P1">First point</param>
-            <param name="C1">First control point</param>
-            <param name="C2">Second control point</param>
-            <param name="P2">Second point</param>
-            <param name="t">Position on curve, 0 &lt;= t &lt;= 1</param>
-            <returns>Point on a curve</returns>
-        </member>
-        <member name="M:Animator.Engine.Elements.PathElement.SplitBezier(System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Single)">
-            <summary>
-            Splits Bezier curve into two parts at given point
-            </summary>
-            <param name="P1">First point</param>
-            <param name="C1">First control point</param>
-            <param name="C2">Second control point</param>
-            <param name="P2">Second point</param>
-            <param name="t">Position on curve, 0 &lt;= t &lt;= 1</param>
-            <returns>Two sets of four control points</returns>
-        </member>
-        <member name="M:Animator.Engine.Elements.PathElement.SplitBezier(System.Drawing.PointF[],System.Single)">
-            <summary>
-            Splits Bezier curve into two parts at given point
-            </summary>
-            <param name="bezier">Array consisting of exactly four points</param>
-            <param name="t">Position on curve, 0 &lt;= t &lt;= 1</param>
-            <returns>Two sets of four control points</returns>
-        </member>
-        <member name="M:Animator.Engine.Elements.PathElement.EstimateBezierLength(System.Drawing.PointF[])">
-            <summary>
-            Estimates Bezier curve length by subdividing it into smaller segments.
-            </summary>
-            <param name="bezier">Cubic Bezier path points</param>
-            <returns>Estimated length and equally divided segments, which were used to evaluate it.</returns>
         </member>
         <member name="M:Animator.Engine.Elements.PathElement.F(System.Single)">
             <summary>
@@ -1324,6 +1294,50 @@
             drawing). If mask is inverted, this behavior works the other
             way around.
             </summary>
+        </member>
+        <member name="F:Animator.Engine.Utils.Bezier.LENGTH_ESTIMATION_ACCURACY">
+            <summary>
+            Defines a threshold for Bezier curve length estimation. If a new
+            estimation differs by previous less than this value, algorithm
+            stops.
+            </summary>
+        </member>
+        <member name="M:Animator.Engine.Utils.Bezier.GetPointOn(System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Single)">
+            <summary>
+            Gets position of a point on a cubic Bezier curve
+            </summary>
+            <param name="P1">First point</param>
+            <param name="C1">First control point</param>
+            <param name="C2">Second control point</param>
+            <param name="P2">Second point</param>
+            <param name="t">Position on curve, 0 &lt;= t &lt;= 1</param>
+            <returns>Point on a curve</returns>
+        </member>
+        <member name="M:Animator.Engine.Utils.Bezier.SplitBezier(System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Single)">
+            <summary>
+            Splits Bezier curve into two parts at given point
+            </summary>
+            <param name="P1">First point</param>
+            <param name="C1">First control point</param>
+            <param name="C2">Second control point</param>
+            <param name="P2">Second point</param>
+            <param name="t">Position on curve, 0 &lt;= t &lt;= 1</param>
+            <returns>Two sets of four control points</returns>
+        </member>
+        <member name="M:Animator.Engine.Utils.Bezier.Split(System.Drawing.PointF[],System.Single)">
+            <summary>
+            Splits Bezier curve into two parts at given point
+            </summary>
+            <param name="bezier">Array consisting of exactly four points</param>
+            <param name="t">Position on curve, 0 &lt;= t &lt;= 1</param>
+            <returns>Two sets of four control points</returns>
+        </member>
+        <member name="M:Animator.Engine.Utils.Bezier.EstimateLength(System.Drawing.PointF[])">
+            <summary>
+            Estimates Bezier curve length by subdividing it into smaller segments.
+            </summary>
+            <param name="bezier">Cubic Bezier path points</param>
+            <returns>Estimated length and equally divided segments, which were used to evaluate it.</returns>
         </member>
     </members>
 </doc>

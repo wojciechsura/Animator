@@ -1,0 +1,76 @@
+<Movie>
+	<Movie.Config>
+		<MovieConfig FramesPerSecond="30" Width="800" Height="600"/>
+	</Movie.Config>
+	
+	<Movie.Scenes>
+		<Scene Name="PathCutTestCases" Background="White" Duration="0:0:3.0">
+			<Path Definition="M 10 80 L 80 10">
+				<Path.Pen>
+					<Pen Color="Black" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Name="p" Definition="M 10 80 L 80 10" Position="10,10" CutFrom="0.2" CutTo="0.8">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 C 10 50 80 40 80 10" Position="100,0">
+				<Path.Pen>
+					<Pen Color="Black" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 C 10 50 80 40 80 10" Position="100,0">
+				<Path.Pen>
+					<Pen Color="Black" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 C 10 50 80 40 80 10" Position="110,10" CutFrom="0.2" CutTo="0.8">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 Q 10 10 80 10" Position="200,0">
+				<Path.Pen>
+					<Pen Color="Black" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 Q 10 10 80 10" Position="210,10" CutFrom="0.2" CutTo="0.8">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 A 70 70 90 0 1 80 10" Position="300,0">
+				<Path.Pen>
+					<Pen Color="Black" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 A 70 70 90 0 1 80 10" Position="310,10" CutFrom="0.2" CutTo="0.8">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 A 40 40 90 1 0 80 10" Position="400,0">
+				<Path.Pen>
+					<Pen Color="Black" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 A 40 40 90 1 0 80 10" Position="410,10" CutFrom="0.2" CutTo="0.8">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+		</Scene>
+	</Movie.Scenes>
+</Movie>

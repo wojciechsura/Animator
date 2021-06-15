@@ -16,11 +16,17 @@ namespace Animator.Engine.Elements
 
         internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
-            path.StartFigure();
+            if (path != null)
+                path.StartFigure();
 
             PointF endPoint = start.Add(DeltaEndPoint);
 
             return (endPoint, endPoint);
+        }
+
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path, float? cutFrom, float? cutTo)
+        {
+            return AddToGeometry(start, lastControlPoint, path);
         }
 
         internal override (float length, PointF endPoint, PointF lastControlPoint) EvalLength(PointF start, PointF lastControlPoint)

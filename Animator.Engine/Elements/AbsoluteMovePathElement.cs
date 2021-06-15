@@ -13,9 +13,15 @@ namespace Animator.Engine.Elements
 
         internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path)
         {
-            path.StartFigure();
+            if (path != null)
+                path.StartFigure();
 
             return (EndPoint, EndPoint);
+        }
+
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path, float? cutFrom, float? cutTo)
+        {
+            return AddToGeometry(start, lastControlPoint, path);
         }
 
         internal override string ToPathString() => $"M {F(EndPoint.X)} {F(EndPoint.Y)}";

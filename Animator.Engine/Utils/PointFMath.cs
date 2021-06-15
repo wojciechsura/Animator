@@ -16,7 +16,7 @@ namespace Animator.Engine.Utils
 
         public static PointF Add(this PointF first, PointF second)
         {
-            return new PointF(first.X + second.X, first.Y - second.Y);
+            return new PointF(first.X + second.X, first.Y + second.Y);
         }
 
         public static PointF Multiply(this PointF point, float factor)

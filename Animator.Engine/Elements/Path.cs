@@ -206,6 +206,11 @@ namespace Animator.Engine.Elements
 
         #region CutFrom managed property
 
+        /// <summary>
+        /// If set, defines first split point of the path. The path
+        /// before this value will not be drawn. CutFrom must fit
+        /// between 0 and 1, inclusive.
+        /// </summary>
         public float CutFrom
         {
             get => (float)GetValue(CutFromProperty);
@@ -233,6 +238,11 @@ namespace Animator.Engine.Elements
 
         #region CutTo managed property
 
+        /// <summary>
+        /// If set, defines last split point of the path. The path
+        /// after this value will not be drawn. CutTo must fit
+        /// between 0 and 1, inclusive.
+        /// </summary>
         public float CutTo
         {
             get => (float)GetValue(CutToProperty);

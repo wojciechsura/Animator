@@ -91,9 +91,30 @@ namespace Animator.Engine.Elements
         {
             PointF[] line = GetLine(start);
 
-            path.AddLine(line[0], line[1]);
+            if (path != null)
+                path.AddLine(line[0], line[1]);
 
             return (line[1], line[1]);
+        }
+
+        internal override (PointF endPoint, PointF lastControlPoint) AddToGeometry(PointF start, PointF lastControlPoint, GraphicsPath path, float? cutFrom, float? cutTo)
+        {
+            PointF[] line = GetLine(start);
+
+            PointF v = line[1].Subtract(line[0]);
+
+            if (cutFrom == null)
+                cutFrom = 0.0f;
+            if (cutTo == null)
+                cutTo = 1.0f;
+
+            PointF pointFrom = line[0].Add(v.Multiply(cutFrom.Value));
+            PointF pointTo = line[0].Add(v.Multiply(cutTo.Value));
+
+            if (path != null)
+                path.AddLine(pointFrom, pointTo);
+
+            return (pointTo, pointTo);
         }
 
         internal override (float length, PointF endPoint, PointF lastControlPoint) EvalLength(PointF start, PointF lastControlPoint)
