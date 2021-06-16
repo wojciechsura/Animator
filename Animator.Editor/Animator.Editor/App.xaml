@@ -38,6 +38,7 @@
             <Thickness x:Key="DialogItemsHorizontalOnlyMargin" Left="4" Top="0" Right="4" Bottom="0" />
 
             <Thickness x:Key="DialogItemsMargin" Left="4" Top="4" Right="4" Bottom="4" />
+            <Thickness x:Key="DialogItemsVMargin" Left="0" Top="0" Right="0" Bottom="4" />
 
             <Thickness x:Key="DefaultMargin">4</Thickness>
 

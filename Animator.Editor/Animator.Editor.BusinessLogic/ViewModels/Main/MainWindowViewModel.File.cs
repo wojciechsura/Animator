@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Animator.Editor.BusinessLogic.ViewModels.Main
 {
@@ -109,6 +110,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
             if (fileDialogResult.Result && InternalSaveDocument(activeDocument, fileDialogResult.FileName))
             {
                 activeDocument.SetFilename(fileDialogResult.FileName, fileIconProvider.GetImageForFile(fileDialogResult.FileName));
+                activeDocument.FilenameVirtual = false;
                 return true;
             }
 
@@ -126,6 +128,14 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
                 string newFilename = GenerateBlankFileName(i);
                 newDocument.SetFilename(newFilename, fileIconProvider.GetImageForFile(newFilename));
                 newDocument.Highlighting = highlightingProvider.GetDefinitionByExtension(".xml");
+
+                // Fill with template
+                string template;
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Animator.Editor.BusinessLogic.Resources.NewDocumentTemplate.xml"))
+                using (var sr = new StreamReader(stream))
+                    template = sr.ReadToEnd();
+
+                newDocument.Document.Text = template;
             });            
         }
 

@@ -681,6 +681,26 @@
             Elements on a layer.
             </summary>
         </member>
+        <member name="P:Animator.Engine.Elements.Layer.Clone">
+            <summary>
+            Clones layer contents with given transforms.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.LayerCloningStep.Count">
+            <summary>
+            Defines, how many times layer should be cloned in this step
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.LayerCloningStep.ReverseOrder">
+            <summary>
+            If set to true, causes clones to be rendered from last to first.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.LayerCloningStep.Transforms">
+            <summary>
+            Defines transforms added to each clone.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.Line">
             <summary>
             Draws a line on the scene.
@@ -1097,6 +1117,26 @@
             to end point's of the previous path element.
             </summary>
         </member>
+        <member name="P:Animator.Engine.Elements.RotateTransform.Center">
+            <summary>
+            Defines center of rotation
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RotateTransform.Angle">
+            <summary>
+            Defines angle of rotation.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.ScaleTransform.SX">
+            <summary>
+            Defines scale in X axis
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.ScaleTransform.SY">
+            <summary>
+            Defines scale in Y axis
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.Scene">
             <summary>
             Contains description of a single scene in animation.
@@ -1220,6 +1260,26 @@
         <member name="P:Animator.Engine.Elements.Storyboard.Keyframes">
             <summary>
             List of keyframes, which define complex animation.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Transform">
+            <summary>
+            Base class for linear transform definitions
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.TranslateTransform">
+            <summary>
+            Represents a translation transform
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.TranslateTransform.DX">
+            <summary>
+            Defines translation distance over X axis
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.TranslateTransform.DY">
+            <summary>
+            Defines translation distance over X axis
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.Visual">

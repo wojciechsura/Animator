@@ -5,17 +5,24 @@
 	
 	<Movie.Scenes>
 		<Scene Name="PathCutTestCases" Background="White" Duration="0:0:3.0">
+		
+			<!-- *** Single paths *** -->
+		
+			<!-- Line -->
+		
 			<Path Definition="M 10 80 L 80 10">
 				<Path.Pen>
 					<Pen Color="Black" Width="1.0"/>
 				</Path.Pen>
 			</Path>
 
-			<Path Name="p" Definition="M 10 80 L 80 10" Position="10,10" CutFrom="0.2" CutTo="0.8">
+			<Path Definition="M 10 80 L 80 10" Position="5,5" CutFrom="0.2" CutTo="0.8">
 				<Path.Pen>
 					<Pen Color="Red" Width="1.0"/>
 				</Path.Pen>
 			</Path>
+
+			<!-- Cubic Bezier -->
 
 			<Path Definition="M 10 80 C 10 50 80 40 80 10" Position="100,0">
 				<Path.Pen>
@@ -23,17 +30,13 @@
 				</Path.Pen>
 			</Path>
 
-			<Path Definition="M 10 80 C 10 50 80 40 80 10" Position="100,0">
-				<Path.Pen>
-					<Pen Color="Black" Width="1.0"/>
-				</Path.Pen>
-			</Path>
-
-			<Path Definition="M 10 80 C 10 50 80 40 80 10" Position="110,10" CutFrom="0.2" CutTo="0.8">
+			<Path Name="p" Definition="M 10 80 C 10 50 80 40 80 10" Position="105,5" CutFrom="0.2" CutTo="0.8">
 				<Path.Pen>
 					<Pen Color="Red" Width="1.0"/>
 				</Path.Pen>
 			</Path>
+
+			<!-- Quadratic Bezier -->
 
 			<Path Definition="M 10 80 Q 10 10 80 10" Position="200,0">
 				<Path.Pen>
@@ -41,11 +44,13 @@
 				</Path.Pen>
 			</Path>
 
-			<Path Definition="M 10 80 Q 10 10 80 10" Position="210,10" CutFrom="0.2" CutTo="0.8">
+			<Path Definition="M 10 80 Q 10 10 80 10" Position="205,5" CutFrom="0.2" CutTo="0.8">
 				<Path.Pen>
 					<Pen Color="Red" Width="1.0"/>
 				</Path.Pen>
 			</Path>
+
+			<!-- Arc 1 -->
 
 			<Path Definition="M 10 80 A 70 70 90 0 1 80 10" Position="300,0">
 				<Path.Pen>
@@ -53,11 +58,13 @@
 				</Path.Pen>
 			</Path>
 
-			<Path Definition="M 10 80 A 70 70 90 0 1 80 10" Position="310,10" CutFrom="0.2" CutTo="0.8">
+			<Path Definition="M 10 80 A 70 70 90 0 1 80 10" Position="305,5" CutFrom="0.2" CutTo="0.8">
 				<Path.Pen>
 					<Pen Color="Red" Width="1.0"/>
 				</Path.Pen>
 			</Path>
+
+			<!-- Arc 2 -->
 
 			<Path Definition="M 10 80 A 40 40 90 1 0 80 10" Position="400,0">
 				<Path.Pen>
@@ -65,11 +72,130 @@
 				</Path.Pen>
 			</Path>
 
-			<Path Definition="M 10 80 A 40 40 90 1 0 80 10" Position="410,10" CutFrom="0.2" CutTo="0.8">
+			<Path Definition="M 10 80 A 40 40 90 1 0 80 10" Position="405,5" CutFrom="0.2" CutTo="0.8">
 				<Path.Pen>
 					<Pen Color="Red" Width="1.0"/>
 				</Path.Pen>
 			</Path>
+
+			<!-- *** Multiple paths *** -->
+			
+			<!-- Lines -->
+			
+			<Path Definition="M 10 80 L 10 40 L 40 10 L 80 10" Position="0,100">
+				<Path.Pen>
+					<Pen Color="Black" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 L 10 40 L 40 10 L 80 10" Position="5,105" CutFrom="0.2" CutTo="0.8">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 L 10 40 L 40 10 L 80 10" Position="10,110" CutFrom="0.0" CutTo="0.5">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 L 10 40 L 40 10 L 80 10" Position="15,115" CutFrom="0.5" CutTo="1.0">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<!-- Cubic Beziers -->
+			
+			<Path Definition="M 10 80 C 40 80 40 40 10 40 C 30 60 60 30 40 10 C 40 40 80 40 80 10" Position="100,100">
+				<Path.Pen>
+					<Pen Color="Black" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 C 40 80 40 40 10 40 C 30 60 60 30 40 10 C 40 40 80 40 80 10" Position="105,105" CutFrom="0.2" CutTo="0.8">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 C 40 80 40 40 10 40 C 30 60 60 30 40 10 C 40 40 80 40 80 10" Position="110,110" CutFrom="0.0" CutTo="0.5">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 C 40 80 40 40 10 40 C 30 60 60 30 40 10 C 40 40 80 40 80 10" Position="115,115" CutFrom="0.5" CutTo="1.0">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<!-- Quadratic Beziers -->
+			
+			<Path Definition="M 10 80 Q 20 60 10 40 Q 0 0 40 10 Q 60 20 80 10" Position="200,100">
+				<Path.Pen>
+					<Pen Color="Black" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+			
+			<Path Definition="M 10 80 Q 20 60 10 40 Q 0 0 40 10 Q 60 20 80 10" Position="205,105" CutFrom="0.2" CutTo="0.8">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 Q 20 60 10 40 Q 0 0 40 10 Q 60 20 80 10" Position="210,110" CutFrom="0.0" CutTo="0.5">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<Path Definition="M 10 80 Q 20 60 10 40 Q 0 0 40 10 Q 60 20 80 10" Position="215,115" CutFrom="0.5" CutTo="1.0">
+				<Path.Pen>
+					<Pen Color="Red" Width="1.0"/>
+				</Path.Pen>
+			</Path>
+
+			<!-- *** Closed shapes *** -->
+			
+			<Path Definition="M 10 10 H 80 V 80 H 10 V 10" Position="0,200">
+				<Path.Pen>
+					<Pen Width="1.0" Color="Black"/>
+				</Path.Pen>
+				<Path.Brush>
+					<SolidBrush Color="#abcdef"/>
+				</Path.Brush>
+			</Path>
+
+			<Path Definition="M 10 10 H 80 V 80 H 10 V 10 Z" Position="0,300" CutFrom="0.2" CutTo="0.8">
+				<Path.Pen>
+					<Pen Width="1.0" Color="Black"/>
+				</Path.Pen>
+				<Path.Brush>
+					<SolidBrush Color="#abcdef"/>
+				</Path.Brush>
+			</Path>
+
+			<Path Definition="M 10 10 H 40 V 40 H 10 V 10 Z M 40 40 H 80 V 80 H 40 V 40 Z" Position="100,200">
+				<Path.Pen>
+					<Pen Width="1.0" Color="Black"/>
+				</Path.Pen>
+				<Path.Brush>
+					<SolidBrush Color="#abcdef"/>
+				</Path.Brush>
+			</Path>
+
+			<Path Definition="M 10 10 H 40 V 40 H 10 V 10 Z M 40 40 H 80 V 80 H 40 V 40 Z" Position="100,300" CutFrom="0.2" CutTo="0.8">
+				<Path.Pen>
+					<Pen Width="1.0" Color="Black"/>
+				</Path.Pen>
+				<Path.Brush>
+					<SolidBrush Color="#abcdef"/>
+				</Path.Brush>
+			</Path>
+
 
 		</Scene>
 	</Movie.Scenes>

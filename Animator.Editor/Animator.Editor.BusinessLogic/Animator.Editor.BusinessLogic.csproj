@@ -7,6 +7,9 @@
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Resources\NewDocumentTemplate.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Animator.Engine\Animator.Engine.csproj" />
     <ProjectReference Include="..\Animator.Editor.Common\Animator.Editor.Common.csproj" />
     <ProjectReference Include="..\Animator.Editor.Configuration\Animator.Editor.Configuration.csproj" />
@@ -116,6 +119,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\FileTypeIcons\Folder_Bin_16x.png" />
     <EmbeddedResource Include="Resources\FileTypeIcons\Folder_Obj_16x.png" />
+    <EmbeddedResource Include="Resources\NewDocumentTemplate.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AvalonEdit" Version="6.1.1" />
