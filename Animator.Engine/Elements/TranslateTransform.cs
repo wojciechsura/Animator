@@ -14,11 +14,12 @@ namespace Animator.Engine.Elements
     public class TranslateTransform : Transform
     {
         // Internal methods ---------------------------------------------------
-
-        internal override Matrix GetMatrix()
+        
+        internal override Matrix GetMatrix(Matrix currentTransform, float multiplier)
         {
             Matrix result = new Matrix();
-            result.Translate(DX, DY, MatrixOrder.Append);
+
+            result.Translate(DX * multiplier, DY * multiplier, MatrixOrder.Append);
 
             return result;
         }

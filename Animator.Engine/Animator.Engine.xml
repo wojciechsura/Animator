@@ -1267,6 +1267,13 @@
             Base class for linear transform definitions
             </summary>
         </member>
+        <member name="P:Animator.Engine.Elements.Transform.UseLocalCoords">
+            <summary>
+            Defines, whether local coords (ie. not affected by previous transforms)
+            should be used for this transform. Note, that this takes effect only on
+            those transforms, which use points (rotation, scale)
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.TranslateTransform">
             <summary>
             Represents a translation transform

@@ -93,11 +93,17 @@
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Content="{Binding FrameIndex}"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                <Slider Grid.Column="1" Minimum="{Binding MinFrame}" Maximum="{Binding MaxFrame}" Value="{Binding FrameIndex, Mode=TwoWay, Delay=100}" 
+                <Label Grid.Row="0" Grid.Column="0" Content="{Binding FrameIndex}"/>
+
+                <Slider Grid.Row="0" Grid.Column="1" Minimum="{Binding MinFrame}" Maximum="{Binding MaxFrame}" Value="{Binding FrameIndex, Mode=TwoWay, Delay=100}" 
                         Margin="{StaticResource DefaultMargin}" SmallChange="1" TickPlacement="BottomRight" TickFrequency="10" LargeChange="10"/>
 
+                <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding RenderingStatus}" Margin="{StaticResource DefaultMargin}" />
             </Grid>
         </Grid>
 

@@ -13,12 +13,19 @@ namespace Animator.Engine.Elements
     {
         // Internal methods ---------------------------------------------------
 
-        internal override Matrix GetMatrix()
+        internal override Matrix GetMatrix(Matrix currentTransform, float multiplier = 1.0f)
         {
-            Matrix result = new Matrix();
-            result.Translate(-Center.X, -Center.Y, MatrixOrder.Append);
-            result.Rotate(Angle, MatrixOrder.Append);
-            result.Translate(Center.X, Center.Y, MatrixOrder.Append);
+            Matrix result = new Matrix();            
+
+            PointF center = Center;
+            if (UseLocalCoords)
+            {
+                PointF[] points = new[] { center };
+                currentTransform.TransformPoints(points);
+                center = points[0];
+            }
+
+            result.RotateAt(Angle * multiplier, center, MatrixOrder.Append);
 
             return result;
         }

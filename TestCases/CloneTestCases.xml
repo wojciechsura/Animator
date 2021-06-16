@@ -5,18 +5,26 @@
 
     <Scene Duration="0:0:3.0" Background="White">
 		<Layer Position="10,10">
-			<Rectangle Width="10" Height="10" Brush="Red" />
+			<Rectangle Width="10" Height="10" Brush="Red">
+				<Rectangle.Pen>
+					<Pen Color="Black" Width="1"/>
+				</Rectangle.Pen>
+			</Rectangle>
 		
 			<Layer.Clone>
 				<LayerCloningStep Count="10">
-					<ScaleTransform SX="1.1" SY="1.1" />
-					<TranslateTransform DX="0" DY="10"/>					
+					<TranslateTransform UseLocalCoords="false" DX="20" DY="0"/>
+					<RotateTransform UseLocalCoords="true" Center="5,5" Angle="5" />
 				</LayerCloningStep>
 				<LayerCloningStep Count="10">
-					<ScaleTransform SX="1.1" SY="1.1" />
-					<TranslateTransform DX="10" DY="0"/>
+					<TranslateTransform UseLocalCoords="false" DX="0" DY="20"/>
+					<RotateTransform UseLocalCoords="true" Center="5,5" Angle="5" />
 				</LayerCloningStep>
 			</Layer.Clone>
+			
+			<Layer.Effects>
+				<DropShadowEffect Color="#a0000000" DX="2" DY="2" Radius="5"/>
+			</Layer.Effects>
 		</Layer>
     </Scene>
 </Movie>

@@ -327,4 +327,13 @@
   <data name="Error.RenderingFailed" xml:space="preserve">
     <value>Rendering failed!</value>
   </data>
+  <data name="Message.FrameRendered" xml:space="preserve">
+    <value>Frame rendered in {0}</value>
+  </data>
+  <data name="Message.FrameFailedToRender" xml:space="preserve">
+    <value>Failed to render frame.</value>
+  </data>
+  <data name="Message.RenderingFrame" xml:space="preserve">
+    <value>Rendering frame...</value>
+  </data>
 </root>

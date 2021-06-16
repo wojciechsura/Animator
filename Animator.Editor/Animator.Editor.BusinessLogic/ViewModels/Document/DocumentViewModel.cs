@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -108,12 +109,14 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 
         private class FrameRenderedResult
         {
-            public FrameRenderedResult(Bitmap frame)
+            public FrameRenderedResult(Bitmap frame, TimeSpan time)
             {
                 Frame = frame;
+                Duration = time;
             }
 
             public Bitmap Frame { get; }
+            public TimeSpan Duration { get; }
         }
 
         private class FrameRenderingFailure
@@ -162,11 +165,15 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 
                 try
                 {
+                    Stopwatch stopwatch = Stopwatch.StartNew();
+
                     var framesPerSecond = input.Movie.Config.FramesPerSecond;
                     TimeSpan time = TimeSpan.FromSeconds(1 / framesPerSecond * input.FrameIndex);
                     Bitmap result = RenderFrameAt(input.Movie, time);
 
-                    e.Result = new FrameRenderedResult(result);
+                    stopwatch.Stop();
+
+                    e.Result = new FrameRenderedResult(result, stopwatch.Elapsed);
                 }
                 catch (Exception ex)
                 {
@@ -209,6 +216,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
         private int maxFrame;
         private string parsingError;
         private string renderingError;
+        private string renderingStatus;
 
         // Private methods ----------------------------------------------------
 
@@ -350,10 +358,13 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
                 }
 
                 Frame = bs;
+
+                RenderingStatus = String.Format(Resources.Strings.Message_FrameRendered, frameRenderedResult.Duration);
             }
             else if (e.Result is FrameRenderingFailure frameRenderingFailure)
             {
                 RenderingError = BuildError(Resources.Strings.Error_RenderingFailed, frameRenderingFailure.Exception);
+                RenderingStatus = Resources.Strings.Message_FrameFailedToRender;
             }
         }
 
@@ -364,6 +375,8 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
                 frameRendererWorker.CancelAsync();
                 frameRendererWorker = null;
             }
+
+            RenderingStatus = Resources.Strings.Message_RenderingFrame;
 
             frameRendererWorker = new FrameRendererWorker();
             frameRendererWorker.RunWorkerCompleted += FrameRendered;
@@ -775,6 +788,12 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
         {
             get => renderingError;
             set => Set(ref renderingError, () => RenderingError, value, HandleErrorChanged);
+        }
+
+        public string RenderingStatus 
+        {
+            get => renderingStatus;
+            set => Set(ref renderingStatus, () => RenderingStatus, value);
         }
 
         public string Error => BuildErrors(ParsingError, RenderingError);

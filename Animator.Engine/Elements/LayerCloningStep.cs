@@ -15,24 +15,12 @@ namespace Animator.Engine.Elements
     {
         // Internal methods ---------------------------------------------------
         
-        internal List<Matrix> BuildMatrices()
+        internal void ApplyTransforms(Matrix currentTransform, int multiplier)
         {
-            Matrix singleTransform = new Matrix();
-
             for (int i = 0; i < Transforms.Count; i++)
             {
-                singleTransform.Multiply(Transforms[i].GetMatrix());
+                currentTransform.Multiply(Transforms[i].GetMatrix(currentTransform, multiplier), MatrixOrder.Append);
             }
-
-            Matrix runningMatrix = new Matrix();
-            List<Matrix> result = new();
-            for (int i = 0; i < Count; i++)
-            {
-                result.Add(runningMatrix.Clone());
-                runningMatrix.Multiply(singleTransform, MatrixOrder.Append);
-            }
-
-            return result;
         }
 
         // Public properties --------------------------------------------------

@@ -327,4 +327,13 @@
   <data name="Error.RenderingFailed" xml:space="preserve">
     <value>Renderowanie nieudane!</value>
   </data>
+  <data name="Message.FrameRendered" xml:space="preserve">
+    <value>Klatka wyrenderowana w {0}</value>
+  </data>
+  <data name="Message.FrameFailedToRender" xml:space="preserve">
+    <value>Wystąpił błąd podczas renderowania klatki.</value>
+  </data>
+  <data name="Message.RenderingFrame" xml:space="preserve">
+    <value>Trwa renderowanie klatki...</value>
+  </data>
 </root>
