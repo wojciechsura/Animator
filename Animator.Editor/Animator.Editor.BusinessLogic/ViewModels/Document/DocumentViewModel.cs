@@ -396,6 +396,11 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             return new CompletionInfo(attr, $"{attr}=\"\"", attr.Length + 2);
         }
 
+        private CompletionInfo ValueToCompletionInfo(string value)
+        {
+            return new CompletionInfo(value, value, value.Length);
+        }
+
         private List<CompletionInfo> CollectRootLevelSuggestions()
         {
             return new List<CompletionInfo> { TagToCompletionInfo(nameof(Movie), false) };
@@ -521,6 +526,35 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             return result;
         }
 
+        private List<CompletionInfo> CollectPropertyValueSuggestionsFor(string name, string attribute)
+        {
+            // Find type for name
+
+            var movieType = typeof(Movie);
+            var movieAssembly = movieType.Assembly;
+            var elementsNamespace = movieType.Namespace;
+
+            var type = movieAssembly.GetType($"{elementsNamespace}.{name}");
+            if (type == null)
+                return new List<CompletionInfo>();
+
+            // Find property
+
+            var result = new List<CompletionInfo>();
+
+            var prop = ManagedProperty.FindByTypeAndName(type, attribute, true);
+
+            if (prop != null && prop.Type.IsEnum)
+                Enum.GetValues(prop.Type)
+                    .OfType<object>()
+                    .Select(o => o.ToString())
+                    .OrderBy(o => o)
+                    .ToList()
+                    .ForEach(v => result.Add(ValueToCompletionInfo(v)));
+
+            return result;
+        }
+
         // Public methods -----------------------------------------------------
 
         public DocumentViewModel(IDocumentHandler handler)
@@ -640,19 +674,31 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             var root = Parser.ParseText(text);
             var currentNode = root.FindNode(selectionStart, includeTrivia: true);
 
+            string attribute = null;
+
             while (currentNode != null)
             {
                 if (currentNode is XmlElementStartTagSyntax xmlStart)
                 {
-                    return CollectPropertySuggestionsFor(xmlStart.Name);
+                    if (attribute != null)
+                        return CollectPropertyValueSuggestionsFor(xmlStart.Name, attribute);
+                    else
+                        return CollectPropertySuggestionsFor(xmlStart.Name);
                 }
                 else if (currentNode is XmlEmptyElementSyntax xmlEmpty)
                 {
-                    return CollectPropertySuggestionsFor(xmlEmpty.Name);
+                    if (attribute != null)
+                        return CollectPropertyValueSuggestionsFor(xmlEmpty.Name, attribute);
+                    else
+                        return CollectPropertySuggestionsFor(xmlEmpty.Name);
                 }
                 else if (currentNode is XmlElementSyntax xmlElement)
                 {
                     return CollectChildSuggestionsFor(xmlElement.Name);
+                }
+                else if (currentNode is XmlAttributeSyntax xmlAttribute)
+                {
+                    attribute = xmlAttribute.Name;
                 }
 
                 currentNode = currentNode.Parent;
