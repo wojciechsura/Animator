@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
@@ -18,6 +19,12 @@ namespace Animator.Engine.Elements
     /// </summary>
     public abstract class SceneElement : Element
     {
+        // Private fields -----------------------------------------------------
+
+        private static readonly string nameRegexString = "[a-zA-Z][a-zA-Z0-9]*";
+        private static readonly Regex nameRegex = new Regex($"^{nameRegexString}$");
+        private static readonly Regex collectionAccessRegex = new Regex($@"^({nameRegexString})\[({nameRegexString})\]$");
+
         // Protected fields ---------------------------------------------------
 
         protected readonly Dictionary<string, List<SceneElement>> names = new();
@@ -49,40 +56,70 @@ namespace Animator.Engine.Elements
         {
             SceneElement current = this;
 
-            for (int i = 0; i < path.Length; i++)
+            int i = 0;
+            while (i < path.Length)
             {
-                var property = current.GetProperty(path[i]);
-
-                current.names.TryGetValue(path[i], out List<SceneElement> children);
-
-                // Erroneus situation
-                if (property != null && (children != null))
-                    throw new AnimationException($"{path[i]} matches both property and child!", GetPath());
-                else if (property == null && children == null)
-                    throw new AnimationException($"{path[i]} doesn't match any property or child!", GetPath());
-                else if (property != null)
+                var collectionAccess = collectionAccessRegex.Match(path[i]);
+                if (collectionAccess.Success)
                 {
-                    object value = current.GetValue(property);
-                    if (value == null)
-                        throw new AnimationException($"{path[i]} returns null element!", GetPath());
+                    // Element looks like id1[id2] - this is a collection item access
 
-                    if (value is not SceneElement baseElement)
-                        throw new AnimationException($"Property {path[i]} yields object of type {value.GetType().Name}, which does not derive from BaseElement!", GetPath());
+                    var property = current.GetProperty(collectionAccess.Groups[1].Value);
+                    if (property == null)
+                        throw new AnimationException($"{path[i]} is invalid, because {current.GetType().Name} does not contain property {collectionAccess.Groups[1].Value}!", GetPath());
+                    if (property is not ManagedCollectionProperty)
+                        throw new AnimationException($"{path[i]} is invalid, because {collectionAccess.Groups[1].Value} is not a collection property!", GetPath());
 
-                    current = baseElement;
-                }
-                else if (children != null)
-                {
-                    if (children.Count > 1)
-                        throw new AnimationException($"{path[i]} yields more than one child element. Name is not unique.", GetPath());
+                    var collection = (ManagedCollection)current.GetValue(property);
 
-                    if (children.Single() is not SceneElement baseElement)
-                        throw new AnimationException($"Child {path[i]} yields object of type {children.Single().GetType().Name}, which does not derive from BaseElement!", GetPath());
+                    var items = collection.OfType<SceneElement>().Where(e => e.Name == collectionAccess.Groups[2].Value).ToList();
 
-                    current = baseElement;
+                    if (items.Count == 0)
+                        throw new AnimationException($"{path[i]} yielded no elements. There is no element with name {collectionAccess.Groups[2].Value} in the collection.", GetPath());
+                    if (items.Count > 1)
+                        throw new AnimationException($"{path[i]} yielded no elements. There are multiple elements in the collection matching name {collectionAccess.Groups[2].Value} in the collection.", GetPath());
+
+                    current = items.Single();
                 }
                 else
-                    throw new InvalidOperationException("Element seeking algorithm malfunction!");
+                {
+                    // Element looks like id1 - this is either property or child item access
+
+                    var property = current.GetProperty(path[i]);
+
+                    current.names.TryGetValue(path[i], out List<SceneElement> children);
+
+                    // Erroneus situation
+                    if (property != null && (children != null))
+                        throw new AnimationException($"{path[i]} matches both property and child!", GetPath());
+                    else if (property == null && children == null)
+                        throw new AnimationException($"{path[i]} doesn't match any property or child!", GetPath());
+                    else if (property != null)
+                    {
+                        object value = current.GetValue(property);
+                        if (value == null)
+                            throw new AnimationException($"{path[i]} returns null element!", GetPath());
+
+                        if (value is not SceneElement sceneElement)
+                            throw new AnimationException($"Property {path[i]} yields object of type {value.GetType().Name}, which does not derive from BaseElement!", GetPath());
+
+                        current = sceneElement;
+                    }
+                    else if (children != null)
+                    {
+                        if (children.Count > 1)
+                            throw new AnimationException($"{path[i]} yields more than one child element. Name is not unique.", GetPath());
+
+                        if (children.Single() is not SceneElement sceneElement)
+                            throw new AnimationException($"Child {path[i]} yields object of type {children.Single().GetType().Name}, which does not derive from BaseElement!", GetPath());
+
+                        current = sceneElement;
+                    }
+                    else
+                        throw new InvalidOperationException("Element seeking algorithm malfunction!");
+                }
+
+                i++;
             }
 
             return current;
@@ -187,13 +224,20 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty NameProperty = ManagedProperty.RegisterReference(typeof(SceneElement),
             nameof(Name),
             typeof(string),
-            new ManagedReferencePropertyMetadata { ValueIsPermanent = true, ValueChangedHandler = HandleNameChanged });
+            new ManagedReferencePropertyMetadata { ValueIsPermanent = true, ValueChangedHandler = HandleNameChanged, ValueValidationHandler = ValidateName });
+
+        private static bool ValidateName(ManagedObject sender, ValueValidationEventArgs args)
+        {
+            string newName = (string)args.NewValue;
+
+            return nameRegex.IsMatch(newName);
+        }
 
         private static void HandleNameChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
             // Value is permanent, so the change may be done only once
-            if (sender is SceneElement baseElement && baseElement.Scene != null)
-                baseElement.Scene.RegisterName((string)args.NewValue, baseElement);
+            if (sender is SceneElement baseElement)
+                baseElement.RegisterName((string)args.NewValue, baseElement);
         }
 
         #endregion
