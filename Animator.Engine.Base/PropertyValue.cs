@@ -84,9 +84,6 @@ namespace Animator.Engine.Base
             get => coercedValue;
             set
             {
-                if (valueSource == PropertyValueSource.Default)
-                    throw new InvalidOperationException("Attempt to coerce default value!");
-
                 isCoerced = true;
                 coercedValue = value;
             }

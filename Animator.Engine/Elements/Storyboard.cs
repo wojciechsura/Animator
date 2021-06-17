@@ -46,8 +46,9 @@ namespace Animator.Engine.Elements
                 if (i == -1)
                 {
                     // Before first keyframe
-                    object fromValue = obj.GetBaseValue(simpleProperty);
-                    object value = keyframes[0].EvalValue(0, fromValue, timeMs);
+                    // object fromValue = obj.GetBaseValue(simpleProperty);
+                    // object value = keyframes[0].EvalValue(0, fromValue, timeMs);
+                    object value = keyframes[0].GetValue();
                     obj.SetAnimatedValue(prop, value);
                 }
                 else if (i == keyframes.Count - 1)
