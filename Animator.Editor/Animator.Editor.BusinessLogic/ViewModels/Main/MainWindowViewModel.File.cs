@@ -136,6 +136,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
                     template = sr.ReadToEnd();
 
                 newDocument.Document.Text = template;
+                newDocument.Changed = false;
             });            
         }
 

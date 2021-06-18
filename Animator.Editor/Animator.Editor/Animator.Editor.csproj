@@ -9,6 +9,9 @@
     <StartupObject>Animator.Editor.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="global.json" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\Images\New32.png" />
   </ItemGroup>
   <ItemGroup>

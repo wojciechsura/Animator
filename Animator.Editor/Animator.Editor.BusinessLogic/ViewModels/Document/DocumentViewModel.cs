@@ -674,7 +674,19 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             var root = Parser.ParseText(text);
             var currentNode = root.FindNode(selectionStart, includeTrivia: true);
 
+            /* DEBUG */
+            var node2 = currentNode;
+            do
+            {
+                Debug.Write($"{node2.GetType().Name} -> ");
+                node2 = node2.Parent;
+            }
+            while (node2 != null);
+            Debug.WriteLine(string.Empty);
+            /* DEBUG */
+
             string attribute = null;
+            bool insideAttribute = false;
 
             while (currentNode != null)
             {
@@ -696,9 +708,14 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
                 {
                     return CollectChildSuggestionsFor(xmlElement.Name);
                 }
+                else if (currentNode is XmlStringSyntax)
+                {
+                    insideAttribute = true;
+                }
                 else if (currentNode is XmlAttributeSyntax xmlAttribute)
                 {
-                    attribute = xmlAttribute.Name;
+                    if (insideAttribute)
+                        attribute = xmlAttribute.Name;
                 }
 
                 currentNode = currentNode.Parent;

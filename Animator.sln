@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31112.23
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31410.414
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Animator", "Animator\Animator.csproj", "{0D286C50-DCC0-4141-9A07-2D99DA850CDA}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -48,6 +48,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Animator.Editor.Resources", "Animator.Editor\Animator.Editor.Resources\Animator.Editor.Resources.csproj", "{C1D43B76-0135-4D78-AC5A-B1EA71F960A1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ICSharpCode.AvalonEdit.Animator.Editor", "Animator.Editor\ICSharpCode.AvalonEdit.Dev.Editor\ICSharpCode.AvalonEdit.Animator.Editor.csproj", "{7FE69364-AB8F-4A9D-BDB9-970D320760E9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1B23C39A-D6B7-48EC-89EB-E543805D1E8C}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

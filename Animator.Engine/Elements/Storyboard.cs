@@ -25,7 +25,11 @@ namespace Animator.Engine.Elements
 
         public override void ApplyAnimation(float timeMs)
         {
-            var groups = Keyframes.GroupBy(k => k.PropertyRef);
+            List<Keyframe> allKeyframes = new List<Keyframe>();
+            foreach (var item in Keyframes)
+                item.AddKeyframesRecursive(allKeyframes);
+
+            var groups = allKeyframes.GroupBy(k => k.PropertyRef);
             
             foreach (var group in groups)
             {
@@ -154,19 +158,17 @@ namespace Animator.Engine.Elements
 
         #endregion
 
+
         #region Keyframes managed collection
 
-        /// <summary>
-        /// List of keyframes, which define complex animation.
-        /// </summary>
-        public ManagedCollection<Keyframe> Keyframes
+        public ManagedCollection<StoryboardEntry> Keyframes
         {
-            get => (ManagedCollection<Keyframe>)GetValue(KeyframesProperty);
+            get => (ManagedCollection<StoryboardEntry>)GetValue(KeyframesProperty);
         }
 
         public static readonly ManagedProperty KeyframesProperty = ManagedProperty.RegisterCollection(typeof(Storyboard),
             nameof(Keyframes),
-            typeof(ManagedCollection<Keyframe>));
+            typeof(ManagedCollection<StoryboardEntry>));
 
         #endregion
     }

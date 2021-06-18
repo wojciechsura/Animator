@@ -23,20 +23,41 @@ namespace Animator.Engine.Elements
     {
         // Private methods ----------------------------------------------------
 
-        private void DoRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
+        private void DoRender(BitmapBuffer buffer, BitmapBufferRepository buffers, BitmapBuffer itemBuffer)
         {
+            var bufferData = buffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, buffer.Bitmap.Width, buffer.Bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
             foreach (var item in Items)
-                item.Render(buffer, buffers);
+            {
+                itemBuffer.Graphics.Clear(Color.Transparent);
+                item.Render(itemBuffer, buffers);
+
+                var itemData = itemBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, itemBuffer.Bitmap.Width, itemBuffer.Bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                ImageProcessing.CombineTwo(bufferData.Scan0, bufferData.Stride, itemData.Scan0, itemData.Stride, buffer.Bitmap.Width, buffer.Bitmap.Height);
+                itemBuffer.Bitmap.UnlockBits(itemData);
+            }
+
+            buffer.Bitmap.UnlockBits(bufferData);
         }
 
         private void RenderNotCloned(BitmapBuffer buffer, BitmapBufferRepository buffers)
         {
-            DoRender(buffer, buffers);
+            BitmapBuffer itemBuffer = buffers.Lease(buffer.Graphics.Transform);
+
+            try
+            {
+                DoRender(buffer, buffers, itemBuffer);
+            }
+            finally
+            {
+                buffers.Return(itemBuffer);
+            }
         }
 
         private void RenderCloned(BitmapBuffer buffer, BitmapBufferRepository buffers)
         {
             var originalTransform = buffer.Graphics.Transform;
+            BitmapBuffer itemBuffer = buffers.Lease(buffer.Graphics.Transform);
 
             try
             { 
@@ -96,15 +117,15 @@ namespace Animator.Engine.Elements
 
                     transform.Multiply(originalTransform, MatrixOrder.Append);
 
-                    buffer.Graphics.Transform = transform;
-                    DoRender(buffer, buffers);
+                    itemBuffer.Graphics.Transform = transform;
+                    DoRender(buffer, buffers, itemBuffer);
 
                     finish = Advance();
                 }
             }
             finally
             {
-                buffer.Graphics.Transform = originalTransform;
+                buffers.Return(itemBuffer);
             }
         }
 

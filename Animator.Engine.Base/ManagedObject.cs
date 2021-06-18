@@ -99,7 +99,8 @@ namespace Animator.Engine.Base
             if (simpleProperty.Type.IsValueType && value == null)
                 throw new ArgumentException($"{simpleProperty.OwnerClassType.Name}.{simpleProperty.Name} property type is value-type ({simpleProperty.Type.Name}), but provided value is null.");
 
-            if (!value.GetType().IsAssignableTo(simpleProperty.Type))
+            if ((value != null && !value.GetType().IsAssignableTo(simpleProperty.Type)) ||
+                (value == null && simpleProperty.Type != typeof(string)))
                 throw new ArgumentException($"Value of type {value.GetType().Name} cannot be assigned to property {simpleProperty.OwnerClassType.Name}.{simpleProperty.Name} of type {simpleProperty.Type.Name}.");
         }
 

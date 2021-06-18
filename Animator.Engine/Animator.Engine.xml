@@ -599,23 +599,6 @@
             specific time.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.Keyframe.Time">
-            <summary>
-            Define exact time since start of a scene, when a
-            property should be set to a fixed value.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.Keyframe.PropertyRef">
-            <summary>
-            Reference to a property, relative to object owning this animator.
-            Subsequent elements must be separated by dots. You may call elements
-            from collections as well, as long as they have their Name property
-            set and it is unique in this collection.
-            </summary>
-            <example>
-            <code>PropertyRef="MyRectangle.Pen.Color"</code>
-            </example>
-        </member>
         <member name="T:Animator.Engine.Elements.Label">
             <summary>
             Draws a text on a scene.
@@ -1257,10 +1240,22 @@
              keyframes will inherit it (for a shorthand notation).
              </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.Storyboard.Keyframes">
+        <member name="P:Animator.Engine.Elements.StoryboardEntry.Time">
             <summary>
-            List of keyframes, which define complex animation.
+            Define exact time since start of a scene, when a
+            property should be set to a fixed value.
             </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.StoryboardEntry.PropertyRef">
+            <summary>
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
+            </summary>
+            <example>
+            <code>PropertyRef="MyRectangle.Pen.Color"</code>
+            </example>
         </member>
         <member name="T:Animator.Engine.Elements.Transform">
             <summary>
