@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 
@@ -19,6 +20,7 @@ namespace Animator.Engine.Base.Persistence
         // Private constants --------------------------------------------------
 
         private const string EngineNamespace = "https://spooksoft.pl/animator";
+        private static readonly Regex markupExtensionRegex = new Regex($@"\{{\s*(?<Name>[^\s,=\}}]+)\s*(?<Params>[^\s]|[^\s].*[^\s])?\s*\}}");
 
         // Private types ------------------------------------------------------
 
@@ -48,6 +50,90 @@ namespace Animator.Engine.Base.Persistence
         private const string contentDecoration = "content:{0}";
 
         // Private methods ----------------------------------------------------
+
+        private void ProcessMarkupExtension(ManagedObject deserializedObject, 
+            ManagedProperty managedProperty, 
+            string value, 
+            XmlNode node,
+            DeserializationContext context)
+        {
+            // 1. Parse entry
+
+            var match = markupExtensionRegex.Match(value);
+            if (!match.Success)
+                throw new SerializerException("Invalid markup extension structure!", node.FindXPath());
+
+            string name = null;
+            string defaultParam = null;
+            List<(string, string)> @params = new();
+
+            var nameGroup = match.Groups.OfType<Group>().Where(g => g.Name == "Name" && g.Success).SingleOrDefault();
+            name = nameGroup.Value;
+
+            var paramStringGroup = match.Groups.OfType<Group>().Where(g => g.Name == "Params" && g.Success).SingleOrDefault();
+            if (paramStringGroup != null)
+            {
+                var paramStrings = paramStringGroup.Value.Split(',').Select(x => x.Trim()).ToArray();
+
+                for (int i = 0; i < paramStrings.Length; i++)
+                {
+                    if (i == 0 && !paramStrings[i].Contains('='))
+                        defaultParam = paramStrings[i];
+                    else
+                    {
+                        var values = paramStrings[i].Split('=');
+                        if (values.Length != 2)
+                            throw new SerializerException($"Invalid markup extension structure: invalid parameter definition: {paramStrings[i]}!", node.FindXPath());
+
+                        @params.Add((values[0], values[1]));
+                    }
+                }
+            }
+
+            // 2. Instantiate class
+
+            string namespaceUri = String.Empty;
+            string className = String.Empty;
+
+            if (name.Contains(':'))
+            {
+                var data = name.Split(':');
+                if (data.Length != 2)
+                    throw new SerializerException($"Invalid markup extension class name: {name}!", node.FindXPath());
+
+                namespaceUri = data[0];
+                className = data[1];
+            }
+            else
+            {
+                className = name;
+            }
+
+            object extObj = Instantiate(namespaceUri, className, context);
+            if (extObj is not BaseMarkupExtension)
+                throw new SerializerException($"Markup extensions must derive from BaseMarkupExtension!", node.FindXPath());
+
+            BaseMarkupExtension extension = extObj as BaseMarkupExtension;
+
+            // 3. Process default parameter
+
+            if (defaultParam != null)
+            {
+                var defaultPropertyAttribute = deserializedObject.GetType().GetCustomAttribute<DefaultPropertyAttribute>(true);
+                if (defaultPropertyAttribute == null)
+                    throw new SerializerException($"Markup extension {name} doesn't have default parameter defined!", node.FindXPath());
+
+                @params.Add((defaultPropertyAttribute.PropertyName, defaultParam));
+            }
+
+            // Every param must be used only once.
+            if (@params.Select(p => p.Item1).Distinct().Count() != @params.Count)
+                throw new SerializerException($"One of parameters for {name} is defined more than once (it may be as well the default one!)", node.FindXPath());
+
+            // 4. Enter property values
+
+            // TODO
+        }
 
         /// <summary>
         /// Parses namespace from string into instance of NamespaceDefinition
@@ -273,44 +359,53 @@ namespace Animator.Engine.Base.Persistence
                     throw new SerializerException($"Property {attribute.LocalName} on object {deserializedObject.GetType().Name} is not serializable!\r\nRemove it from input file.",
                         node.FindXPath());
 
-                // TODO merge duplicated code
+                // 4. Check for markup extension
 
-                if (managedProperty is ManagedValueProperty valueProperty)
+                if (attribute.Value.StartsWith("{") && !attribute.Value.StartsWith("{{") && attribute.Value.EndsWith("}"))
                 {
-                    string propertyValue = attribute.Value;
-                    object value;
-
-                    try
-                    {
-                        value = DeserializePropertyValue(context, valueProperty, attribute.Value);
-                    }
-                    catch (Exception e)
-                    {
-                        throw new SerializerException($"Failed to deserialize attribute {attribute.LocalName}", attribute.FindXPath(), e);
-                    }
-
-                    deserializedObject.SetValue(valueProperty, value);
-                    propertiesSet.Add(attribute.LocalName);
-                }
-                else if (managedProperty is ManagedCollectionProperty collectionProperty)
-                {
-                    IList value = DeserializeCollectionPropertyValue(context, collectionProperty, attribute.Value);
-
-                    if (value != null)
-                    {
-                        var collection = (ManagedCollection)deserializedObject.GetValue(collectionProperty);
-
-                        foreach (object obj in value)
-                            ((IList)collection).Add(obj);
-
-                        propertiesSet.Add(attribute.LocalName);
-                    }
-                    else
-                        throw new SerializerException($"Property {attribute.LocalName} of {deserializedObject.GetType().Name} is a collection property, but its value is stored in attribute and no custom serializer is provided!",
-                            node.FindXPath());
+                    ProcessMarkupExtension(deserializedObject, managedProperty, attribute.Value, node, context);
                 }
                 else
-                    throw new InvalidOperationException("Unsupported property type!");
+                {
+                    // TODO merge duplicated code
+
+                    if (managedProperty is ManagedValueProperty valueProperty)
+                    {
+                        string propertyValue = attribute.Value;
+                        object value;
+
+                        try
+                        {
+                            value = DeserializePropertyValue(context, valueProperty, attribute.Value);
+                        }
+                        catch (Exception e)
+                        {
+                            throw new SerializerException($"Failed to deserialize attribute {attribute.LocalName}", attribute.FindXPath(), e);
+                        }
+
+                        deserializedObject.SetValue(valueProperty, value);
+                        propertiesSet.Add(attribute.LocalName);
+                    }
+                    else if (managedProperty is ManagedCollectionProperty collectionProperty)
+                    {
+                        IList value = DeserializeCollectionPropertyValue(context, collectionProperty, attribute.Value);
+
+                        if (value != null)
+                        {
+                            var collection = (ManagedCollection)deserializedObject.GetValue(collectionProperty);
+
+                            foreach (object obj in value)
+                                ((IList)collection).Add(obj);
+
+                            propertiesSet.Add(attribute.LocalName);
+                        }
+                        else
+                            throw new SerializerException($"Property {attribute.LocalName} of {deserializedObject.GetType().Name} is a collection property, but its value is stored in attribute and no custom serializer is provided!",
+                                node.FindXPath());
+                    }
+                    else
+                        throw new InvalidOperationException("Unsupported property type!");
+                }
             }
         }
 
@@ -340,6 +435,64 @@ namespace Animator.Engine.Base.Persistence
                 return (IList)customSerializer.Deserialize(propertyValue);
 
             return null;
+        }
+
+        private object Instantiate(string namespaceUri, string className, DeserializationContext context)
+        {
+            // 1. Figure out, which object to instantiate
+
+            if (!context.Namespaces.TryGetValue(namespaceUri, out NamespaceDefinition namespaceDefinition))
+            {
+                namespaceDefinition = ParseNamespaceDefinition(namespaceUri);
+                context.Namespaces[namespaceUri] = namespaceDefinition;
+            }
+
+            // 2. Get type from the specified assembly + namespace + class name
+
+            var assembly = AppDomain.CurrentDomain.GetAssemblies().
+                SingleOrDefault(assembly => assembly.GetName().Name == namespaceDefinition.Assembly);
+
+            if (assembly == null)
+                try
+                {
+                    assembly = Assembly.Load(namespaceDefinition.Assembly);
+                }
+                catch (FileNotFoundException)
+                {
+                    // Intentionally left empty, will leave assembly as null.
+                }
+
+            if (assembly == null)
+                throw new ActivatorException($"Cannot access assembly {namespaceDefinition.Assembly}\r\nMake sure, it is loaded or accessible to load.");
+
+            string fullClassTypeName = string.Join('.', namespaceDefinition.Namespace, className);
+            Type objType = assembly.GetType(fullClassTypeName, false);
+
+            if (objType == null)
+                throw new ActivatorException($"Cannot find type {fullClassTypeName} in assembly {namespaceDefinition.Assembly}");
+
+            // 3. Make sure, that object derives from ManagedObject - only those are supported
+
+            if (!objType.IsAssignableTo(typeof(ManagedObject)))
+                throw new ActivatorException($"Type {fullClassTypeName} does not derive from ManagedObject!");
+
+            // 4. Try to instantiate object
+
+            object deserializedObject;
+
+            try
+            {
+                if (context.CustomActivator != null)
+                    deserializedObject = context.CustomActivator.CreateInstance(objType);
+                else
+                    deserializedObject = Activator.CreateInstance(objType);
+            }
+            catch (Exception e)
+            {
+                throw new ActivatorException($"Cannot instantiate type {fullClassTypeName}. Check inner exception for details.", e);
+            }
+
+            return deserializedObject;
         }
 
         private ManagedObject DeserializeElement(XmlNode node, DeserializationContext context)
@@ -380,77 +533,35 @@ namespace Animator.Engine.Base.Persistence
             }
             else
             {
-                // 1. Figure out, which object to instantiate
-
-                string className = node.LocalName;
-
-                if (!context.Namespaces.TryGetValue(node.NamespaceURI, out NamespaceDefinition namespaceDefinition))
-                {
-                    namespaceDefinition = ParseNamespaceDefinition(node.NamespaceURI);
-                    context.Namespaces[node.NamespaceURI] = namespaceDefinition;
-                }
-
-                // 2. Get type from the specified assembly + namespace + class name
-
-                var assembly = AppDomain.CurrentDomain.GetAssemblies().
-                    SingleOrDefault(assembly => assembly.GetName().Name == namespaceDefinition.Assembly);
-
-                if (assembly == null)
-                    try
-                    {
-                        assembly = Assembly.Load(namespaceDefinition.Assembly);
-                    }
-                    catch (FileNotFoundException)
-                    {
-                        // Intentionally left empty, will leave assembly as null.
-                    }
-
-                if (assembly == null)
-                    throw new SerializerException($"Cannot access assembly {namespaceDefinition.Assembly}\r\nMake sure, it is loaded or accessible to load.",
-                        node.FindXPath());
-
-                string fullClassTypeName = string.Join('.', namespaceDefinition.Namespace, className);
-                Type objType = assembly.GetType(fullClassTypeName, false);
-
-                if (objType == null)
-                    throw new SerializerException($"Cannot find type {fullClassTypeName} in assembly {namespaceDefinition.Assembly}",
-                        node.FindXPath());
-
-                // 3. Make sure, that object derives from ManagedObject - only those are supported
-
-                if (!objType.IsAssignableTo(typeof(ManagedObject)))
-                    throw new SerializerException($"Type {fullClassTypeName} does not derive from ManagedObject!",
-                        node.FindXPath());
-
-                // 4. Try to instantiate object
+                // 1. Deserialize class
 
                 ManagedObject deserializedObject;
 
                 try
                 {
-                    if (context.CustomActivator != null)
-                        deserializedObject = (ManagedObject)context.CustomActivator.CreateInstance(objType);
-                    else
-                        deserializedObject = (ManagedObject)Activator.CreateInstance(objType);
+                    object obj = Instantiate(node.NamespaceURI, node.LocalName, context);
+
+                    if (obj is not ManagedObject)
+                        throw new ActivatorException("Element classes must derive from ManagedObject!");
+
+                    deserializedObject = (ManagedObject)obj;
                 }
                 catch (Exception e)
                 {
-                    throw new SerializerException($"Cannot instantiate type {fullClassTypeName}. Check inner exception for details.",
-                        node.FindXPath(),
-                        e);
+                    throw new SerializerException("Cannot instantiate class.", node.FindXPath(), e);
                 }
 
-                // 5. Load attributes
+                // 2. Load attributes
 
                 var setProperties = new HashSet<string>();
 
                 DeserializeAttributes(node, deserializedObject, context, setProperties);
 
-                // 6. Load children
+                // 3. Load children
 
                 DeserializeChildren(node, deserializedObject, context, setProperties);
 
-                // 7. Return deserialized object
+                // 4. Return deserialized object
 
                 return deserializedObject;
             }

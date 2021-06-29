@@ -373,5 +373,159 @@ namespace Animator.Engine.Base.Tests
             Assert.IsNotNull(deserialized);
             Assert.AreEqual(deserialized.Value, 42);
         }
+
+        [TestMethod]
+        public void MarkupExtensionDeserializationTest1()
+        {
+            // Arrange
+
+            string xml = $"<IntDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" IntValue=\"{{MarkupExtension}}\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            IntDataClass data = (IntDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual(0, data.IntValue);
+        }
+
+        [TestMethod]
+        public void MarkupExtensionDeserializationTest2()
+        {
+            // Arrange
+
+            string xml = $"<IntDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" IntValue=\"{{MarkupExtension 8}}\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            IntDataClass data = (IntDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual(8, data.IntValue);
+        }
+
+        [TestMethod]
+        public void MarkupExtensionDeserializationTest3()
+        {
+            // Arrange
+
+            string xml = $"<IntDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" IntValue=\"{{MarkupExtension Value=8}}\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            IntDataClass data = (IntDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual(8, data.IntValue);
+        }
+
+        [TestMethod]
+        public void MarkupExtensionDeserializationTest4()
+        {
+            // Arrange
+
+            string xml = $"<IntDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" IntValue=\"{{MarkupExtension 4, Offset1=1}}\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            IntDataClass data = (IntDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual(5, data.IntValue);
+        }
+
+        [TestMethod]
+        public void MarkupExtensionDeserializationTest5()
+        {
+            // Arrange
+
+            string xml = $"<IntDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" IntValue=\"{{MarkupExtension Value=4, Offset1=1}}\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            IntDataClass data = (IntDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual(5, data.IntValue);
+        }
+
+        [TestMethod]
+        public void MarkupExtensionDeserializationTest6()
+        {
+            // Arrange
+
+            string xml = $"<IntDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" IntValue=\"{{MarkupExtension 4, Offset1=1, Offset2=1}}\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            IntDataClass data = (IntDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual(6, data.IntValue);
+        }
+
+        [TestMethod]
+        public void MarkupExtensionDeserializationTest7()
+        {
+            // Arrange
+
+            string xml = $"<IntDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" IntValue=\"{{MarkupExtension Value=4, Offset1=1, Offset2=1}}\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            IntDataClass data = (IntDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual(6, data.IntValue);
+        }
     }
 }
