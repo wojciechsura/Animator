@@ -8,7 +8,7 @@ namespace Animator.Engine.Elements
     /// Represents a path part, which is drawn as a vertical line.
     /// All points are expressed in absolute coordinates.
     /// </summary>
-    public class AbsoluteVerticalLinePathElement : LineBasedPathElement
+    public class VerticalLineSegment : LineBasedSegment
     {
         // Protected methods --------------------------------------------------
 
@@ -35,7 +35,7 @@ namespace Animator.Engine.Elements
             set => SetValue(YProperty, value);
         }
 
-        public static readonly ManagedProperty YProperty = ManagedProperty.Register(typeof(AbsoluteVerticalLinePathElement),
+        public static readonly ManagedProperty YProperty = ManagedProperty.Register(typeof(VerticalLineSegment),
             nameof(Y),
             typeof(float),
             new ManagedSimplePropertyMetadata { DefaultValue = 0.0f, ValueChangedHandler = HandleLineChanged });

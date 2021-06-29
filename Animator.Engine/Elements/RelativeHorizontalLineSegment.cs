@@ -8,38 +8,38 @@ namespace Animator.Engine.Elements
     /// Represents a path part, which is drawn as a horizontal line.
     /// All points are expressed in relative coordinates.
     /// </summary>
-    public class RelativeVerticalLinePathElement : LineBasedPathElement
+    public class RelativeHorizontalLineSegment : LineBasedSegment
     {
         // Protected methods --------------------------------------------------
 
         protected override PointF[] BuildLine(PointF start)
         {
-            PointF end = new PointF(start.X, start.Y + DY);
+            PointF end = new PointF(start.X + DX, start.Y);
 
             return new[] { start, end };
         }
 
         // Internal methods ---------------------------------------------------
 
-        internal override string ToPathString() => $"v {F(DY)}";
+        internal override string ToPathString() => $"h {F(DX)}";        
 
         // Public properties --------------------------------------------------
 
-        #region DY managed property
+        #region DX managed property
 
         /// <summary>
-        /// Y-coordinate of the end point relative to Y-coordinate of 
-        /// end point of the previous path element. X-coordinate equals
+        /// X-coordinate of the end point relative to X-coordinate of 
+        /// end point of the previous path element. Y-coordinate equals
         /// to end point's of the previous path element.
         /// </summary>
-        public float DY
+        public float DX
         {
-            get => (float)GetValue(DYProperty);
-            set => SetValue(DYProperty, value);
+            get => (float)GetValue(DXProperty);
+            set => SetValue(DXProperty, value);
         }
 
-        public static readonly ManagedProperty DYProperty = ManagedProperty.Register(typeof(RelativeVerticalLinePathElement),
-            nameof(DY),
+        public static readonly ManagedProperty DXProperty = ManagedProperty.Register(typeof(RelativeHorizontalLineSegment),
+            nameof(DX),
             typeof(float),
             new ManagedSimplePropertyMetadata { DefaultValue = 0.0f, ValueChangedHandler = HandleLineChanged });
 

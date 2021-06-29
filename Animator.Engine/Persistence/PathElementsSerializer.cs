@@ -78,9 +78,9 @@ namespace Animator.Engine.Elements.Persistence
             return str[index++];
         }
 
-        private PathElement ParseRelativeArc(string data, ref int index)
+        private Segment ParseRelativeArc(string data, ref int index)
         {
-            return new RelativeArcPathElement
+            return new RelativeArcSegment
             {
                 RX = ExpectFloat(data, ref index),
                 RY = ExpectFloat(data, ref index),
@@ -91,9 +91,9 @@ namespace Animator.Engine.Elements.Persistence
             };
         }
 
-        private PathElement ParseAbsoluteArc(string data, ref int index)
+        private Segment ParseAbsoluteArc(string data, ref int index)
         {
-            return new AbsoluteArcPathElement
+            return new ArcSegment
             {
                 RX = ExpectFloat(data, ref index),
                 RY = ExpectFloat(data, ref index),
@@ -104,61 +104,61 @@ namespace Animator.Engine.Elements.Persistence
             };
         }
 
-        private PathElement ParseRelativeShorthandQuadraticBezier(string data, ref int index)
+        private Segment ParseRelativeShorthandQuadraticBezier(string data, ref int index)
         {
-            return new RelativeQuadraticShorthandBezierPathElement()
+            return new RelativeShorthandQuadraticBezierSegment()
             {
                 DeltaEndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
-        private PathElement ParseAbsoluteShorthandQuadraticBezier(string data, ref int index)
+        private Segment ParseAbsoluteShorthandQuadraticBezier(string data, ref int index)
         {
-            return new AbsoluteQuadraticShorthandBezierPathElement()
+            return new ShorthandQuadraticBezierSegment()
             {
                 EndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
-        private PathElement ParseRelativeQuadraticBezier(string data, ref int index)
+        private Segment ParseRelativeQuadraticBezier(string data, ref int index)
         {
-            return new RelativeQuadraticBezierPathElement
+            return new RelativeQuadraticBezierSegment
             {
                 DeltaControlPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
                 DeltaEndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
-        private PathElement ParseAbsoluteQuadraticBezier(string data, ref int index)
+        private Segment ParseAbsoluteQuadraticBezier(string data, ref int index)
         {
-            return new AbsoluteQuadraticBezierPathElement
+            return new QuadraticBezierSegment
             {
                 ControlPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
                 EndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
-        private PathElement ParseRelativeShorthandBezier(string data, ref int index)
+        private Segment ParseRelativeShorthandBezier(string data, ref int index)
         {
-            return new RelativeCubicShorthandBezierPathElement
+            return new RelativeShorthandCubicBezierSegment
             {
                 DeltaControlPoint2 = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
                 DeltaEndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
-        private PathElement ParseAbsoluteShorthandBezier(string data, ref int index)
+        private Segment ParseAbsoluteShorthandBezier(string data, ref int index)
         {
-            return new AbsoluteCubicShorthandBezierPathElement
+            return new ShorthandCubicBezierSegment
             {
                 ControlPoint2 = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
                 EndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
-        private PathElement ParseRelativeBezier(string data, ref int index)
+        private Segment ParseRelativeBezier(string data, ref int index)
         {
-            return new RelativeCubicBezierPathElement
+            return new RelativeCubicBezierSegment
             {
                 DeltaControlPoint1 = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
                 DeltaControlPoint2 = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
@@ -166,9 +166,9 @@ namespace Animator.Engine.Elements.Persistence
             };
         }
 
-        private PathElement ParseAbsoluteBezier(string data, ref int index)
+        private Segment ParseAbsoluteBezier(string data, ref int index)
         {
-            return new AbsoluteCubicBezierPathElement
+            return new CubicBezierSegment
             {
                 ControlPoint1 = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
                 ControlPoint2 = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index)),
@@ -176,70 +176,70 @@ namespace Animator.Engine.Elements.Persistence
             };
         }
 
-        private PathElement ParseCloseShape(string data, ref int index)
+        private Segment ParseCloseShape(string data, ref int index)
         {
-            return new CloseShapePathElement();
+            return new CloseShapeSegment();
         }
 
-        private PathElement ParseRelativeVerticalLine(string data, ref int index)
+        private Segment ParseRelativeVerticalLine(string data, ref int index)
         {
-            return new RelativeVerticalLinePathElement
+            return new RelativeVerticalLineSegment
             {
                 DY = ExpectFloat(data, ref index)
             };
         }
 
-        private PathElement ParseAbsoluteVerticalLine(string data, ref int index)
+        private Segment ParseAbsoluteVerticalLine(string data, ref int index)
         {
-            return new AbsoluteVerticalLinePathElement
+            return new VerticalLineSegment
             {
                 Y = ExpectFloat(data, ref index)
             };
         }
 
-        private PathElement ParseRelativeHorizontalLine(string data, ref int index)
+        private Segment ParseRelativeHorizontalLine(string data, ref int index)
         {
-            return new RelativeHorizontalLinePathElement
+            return new RelativeHorizontalLineSegment
             {
                 DX = ExpectFloat(data, ref index)
             };
         }
 
-        private PathElement ParseAbsoluteHorizontalLine(string data, ref int index)
+        private Segment ParseAbsoluteHorizontalLine(string data, ref int index)
         {
-            return new AbsoluteHorizontalLinePathElement
+            return new HorizontalLineSegment
             {
                 X = ExpectFloat(data, ref index)
             };
         }
 
-        private PathElement ParseRelativeLine(string data, ref int index)
+        private Segment ParseRelativeLine(string data, ref int index)
         {
-            return new RelativeLinePathElement
+            return new RelativeLineSegment
             {
                 DeltaEndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
-        private PathElement ParseAbsoluteLine(string data, ref int index)
+        private Segment ParseAbsoluteLine(string data, ref int index)
         {
-            return new AbsoluteLinePathElement
+            return new LineSegment
             {
                 EndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
-        private PathElement ParseRelativeMove(string data, ref int index)
+        private Segment ParseRelativeMove(string data, ref int index)
         {
-            return new RelativeMovePathElement
+            return new RelativeMoveSegment
             {
                 DeltaEndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
         }
 
-        private PathElement ParseAbsoluteMove(string data, ref int index)
+        private Segment ParseAbsoluteMove(string data, ref int index)
         {
-            return new AbsoluteMovePathElement
+            return new MoveSegment
             {
                 EndPoint = new PointF(ExpectFloat(data, ref index), ExpectFloat(data, ref index))
             };
@@ -251,7 +251,7 @@ namespace Animator.Engine.Elements.Persistence
 
         public override IList Deserialize(string data)
         {
-            List<PathElement> result = new List<PathElement>();
+            List<Segment> result = new List<Segment>();
 
             int index = 0;
             while (index < data.Length)
@@ -334,7 +334,7 @@ namespace Animator.Engine.Elements.Persistence
 
         public override string Serialize(object obj)
         {
-            var elementList = obj as List<PathElement>;
+            var elementList = obj as List<Segment>;
 
             if (elementList != null)
                 return string.Join(" ", elementList.Select(e => e.ToPathString()));

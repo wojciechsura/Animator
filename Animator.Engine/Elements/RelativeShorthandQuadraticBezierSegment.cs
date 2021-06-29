@@ -11,9 +11,9 @@ namespace Animator.Engine.Elements
     /// path element. The control point is deduced from the previous
     /// path element as a mirror of its last control point against its
     /// endpoint.
-    /// End point is expressed in absolute coordinates.
+    /// End point is expressed in relative coordinates.
     /// </summary>
-    public class AbsoluteQuadraticShorthandBezierPathElement : QuadraticBezierPathElement
+    public class RelativeShorthandQuadraticBezierSegment : BaseQuadraticBezierSegment
     {
         // Protected methods --------------------------------------------------
 
@@ -22,28 +22,33 @@ namespace Animator.Engine.Elements
             var delta = start.Subtract(lastControlPoint);
             var controlPoint = start.Add(delta);
 
-            (var controlPoint1, var controlPoint2) = EstimateCubicControlPoints(start, controlPoint, EndPoint);
+            var end = start.Add(DeltaEndPoint);
 
-            return new[] { start, controlPoint1, controlPoint2, EndPoint };
+            (var controlPoint1, var controlPoint2) = EstimateCubicControlPoints(start, controlPoint, end);
+
+            return new[] { start, controlPoint1, controlPoint2, end };
         }
 
-        internal override string ToPathString() => $"T {F(EndPoint.X)} {F(EndPoint.Y)}";
+        // Internal methods ---------------------------------------------------
+
+        internal override string ToPathString() => $"t {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
         // Public properties --------------------------------------------------
 
-        #region EndPoint managed property
+        #region DeltaEndPoint managed property
 
         /// <summary>
-        /// End point of the curve.
+        /// End point of the curve, relative to end point of the previous
+        /// path element.
         /// </summary>
-        public PointF EndPoint
+        public PointF DeltaEndPoint
         {
-            get => (PointF)GetValue(EndPointProperty);
-            set => SetValue(EndPointProperty, value);
+            get => (PointF)GetValue(DeltaEndPointProperty);
+            set => SetValue(DeltaEndPointProperty, value);
         }
 
-        public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(AbsoluteQuadraticShorthandBezierPathElement),
-            nameof(EndPoint),
+        public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeShorthandQuadraticBezierSegment),
+            nameof(DeltaEndPoint),
             typeof(PointF),
             new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
 

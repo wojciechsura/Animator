@@ -144,7 +144,7 @@ namespace Animator.Engine.Elements
                 
                 // If there is any following close-shape element, run it
                 var closeElement = Definition.Skip(startElement + 1)
-                    .OfType<CloseShapePathElement>()
+                    .OfType<CloseShapeSegment>()
                     .FirstOrDefault();
 
                 if (closeElement != null)
@@ -172,7 +172,7 @@ namespace Animator.Engine.Elements
 
                     // If there is any following close-shape element, run it
                     var closeElement = Definition.Skip(endElement + 1)
-                        .OfType<CloseShapePathElement>()
+                        .OfType<CloseShapeSegment>()
                         .FirstOrDefault();
 
                     if (closeElement != null)
@@ -192,14 +192,14 @@ namespace Animator.Engine.Elements
         /// In XML, you may express value of this property in an
         /// attribute as SVG-compatible path description.
         /// </summary>
-        public ManagedCollection<PathElement> Definition
+        public ManagedCollection<Segment> Definition
         {
-            get => (ManagedCollection<PathElement>)GetValue(DefinitionProperty);
+            get => (ManagedCollection<Segment>)GetValue(DefinitionProperty);
         }
 
         public static readonly ManagedProperty DefinitionProperty = ManagedProperty.RegisterCollection(typeof(Path),
             nameof(Definition),
-            typeof(ManagedCollection<PathElement>),
+            typeof(ManagedCollection<Segment>),
             new ManagedCollectionMetadata { CustomSerializer = new PathElementsSerializer() });
 
         #endregion

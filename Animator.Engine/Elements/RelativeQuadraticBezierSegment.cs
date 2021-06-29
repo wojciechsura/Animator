@@ -11,7 +11,7 @@ namespace Animator.Engine.Elements
     /// path element. 
     /// All points are expressed in relative coordinates.
     /// </summary>
-    public class RelativeQuadraticBezierPathElement : QuadraticBezierPathElement
+    public class RelativeQuadraticBezierSegment : BaseQuadraticBezierSegment
     {
         // Protected methods --------------------------------------------------
 
@@ -45,7 +45,7 @@ namespace Animator.Engine.Elements
             set => SetValue(DeltaControlPointProperty, value);
         }
 
-        public static readonly ManagedProperty DeltaControlPointProperty = ManagedProperty.Register(typeof(RelativeQuadraticBezierPathElement),
+        public static readonly ManagedProperty DeltaControlPointProperty = ManagedProperty.Register(typeof(RelativeQuadraticBezierSegment),
             nameof(DeltaControlPoint),
             typeof(PointF),
             new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
@@ -70,7 +70,7 @@ namespace Animator.Engine.Elements
             set => SetValue(DeltaEndPointProperty, value);
         }
 
-        public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeQuadraticBezierPathElement),
+        public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeQuadraticBezierSegment),
             nameof(DeltaEndPoint),
             typeof(PointF),
             new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });

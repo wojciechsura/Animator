@@ -14,7 +14,7 @@ namespace Animator.Engine.Elements
     /// Base class for all path elements, which are interpolated
     /// by a series of cubic Bezier curves
     /// </summary>
-    public abstract class MultipleCubicBezierBasedPathElement : PathElement
+    public abstract class MultipleCubicBezierBasedSegment : Segment
     {
         // Private methods ----------------------------------------------------
 
@@ -95,7 +95,7 @@ namespace Animator.Engine.Elements
 
         protected static void HandleCurveChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
-            if (sender is MultipleCubicBezierBasedPathElement multipleCubic)
+            if (sender is MultipleCubicBezierBasedSegment multipleCubic)
                 multipleCubic.NotifyCurveChanged();
         }
 

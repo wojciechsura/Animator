@@ -1,45 +1,49 @@
 using Animator.Engine.Base;
+using Animator.Engine.Utils;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
 namespace Animator.Engine.Elements
 {
     /// <summary>
-    /// Represents a path part, which is drawn as a quadratic Bezier curve.
+    /// Represents a path part, which is drawn as a cubic Bezier curve.
     /// First point of the curve equals to the last point of previous
-    /// path element.
+    /// path element. First control point is deduced from the previous
+    /// path element as a mirror of its last control point against its
+    /// endpoint.
     /// All points are expressed in absolute coordinates.
     /// </summary>
-    public class AbsoluteQuadraticBezierPathElement : QuadraticBezierPathElement
+    public class ShorthandCubicBezierSegment : BaseCubicBezierBasedSegment
     {
         // Protected methods --------------------------------------------------
 
         protected override PointF[] BuildBezier(PointF start, PointF lastControlPoint)
         {
-            (var controlPoint1, var controlPoint2) = EstimateCubicControlPoints(start, ControlPoint, EndPoint);
+            var delta = start.Subtract(lastControlPoint);
+            var controlPoint1 = start.Add(delta);
 
-            return new[] { start, controlPoint1, controlPoint2, EndPoint };
+            return new PointF[] { start, controlPoint1, ControlPoint2, EndPoint };
         }
 
         // Internal methods ---------------------------------------------------
 
-        internal override string ToPathString() => $"Q {F(ControlPoint.X)} {F(ControlPoint.Y)} {F(EndPoint.X)} {F(EndPoint.Y)}";
+        internal override string ToPathString() => $"S {F(ControlPoint2.X)} {F(ControlPoint2.Y)} {F(EndPoint.X)} {F(EndPoint.Y)}";
 
         // Public properties --------------------------------------------------
 
-        #region ControlPoint managed property
+        #region ControlPoint2 managed property
 
         /// <summary>
-        /// Control point of the curve.
+        /// Second control point of the curve.
         /// </summary>
-        public PointF ControlPoint
+        public PointF ControlPoint2
         {
-            get => (PointF)GetValue(ControlPointProperty);
-            set => SetValue(ControlPointProperty, value);
+            get => (PointF)GetValue(ControlPoint2Property);
+            set => SetValue(ControlPoint2Property, value);
         }
 
-        public static readonly ManagedProperty ControlPointProperty = ManagedProperty.Register(typeof(AbsoluteQuadraticBezierPathElement),
-            nameof(ControlPoint),
+        public static readonly ManagedProperty ControlPoint2Property = ManagedProperty.Register(typeof(ShorthandCubicBezierSegment),
+            nameof(ControlPoint2),
             typeof(PointF),
             new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
 
@@ -56,7 +60,7 @@ namespace Animator.Engine.Elements
             set => SetValue(EndPointProperty, value);
         }
 
-        public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(AbsoluteQuadraticBezierPathElement),
+        public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(ShorthandCubicBezierSegment),
             nameof(EndPoint),
             typeof(PointF),
             new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });

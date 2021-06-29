@@ -8,7 +8,7 @@ namespace Animator.Engine.Elements
     /// ends here. If needed, path is closed with a line leading to
     /// its start.
     /// </summary>
-    public class CloseShapePathElement : PathElement
+    public class CloseShapeSegment : Segment
     {
         // Internal methods ---------------------------------------------------
 

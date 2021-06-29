@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// This is a base class for all arc path elements.
     /// </summary>
-    public abstract class ArcPathElement : MultipleCubicBezierBasedPathElement
+    public abstract class BaseArcSegment : MultipleCubicBezierBasedSegment
     {
         private const double RadiansPerDegree = Math.PI / 180.0;
         private const double DoublePI = Math.PI * 2;

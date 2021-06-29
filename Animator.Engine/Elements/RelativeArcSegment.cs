@@ -8,20 +8,21 @@ namespace Animator.Engine.Elements
     /// Represents a path part, which is drawn as an elliptical arc.
     /// First point of the arc equals to the last point of previous
     /// path element.
-    /// Endpoint of the arc is expressed in absolute coordinates.
+    /// Endpoint of the arc is expressed in relative coordinates.
     /// </summary>
-    public class AbsoluteArcPathElement : ArcPathElement
+    public class RelativeArcSegment : BaseArcSegment
     {
         // Protected methods --------------------------------------------------
 
         protected override PointF[][] BuildBeziers(PointF start)
         {
-            return InternalBuildBeziers(start, RX, RY, Angle, LargeArcFlag, SweepFlag, EndPoint);
+            RunningPoint point = new RunningPoint(start);
+            return InternalBuildBeziers(point.Current, RX, RY, Angle, LargeArcFlag, SweepFlag, point.Delta(DeltaEndPoint));
         }
 
         // Internal methods ---------------------------------------------------
 
-        internal override string ToPathString() => $"A {F(RX)} {F(RY)} {F(Angle)} {(LargeArcFlag ? 1 : 0)} {(SweepFlag ? 1 : 0)} {F(EndPoint.X)} {F(EndPoint.Y)}";
+        internal override string ToPathString() => $"a {F(RX)} {F(RY)} {F(Angle)} {(LargeArcFlag ? 1 : 0)} {(SweepFlag ? 1 : 0)} {F(DeltaEndPoint.X)} {F(DeltaEndPoint.Y)}";
 
         // Public properties --------------------------------------------------
 
@@ -36,7 +37,7 @@ namespace Animator.Engine.Elements
             set => SetValue(RXProperty, value);
         }
 
-        public static readonly ManagedProperty RXProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
+        public static readonly ManagedProperty RXProperty = ManagedProperty.Register(typeof(RelativeArcSegment),
             nameof(RX),
             typeof(float),
             new ManagedSimplePropertyMetadata { DefaultValue = 0.0f, ValueChangedHandler = HandleCurveChanged });
@@ -54,7 +55,7 @@ namespace Animator.Engine.Elements
             set => SetValue(RYProperty, value);
         }
 
-        public static readonly ManagedProperty RYProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
+        public static readonly ManagedProperty RYProperty = ManagedProperty.Register(typeof(RelativeArcSegment),
             nameof(RY),
             typeof(float),
             new ManagedSimplePropertyMetadata { DefaultValue = 0.0f, ValueChangedHandler = HandleCurveChanged });
@@ -64,7 +65,7 @@ namespace Animator.Engine.Elements
         #region Angle managed property
 
         /// <summary>
-        /// Angle of the arc.
+        /// Angle of the arc
         /// </summary>
         public float Angle
         {
@@ -72,7 +73,7 @@ namespace Animator.Engine.Elements
             set => SetValue(AngleProperty, value);
         }
 
-        public static readonly ManagedProperty AngleProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
+        public static readonly ManagedProperty AngleProperty = ManagedProperty.Register(typeof(RelativeArcSegment),
             nameof(Angle),
             typeof(float),
             new ManagedSimplePropertyMetadata { DefaultValue = 0.0f, ValueChangedHandler = HandleCurveChanged });
@@ -90,7 +91,7 @@ namespace Animator.Engine.Elements
             set => SetValue(LargeArcFlagProperty, value);
         }
 
-        public static readonly ManagedProperty LargeArcFlagProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
+        public static readonly ManagedProperty LargeArcFlagProperty = ManagedProperty.Register(typeof(RelativeArcSegment),
             nameof(LargeArcFlag),
             typeof(bool),
             new ManagedSimplePropertyMetadata { DefaultValue = false, ValueChangedHandler = HandleCurveChanged });
@@ -108,26 +109,26 @@ namespace Animator.Engine.Elements
             set => SetValue(SweepFlagProperty, value);
         }
 
-        public static readonly ManagedProperty SweepFlagProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
+        public static readonly ManagedProperty SweepFlagProperty = ManagedProperty.Register(typeof(RelativeArcSegment),
             nameof(SweepFlag),
             typeof(bool),
             new ManagedSimplePropertyMetadata { DefaultValue = false, ValueChangedHandler = HandleCurveChanged });
 
         #endregion
 
-        #region EndPoint managed property
+        #region DeltaEndPoint managed property
 
         /// <summary>
-        /// End point of the arc
+        /// End point of the arc, relative to the endpoint of previous path element.
         /// </summary>
-        public PointF EndPoint
+        public PointF DeltaEndPoint
         {
-            get => (PointF)GetValue(EndPointProperty);
-            set => SetValue(EndPointProperty, value);
+            get => (PointF)GetValue(DeltaEndPointProperty);
+            set => SetValue(DeltaEndPointProperty, value);
         }
 
-        public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(AbsoluteArcPathElement),
-            nameof(EndPoint),
+        public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeArcSegment),
+            nameof(DeltaEndPoint),
             typeof(PointF),
             new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
 

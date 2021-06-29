@@ -14,7 +14,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Base class for all path elements.
     /// </summary>
-    public abstract class PathElement : SceneElement
+    public abstract class Segment : SceneElement
     {
         // Protected types ----------------------------------------------------
 

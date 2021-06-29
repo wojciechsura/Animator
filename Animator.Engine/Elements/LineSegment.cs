@@ -8,7 +8,7 @@ namespace Animator.Engine.Elements
     /// Represents a path part, which is drawn as a line.
     /// All points are expressed in absolute coordinates.
     /// </summary>
-    public class AbsoluteLinePathElement : LineBasedPathElement
+    public class LineSegment : LineBasedSegment
     {
         // Protected methods --------------------------------------------------
 
@@ -34,7 +34,7 @@ namespace Animator.Engine.Elements
             set => SetValue(EndPointProperty, value);
         }
 
-        public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(AbsoluteLinePathElement),
+        public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(LineSegment),
             nameof(EndPoint),
             typeof(PointF),
             new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleLineChanged });

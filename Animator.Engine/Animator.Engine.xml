@@ -13,165 +13,6 @@
         <member name="M:Animator.Engine.Animation.Maths.EasingFunctionRepository.SpeedUpToReverseBoth(System.Func{System.Single,System.Single})">
             <remarks>Assumes, that func is continuous, func(0) = 0 and func(1) = 1.</remarks>
         </member>
-        <member name="T:Animator.Engine.Elements.AbsoluteArcPathElement">
-            <summary>
-            Represents a path part, which is drawn as an elliptical arc.
-            First point of the arc equals to the last point of previous
-            path element.
-            Endpoint of the arc is expressed in absolute coordinates.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.RX">
-            <summary>
-            X radius of the ellipse, from which the arc is built.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.RY">
-            <summary>
-            Y radius of the ellipse, from which the arc is built.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.Angle">
-            <summary>
-            Angle of the arc.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.LargeArcFlag">
-            <summary>
-            Determines, whether arc should follow the larger path or smaller one.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.SweepFlag">
-            <summary>
-            Determines, whether arc will be drawn positive-angle or negative-angle.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteArcPathElement.EndPoint">
-            <summary>
-            End point of the arc
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.AbsoluteCubicBezierPathElement">
-            <summary>
-            Represents a path part, which is drawn as a cubic Bezier curve.
-            First point of the curve equals to the last point of previous
-            path element.
-            All points are expressed in absolute coordinates.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteCubicBezierPathElement.ControlPoint1">
-            <summary>
-            First control point of the curve.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteCubicBezierPathElement.ControlPoint2">
-            <summary>
-            Second control point of the curve.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteCubicBezierPathElement.EndPoint">
-            <summary>
-            End point of the curve.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.AbsoluteCubicShorthandBezierPathElement">
-            <summary>
-            Represents a path part, which is drawn as a cubic Bezier curve.
-            First point of the curve equals to the last point of previous
-            path element. First control point is deduced from the previous
-            path element as a mirror of its last control point against its
-            endpoint.
-            All points are expressed in absolute coordinates.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteCubicShorthandBezierPathElement.ControlPoint2">
-            <summary>
-            Second control point of the curve.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteCubicShorthandBezierPathElement.EndPoint">
-            <summary>
-            End point of the curve.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.AbsoluteHorizontalLinePathElement">
-            <summary>
-            Represents a path part, which is drawn as a horizontal line.
-            All points are expressed in absolute coordinates.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteHorizontalLinePathElement.X">
-            <summary>
-            X-coordinate of the end point. Y-coordinate equals to
-            the end point's of the previous path element.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.AbsoluteLinePathElement">
-            <summary>
-            Represents a path part, which is drawn as a line.
-            All points are expressed in absolute coordinates.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteLinePathElement.EndPoint">
-            <summary>
-            End point of the line.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.AbsoluteMovePathElement">
-            <summary>
-            Begins a new path in specified absolute coordinates
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteMovePathElement.EndPoint">
-            <summary>
-            Coordinates at which new path should begin.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.AbsoluteQuadraticBezierPathElement">
-            <summary>
-            Represents a path part, which is drawn as a quadratic Bezier curve.
-            First point of the curve equals to the last point of previous
-            path element.
-            All points are expressed in absolute coordinates.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteQuadraticBezierPathElement.ControlPoint">
-            <summary>
-            Control point of the curve.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteQuadraticBezierPathElement.EndPoint">
-            <summary>
-            End point of the curve.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.AbsoluteQuadraticShorthandBezierPathElement">
-            <summary>
-            Represents a path part, which is drawn as a quadratic Bezier curve.
-            Start point of the curve equals to the last point of previous
-            path element. The control point is deduced from the previous
-            path element as a mirror of its last control point against its
-            endpoint.
-            End point is expressed in absolute coordinates.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteQuadraticShorthandBezierPathElement.EndPoint">
-            <summary>
-            End point of the curve.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.AbsoluteVerticalLinePathElement">
-            <summary>
-            Represents a path part, which is drawn as a vertical line.
-            All points are expressed in absolute coordinates.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.AbsoluteVerticalLinePathElement.Y">
-            <summary>
-            Y-coordinate of the end point. X-coordinate equals to
-            the end point's of the previous path element.
-            </summary>
-        </member>
         <member name="T:Animator.Engine.Elements.AnimateBool">
             <summary>
             Allows applying an animation to a bool property of some
@@ -439,9 +280,68 @@
             positive values - later.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.ArcPathElement">
+        <member name="T:Animator.Engine.Elements.ArcSegment">
+            <summary>
+            Represents a path part, which is drawn as an elliptical arc.
+            First point of the arc equals to the last point of previous
+            path element.
+            Endpoint of the arc is expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.ArcSegment.RX">
+            <summary>
+            X radius of the ellipse, from which the arc is built.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.ArcSegment.RY">
+            <summary>
+            Y radius of the ellipse, from which the arc is built.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.ArcSegment.Angle">
+            <summary>
+            Angle of the arc.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.ArcSegment.LargeArcFlag">
+            <summary>
+            Determines, whether arc should follow the larger path or smaller one.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.ArcSegment.SweepFlag">
+            <summary>
+            Determines, whether arc will be drawn positive-angle or negative-angle.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.ArcSegment.EndPoint">
+            <summary>
+            End point of the arc
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.BaseArcSegment">
             <summary>
             This is a base class for all arc path elements.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.BaseCubicBezierBasedSegment">
+            <summary>
+            Base class for all path elements, which are interpolated
+            by a cubic Bezier curve
+            </summary>
+        </member>
+        <member name="M:Animator.Engine.Elements.BaseCubicBezierBasedSegment.BuildBezier(System.Drawing.PointF,System.Drawing.PointF)">
+            <summary>
+            Builds cubic Bezier curve equivalent for current path fragment.
+            </summary>
+        </member>
+        <member name="M:Animator.Engine.Elements.BaseCubicBezierBasedSegment.GetBezier(System.Drawing.PointF,System.Drawing.PointF)">
+            <summary>
+            Gets cubic Bezier curve equivalent for current path fragment.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.BaseQuadraticBezierSegment">
+            <summary>
+            Base abstract class for all quadratic Bezier path elements.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.BlurEffect">
@@ -486,7 +386,7 @@
             Radius of the circle.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.CloseShapePathElement">
+        <member name="T:Animator.Engine.Elements.CloseShapeSegment">
             <summary>
             Informs, that the shape defined by a series of path elements
             ends here. If needed, path is closed with a line leading to
@@ -498,20 +398,27 @@
             A keyframe for a property of type Color.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.CubicBezierBasedPathElement">
+        <member name="T:Animator.Engine.Elements.CubicBezierSegment">
             <summary>
-            Base class for all path elements, which are interpolated
-            by a cubic Bezier curve
+            Represents a path part, which is drawn as a cubic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element.
+            All points are expressed in absolute coordinates.
             </summary>
         </member>
-        <member name="M:Animator.Engine.Elements.CubicBezierBasedPathElement.BuildBezier(System.Drawing.PointF,System.Drawing.PointF)">
+        <member name="P:Animator.Engine.Elements.CubicBezierSegment.ControlPoint1">
             <summary>
-            Builds cubic Bezier curve equivalent for current path fragment.
+            First control point of the curve.
             </summary>
         </member>
-        <member name="M:Animator.Engine.Elements.CubicBezierBasedPathElement.GetBezier(System.Drawing.PointF,System.Drawing.PointF)">
+        <member name="P:Animator.Engine.Elements.CubicBezierSegment.ControlPoint2">
             <summary>
-            Gets cubic Bezier curve equivalent for current path fragment.
+            Second control point of the curve.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.CubicBezierSegment.EndPoint">
+            <summary>
+            End point of the curve.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.DropShadowEffect">
@@ -580,6 +487,18 @@
         <member name="P:Animator.Engine.Elements.GaussianBlurEffect.Radius">
             <summary>
             Radius of the blur.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.HorizontalLineSegment">
+            <summary>
+            Represents a path part, which is drawn as a horizontal line.
+            All points are expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.HorizontalLineSegment.X">
+            <summary>
+            X-coordinate of the end point. Y-coordinate equals to
+            the end point's of the previous path element.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.IntKeyframe">
@@ -752,6 +671,27 @@
             Color of this gradient stop.
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.LineSegment">
+            <summary>
+            Represents a path part, which is drawn as a line.
+            All points are expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.LineSegment.EndPoint">
+            <summary>
+            End point of the line.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.MoveSegment">
+            <summary>
+            Begins a new path in specified absolute coordinates
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.MoveSegment.EndPoint">
+            <summary>
+            Coordinates at which new path should begin.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.Movie">
             <summary>
             Root element of the movie.
@@ -787,18 +727,18 @@
             Defines, how many frames should be in a second of animation.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.MultipleCubicBezierBasedPathElement">
+        <member name="T:Animator.Engine.Elements.MultipleCubicBezierBasedSegment">
             <summary>
             Base class for all path elements, which are interpolated
             by a series of cubic Bezier curves
             </summary>
         </member>
-        <member name="M:Animator.Engine.Elements.MultipleCubicBezierBasedPathElement.BuildBeziers(System.Drawing.PointF)">
+        <member name="M:Animator.Engine.Elements.MultipleCubicBezierBasedSegment.BuildBeziers(System.Drawing.PointF)">
             <summary>
             Builds cubic Bezier curve equivalent for current path fragment.
             </summary>
         </member>
-        <member name="M:Animator.Engine.Elements.MultipleCubicBezierBasedPathElement.GetBeziers(System.Drawing.PointF)">
+        <member name="M:Animator.Engine.Elements.MultipleCubicBezierBasedSegment.GetBeziers(System.Drawing.PointF)">
             <summary>
             Gets cubic Bezier curve equivalent for current path fragment.
             </summary>
@@ -865,21 +805,6 @@
             between 0 and 1, inclusive.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.PathElement">
-            <summary>
-            Base class for all path elements.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.PathElement.RunningPoint">
-            <summary>
-            Utility class to simplify handling relative positions
-            </summary>
-        </member>
-        <member name="M:Animator.Engine.Elements.PathElement.F(System.Single)">
-            <summary>
-            Formats a float into a SVG path-compatible string.
-            </summary>
-        </member>
         <member name="T:Animator.Engine.Elements.Pen">
             <summary>
             Defines a way in which lines are being drawn.
@@ -905,9 +830,22 @@
             Value of the keyframe.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.QuadraticBezierPathElement">
+        <member name="T:Animator.Engine.Elements.QuadraticBezierSegment">
             <summary>
-            Base abstract class for all quadratic Bezier path elements.
+            Represents a path part, which is drawn as a quadratic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element.
+            All points are expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.QuadraticBezierSegment.ControlPoint">
+            <summary>
+            Control point of the curve.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.QuadraticBezierSegment.EndPoint">
+            <summary>
+            End point of the curve.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.Rectangle">
@@ -925,7 +863,7 @@
             Height of the rectangle.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.RelativeArcPathElement">
+        <member name="T:Animator.Engine.Elements.RelativeArcSegment">
             <summary>
             Represents a path part, which is drawn as an elliptical arc.
             First point of the arc equals to the last point of previous
@@ -933,37 +871,37 @@
             Endpoint of the arc is expressed in relative coordinates.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeArcPathElement.RX">
+        <member name="P:Animator.Engine.Elements.RelativeArcSegment.RX">
             <summary>
             X radius of the ellipse, from which the arc is built.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeArcPathElement.RY">
+        <member name="P:Animator.Engine.Elements.RelativeArcSegment.RY">
             <summary>
             Y radius of the ellipse, from which the arc is built.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeArcPathElement.Angle">
+        <member name="P:Animator.Engine.Elements.RelativeArcSegment.Angle">
             <summary>
             Angle of the arc
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeArcPathElement.LargeArcFlag">
+        <member name="P:Animator.Engine.Elements.RelativeArcSegment.LargeArcFlag">
             <summary>
             Determines, whether arc should follow the larger path or smaller one.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeArcPathElement.SweepFlag">
+        <member name="P:Animator.Engine.Elements.RelativeArcSegment.SweepFlag">
             <summary>
             Determines, whether arc will be drawn positive-angle or negative-angle.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeArcPathElement.DeltaEndPoint">
+        <member name="P:Animator.Engine.Elements.RelativeArcSegment.DeltaEndPoint">
             <summary>
             End point of the arc, relative to the endpoint of previous path element.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.RelativeCubicBezierPathElement">
+        <member name="T:Animator.Engine.Elements.RelativeCubicBezierSegment">
             <summary>
             Represents a path part, which is drawn as a cubic Bezier curve.
             First point of the curve equals to the last point of previous
@@ -971,81 +909,60 @@
             All points are expressed in relative coordinates.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeCubicBezierPathElement.DeltaControlPoint1">
+        <member name="P:Animator.Engine.Elements.RelativeCubicBezierSegment.DeltaControlPoint1">
             <summary>
             First control point, relative to endpoint of the previous
             path element.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeCubicBezierPathElement.DeltaControlPoint2">
+        <member name="P:Animator.Engine.Elements.RelativeCubicBezierSegment.DeltaControlPoint2">
             <summary>
             Second control point, relative to the first control
             point.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeCubicBezierPathElement.DeltaEndPoint">
+        <member name="P:Animator.Engine.Elements.RelativeCubicBezierSegment.DeltaEndPoint">
             <summary>
             End point, relative to the second control point.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.RelativeCubicShorthandBezierPathElement">
-            <summary>
-            Represents a path part, which is drawn as a cubic Bezier curve.
-            First point of the curve equals to the last point of previous
-            path element. First control point is deduced from the previous
-            path element as a mirror of its last control point against its
-            endpoint.
-            All points are expressed in relative coordinates.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.RelativeCubicShorthandBezierPathElement.DeltaControlPoint2">
-            <summary>
-            Second control point, relative to the deduced 
-            first control point.
-            </summary>
-        </member>
-        <member name="P:Animator.Engine.Elements.RelativeCubicShorthandBezierPathElement.DeltaEndPoint">
-            <summary>
-            End point, relative to the second control point.
-            </summary>
-        </member>
-        <member name="T:Animator.Engine.Elements.RelativeHorizontalLinePathElement">
+        <member name="T:Animator.Engine.Elements.RelativeHorizontalLineSegment">
             <summary>
             Represents a path part, which is drawn as a horizontal line.
             All points are expressed in relative coordinates.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeHorizontalLinePathElement.DX">
+        <member name="P:Animator.Engine.Elements.RelativeHorizontalLineSegment.DX">
             <summary>
             X-coordinate of the end point relative to X-coordinate of 
             end point of the previous path element. Y-coordinate equals
             to end point's of the previous path element.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.RelativeLinePathElement">
+        <member name="T:Animator.Engine.Elements.RelativeLineSegment">
             <summary>
             Represents a path part, which is drawn as a line.
             All points are expressed in relative coordinates.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeLinePathElement.DeltaEndPoint">
+        <member name="P:Animator.Engine.Elements.RelativeLineSegment.DeltaEndPoint">
             <summary>
             End point of the line, relative to end point
             of the previous path element.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.RelativeMovePathElement">
+        <member name="T:Animator.Engine.Elements.RelativeMoveSegment">
             <summary>
             Begins a new path in specified relative coordinates
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeMovePathElement.DeltaEndPoint">
+        <member name="P:Animator.Engine.Elements.RelativeMoveSegment.DeltaEndPoint">
             <summary>
             Coordinates at which new path should begin, relative
             to end point of the previous path element.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.RelativeQuadraticBezierPathElement">
+        <member name="T:Animator.Engine.Elements.RelativeQuadraticBezierSegment">
             <summary>
             Represents a path part, which is drawn as a quadratic Bezier curve.
             First point of the curve equals to the last point of previous
@@ -1053,13 +970,13 @@
             All points are expressed in relative coordinates.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeQuadraticBezierPathElement.DeltaControlPoint">
+        <member name="P:Animator.Engine.Elements.RelativeQuadraticBezierSegment.DeltaControlPoint">
             <summary>
             Control point of the curve, relative to endpoint of the previous
             path element.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeQuadraticBezierPathElement.DeltaEndPoint">
+        <member name="P:Animator.Engine.Elements.RelativeQuadraticBezierSegment.DeltaEndPoint">
             <summary>
             End point of the curve, relative to endpoint of the previous
             path element.
@@ -1071,7 +988,28 @@
             to SVG's standard of defining paths.
             </remarks>
         </member>
-        <member name="T:Animator.Engine.Elements.RelativeQuadraticShorthandBezierPathElement">
+        <member name="T:Animator.Engine.Elements.RelativeShorthandCubicBezierSegment">
+            <summary>
+            Represents a path part, which is drawn as a cubic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element. First control point is deduced from the previous
+            path element as a mirror of its last control point against its
+            endpoint.
+            All points are expressed in relative coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeShorthandCubicBezierSegment.DeltaControlPoint2">
+            <summary>
+            Second control point, relative to the deduced 
+            first control point.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.RelativeShorthandCubicBezierSegment.DeltaEndPoint">
+            <summary>
+            End point, relative to the second control point.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.RelativeShorthandQuadraticBezierSegment">
             <summary>
             Represents a path part, which is drawn as a quadratic Bezier curve.
             Start point of the curve equals to the last point of previous
@@ -1081,19 +1019,19 @@
             End point is expressed in relative coordinates.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeQuadraticShorthandBezierPathElement.DeltaEndPoint">
+        <member name="P:Animator.Engine.Elements.RelativeShorthandQuadraticBezierSegment.DeltaEndPoint">
             <summary>
             End point of the curve, relative to end point of the previous
             path element.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.RelativeVerticalLinePathElement">
+        <member name="T:Animator.Engine.Elements.RelativeVerticalLineSegment">
             <summary>
             Represents a path part, which is drawn as a horizontal line.
             All points are expressed in relative coordinates.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.RelativeVerticalLinePathElement.DY">
+        <member name="P:Animator.Engine.Elements.RelativeVerticalLineSegment.DY">
             <summary>
             Y-coordinate of the end point relative to Y-coordinate of 
             end point of the previous path element. X-coordinate equals
@@ -1162,6 +1100,21 @@
             of elements placed inside this element.
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.Segment">
+            <summary>
+            Base class for all path elements.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.Segment.RunningPoint">
+            <summary>
+            Utility class to simplify handling relative positions
+            </summary>
+        </member>
+        <member name="M:Animator.Engine.Elements.Segment.F(System.Single)">
+            <summary>
+            Formats a float into a SVG path-compatible string.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.Shape">
             <summary>
             Base class for all shapes drawn on the scene.
@@ -1175,6 +1128,41 @@
         <member name="P:Animator.Engine.Elements.Shape.Pen">
             <summary>
             Defines, how edges of the shape will be drawn.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.ShorthandCubicBezierSegment">
+            <summary>
+            Represents a path part, which is drawn as a cubic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element. First control point is deduced from the previous
+            path element as a mirror of its last control point against its
+            endpoint.
+            All points are expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.ShorthandCubicBezierSegment.ControlPoint2">
+            <summary>
+            Second control point of the curve.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.ShorthandCubicBezierSegment.EndPoint">
+            <summary>
+            End point of the curve.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.ShorthandQuadraticBezierSegment">
+            <summary>
+            Represents a path part, which is drawn as a quadratic Bezier curve.
+            Start point of the curve equals to the last point of previous
+            path element. The control point is deduced from the previous
+            path element as a mirror of its last control point against its
+            endpoint.
+            End point is expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.ShorthandQuadraticBezierSegment.EndPoint">
+            <summary>
+            End point of the curve.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.SolidBrush">
@@ -1282,6 +1270,18 @@
         <member name="P:Animator.Engine.Elements.TranslateTransform.DY">
             <summary>
             Defines translation distance over X axis
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.VerticalLineSegment">
+            <summary>
+            Represents a path part, which is drawn as a vertical line.
+            All points are expressed in absolute coordinates.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.VerticalLineSegment.Y">
+            <summary>
+            Y-coordinate of the end point. X-coordinate equals to
+            the end point's of the previous path element.
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.Visual">

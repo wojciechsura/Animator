@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public abstract class LineBasedPathElement : PathElement
+    public abstract class LineBasedSegment : Segment
     {
         // Private fields -----------------------------------------------------
 
@@ -81,7 +81,7 @@ namespace Animator.Engine.Elements
 
         protected static void HandleLineChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
-            if (sender is LineBasedPathElement lineElement)
+            if (sender is LineBasedSegment lineElement)
                 lineElement.NotifyLineChanged();
         }
 

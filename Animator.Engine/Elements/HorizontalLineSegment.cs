@@ -6,40 +6,39 @@ namespace Animator.Engine.Elements
 {
     /// <summary>
     /// Represents a path part, which is drawn as a horizontal line.
-    /// All points are expressed in relative coordinates.
+    /// All points are expressed in absolute coordinates.
     /// </summary>
-    public class RelativeHorizontalLinePathElement : LineBasedPathElement
+    public class HorizontalLineSegment : LineBasedSegment
     {
         // Protected methods --------------------------------------------------
 
         protected override PointF[] BuildLine(PointF start)
         {
-            PointF end = new PointF(start.X + DX, start.Y);
+            PointF end = new PointF(X, start.Y);
 
             return new[] { start, end };
         }
 
         // Internal methods ---------------------------------------------------
 
-        internal override string ToPathString() => $"h {F(DX)}";        
+        internal override string ToPathString() => $"H {F(X)}";
 
         // Public properties --------------------------------------------------
 
-        #region DX managed property
+        #region X managed property
 
         /// <summary>
-        /// X-coordinate of the end point relative to X-coordinate of 
-        /// end point of the previous path element. Y-coordinate equals
-        /// to end point's of the previous path element.
+        /// X-coordinate of the end point. Y-coordinate equals to
+        /// the end point's of the previous path element.
         /// </summary>
-        public float DX
+        public float X
         {
-            get => (float)GetValue(DXProperty);
-            set => SetValue(DXProperty, value);
+            get => (float)GetValue(XProperty);
+            set => SetValue(XProperty, value);
         }
 
-        public static readonly ManagedProperty DXProperty = ManagedProperty.Register(typeof(RelativeHorizontalLinePathElement),
-            nameof(DX),
+        public static readonly ManagedProperty XProperty = ManagedProperty.Register(typeof(HorizontalLineSegment),
+            nameof(X),
             typeof(float),
             new ManagedSimplePropertyMetadata { DefaultValue = 0.0f, ValueChangedHandler = HandleLineChanged });
 

@@ -9,7 +9,7 @@ namespace Animator.Engine.Elements
     /// Represents a path part, which is drawn as a line.
     /// All points are expressed in relative coordinates.
     /// </summary>
-    public class RelativeLinePathElement : LineBasedPathElement
+    public class RelativeLineSegment : LineBasedSegment
     {
         // Protected methods --------------------------------------------------
 
@@ -38,7 +38,7 @@ namespace Animator.Engine.Elements
             set => SetValue(DeltaEndPointProperty, value);
         }
 
-        public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeLinePathElement),
+        public static readonly ManagedProperty DeltaEndPointProperty = ManagedProperty.Register(typeof(RelativeLineSegment),
             nameof(DeltaEndPoint),
             typeof(PointF),
             new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleLineChanged });

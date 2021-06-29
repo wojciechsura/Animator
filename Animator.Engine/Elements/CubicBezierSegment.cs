@@ -11,7 +11,7 @@ namespace Animator.Engine.Elements
     /// path element.
     /// All points are expressed in absolute coordinates.
     /// </summary>
-    public class AbsoluteCubicBezierPathElement : CubicBezierBasedPathElement
+    public class CubicBezierSegment : BaseCubicBezierBasedSegment
     {
         // Protected methods --------------------------------------------------
 
@@ -37,7 +37,7 @@ namespace Animator.Engine.Elements
             set => SetValue(ControlPoint1Property, value);
         }
 
-        public static readonly ManagedProperty ControlPoint1Property = ManagedProperty.Register(typeof(AbsoluteCubicBezierPathElement),
+        public static readonly ManagedProperty ControlPoint1Property = ManagedProperty.Register(typeof(CubicBezierSegment),
             nameof(ControlPoint1),
             typeof(PointF),
             new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
@@ -55,7 +55,7 @@ namespace Animator.Engine.Elements
             set => SetValue(ControlPoint2Property, value);
         }
 
-        public static readonly ManagedProperty ControlPoint2Property = ManagedProperty.Register(typeof(AbsoluteCubicBezierPathElement),
+        public static readonly ManagedProperty ControlPoint2Property = ManagedProperty.Register(typeof(CubicBezierSegment),
             nameof(ControlPoint2),
             typeof(PointF),
             new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
@@ -73,7 +73,7 @@ namespace Animator.Engine.Elements
             set => SetValue(EndPointProperty, value);
         }
 
-        public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(AbsoluteCubicBezierPathElement),
+        public static readonly ManagedProperty EndPointProperty = ManagedProperty.Register(typeof(CubicBezierSegment),
             nameof(EndPoint),
             typeof(PointF),
             new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f), ValueChangedHandler = HandleCurveChanged });
