@@ -5,6 +5,7 @@ using Animator.Engine.Types;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -256,6 +257,19 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty AnimationsProperty = ManagedProperty.RegisterCollection(typeof(SceneElement),
             nameof(Animations),
             typeof(ManagedCollection<Animation>));
+
+        #endregion
+
+        #region Resources managed collection
+
+        public ManagedCollection<Resource> Resources
+        {
+            get => (ManagedCollection<Resource>)GetValue(ResourcesProperty);
+        }
+
+        public static readonly ManagedProperty ResourcesProperty = ManagedProperty.RegisterCollection(typeof(SceneElement),
+            nameof(Resources),
+            typeof(ManagedCollection<Resource>));
 
         #endregion
 

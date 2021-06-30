@@ -479,6 +479,9 @@
             Value of the keyframe.
             </summary>
         </member>
+        <member name="P:Animator.Engine.Elements.FloatResource.Value">
+            <summary>Value of this resource</summary>
+        </member>
         <member name="T:Animator.Engine.Elements.GaussianBlurEffect">
             <summary>
             Adds a nice, Gaussian blur to a visual.
@@ -510,6 +513,9 @@
             <summary>
             Value of the keyframe.
             </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.IntResource.Value">
+            <summary>Value of this resource</summary>
         </member>
         <member name="T:Animator.Engine.Elements.Keyframe">
             <summary>
@@ -830,6 +836,9 @@
             Value of the keyframe.
             </summary>
         </member>
+        <member name="P:Animator.Engine.Elements.PointResource.Value">
+            <summary>Value of this resource</summary>
+        </member>
         <member name="T:Animator.Engine.Elements.QuadraticBezierSegment">
             <summary>
             Represents a path part, which is drawn as a quadratic Bezier curve.
@@ -1038,6 +1047,9 @@
             to end point's of the previous path element.
             </summary>
         </member>
+        <member name="P:Animator.Engine.Elements.Resource.Key">
+            <summary>Key of this resource</summary>
+        </member>
         <member name="P:Animator.Engine.Elements.RotateTransform.Center">
             <summary>
             Defines center of rotation
@@ -1244,6 +1256,12 @@
             <example>
             <code>PropertyRef="MyRectangle.Pen.Color"</code>
             </example>
+        </member>
+        <member name="P:Animator.Engine.Elements.StringResource.Value">
+            <summary>Value of this resource</summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.TimeResource.Value">
+            <summary>Value of this resource</summary>
         </member>
         <member name="T:Animator.Engine.Elements.Transform">
             <summary>
