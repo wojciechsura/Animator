@@ -1,134 +1,169 @@
 digraph {
   rankdir=LR
-0 [ label = "AbsoluteArcPathElement" ]
-1 [ label = "AbsoluteCubicBezierPathElement" ]
-2 [ label = "AbsoluteCubicShorthandBezierPathElement" ]
-3 [ label = "AbsoluteHorizontalLinePathElement" ]
-4 [ label = "AbsoluteLinePathElement" ]
-5 [ label = "AbsoluteMovePathElement" ]
-6 [ label = "AbsoluteQuadraticBezierPathElement" ]
-7 [ label = "AbsoluteQuadraticShorthandBezierPathElement" ]
-8 [ label = "AbsoluteVerticalLinePathElement" ]
-9 [ label = "AnimateBool" ]
-10 [ label = "AnimateColor" ]
-11 [ label = "AnimateFloat" ]
-12 [ label = "AnimateInt" ]
-13 [ label = "AnimateNumericPropertyInTime" ]
-14 [ label = "AnimatePoint" ]
-15 [ label = "AnimateProperty" ]
-16 [ label = "AnimatePropertyInTime" ]
-17 [ label = "AnimateWithExpression" ]
-18 [ label = "Animation" ]
-19 [ label = "AnimationGroup" ]
-20 [ label = "ArcPathElement" ]
-21 [ label = "BlurEffect" ]
-22 [ label = "BoolKeyframe" ]
-23 [ label = "Brush" ]
-24 [ label = "Circle" ]
-25 [ label = "CloseShapePathElement" ]
-26 [ label = "ColorKeyframe" ]
-27 [ label = "DropShadowEffect" ]
-28 [ label = "Effect" ]
-29 [ label = "Element" ]
-30 [ label = "Ellipse" ]
-31 [ label = "FloatKeyframe" ]
-32 [ label = "GaussianBlurEffect" ]
-33 [ label = "Image" ]
-34 [ label = "IntKeyframe" ]
+0 [ label = "AnimateBool" ]
+1 [ label = "AnimateColor" ]
+2 [ label = "AnimateFloat" ]
+3 [ label = "AnimateInt" ]
+4 [ label = "AnimateNumericPropertyInTime" ]
+5 [ label = "AnimatePoint" ]
+6 [ label = "AnimateProperty" ]
+7 [ label = "AnimatePropertyInTime" ]
+8 [ label = "AnimateWithExpression" ]
+9 [ label = "Animation" ]
+10 [ label = "AnimationGroup" ]
+11 [ label = "ArcSegment" ]
+12 [ label = "BaseArcSegment" ]
+13 [ label = "BaseCubicBezierBasedSegment" ]
+14 [ label = "BaseQuadraticBezierSegment" ]
+15 [ label = "BlurEffect" ]
+16 [ label = "BoolKeyframe" ]
+17 [ label = "Brush" ]
+18 [ label = "Circle" ]
+19 [ label = "CloseShapeSegment" ]
+20 [ label = "ColorKeyframe" ]
+21 [ label = "CubicBezierSegment" ]
+22 [ label = "DropShadowEffect" ]
+23 [ label = "Effect" ]
+24 [ label = "Element" ]
+25 [ label = "Ellipse" ]
+26 [ label = "FloatKeyframe" ]
+27 [ label = "FloatResource" ]
+28 [ label = "For" ]
+29 [ label = "FromResource" ]
+30 [ label = "GaussianBlurEffect" ]
+31 [ label = "HorizontalLineSegment" ]
+32 [ label = "Image" ]
+33 [ label = "IntKeyframe" ]
+34 [ label = "IntResource" ]
 35 [ label = "Keyframe" ]
 36 [ label = "Label" ]
 37 [ label = "Layer" ]
-38 [ label = "Line" ]
-39 [ label = "LinearGradientBrush" ]
-40 [ label = "LinearGradientStop" ]
-41 [ label = "Movie" ]
-42 [ label = "MovieConfig" ]
-43 [ label = "NumericKeyframe" ]
-44 [ label = "Path" ]
-45 [ label = "PathElement" ]
-46 [ label = "Pen" ]
-47 [ label = "PointKeyframe" ]
-48 [ label = "QuadraticBezierPathElement" ]
-49 [ label = "Rectangle" ]
-50 [ label = "RelativeArcPathElement" ]
-51 [ label = "RelativeCubicBezierPathElement" ]
-52 [ label = "RelativeCubicShorthandBezierPathElement" ]
-53 [ label = "RelativeHorizontalLinePathElement" ]
-54 [ label = "RelativeLinePathElement" ]
-55 [ label = "RelativeMovePathElement" ]
-56 [ label = "RelativeQuadraticBezierPathElement" ]
-57 [ label = "RelativeQuadraticShorthandBezierPathElement" ]
-58 [ label = "RelativeVerticalLinePathElement" ]
-59 [ label = "Scene" ]
-60 [ label = "SceneElement" ]
-61 [ label = "Shape" ]
-62 [ label = "SolidBrush" ]
-63 [ label = "Storyboard" ]
-64 [ label = "Visual" ]
-65 [ label = "ManagedObject" ]
-20 -> 0
-45 -> 1
-45 -> 2
-45 -> 3
-45 -> 4
-45 -> 5
-48 -> 6
-48 -> 7
-45 -> 8
-13 -> 9
-13 -> 10
-13 -> 11
-13 -> 12
-16 -> 13
+38 [ label = "LayerCloningStep" ]
+39 [ label = "Line" ]
+40 [ label = "LinearGradientBrush" ]
+41 [ label = "LinearGradientStop" ]
+42 [ label = "LineBasedSegment" ]
+43 [ label = "LineSegment" ]
+44 [ label = "MoveSegment" ]
+45 [ label = "Movie" ]
+46 [ label = "MovieConfig" ]
+47 [ label = "MultipleCubicBezierBasedSegment" ]
+48 [ label = "NumericKeyframe" ]
+49 [ label = "Path" ]
+50 [ label = "Pen" ]
+51 [ label = "PointKeyframe" ]
+52 [ label = "PointResource" ]
+53 [ label = "QuadraticBezierSegment" ]
+54 [ label = "Rectangle" ]
+55 [ label = "RelativeArcSegment" ]
+56 [ label = "RelativeCubicBezierSegment" ]
+57 [ label = "RelativeHorizontalLineSegment" ]
+58 [ label = "RelativeLineSegment" ]
+59 [ label = "RelativeMoveSegment" ]
+60 [ label = "RelativeQuadraticBezierSegment" ]
+61 [ label = "RelativeShorthandCubicBezierSegment" ]
+62 [ label = "RelativeShorthandQuadraticBezierSegment" ]
+63 [ label = "RelativeVerticalLineSegment" ]
+64 [ label = "Resource" ]
+65 [ label = "RotateTransform" ]
+66 [ label = "ScaleTransform" ]
+67 [ label = "Scene" ]
+68 [ label = "SceneElement" ]
+69 [ label = "Segment" ]
+70 [ label = "Shape" ]
+71 [ label = "ShorthandCubicBezierSegment" ]
+72 [ label = "ShorthandQuadraticBezierSegment" ]
+73 [ label = "SolidBrush" ]
+74 [ label = "Storyboard" ]
+75 [ label = "StoryboardEntry" ]
+76 [ label = "StringResource" ]
+77 [ label = "TimeResource" ]
+78 [ label = "Transform" ]
+79 [ label = "TranslateTransform" ]
+80 [ label = "VerticalLineSegment" ]
+81 [ label = "Visual" ]
+82 [ label = "ManagedObject" ]
+83 [ label = "BaseMarkupExtension" ]
+4 -> 0
+4 -> 1
+4 -> 2
+4 -> 3
+7 -> 4
+4 -> 5
+9 -> 6
+6 -> 7
+4 -> 8
+24 -> 9
+9 -> 10
+12 -> 11
+47 -> 12
+69 -> 13
 13 -> 14
-18 -> 15
-15 -> 16
-13 -> 17
-29 -> 18
-18 -> 19
-45 -> 20
-28 -> 21
-43 -> 22
-60 -> 23
-61 -> 24
-45 -> 25
-43 -> 26
-28 -> 27
-60 -> 28
-65 -> 29
-61 -> 30
-43 -> 31
-28 -> 32
-64 -> 33
-43 -> 34
-29 -> 35
-64 -> 36
-64 -> 37
-64 -> 38
-23 -> 39
-60 -> 40
-65 -> 41
-65 -> 42
-35 -> 43
-61 -> 44
-60 -> 45
-60 -> 46
-43 -> 47
-45 -> 48
-61 -> 49
-20 -> 50
-45 -> 51
-45 -> 52
-45 -> 53
-45 -> 54
-45 -> 55
-48 -> 56
-48 -> 57
-45 -> 58
-60 -> 59
-29 -> 60
-64 -> 61
-23 -> 62
-18 -> 63
-60 -> 64
+23 -> 15
+48 -> 16
+68 -> 17
+70 -> 18
+69 -> 19
+48 -> 20
+13 -> 21
+23 -> 22
+68 -> 23
+82 -> 24
+70 -> 25
+48 -> 26
+64 -> 27
+75 -> 28
+83 -> 29
+23 -> 30
+42 -> 31
+81 -> 32
+48 -> 33
+64 -> 34
+75 -> 35
+81 -> 36
+81 -> 37
+68 -> 38
+81 -> 39
+17 -> 40
+68 -> 41
+69 -> 42
+42 -> 43
+69 -> 44
+82 -> 45
+82 -> 46
+69 -> 47
+35 -> 48
+70 -> 49
+68 -> 50
+48 -> 51
+64 -> 52
+14 -> 53
+70 -> 54
+12 -> 55
+13 -> 56
+42 -> 57
+42 -> 58
+69 -> 59
+14 -> 60
+13 -> 61
+14 -> 62
+42 -> 63
+24 -> 64
+78 -> 65
+78 -> 66
+68 -> 67
+24 -> 68
+68 -> 69
+81 -> 70
+13 -> 71
+14 -> 72
+17 -> 73
+9 -> 74
+24 -> 75
+64 -> 76
+64 -> 77
+68 -> 78
+78 -> 79
+42 -> 80
+68 -> 81
 }

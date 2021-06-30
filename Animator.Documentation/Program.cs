@@ -113,12 +113,20 @@ namespace Animator.Documentation
 
             // Inheritance
 
+            Type rootType;
+            if (type.IsAssignableTo(typeof(ManagedObject)))
+                rootType = typeof(ManagedObject);
+            else if (type.IsAssignableTo(typeof(BaseMarkupExtension)))
+                rootType = typeof(BaseMarkupExtension);
+            else
+                throw new InvalidOperationException("Type does not derive from one of known types!");
+
             sb.AppendLine("<h2>Inheritance</h2>");
 
             sb.Append("<pre><code>");
             var inheritedTypes = new List<Type>();
             Type parentType = type;
-            while (parentType != typeof(ManagedObject))
+            while (parentType != rootType)
             {
                 inheritedTypes.Add(parentType);
                 parentType = parentType.BaseType;

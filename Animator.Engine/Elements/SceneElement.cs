@@ -210,10 +210,10 @@ namespace Animator.Engine.Elements
 
         /// <summary>
         /// Defines name of this object, which may be then used to
-        /// reference it from various objects via their TargetName
+        /// reference it from various objects via their PropertyRef
         /// properties. This value should be unique among the whole
         /// scene, though this is not enforced. However, elements
-        /// are reachable through TargetName properties only if
+        /// are reachable through PropertyRef properties only if
         /// their names are unique.
         /// </summary>
         public string Name

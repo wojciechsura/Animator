@@ -311,669 +311,6 @@
 </head>
 <body>
 
-<h1><a name="AbsoluteArcPathElement"></a>AbsoluteArcPathElement</h1>
-<h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » ArcPathElement » <a href="#AbsoluteArcPathElement">AbsoluteArcPathElement</a></pre></code>
-<h2>Description</h2>
-Represents a path part, which is drawn as an elliptical arc.
-            First point of the arc equals to the last point of previous
-            path element.
-            Endpoint of the arc is expressed in absolute coordinates.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>Single</code></pre>
-</td>
-<td>
-<pre><code><strong>RX</strong></code></pre>
-</td>
-<td>
-
-            X radius of the ellipse, from which the arc is built.
-            
-<p>Not inheritable by child elements. 
-Default value is 0.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>Single</code></pre>
-</td>
-<td>
-<pre><code><strong>RY</strong></code></pre>
-</td>
-<td>
-
-            Y radius of the ellipse, from which the arc is built.
-            
-<p>Not inheritable by child elements. 
-Default value is 0.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>Single</code></pre>
-</td>
-<td>
-<pre><code><strong>Angle</strong></code></pre>
-</td>
-<td>
-
-            Angle of the arc.
-            
-<p>Not inheritable by child elements. 
-Default value is 0.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>Boolean</code></pre>
-</td>
-<td>
-<pre><code><strong>LargeArcFlag</strong></code></pre>
-</td>
-<td>
-
-            Determines, whether arc should follow the larger path or smaller one.
-            
-<p>Not inheritable by child elements. 
-Default value is False.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>Boolean</code></pre>
-</td>
-<td>
-<pre><code><strong>SweepFlag</strong></code></pre>
-</td>
-<td>
-
-            Determines, whether arc will be drawn positive-angle or negative-angle.
-            
-<p>Not inheritable by child elements. 
-Default value is False.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>EndPoint</strong></code></pre>
-</td>
-<td>
-
-            End point of the arc
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animations</strong></code></pre>
-</td>
-<td>
-
-            Contains list of all animators, which animate properties
-            of elements placed inside this element.
-            
-</td>
-</table>
-<hr />
-
-<h1><a name="AbsoluteCubicBezierPathElement"></a>AbsoluteCubicBezierPathElement</h1>
-<h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » <a href="#AbsoluteCubicBezierPathElement">AbsoluteCubicBezierPathElement</a></pre></code>
-<h2>Description</h2>
-Represents a path part, which is drawn as a cubic Bezier curve.
-            First point of the curve equals to the last point of previous
-            path element.
-            All points are expressed in absolute coordinates.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>ControlPoint1</strong></code></pre>
-</td>
-<td>
-
-            First control point of the curve.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>ControlPoint2</strong></code></pre>
-</td>
-<td>
-
-            Second control point of the curve.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>EndPoint</strong></code></pre>
-</td>
-<td>
-
-            End point of the curve.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animations</strong></code></pre>
-</td>
-<td>
-
-            Contains list of all animators, which animate properties
-            of elements placed inside this element.
-            
-</td>
-</table>
-<hr />
-
-<h1><a name="AbsoluteCubicShorthandBezierPathElement"></a>AbsoluteCubicShorthandBezierPathElement</h1>
-<h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » <a href="#AbsoluteCubicShorthandBezierPathElement">AbsoluteCubicShorthandBezierPathElement</a></pre></code>
-<h2>Description</h2>
-Represents a path part, which is drawn as a cubic Bezier curve.
-            First point of the curve equals to the last point of previous
-            path element. First control point is deduced from the previous
-            path element as a mirror of its last control point against its
-            endpoint.
-            All points are expressed in absolute coordinates.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>ControlPoint2</strong></code></pre>
-</td>
-<td>
-
-            Second control point of the curve.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>EndPoint</strong></code></pre>
-</td>
-<td>
-
-            End point of the curve.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animations</strong></code></pre>
-</td>
-<td>
-
-            Contains list of all animators, which animate properties
-            of elements placed inside this element.
-            
-</td>
-</table>
-<hr />
-
-<h1><a name="AbsoluteHorizontalLinePathElement"></a>AbsoluteHorizontalLinePathElement</h1>
-<h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » <a href="#AbsoluteHorizontalLinePathElement">AbsoluteHorizontalLinePathElement</a></pre></code>
-<h2>Description</h2>
-Represents a path part, which is drawn as a horizontal line.
-            All points are expressed in absolute coordinates.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>Single</code></pre>
-</td>
-<td>
-<pre><code><strong>X</strong></code></pre>
-</td>
-<td>
-
-            X-coordinate of the end point. Y-coordinate equals to
-            the end point's of the previous path element.
-            
-<p>Not inheritable by child elements. 
-Default value is 0.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animations</strong></code></pre>
-</td>
-<td>
-
-            Contains list of all animators, which animate properties
-            of elements placed inside this element.
-            
-</td>
-</table>
-<hr />
-
-<h1><a name="AbsoluteLinePathElement"></a>AbsoluteLinePathElement</h1>
-<h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » <a href="#AbsoluteLinePathElement">AbsoluteLinePathElement</a></pre></code>
-<h2>Description</h2>
-Represents a path part, which is drawn as a line.
-            All points are expressed in absolute coordinates.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>EndPoint</strong></code></pre>
-</td>
-<td>
-
-            End point of the line.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animations</strong></code></pre>
-</td>
-<td>
-
-            Contains list of all animators, which animate properties
-            of elements placed inside this element.
-            
-</td>
-</table>
-<hr />
-
-<h1><a name="AbsoluteMovePathElement"></a>AbsoluteMovePathElement</h1>
-<h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » <a href="#AbsoluteMovePathElement">AbsoluteMovePathElement</a></pre></code>
-<h2>Description</h2>
-Begins a new path in specified absolute coordinates
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>EndPoint</strong></code></pre>
-</td>
-<td>
-
-            Coordinates at which new path should begin.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animations</strong></code></pre>
-</td>
-<td>
-
-            Contains list of all animators, which animate properties
-            of elements placed inside this element.
-            
-</td>
-</table>
-<hr />
-
-<h1><a name="AbsoluteQuadraticBezierPathElement"></a>AbsoluteQuadraticBezierPathElement</h1>
-<h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » QuadraticBezierPathElement » <a href="#AbsoluteQuadraticBezierPathElement">AbsoluteQuadraticBezierPathElement</a></pre></code>
-<h2>Description</h2>
-Represents a path part, which is drawn as a quadratic Bezier curve.
-            First point of the curve equals to the last point of previous
-            path element.
-            All points are expressed in absolute coordinates.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>ControlPoint</strong></code></pre>
-</td>
-<td>
-
-            Control point of the curve.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>EndPoint</strong></code></pre>
-</td>
-<td>
-
-            End point of the curve.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animations</strong></code></pre>
-</td>
-<td>
-
-            Contains list of all animators, which animate properties
-            of elements placed inside this element.
-            
-</td>
-</table>
-<hr />
-
-<h1><a name="AbsoluteQuadraticShorthandBezierPathElement"></a>AbsoluteQuadraticShorthandBezierPathElement</h1>
-<h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » QuadraticBezierPathElement » <a href="#AbsoluteQuadraticShorthandBezierPathElement">AbsoluteQuadraticShorthandBezierPathElement</a></pre></code>
-<h2>Description</h2>
-Represents a path part, which is drawn as a quadratic Bezier curve.
-            Start point of the curve equals to the last point of previous
-            path element. The control point is deduced from the previous
-            path element as a mirror of its last control point against its
-            endpoint.
-            End point is expressed in absolute coordinates.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>EndPoint</strong></code></pre>
-</td>
-<td>
-
-            End point of the curve.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animations</strong></code></pre>
-</td>
-<td>
-
-            Contains list of all animators, which animate properties
-            of elements placed inside this element.
-            
-</td>
-</table>
-<hr />
-
-<h1><a name="AbsoluteVerticalLinePathElement"></a>AbsoluteVerticalLinePathElement</h1>
-<h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » <a href="#AbsoluteVerticalLinePathElement">AbsoluteVerticalLinePathElement</a></pre></code>
-<h2>Description</h2>
-Represents a path part, which is drawn as a vertical line.
-            All points are expressed in absolute coordinates.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>Single</code></pre>
-</td>
-<td>
-<pre><code><strong>Y</strong></code></pre>
-</td>
-<td>
-
-            Y-coordinate of the end point. X-coordinate equals to
-            the end point's of the previous path element.
-            
-<p>Not inheritable by child elements. 
-Default value is 0.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animations</strong></code></pre>
-</td>
-<td>
-
-            Contains list of all animators, which animate properties
-            of elements placed inside this element.
-            
-</td>
-</table>
-<hr />
-
 <h1><a name="AnimateBool"></a>AnimateBool</h1>
 <h2>Inheritance</h2>
 <pre><code>Element » Animation » AnimateProperty » AnimatePropertyInTime » AnimateNumericPropertyInTime » <a href="#AnimateBool">AnimateBool</a></pre></code>
@@ -1779,6 +1116,149 @@ Default value is 00:00:00.
 </table>
 <hr />
 
+<h1><a name="ArcSegment"></a>ArcSegment</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Segment » MultipleCubicBezierBasedSegment » BaseArcSegment » <a href="#ArcSegment">ArcSegment</a></pre></code>
+<h2>Description</h2>
+Represents a path part, which is drawn as an elliptical arc.
+            First point of the arc equals to the last point of previous
+            path element.
+            Endpoint of the arc is expressed in absolute coordinates.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>RX</strong></code></pre>
+</td>
+<td>
+
+            X radius of the ellipse, from which the arc is built.
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>RY</strong></code></pre>
+</td>
+<td>
+
+            Y radius of the ellipse, from which the arc is built.
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>Angle</strong></code></pre>
+</td>
+<td>
+
+            Angle of the arc.
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>LargeArcFlag</strong></code></pre>
+</td>
+<td>
+
+            Determines, whether arc should follow the larger path or smaller one.
+            
+<p>Not inheritable by child elements. 
+Default value is False.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>SweepFlag</strong></code></pre>
+</td>
+<td>
+
+            Determines, whether arc will be drawn positive-angle or negative-angle.
+            
+<p>Not inheritable by child elements. 
+Default value is False.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>EndPoint</strong></code></pre>
+</td>
+<td>
+
+            End point of the arc
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
 <h1><a name="BlurEffect"></a>BlurEffect</h1>
 <h2>Inheritance</h2>
 <pre><code>Element » SceneElement » Effect » <a href="#BlurEffect">BlurEffect</a></pre></code>
@@ -1812,10 +1292,10 @@ Default value is 3.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -1832,12 +1312,21 @@ Default value is 3.
             of elements placed inside this element.
             
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
 <h1><a name="BoolKeyframe"></a>BoolKeyframe</h1>
 <h2>Inheritance</h2>
-<pre><code>Element » Keyframe » NumericKeyframe » <a href="#BoolKeyframe">BoolKeyframe</a></pre></code>
+<pre><code>Element » StoryboardEntry » Keyframe » NumericKeyframe » <a href="#BoolKeyframe">BoolKeyframe</a></pre></code>
 <h2>Description</h2>
 A keyframe for a property of type float.
 <h2>Properties</h2>
@@ -1878,7 +1367,7 @@ Value is inherited from parent element if none provided explicitly.
 Default value is Linear.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>Keyframe:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>StoryboardEntry:</strong></td></tr>
 <tr>
 <td>
 <pre><code>TimeSpan</code></pre>
@@ -1891,7 +1380,8 @@ Default value is Linear.
             Define exact time since start of a scene, when a
             property should be set to a fixed value.
             
-<p>Not inheritable by child elements. 
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
 Default value is 00:00:00.
 </p>
 </td>
@@ -1909,7 +1399,8 @@ Default value is 00:00:00.
             from collections as well, as long as they have their Name property
             set and it is unique in this collection.
             
-<p>Not inheritable by child elements. 
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
 Default value is .
 </p>
 <p><strong>Example:</strong></p><code>PropertyRef="MyRectangle.Pen.Color"</code>
@@ -2153,10 +1644,10 @@ Default value is Local.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -2173,12 +1664,21 @@ Default value is Local.
             of elements placed inside this element.
             
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
-<h1><a name="CloseShapePathElement"></a>CloseShapePathElement</h1>
+<h1><a name="CloseShapeSegment"></a>CloseShapeSegment</h1>
 <h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » <a href="#CloseShapePathElement">CloseShapePathElement</a></pre></code>
+<pre><code>Element » SceneElement » Segment » <a href="#CloseShapeSegment">CloseShapeSegment</a></pre></code>
 <h2>Description</h2>
 Informs, that the shape defined by a series of path elements
             ends here. If needed, path is closed with a line leading to
@@ -2196,10 +1696,10 @@ Informs, that the shape defined by a series of path elements
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -2216,12 +1716,21 @@ Informs, that the shape defined by a series of path elements
             of elements placed inside this element.
             
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
 <h1><a name="ColorKeyframe"></a>ColorKeyframe</h1>
 <h2>Inheritance</h2>
-<pre><code>Element » Keyframe » NumericKeyframe » <a href="#ColorKeyframe">ColorKeyframe</a></pre></code>
+<pre><code>Element » StoryboardEntry » Keyframe » NumericKeyframe » <a href="#ColorKeyframe">ColorKeyframe</a></pre></code>
 <h2>Description</h2>
 A keyframe for a property of type Color.
 <h2>Properties</h2>
@@ -2256,7 +1765,7 @@ Value is inherited from parent element if none provided explicitly.
 Default value is Linear.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>Keyframe:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>StoryboardEntry:</strong></td></tr>
 <tr>
 <td>
 <pre><code>TimeSpan</code></pre>
@@ -2269,7 +1778,8 @@ Default value is Linear.
             Define exact time since start of a scene, when a
             property should be set to a fixed value.
             
-<p>Not inheritable by child elements. 
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
 Default value is 00:00:00.
 </p>
 </td>
@@ -2287,10 +1797,109 @@ Default value is 00:00:00.
             from collections as well, as long as they have their Name property
             set and it is unique in this collection.
             
-<p>Not inheritable by child elements. 
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
 Default value is .
 </p>
 <p><strong>Example:</strong></p><code>PropertyRef="MyRectangle.Pen.Color"</code>
+</td>
+</table>
+<hr />
+
+<h1><a name="CubicBezierSegment"></a>CubicBezierSegment</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Segment » BaseCubicBezierBasedSegment » <a href="#CubicBezierSegment">CubicBezierSegment</a></pre></code>
+<h2>Description</h2>
+Represents a path part, which is drawn as a cubic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element.
+            All points are expressed in absolute coordinates.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>ControlPoint1</strong></code></pre>
+</td>
+<td>
+
+            First control point of the curve.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>ControlPoint2</strong></code></pre>
+</td>
+<td>
+
+            Second control point of the curve.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>EndPoint</strong></code></pre>
+</td>
+<td>
+
+            End point of the curve.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -2373,10 +1982,10 @@ Default value is 5.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -2392,6 +2001,15 @@ Default value is 5.
             Contains list of all animators, which animate properties
             of elements placed inside this element.
             
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -2634,10 +2252,10 @@ Default value is Local.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -2654,12 +2272,21 @@ Default value is Local.
             of elements placed inside this element.
             
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
 <h1><a name="FloatKeyframe"></a>FloatKeyframe</h1>
 <h2>Inheritance</h2>
-<pre><code>Element » Keyframe » NumericKeyframe » <a href="#FloatKeyframe">FloatKeyframe</a></pre></code>
+<pre><code>Element » StoryboardEntry » Keyframe » NumericKeyframe » <a href="#FloatKeyframe">FloatKeyframe</a></pre></code>
 <h2>Description</h2>
 A keyframe for a property of type float.
 <h2>Properties</h2>
@@ -2700,7 +2327,7 @@ Value is inherited from parent element if none provided explicitly.
 Default value is Linear.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>Keyframe:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>StoryboardEntry:</strong></td></tr>
 <tr>
 <td>
 <pre><code>TimeSpan</code></pre>
@@ -2713,7 +2340,8 @@ Default value is Linear.
             Define exact time since start of a scene, when a
             property should be set to a fixed value.
             
-<p>Not inheritable by child elements. 
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
 Default value is 00:00:00.
 </p>
 </td>
@@ -2731,10 +2359,118 @@ Default value is 00:00:00.
             from collections as well, as long as they have their Name property
             set and it is unique in this collection.
             
-<p>Not inheritable by child elements. 
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
 Default value is .
 </p>
 <p><strong>Example:</strong></p><code>PropertyRef="MyRectangle.Pen.Color"</code>
+</td>
+</table>
+<hr />
+
+<h1><a name="FloatResource"></a>FloatResource</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » Resource » <a href="#FloatResource">FloatResource</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>Value</strong></code></pre>
+</td>
+<td>
+Value of this resource
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Resource:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Key</strong></code></pre>
+</td>
+<td>
+Key of this resource
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+</td>
+</table>
+<hr />
+
+<h1><a name="For"></a>For</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » StoryboardEntry » <a href="#For">For</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;StoryboardEntry&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Keyframes</strong></code></pre>
+</td>
+<td>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>StoryboardEntry:</strong></td></tr>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>Time</strong></code></pre>
+</td>
+<td>
+
+            Define exact time since start of a scene, when a
+            property should be set to a fixed value.
+            
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>PropertyRef</strong></code></pre>
+</td>
+<td>
+
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
+            
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is .
+</p>
+<p><strong>Example:</strong></p><code>PropertyRef="MyRectangle.Pen.Color"</code>
+</td>
+</table>
+<hr />
+
+<h1><a name="FromResource"></a>FromResource</h1>
+<h2>Inheritance</h2>
+<pre><code><a href="#FromResource">FromResource</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Key</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -2772,10 +2508,10 @@ Default value is 5.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -2791,6 +2527,82 @@ Default value is 5.
             Contains list of all animators, which animate properties
             of elements placed inside this element.
             
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="HorizontalLineSegment"></a>HorizontalLineSegment</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Segment » LineBasedSegment » <a href="#HorizontalLineSegment">HorizontalLineSegment</a></pre></code>
+<h2>Description</h2>
+Represents a path part, which is drawn as a horizontal line.
+            All points are expressed in absolute coordinates.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>X</strong></code></pre>
+</td>
+<td>
+
+            X-coordinate of the end point. Y-coordinate equals to
+            the end point's of the previous path element.
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -2983,10 +2795,10 @@ Default value is Local.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -3003,12 +2815,21 @@ Default value is Local.
             of elements placed inside this element.
             
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
 <h1><a name="IntKeyframe"></a>IntKeyframe</h1>
 <h2>Inheritance</h2>
-<pre><code>Element » Keyframe » NumericKeyframe » <a href="#IntKeyframe">IntKeyframe</a></pre></code>
+<pre><code>Element » StoryboardEntry » Keyframe » NumericKeyframe » <a href="#IntKeyframe">IntKeyframe</a></pre></code>
 <h2>Description</h2>
 A keyframe for a property of type int.
 <h2>Properties</h2>
@@ -3049,7 +2870,7 @@ Value is inherited from parent element if none provided explicitly.
 Default value is Linear.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>Keyframe:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>StoryboardEntry:</strong></td></tr>
 <tr>
 <td>
 <pre><code>TimeSpan</code></pre>
@@ -3062,7 +2883,8 @@ Default value is Linear.
             Define exact time since start of a scene, when a
             property should be set to a fixed value.
             
-<p>Not inheritable by child elements. 
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
 Default value is 00:00:00.
 </p>
 </td>
@@ -3080,10 +2902,46 @@ Default value is 00:00:00.
             from collections as well, as long as they have their Name property
             set and it is unique in this collection.
             
-<p>Not inheritable by child elements. 
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
 Default value is .
 </p>
 <p><strong>Example:</strong></p><code>PropertyRef="MyRectangle.Pen.Color"</code>
+</td>
+</table>
+<hr />
+
+<h1><a name="IntResource"></a>IntResource</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » Resource » <a href="#IntResource">IntResource</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Int32</code></pre>
+</td>
+<td>
+<pre><code><strong>Value</strong></code></pre>
+</td>
+<td>
+Value of this resource
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Resource:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Key</strong></code></pre>
+</td>
+<td>
+Key of this resource
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
 </td>
 </table>
 <hr />
@@ -3387,10 +3245,10 @@ Default value is Local.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -3406,6 +3264,15 @@ Default value is Local.
             Contains list of all animators, which animate properties
             of elements placed inside this element.
             
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -3429,6 +3296,18 @@ Allows grouping visuals. You can use it to apply
 <td>
 
             Elements on a layer.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;LayerCloningStep&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Clone</strong></code></pre>
+</td>
+<td>
+
+            Clones layer contents with given transforms.
             
 </td>
 <tr><td colspan="3" class="table-separator">Properties derived from <strong>Visual:</strong></td></tr>
@@ -3605,10 +3484,10 @@ Default value is Local.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -3624,6 +3503,105 @@ Default value is Local.
             Contains list of all animators, which animate properties
             of elements placed inside this element.
             
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="LayerCloningStep"></a>LayerCloningStep</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » <a href="#LayerCloningStep">LayerCloningStep</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Int32</code></pre>
+</td>
+<td>
+<pre><code><strong>Count</strong></code></pre>
+</td>
+<td>
+
+            Defines, how many times layer should be cloned in this step
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>ReverseOrder</strong></code></pre>
+</td>
+<td>
+
+            If set to true, causes clones to be rendered from last to first.
+            
+<p>Not inheritable by child elements. 
+Default value is False.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Transform&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Transforms</strong></code></pre>
+</td>
+<td>
+
+            Defines transforms added to each clone.
+            
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -3851,10 +3829,10 @@ Default value is Local.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -3870,6 +3848,15 @@ Default value is Local.
             Contains list of all animators, which animate properties
             of elements placed inside this element.
             
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -3965,10 +3952,10 @@ Default value is Color [White].
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -3984,6 +3971,15 @@ Default value is Color [White].
             Contains list of all animators, which animate properties
             of elements placed inside this element.
             
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -4038,10 +4034,10 @@ Default value is Color [White].
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -4057,6 +4053,146 @@ Default value is Color [White].
             Contains list of all animators, which animate properties
             of elements placed inside this element.
             
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="LineSegment"></a>LineSegment</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Segment » LineBasedSegment » <a href="#LineSegment">LineSegment</a></pre></code>
+<h2>Description</h2>
+Represents a path part, which is drawn as a line.
+            All points are expressed in absolute coordinates.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>EndPoint</strong></code></pre>
+</td>
+<td>
+
+            End point of the line.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="MoveSegment"></a>MoveSegment</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Segment » <a href="#MoveSegment">MoveSegment</a></pre></code>
+<h2>Description</h2>
+Begins a new path in specified absolute coordinates
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>EndPoint</strong></code></pre>
+</td>
+<td>
+
+            Coordinates at which new path should begin.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -4159,7 +4295,7 @@ Draws a path on a scene.
 <table class="properties">
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;PathElement&gt;</code></pre>
+<pre><code>ManagedCollection&lt;Segment&gt;</code></pre>
 </td>
 <td>
 <pre><code><strong>Definition</strong></code></pre>
@@ -4170,6 +4306,40 @@ Draws a path on a scene.
             In XML, you may express value of this property in an
             attribute as SVG-compatible path description.
             
+</td>
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>CutFrom</strong></code></pre>
+</td>
+<td>
+
+            If set, defines first split point of the path. The path
+            before this value will not be drawn. CutFrom must fit
+            between 0 and 1, inclusive.
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>CutTo</strong></code></pre>
+</td>
+<td>
+
+            If set, defines last split point of the path. The path
+            after this value will not be drawn. CutTo must fit
+            between 0 and 1, inclusive.
+            
+<p>Not inheritable by child elements. 
+Default value is 1.
+</p>
 </td>
 <tr><td colspan="3" class="table-separator">Properties derived from <strong>Shape:</strong></td></tr>
 <tr>
@@ -4370,10 +4540,10 @@ Default value is Local.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -4389,6 +4559,15 @@ Default value is Local.
             Contains list of all animators, which animate properties
             of elements placed inside this element.
             
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -4441,10 +4620,10 @@ Default value is 1.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -4461,12 +4640,21 @@ Default value is 1.
             of elements placed inside this element.
             
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
 <h1><a name="PointKeyframe"></a>PointKeyframe</h1>
 <h2>Inheritance</h2>
-<pre><code>Element » Keyframe » NumericKeyframe » <a href="#PointKeyframe">PointKeyframe</a></pre></code>
+<pre><code>Element » StoryboardEntry » Keyframe » NumericKeyframe » <a href="#PointKeyframe">PointKeyframe</a></pre></code>
 <h2>Description</h2>
 A keyframe for a property of type PointF.
 <h2>Properties</h2>
@@ -4507,7 +4695,7 @@ Value is inherited from parent element if none provided explicitly.
 Default value is Linear.
 </p>
 </td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>Keyframe:</strong></td></tr>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>StoryboardEntry:</strong></td></tr>
 <tr>
 <td>
 <pre><code>TimeSpan</code></pre>
@@ -4520,7 +4708,8 @@ Default value is Linear.
             Define exact time since start of a scene, when a
             property should be set to a fixed value.
             
-<p>Not inheritable by child elements. 
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
 Default value is 00:00:00.
 </p>
 </td>
@@ -4538,10 +4727,129 @@ Default value is 00:00:00.
             from collections as well, as long as they have their Name property
             set and it is unique in this collection.
             
-<p>Not inheritable by child elements. 
+<p>May be inherited by child elements. 
+Value is inherited from parent element if none provided explicitly. 
 Default value is .
 </p>
 <p><strong>Example:</strong></p><code>PropertyRef="MyRectangle.Pen.Color"</code>
+</td>
+</table>
+<hr />
+
+<h1><a name="PointResource"></a>PointResource</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » Resource » <a href="#PointResource">PointResource</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>Value</strong></code></pre>
+</td>
+<td>
+Value of this resource
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Resource:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Key</strong></code></pre>
+</td>
+<td>
+Key of this resource
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+</td>
+</table>
+<hr />
+
+<h1><a name="QuadraticBezierSegment"></a>QuadraticBezierSegment</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Segment » BaseCubicBezierBasedSegment » BaseQuadraticBezierSegment » <a href="#QuadraticBezierSegment">QuadraticBezierSegment</a></pre></code>
+<h2>Description</h2>
+Represents a path part, which is drawn as a quadratic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element.
+            All points are expressed in absolute coordinates.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>ControlPoint</strong></code></pre>
+</td>
+<td>
+
+            Control point of the curve.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>EndPoint</strong></code></pre>
+</td>
+<td>
+
+            End point of the curve.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -4782,10 +5090,10 @@ Default value is Local.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -4802,12 +5110,21 @@ Default value is Local.
             of elements placed inside this element.
             
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
-<h1><a name="RelativeArcPathElement"></a>RelativeArcPathElement</h1>
+<h1><a name="RelativeArcSegment"></a>RelativeArcSegment</h1>
 <h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » ArcPathElement » <a href="#RelativeArcPathElement">RelativeArcPathElement</a></pre></code>
+<pre><code>Element » SceneElement » Segment » MultipleCubicBezierBasedSegment » BaseArcSegment » <a href="#RelativeArcSegment">RelativeArcSegment</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as an elliptical arc.
             First point of the arc equals to the last point of previous
@@ -4916,10 +5233,10 @@ Default value is {X=0, Y=0}.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -4936,12 +5253,21 @@ Default value is {X=0, Y=0}.
             of elements placed inside this element.
             
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
-<h1><a name="RelativeCubicBezierPathElement"></a>RelativeCubicBezierPathElement</h1>
+<h1><a name="RelativeCubicBezierSegment"></a>RelativeCubicBezierSegment</h1>
 <h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » <a href="#RelativeCubicBezierPathElement">RelativeCubicBezierPathElement</a></pre></code>
+<pre><code>Element » SceneElement » Segment » BaseCubicBezierBasedSegment » <a href="#RelativeCubicBezierSegment">RelativeCubicBezierSegment</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a cubic Bezier curve.
             First point of the curve equals to the last point of previous
@@ -5007,10 +5333,10 @@ Default value is {X=0, Y=0}.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -5027,12 +5353,307 @@ Default value is {X=0, Y=0}.
             of elements placed inside this element.
             
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
-<h1><a name="RelativeCubicShorthandBezierPathElement"></a>RelativeCubicShorthandBezierPathElement</h1>
+<h1><a name="RelativeHorizontalLineSegment"></a>RelativeHorizontalLineSegment</h1>
 <h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » <a href="#RelativeCubicShorthandBezierPathElement">RelativeCubicShorthandBezierPathElement</a></pre></code>
+<pre><code>Element » SceneElement » Segment » LineBasedSegment » <a href="#RelativeHorizontalLineSegment">RelativeHorizontalLineSegment</a></pre></code>
+<h2>Description</h2>
+Represents a path part, which is drawn as a horizontal line.
+            All points are expressed in relative coordinates.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>DX</strong></code></pre>
+</td>
+<td>
+
+            X-coordinate of the end point relative to X-coordinate of 
+            end point of the previous path element. Y-coordinate equals
+            to end point's of the previous path element.
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="RelativeLineSegment"></a>RelativeLineSegment</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Segment » LineBasedSegment » <a href="#RelativeLineSegment">RelativeLineSegment</a></pre></code>
+<h2>Description</h2>
+Represents a path part, which is drawn as a line.
+            All points are expressed in relative coordinates.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>DeltaEndPoint</strong></code></pre>
+</td>
+<td>
+
+            End point of the line, relative to end point
+            of the previous path element.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="RelativeMoveSegment"></a>RelativeMoveSegment</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Segment » <a href="#RelativeMoveSegment">RelativeMoveSegment</a></pre></code>
+<h2>Description</h2>
+Begins a new path in specified relative coordinates
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>DeltaEndPoint</strong></code></pre>
+</td>
+<td>
+
+            Coordinates at which new path should begin, relative
+            to end point of the previous path element.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="RelativeQuadraticBezierSegment"></a>RelativeQuadraticBezierSegment</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Segment » BaseCubicBezierBasedSegment » BaseQuadraticBezierSegment » <a href="#RelativeQuadraticBezierSegment">RelativeQuadraticBezierSegment</a></pre></code>
+<h2>Description</h2>
+Represents a path part, which is drawn as a quadratic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element. 
+            All points are expressed in relative coordinates.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>DeltaControlPoint</strong></code></pre>
+</td>
+<td>
+
+            Control point of the curve, relative to endpoint of the previous
+            path element.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>DeltaEndPoint</strong></code></pre>
+</td>
+<td>
+
+            End point of the curve, relative to endpoint of the previous
+            path element.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="RelativeShorthandCubicBezierSegment"></a>RelativeShorthandCubicBezierSegment</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Segment » BaseCubicBezierBasedSegment » <a href="#RelativeShorthandCubicBezierSegment">RelativeShorthandCubicBezierSegment</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a cubic Bezier curve.
             First point of the curve equals to the last point of previous
@@ -5084,10 +5705,10 @@ Default value is {X=0, Y=0}.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -5104,262 +5725,21 @@ Default value is {X=0, Y=0}.
             of elements placed inside this element.
             
 </td>
-</table>
-<hr />
-
-<h1><a name="RelativeHorizontalLinePathElement"></a>RelativeHorizontalLinePathElement</h1>
-<h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » <a href="#RelativeHorizontalLinePathElement">RelativeHorizontalLinePathElement</a></pre></code>
-<h2>Description</h2>
-Represents a path part, which is drawn as a horizontal line.
-            All points are expressed in relative coordinates.
-<h2>Properties</h2>
-<table class="properties">
 <tr>
 <td>
-<pre><code>Single</code></pre>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
 </td>
 <td>
-<pre><code><strong>DX</strong></code></pre>
+<pre><code><strong>Resources</strong></code></pre>
 </td>
 <td>
-
-            X-coordinate of the end point relative to X-coordinate of 
-            end point of the previous path element. Y-coordinate equals
-            to end point's of the previous path element.
-            
-<p>Not inheritable by child elements. 
-Default value is 0.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animations</strong></code></pre>
-</td>
-<td>
-
-            Contains list of all animators, which animate properties
-            of elements placed inside this element.
-            
 </td>
 </table>
 <hr />
 
-<h1><a name="RelativeLinePathElement"></a>RelativeLinePathElement</h1>
+<h1><a name="RelativeShorthandQuadraticBezierSegment"></a>RelativeShorthandQuadraticBezierSegment</h1>
 <h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » <a href="#RelativeLinePathElement">RelativeLinePathElement</a></pre></code>
-<h2>Description</h2>
-Represents a path part, which is drawn as a line.
-            All points are expressed in relative coordinates.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>DeltaEndPoint</strong></code></pre>
-</td>
-<td>
-
-            End point of the line, relative to end point
-            of the previous path element.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animations</strong></code></pre>
-</td>
-<td>
-
-            Contains list of all animators, which animate properties
-            of elements placed inside this element.
-            
-</td>
-</table>
-<hr />
-
-<h1><a name="RelativeMovePathElement"></a>RelativeMovePathElement</h1>
-<h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » <a href="#RelativeMovePathElement">RelativeMovePathElement</a></pre></code>
-<h2>Description</h2>
-Begins a new path in specified relative coordinates
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>DeltaEndPoint</strong></code></pre>
-</td>
-<td>
-
-            Coordinates at which new path should begin, relative
-            to end point of the previous path element.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animations</strong></code></pre>
-</td>
-<td>
-
-            Contains list of all animators, which animate properties
-            of elements placed inside this element.
-            
-</td>
-</table>
-<hr />
-
-<h1><a name="RelativeQuadraticBezierPathElement"></a>RelativeQuadraticBezierPathElement</h1>
-<h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » QuadraticBezierPathElement » <a href="#RelativeQuadraticBezierPathElement">RelativeQuadraticBezierPathElement</a></pre></code>
-<h2>Description</h2>
-Represents a path part, which is drawn as a quadratic Bezier curve.
-            First point of the curve equals to the last point of previous
-            path element. 
-            All points are expressed in relative coordinates.
-<h2>Properties</h2>
-<table class="properties">
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>DeltaControlPoint</strong></code></pre>
-</td>
-<td>
-
-            Control point of the curve, relative to endpoint of the previous
-            path element.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr>
-<td>
-<pre><code>PointF</code></pre>
-</td>
-<td>
-<pre><code><strong>DeltaEndPoint</strong></code></pre>
-</td>
-<td>
-
-            End point of the curve, relative to endpoint of the previous
-            path element.
-            
-<p>Not inheritable by child elements. 
-Default value is {X=0, Y=0}.
-</p>
-</td>
-<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
-<tr>
-<td>
-<pre><code>String</code></pre>
-</td>
-<td>
-<pre><code><strong>Name</strong></code></pre>
-</td>
-<td>
-
-            Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
-            properties. This value should be unique among the whole
-            scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
-            their names are unique.
-            
-</td>
-<tr>
-<td>
-<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
-</td>
-<td>
-<pre><code><strong>Animations</strong></code></pre>
-</td>
-<td>
-
-            Contains list of all animators, which animate properties
-            of elements placed inside this element.
-            
-</td>
-</table>
-<hr />
-
-<h1><a name="RelativeQuadraticShorthandBezierPathElement"></a>RelativeQuadraticShorthandBezierPathElement</h1>
-<h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » QuadraticBezierPathElement » <a href="#RelativeQuadraticShorthandBezierPathElement">RelativeQuadraticShorthandBezierPathElement</a></pre></code>
+<pre><code>Element » SceneElement » Segment » BaseCubicBezierBasedSegment » BaseQuadraticBezierSegment » <a href="#RelativeShorthandQuadraticBezierSegment">RelativeShorthandQuadraticBezierSegment</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a quadratic Bezier curve.
             Start point of the curve equals to the last point of previous
@@ -5396,10 +5776,10 @@ Default value is {X=0, Y=0}.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -5416,12 +5796,21 @@ Default value is {X=0, Y=0}.
             of elements placed inside this element.
             
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
-<h1><a name="RelativeVerticalLinePathElement"></a>RelativeVerticalLinePathElement</h1>
+<h1><a name="RelativeVerticalLineSegment"></a>RelativeVerticalLineSegment</h1>
 <h2>Inheritance</h2>
-<pre><code>Element » SceneElement » PathElement » <a href="#RelativeVerticalLinePathElement">RelativeVerticalLinePathElement</a></pre></code>
+<pre><code>Element » SceneElement » Segment » LineBasedSegment » <a href="#RelativeVerticalLineSegment">RelativeVerticalLineSegment</a></pre></code>
 <h2>Description</h2>
 Represents a path part, which is drawn as a horizontal line.
             All points are expressed in relative coordinates.
@@ -5455,10 +5844,10 @@ Default value is 0.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -5474,6 +5863,216 @@ Default value is 0.
             Contains list of all animators, which animate properties
             of elements placed inside this element.
             
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="RotateTransform"></a>RotateTransform</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Transform » <a href="#RotateTransform">RotateTransform</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>Center</strong></code></pre>
+</td>
+<td>
+
+            Defines center of rotation
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>Angle</strong></code></pre>
+</td>
+<td>
+
+            Defines angle of rotation.
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Transform:</strong></td></tr>
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>UseLocalCoords</strong></code></pre>
+</td>
+<td>
+
+            Defines, whether local coords (ie. not affected by previous transforms)
+            should be used for this transform. Note, that this takes effect only on
+            those transforms, which use points (rotation, scale)
+            
+<p>Not inheritable by child elements. 
+Default value is True.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="ScaleTransform"></a>ScaleTransform</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Transform » <a href="#ScaleTransform">ScaleTransform</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>Center</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>SX</strong></code></pre>
+</td>
+<td>
+
+            Defines scale in X axis
+            
+<p>Not inheritable by child elements. 
+Default value is 1.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>SY</strong></code></pre>
+</td>
+<td>
+
+            Defines scale in Y axis
+            
+<p>Not inheritable by child elements. 
+Default value is 1.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Transform:</strong></td></tr>
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>UseLocalCoords</strong></code></pre>
+</td>
+<td>
+
+            Defines, whether local coords (ie. not affected by previous transforms)
+            should be used for this transform. Note, that this takes effect only on
+            those transforms, which use points (rotation, scale)
+            
+<p>Not inheritable by child elements. 
+Default value is True.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -5535,10 +6134,10 @@ Default value is 00:00:10.
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -5554,6 +6153,170 @@ Default value is 00:00:10.
             Contains list of all animators, which animate properties
             of elements placed inside this element.
             
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="ShorthandCubicBezierSegment"></a>ShorthandCubicBezierSegment</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Segment » BaseCubicBezierBasedSegment » <a href="#ShorthandCubicBezierSegment">ShorthandCubicBezierSegment</a></pre></code>
+<h2>Description</h2>
+Represents a path part, which is drawn as a cubic Bezier curve.
+            First point of the curve equals to the last point of previous
+            path element. First control point is deduced from the previous
+            path element as a mirror of its last control point against its
+            endpoint.
+            All points are expressed in absolute coordinates.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>ControlPoint2</strong></code></pre>
+</td>
+<td>
+
+            Second control point of the curve.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>EndPoint</strong></code></pre>
+</td>
+<td>
+
+            End point of the curve.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="ShorthandQuadraticBezierSegment"></a>ShorthandQuadraticBezierSegment</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Segment » BaseCubicBezierBasedSegment » BaseQuadraticBezierSegment » <a href="#ShorthandQuadraticBezierSegment">ShorthandQuadraticBezierSegment</a></pre></code>
+<h2>Description</h2>
+Represents a path part, which is drawn as a quadratic Bezier curve.
+            Start point of the curve equals to the last point of previous
+            path element. The control point is deduced from the previous
+            path element as a mirror of its last control point against its
+            endpoint.
+            End point is expressed in absolute coordinates.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>EndPoint</strong></code></pre>
+</td>
+<td>
+
+            End point of the curve.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -5591,10 +6354,10 @@ Default value is Color [Transparent].
 <td>
 
             Defines name of this object, which may be then used to
-            reference it from various objects via their TargetName
+            reference it from various objects via their PropertyRef
             properties. This value should be unique among the whole
             scene, though this is not enforced. However, elements
-            are reachable through TargetName properties only if
+            are reachable through PropertyRef properties only if
             their names are unique.
             
 </td>
@@ -5610,6 +6373,15 @@ Default value is Color [Transparent].
             Contains list of all animators, which animate properties
             of elements placed inside this element.
             
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -5671,15 +6443,247 @@ Default value is Linear.
 </td>
 <tr>
 <td>
-<pre><code>ManagedCollection&lt;Keyframe&gt;</code></pre>
+<pre><code>ManagedCollection&lt;StoryboardEntry&gt;</code></pre>
 </td>
 <td>
 <pre><code><strong>Keyframes</strong></code></pre>
 </td>
 <td>
+</td>
+</table>
+<hr />
 
-            List of keyframes, which define complex animation.
+<h1><a name="StringResource"></a>StringResource</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » Resource » <a href="#StringResource">StringResource</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Value</strong></code></pre>
+</td>
+<td>
+Value of this resource
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Resource:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Key</strong></code></pre>
+</td>
+<td>
+Key of this resource
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+</td>
+</table>
+<hr />
+
+<h1><a name="TimeResource"></a>TimeResource</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » Resource » <a href="#TimeResource">TimeResource</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>Value</strong></code></pre>
+</td>
+<td>
+Value of this resource
+<p>Not inheritable by child elements. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Resource:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Key</strong></code></pre>
+</td>
+<td>
+Key of this resource
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+</td>
+</table>
+<hr />
+
+<h1><a name="TranslateTransform"></a>TranslateTransform</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Transform » <a href="#TranslateTransform">TranslateTransform</a></pre></code>
+<h2>Description</h2>
+Represents a translation transform
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>DX</strong></code></pre>
+</td>
+<td>
+
+            Defines translation distance over X axis
             
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>DY</strong></code></pre>
+</td>
+<td>
+
+            Defines translation distance over X axis
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Transform:</strong></td></tr>
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>UseLocalCoords</strong></code></pre>
+</td>
+<td>
+
+            Defines, whether local coords (ie. not affected by previous transforms)
+            should be used for this transform. Note, that this takes effect only on
+            those transforms, which use points (rotation, scale)
+            
+<p>Not inheritable by child elements. 
+Default value is True.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="VerticalLineSegment"></a>VerticalLineSegment</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Segment » LineBasedSegment » <a href="#VerticalLineSegment">VerticalLineSegment</a></pre></code>
+<h2>Description</h2>
+Represents a path part, which is drawn as a vertical line.
+            All points are expressed in absolute coordinates.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>Y</strong></code></pre>
+</td>
+<td>
+
+            Y-coordinate of the end point. X-coordinate equals to
+            the end point's of the previous path element.
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 </body>
