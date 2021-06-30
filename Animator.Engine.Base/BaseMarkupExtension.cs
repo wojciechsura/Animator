@@ -8,6 +8,6 @@ namespace Animator.Engine.Base
 {
     public abstract class BaseMarkupExtension
     {
-
+        public abstract void ProvideValue(ManagedObject @object, ManagedProperty property);
     }
 }

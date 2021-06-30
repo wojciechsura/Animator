@@ -236,8 +236,8 @@ namespace Animator.Engine.Elements
         private static void HandleNameChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
             // Value is permanent, so the change may be done only once
-            if (sender is SceneElement baseElement)
-                baseElement.RegisterName((string)args.NewValue, baseElement);
+            if (sender is SceneElement sceneElement && sender.Parent is SceneElement parentElement)
+                parentElement.RegisterName((string)args.NewValue, sceneElement);
         }
 
         #endregion

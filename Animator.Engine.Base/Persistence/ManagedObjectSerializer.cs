@@ -43,6 +43,7 @@ namespace Animator.Engine.Base.Persistence
             public Dictionary<Type, TypeSerializer> CustomTypeSerializers { get; }
             public string DocumentPath { get; }
             public DeserializationOptions OriginalOptions { get; }
+            public List<PendingMarkupExtension> PendingMarkupExtensions { get; } = new();
         }
 
         // Private constants --------------------------------------------------
@@ -51,6 +52,9 @@ namespace Animator.Engine.Base.Persistence
 
         // Private methods ----------------------------------------------------
 
+        /// <summary>
+        /// Deserializes markup extension and adds it to context's PendingMarkupExtensions
+        /// </summary>
         private void ProcessMarkupExtension(ManagedObject deserializedObject, 
             ManagedProperty managedProperty, 
             string value, 
@@ -65,7 +69,7 @@ namespace Animator.Engine.Base.Persistence
 
             string name = null;
             string defaultParam = null;
-            List<(string, string)> @params = new();
+            List<(string property, string value)> @params = new();
 
             var nameGroup = match.Groups.OfType<Group>().Where(g => g.Name == "Name" && g.Success).SingleOrDefault();
             name = nameGroup.Value;
@@ -92,7 +96,7 @@ namespace Animator.Engine.Base.Persistence
 
             // 2. Instantiate class
 
-            string namespaceUri = String.Empty;
+            string namespaceKey = string.Empty;
             string className = String.Empty;
 
             if (name.Contains(':'))
@@ -101,7 +105,7 @@ namespace Animator.Engine.Base.Persistence
                 if (data.Length != 2)
                     throw new SerializerException($"Invalid markup extension class name: {name}!", node.FindXPath());
 
-                namespaceUri = data[0];
+                namespaceKey = data[0];
                 className = data[1];
             }
             else
@@ -109,7 +113,10 @@ namespace Animator.Engine.Base.Persistence
                 className = name;
             }
 
-            object extObj = Instantiate(namespaceUri, className, context);
+            string namespaceUri = node.GetNamespaceOfPrefix($"{namespaceKey}");
+
+            object extObj = Instantiate(namespaceUri, className, typeof(BaseMarkupExtension), context);
+
             if (extObj is not BaseMarkupExtension)
                 throw new SerializerException($"Markup extensions must derive from BaseMarkupExtension!", node.FindXPath());
 
@@ -119,7 +126,7 @@ namespace Animator.Engine.Base.Persistence
 
             if (defaultParam != null)
             {
-                var defaultPropertyAttribute = deserializedObject.GetType().GetCustomAttribute<DefaultPropertyAttribute>(true);
+                var defaultPropertyAttribute = extension.GetType().GetCustomAttribute<DefaultPropertyAttribute>(true);
                 if (defaultPropertyAttribute == null)
                     throw new SerializerException($"Markup extension {name} doesn't have default parameter defined!", node.FindXPath());
 
@@ -127,12 +134,36 @@ namespace Animator.Engine.Base.Persistence
             }
 
             // Every param must be used only once.
-            if (@params.Select(p => p.Item1).Distinct().Count() != @params.Count)
+            if (@params.Select(p => p.property).Distinct().Count() != @params.Count)
                 throw new SerializerException($"One of parameters for {name} is defined more than once (it may be as well the default one!)", node.FindXPath());
 
             // 4. Enter property values
 
-            // TODO
+            foreach (var param in @params)
+            {
+                PropertyInfo info = extension.GetType().GetProperty(param.property);
+                if (info == null)
+                    throw new SerializerException($"Markup extension {name} does not have property {param.property}!", node.FindXPath());
+
+                object propertyValue;
+
+                if (context.CustomTypeSerializers != null && 
+                    context.CustomTypeSerializers.TryGetValue(info.PropertyType, out TypeSerializer customSerializer) && 
+                    customSerializer.CanDeserialize(param.value))
+                {
+                    propertyValue = customSerializer.Deserialize(param.value);
+                }
+                else if (TypeSerialization.CanDeserialize(param.value, info.PropertyType))
+                {
+                    propertyValue = TypeSerialization.Deserialize(param.value, info.PropertyType);
+                }
+                else
+                    throw new InvalidCastException($"Cannot deserialize value {param.value} to type {info.PropertyType.Name}!");
+
+                info.SetValue(extension, propertyValue);
+            }
+
+            context.PendingMarkupExtensions.Add(new PendingMarkupExtension(extension, managedProperty, deserializedObject));
         }
 
         /// <summary>
@@ -437,7 +468,7 @@ namespace Animator.Engine.Base.Persistence
             return null;
         }
 
-        private object Instantiate(string namespaceUri, string className, DeserializationContext context)
+        private object Instantiate(string namespaceUri, string className, Type requiredBaseType, DeserializationContext context)
         {
             // 1. Figure out, which object to instantiate
 
@@ -473,8 +504,8 @@ namespace Animator.Engine.Base.Persistence
 
             // 3. Make sure, that object derives from ManagedObject - only those are supported
 
-            if (!objType.IsAssignableTo(typeof(ManagedObject)))
-                throw new ActivatorException($"Type {fullClassTypeName} does not derive from ManagedObject!");
+            if (!objType.IsAssignableTo(requiredBaseType))
+                throw new ActivatorException($"Type {fullClassTypeName} does not derive from {requiredBaseType.Name}!");
 
             // 4. Try to instantiate object
 
@@ -539,7 +570,7 @@ namespace Animator.Engine.Base.Persistence
 
                 try
                 {
-                    object obj = Instantiate(node.NamespaceURI, node.LocalName, context);
+                    object obj = Instantiate(node.NamespaceURI, node.LocalName, typeof(ManagedObject), context);
 
                     if (obj is not ManagedObject)
                         throw new ActivatorException("Element classes must derive from ManagedObject!");
@@ -579,7 +610,15 @@ namespace Animator.Engine.Base.Persistence
                 }
             }
 
-            return DeserializeElement(document.ChildNodes.OfType<XmlElement>().Single(), context);
+            var result = DeserializeElement(document.ChildNodes.OfType<XmlElement>().Single(), context);
+
+            // Run pending markup extensions
+            foreach (var extension in context.PendingMarkupExtensions)
+            {
+                extension.MarkupExtension.ProvideValue(extension.Object, extension.Property);
+            }
+
+            return result;
         }
 
         // Public methods -----------------------------------------------------
