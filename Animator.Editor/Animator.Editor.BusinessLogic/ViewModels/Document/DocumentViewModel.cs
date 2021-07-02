@@ -497,8 +497,6 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 
                 return result;
             }
-
-            return null;
         }
 
         private List<CompletionInfo> CollectPropertySuggestionsFor(string name)

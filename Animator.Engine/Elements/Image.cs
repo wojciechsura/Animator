@@ -30,6 +30,7 @@ namespace Animator.Engine.Elements
             if (cachedImagePath != Source)
             {
                 cachedImage = new Bitmap(Source);
+                cachedImagePath = Source;
             }
         }
 

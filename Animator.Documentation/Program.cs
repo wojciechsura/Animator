@@ -53,8 +53,6 @@ namespace Animator.Documentation
                 var propDocumentation = property.GetDocumentation();
                 if (propDocumentation != null)
                 {
-                    var isFirst = true;
-
                     var summary = propDocumentation["member"]?["summary"];
 
                     if (summary != null)
