@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0-windows7.0</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Resources\NewDocumentTemplate.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Animator.Engine\Animator.Engine.csproj" />
     <ProjectReference Include="..\Animator.Editor.Common\Animator.Editor.Common.csproj" />
     <ProjectReference Include="..\Animator.Editor.Configuration\Animator.Editor.Configuration.csproj" />
     <ProjectReference Include="..\Animator.Editor.Resources\Animator.Editor.Resources.csproj" />
+    <ProjectReference Include="..\Animator.Engine\Animator.Engine.csproj" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Highlighting\xml.xshd" />
