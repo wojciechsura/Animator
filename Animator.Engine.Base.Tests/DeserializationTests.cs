@@ -527,5 +527,67 @@ namespace Animator.Engine.Base.Tests
             Assert.IsNotNull(data);
             Assert.AreEqual(6, data.IntValue);
         }
+
+        [TestMethod]
+        public void SimpleMacroTest()
+        {
+            // Arrange
+
+            string xml = $"<SimpleCollectionClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\"\n" +
+                "    xmlns:x=\"https://spooksoft.pl/animator\">\n" +
+                "   <x:Macros>\n" +
+                "       <SimplePropertyClass x:Key=\"TestMacro\" IntValue=\"44\" />\n" +
+                "   </x:Macros>\n" +
+                "   <SimpleCollectionClass.Items>\n" +
+                "       <x:Macro x:Key=\"TestMacro\" />\n" +
+                "   </SimpleCollectionClass.Items>\n" +
+                "</SimpleCollectionClass>";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            SimpleCollectionClass data = (SimpleCollectionClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual(1, data.Items.Count);
+            Assert.AreEqual(44, data.Items[0].IntValue);
+        }
+
+        [TestMethod]
+        public void PropertyOverridingMacroTest()
+        {
+            // Arrange
+
+            string xml = $"<SimpleCollectionClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\"\n" +
+                "    xmlns:x=\"https://spooksoft.pl/animator\">\n" +
+                "   <x:Macros>\n" +
+                "       <SimplePropertyClass x:Key=\"TestMacro\" />\n" +
+                "   </x:Macros>\n" +
+                "   <SimpleCollectionClass.Items>\n" +
+                "       <x:Macro x:Key=\"TestMacro\" IntValue=\"44\" />\n" +
+                "   </SimpleCollectionClass.Items>\n" +
+                "</SimpleCollectionClass>";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            SimpleCollectionClass data = (SimpleCollectionClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual(1, data.Items.Count);
+            Assert.AreEqual(44, data.Items[0].IntValue);
+        }
     }
 }

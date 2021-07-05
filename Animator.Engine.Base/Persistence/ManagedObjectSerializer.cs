@@ -213,6 +213,19 @@ namespace Animator.Engine.Base.Persistence
                 if (child is XmlComment)
                     continue;
 
+                // 0. Check if it is any of internal elements
+
+                if (child.NamespaceURI == EngineNamespace)
+                {
+                    if (child.LocalName == "Macros")
+                    {
+                        // This doesn't need immediate processing
+                        continue;
+                    }
+                    else
+                        throw new SerializerException($"Not recognized internal element: {child.LocalName}!", child.FindXPath());
+                }
+
                 // 1. Check if it is a property with extended notation
 
                 if (child.NamespaceURI == node.NamespaceURI &&
@@ -373,6 +386,19 @@ namespace Animator.Engine.Base.Persistence
                 if (attribute.Name == "xmlns" || attribute.Name.StartsWith("xmlns:"))
                     continue;
 
+                // 2. Omit internal attributes
+
+                if (attribute.NamespaceURI == EngineNamespace)
+                {
+                    if (attribute.LocalName == "Key")
+                    {
+                        // This attribute may be safely ignored.
+                        continue;
+                    }
+                    else
+                        throw new SerializerException($"Not recognized internal attribute: {attribute.LocalName}", node.FindXPath());
+                }
+
                 // 2. Check if property hasn't been already set
 
                 if (propertiesSet.Contains(attribute.LocalName))
@@ -526,6 +552,51 @@ namespace Animator.Engine.Base.Persistence
             return deserializedObject;
         }
 
+        private ManagedObject FindMacro(XmlNode child, string key, DeserializationContext context)
+        {
+            XmlElement foundMacro = null;
+
+            var node = child;
+            while (node != null)
+            {
+                var macroChild = node.ChildNodes
+                    .OfType<XmlElement>()
+                    .Where(c => c.NamespaceURI == EngineNamespace && c.LocalName == "Macros")
+                    .FirstOrDefault();
+
+                if (macroChild != null)
+                {
+                    List<XmlElement> macro = macroChild.ChildNodes
+                        .OfType<XmlElement>()
+                        .Where(m => m.Attributes
+                            .OfType<XmlAttribute>()
+                            .Where(a => a.NamespaceURI == EngineNamespace && a.LocalName == "Key" && a.Value == key)
+                            .FirstOrDefault() != null)
+                        .ToList();
+
+                    if (macro.Count == 1)
+                    {
+                        foundMacro = macro[0];
+                        break;
+                    }
+                    else if (macro.Count > 1)
+                    {
+                        throw new SerializerException($"There are multiple macros on a node, which match the same key {key}!", node.FindXPath());
+                    }
+                }
+
+                node = node.ParentNode;
+                continue;
+            }
+
+            if (foundMacro == null)
+                throw new SerializerException($"Cannot find macro with key {key}! Make sure, that it is reachable and key is not misspelled (keys are case-sensitive)", child.FindXPath());
+
+            ManagedObject result = DeserializeElement(foundMacro, context);
+            return result;
+        }
+
+
         private ManagedObject DeserializeElement(XmlNode node, DeserializationContext context)
         {
             // 1. Check control nodes
@@ -556,6 +627,31 @@ namespace Animator.Engine.Base.Persistence
                     }
 
                     return includedObject;
+                }
+                else if (node.LocalName == "Macro")
+                {
+                    var keyAttribute = node.Attributes
+                        .OfType<XmlAttribute>()
+                        .Where(a => a.NamespaceURI == EngineNamespace && a.LocalName == "Key")
+                        .FirstOrDefault();
+
+                    if (keyAttribute == null)
+                        throw new SerializerException("Macro element misses Key attribute!", node.FindXPath());
+
+                    var key = keyAttribute.Value;
+
+                    if (node.ChildNodes.Count > 0)
+                        throw new SerializerException("Macro may not contain any child elements!", node.FindXPath());
+
+                    ManagedObject objectFromMacro = FindMacro(node, key, context);
+
+                    // Using new HashSet here on purpose.
+                    // This allows overriding attributes, which are set in macro.
+                    // eg.
+                    // <x:Macro x:Key="SomeMacro" Name="Test" Position="20,30" />
+                    DeserializeAttributes(node, objectFromMacro, context, new HashSet<string>());
+
+                    return objectFromMacro;
                 }
                 else
                 {
