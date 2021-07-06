@@ -19,7 +19,23 @@ namespace Animator.Engine.Base.Persistence
     {
         // Private constants --------------------------------------------------
 
-        private const string EngineNamespace = "https://spooksoft.pl/animator";
+        private const string ENGINE_NAMESPACE = "https://spooksoft.pl/animator";
+
+        private const string CONTENT_DECORATION = "content:{0}";
+
+        private const string MACROS_ELEMENT = "Macros";
+        private const string MACRO_ELEMENT = "Macro";
+        private const string INCLUDE_ELEMENT = "Include";
+
+        private const string KEY_ATTRIBUTE = "Key";
+        
+        private const string NS_ASSEMBLY_PREFIX = "assembly=";
+        private const string NS_NAMESPACE_PREFIX = "namespace=";
+
+        private const string MARKUP_EXTENSION_BEGIN = "{";
+        private const string MARKUP_EXTENSION_ESCAPED_BEGIN = "{{";
+        private const string MARKUP_EXTENSION_END = "}";
+
         private static readonly Regex markupExtensionRegex = new Regex($@"\{{\s*(?<Name>[^\s,=\}}]+)\s*(?<Params>[^\s]|[^\s].*[^\s])?\s*\}}");
 
         // Private types ------------------------------------------------------
@@ -45,10 +61,6 @@ namespace Animator.Engine.Base.Persistence
             public DeserializationOptions OriginalOptions { get; }
             public List<PendingMarkupExtension> PendingMarkupExtensions { get; } = new();
         }
-
-        // Private constants --------------------------------------------------
-
-        private const string contentDecoration = "content:{0}";
 
         // Private methods ----------------------------------------------------
 
@@ -182,14 +194,14 @@ namespace Animator.Engine.Base.Persistence
 
             // Assembly
 
-            if (!elements[0].StartsWith("assembly=") || elements[0].Length < 10)
+            if (!elements[0].StartsWith(NS_ASSEMBLY_PREFIX) || elements[0].Length < 10)
                 throw new ParseException($"Invalid namespace definition: {namespaceDefinition}\r\nMissing or invalid assembly section!");
 
             string assembly = elements[0].Substring(9);
 
             // Namespace
 
-            if (!elements[1].StartsWith("namespace=") || elements[1].Length < 11)
+            if (!elements[1].StartsWith(NS_NAMESPACE_PREFIX) || elements[1].Length < 11)
                 throw new ParseException($"Invalid namespace definition: {namespaceDefinition}\r\nMissing or invalid namespace section!");
 
             string @namespace = elements[1][10..];
@@ -215,12 +227,20 @@ namespace Animator.Engine.Base.Persistence
 
                 // 0. Check if it is any of internal elements
 
-                if (child.NamespaceURI == EngineNamespace)
+                if (child.NamespaceURI == ENGINE_NAMESPACE)
                 {
-                    if (child.LocalName == "Macros")
+                    if (child.LocalName == MACROS_ELEMENT)
                     {
                         // This doesn't need immediate processing
                         continue;
+                    }
+                    else if (child.LocalName == MACRO_ELEMENT)
+                    {
+                        // This one will be processed later, no action required
+                    }
+                    else if (child.LocalName == INCLUDE_ELEMENT)
+                    {
+                        // This one will be processed later, no action required
                     }
                     else
                         throw new SerializerException($"Not recognized internal element: {child.LocalName}!", child.FindXPath());
@@ -273,19 +293,19 @@ namespace Animator.Engine.Base.Persistence
                     if (property is ManagedSimpleProperty simpleProperty)
                     {
                         deserializedObject.SetValue(simpleProperty, content);
-                        propertiesSet.Add(string.Format(contentDecoration, property.Name));
+                        propertiesSet.Add(string.Format(CONTENT_DECORATION, property.Name));
                     }
                     else if (property is ManagedReferenceProperty referenceProperty)
                     {
                         deserializedObject.SetValue(referenceProperty, content);
-                        propertiesSet.Add(string.Format(contentDecoration, property.Name));
+                        propertiesSet.Add(string.Format(CONTENT_DECORATION, property.Name));
                     }
                     else if (property is ManagedCollectionProperty collectionProperty)
                     {
                         ManagedCollection collection = (ManagedCollection)deserializedObject.GetValue(property);
                         ((IList)collection).Add(content);
 
-                        propertiesSet.Add(string.Format(contentDecoration, property.Name));
+                        propertiesSet.Add(string.Format(CONTENT_DECORATION, property.Name));
                     }
                     else
                         throw new InvalidOperationException("Unsupported managed property!");
@@ -308,7 +328,7 @@ namespace Animator.Engine.Base.Persistence
                 throw new SerializerException($"Cannot deserialize non-serializable property {property.Name}!",
                     propertyNode.FindXPath());
 
-            if (propertiesSet.Contains(property.Name) || propertiesSet.Contains(string.Format(contentDecoration, property.Name)))
+            if (propertiesSet.Contains(property.Name) || propertiesSet.Contains(string.Format(CONTENT_DECORATION, property.Name)))
                 throw new SerializerException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}",
                     propertyNode.FindXPath());
 
@@ -388,9 +408,9 @@ namespace Animator.Engine.Base.Persistence
 
                 // 2. Omit internal attributes
 
-                if (attribute.NamespaceURI == EngineNamespace)
+                if (attribute.NamespaceURI == ENGINE_NAMESPACE)
                 {
-                    if (attribute.LocalName == "Key")
+                    if (attribute.LocalName == KEY_ATTRIBUTE)
                     {
                         // This attribute may be safely ignored.
                         continue;
@@ -399,13 +419,13 @@ namespace Animator.Engine.Base.Persistence
                         throw new SerializerException($"Not recognized internal attribute: {attribute.LocalName}", node.FindXPath());
                 }
 
-                // 2. Check if property hasn't been already set
+                // 3. Check if property hasn't been already set
 
                 if (propertiesSet.Contains(attribute.LocalName))
                     throw new SerializerException($"Property {attribute.LocalName} has been already set on type {deserializedObject.GetType().Name}",
                         node.FindXPath());
 
-                // 3. Find property with appropriate name
+                // 4. Find property with appropriate name
 
                 ManagedProperty managedProperty = deserializedObject.GetProperty(attribute.LocalName);
 
@@ -416,9 +436,11 @@ namespace Animator.Engine.Base.Persistence
                     throw new SerializerException($"Property {attribute.LocalName} on object {deserializedObject.GetType().Name} is not serializable!\r\nRemove it from input file.",
                         node.FindXPath());
 
-                // 4. Check for markup extension
+                // 5. Check for markup extension
 
-                if (attribute.Value.StartsWith("{") && !attribute.Value.StartsWith("{{") && attribute.Value.EndsWith("}"))
+                if (attribute.Value.StartsWith(MARKUP_EXTENSION_BEGIN) && 
+                    !attribute.Value.StartsWith(MARKUP_EXTENSION_ESCAPED_BEGIN) && 
+                    attribute.Value.EndsWith(MARKUP_EXTENSION_END))
                 {
                     ProcessMarkupExtension(deserializedObject, managedProperty, attribute.Value, node, context);
                 }
@@ -561,7 +583,7 @@ namespace Animator.Engine.Base.Persistence
             {
                 var macroChild = node.ChildNodes
                     .OfType<XmlElement>()
-                    .Where(c => c.NamespaceURI == EngineNamespace && c.LocalName == "Macros")
+                    .Where(c => c.NamespaceURI == ENGINE_NAMESPACE && c.LocalName == MACROS_ELEMENT)
                     .FirstOrDefault();
 
                 if (macroChild != null)
@@ -570,7 +592,7 @@ namespace Animator.Engine.Base.Persistence
                         .OfType<XmlElement>()
                         .Where(m => m.Attributes
                             .OfType<XmlAttribute>()
-                            .Where(a => a.NamespaceURI == EngineNamespace && a.LocalName == "Key" && a.Value == key)
+                            .Where(a => a.NamespaceURI == ENGINE_NAMESPACE && a.LocalName == KEY_ATTRIBUTE && a.Value == key)
                             .FirstOrDefault() != null)
                         .ToList();
 
@@ -601,9 +623,9 @@ namespace Animator.Engine.Base.Persistence
         {
             // 1. Check control nodes
 
-            if (string.Equals(node.NamespaceURI, EngineNamespace))
+            if (string.Equals(node.NamespaceURI, ENGINE_NAMESPACE))
             {
-                if (node.LocalName == "Include")
+                if (node.LocalName == INCLUDE_ELEMENT)
                 {
                     var sourceAttribute = node.Attributes["Source"];
                     if (sourceAttribute == null)
@@ -628,11 +650,11 @@ namespace Animator.Engine.Base.Persistence
 
                     return includedObject;
                 }
-                else if (node.LocalName == "Macro")
+                else if (node.LocalName == MACRO_ELEMENT)
                 {
                     var keyAttribute = node.Attributes
                         .OfType<XmlAttribute>()
-                        .Where(a => a.NamespaceURI == EngineNamespace && a.LocalName == "Key")
+                        .Where(a => a.NamespaceURI == ENGINE_NAMESPACE && a.LocalName == KEY_ATTRIBUTE)
                         .FirstOrDefault();
 
                     if (keyAttribute == null)

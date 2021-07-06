@@ -14,22 +14,24 @@ namespace Animator.Engine.Elements
     {
         public override void ProvideValue(ManagedObject @object, ManagedProperty property)
         {
-            var current = @object as SceneElement;
+            var current = @object as Element;
 
             while (current != null)
             {
-                var res = current.Resources.Where(r => r.Key == Key).ToList();
-                if (res.Count == 0)
+                if (current is SceneElement sceneElement)
                 {
-                    current = current.Parent as SceneElement;
+                    var res = sceneElement.Resources.Where(r => r.Key == Key).ToList();
+
+                    if (res.Count == 1)
+                    {
+                        @object.SetValue(property, res[0].GetValue());
+                        return;
+                    }
+                    else if (res.Count > 1)
+                        throw new AnimationException($"Object contains more than one resource named {Key}!", (current as Element)?.GetPath() ?? String.Empty);
                 }
-                else if (res.Count == 1)
-                {
-                    @object.SetValue(property, res[0].GetValue());
-                    return;
-                }
-                else
-                    throw new AnimationException($"Object contains more than one resource named {Key}!", (current as Element)?.GetPath() ?? String.Empty);
+
+                current = current.Parent as Element;
             }
         }
 

@@ -1,91 +1,91 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <OutputType>WinExe</OutputType>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <UseWindowsForms>true</UseWindowsForms>
-    <UseWPF>true</UseWPF>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-    <StartupObject>Animator.Editor.App</StartupObject>
-    <Platforms>x64</Platforms>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Remove="global.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\New32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Animator.Editor.BusinessLogic\Animator.Editor.BusinessLogic.csproj" />
-    <ProjectReference Include="..\Animator.Editor.Dependencies\Animator.Editor.Dependencies.csproj" />
-    <ProjectReference Include="..\Animator.Editor.Resources\Animator.Editor.Resources.csproj" />
-    <ProjectReference Include="..\Animator.Engine.Native\Animator.Engine.Native.vcxproj" />
-    <ProjectReference Include="..\ICSharpCode.AvalonEdit.Dev.Editor\ICSharpCode.AvalonEdit.Animator.Editor.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\New16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Open32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Open16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Save16.png" />
-    <Resource Include="Resources\Images\Save32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Copy16.png" />
-    <Resource Include="Resources\Images\Copy32.png" />
-    <Resource Include="Resources\Images\Cut16.png" />
-    <Resource Include="Resources\Images\Cut32.png" />
-    <Resource Include="Resources\Images\Paste16.png" />
-    <Resource Include="Resources\Images\Paste32.png" />
-    <Resource Include="Resources\Images\Redo16.png" />
-    <Resource Include="Resources\Images\Redo32.png" />
-    <Resource Include="Resources\Images\Undo16.png" />
-    <Resource Include="Resources\Images\Undo32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\FindNext16.png" />
-    <Resource Include="Resources\Images\FindNext32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Replace16.png" />
-    <Resource Include="Resources\Images\Replace32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Search16.png" />
-    <Resource Include="Resources\Images\Search32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\SortAscending16.png" />
-    <Resource Include="Resources\Images\SortAscending32.png" />
-    <Resource Include="Resources\Images\SortDescending16.png" />
-    <Resource Include="Resources\Images\SortDescending32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Navigation16.png" />
-    <Resource Include="Resources\Images\Navigation32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Explorer16.png" />
-    <Resource Include="Resources\Images\Explorer32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Up16.png" />
-    <Resource Include="Resources\Images\Up32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="AvalonEdit" Version="6.1.2.30" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="ProCalc.NET" Version="1.0.6" />
-    <PackageReference Include="Unity" Version="5.11.10" />
-    <PackageReference Include="Fluent.Ribbon" Version="8.0.3" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
-  </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;$(SolutionDir)x64\$(ConfigurationName)\Animator.Engine.Native.dll&quot; &quot;$(TargetDir)Animator.Engine.Native.dll&quot;&#xD;&#xA;copy &quot;$(SolutionDir)x64\$(ConfigurationName)\Animator.Engine.Native.pdb&quot; &quot;$(TargetDir)Animator.Engine.Native.pdb&quot;" />
-  </Target>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net5.0-windows7.0</TargetFramework>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<UseWindowsForms>true</UseWindowsForms>
+		<UseWPF>true</UseWPF>
+		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+		<StartupObject>Animator.Editor.App</StartupObject>
+		<Platforms>x64</Platforms>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Remove="global.json" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\New32.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Animator.Editor.BusinessLogic\Animator.Editor.BusinessLogic.csproj" />
+		<ProjectReference Include="..\Animator.Editor.Dependencies\Animator.Editor.Dependencies.csproj" />
+		<ProjectReference Include="..\Animator.Editor.Resources\Animator.Editor.Resources.csproj" />
+		<ProjectReference Include="..\Animator.Engine.Native\Animator.Engine.Native.vcxproj" />
+		<ProjectReference Include="..\ICSharpCode.AvalonEdit.Dev.Editor\ICSharpCode.AvalonEdit.Animator.Editor.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\New16.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\Open32.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\Open16.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\Save16.png" />
+		<Resource Include="Resources\Images\Save32.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\Copy16.png" />
+		<Resource Include="Resources\Images\Copy32.png" />
+		<Resource Include="Resources\Images\Cut16.png" />
+		<Resource Include="Resources\Images\Cut32.png" />
+		<Resource Include="Resources\Images\Paste16.png" />
+		<Resource Include="Resources\Images\Paste32.png" />
+		<Resource Include="Resources\Images\Redo16.png" />
+		<Resource Include="Resources\Images\Redo32.png" />
+		<Resource Include="Resources\Images\Undo16.png" />
+		<Resource Include="Resources\Images\Undo32.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\FindNext16.png" />
+		<Resource Include="Resources\Images\FindNext32.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\Replace16.png" />
+		<Resource Include="Resources\Images\Replace32.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\Search16.png" />
+		<Resource Include="Resources\Images\Search32.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\SortAscending16.png" />
+		<Resource Include="Resources\Images\SortAscending32.png" />
+		<Resource Include="Resources\Images\SortDescending16.png" />
+		<Resource Include="Resources\Images\SortDescending32.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\Navigation16.png" />
+		<Resource Include="Resources\Images\Navigation32.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\Explorer16.png" />
+		<Resource Include="Resources\Images\Explorer32.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\Up16.png" />
+		<Resource Include="Resources\Images\Up32.png" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AvalonEdit" Version="6.1.2.30" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="ProCalc.NET" Version="1.0.6" />
+		<PackageReference Include="Unity" Version="5.11.10" />
+		<PackageReference Include="Fluent.Ribbon" Version="8.0.3" />
+		<PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+	</ItemGroup>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<Exec Command="copy &quot;$(SolutionDir)x64\$(ConfigurationName)\Animator.Engine.Native.dll&quot; &quot;$(TargetDir)Animator.Engine.Native.dll&quot;&#xD;&#xA;copy &quot;$(SolutionDir)x64\$(ConfigurationName)\Animator.Engine.Native.pdb&quot; &quot;$(TargetDir)Animator.Engine.Native.pdb&quot;" />
+	</Target>
 </Project>
