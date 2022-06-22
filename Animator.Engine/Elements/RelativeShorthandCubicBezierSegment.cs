@@ -27,7 +27,7 @@ namespace Animator.Engine.Elements
             PointF controlPoint2 = point.Delta(DeltaControlPoint2);
             PointF endPoint = point.Delta(DeltaEndPoint);
             
-            return new[] { point.Current, controlPoint1, controlPoint2, endPoint };
+            return new[] { start, controlPoint1, controlPoint2, endPoint };
         }
 
         // Internal methods ---------------------------------------------------
