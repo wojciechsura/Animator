@@ -16,7 +16,7 @@ namespace Animator.Engine.Elements
 
         protected override PointF[] BuildBezier(PointF start, PointF lastControlPoint)
         {
-            RunningPoint point = new RunningPoint(start);
+            RelativePoint point = new RelativePoint(start);
 
             PointF controlPoint1 = point.Delta(DeltaControlPoint1);
             PointF controlPoint2 = point.Delta(DeltaControlPoint2);

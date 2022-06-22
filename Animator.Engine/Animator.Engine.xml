@@ -1117,7 +1117,7 @@
             Base class for all path elements.
             </summary>
         </member>
-        <member name="T:Animator.Engine.Elements.Segment.RunningPoint">
+        <member name="T:Animator.Engine.Elements.Segment.RelativePoint">
             <summary>
             Utility class to simplify handling relative positions
             </summary>

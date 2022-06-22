@@ -22,7 +22,7 @@ namespace Animator.Engine.Elements
             var delta = start.Subtract(lastControlPoint);
             var controlPoint1 = start.Add(delta);
 
-            RunningPoint point = new RunningPoint(controlPoint1);
+            RelativePoint point = new RelativePoint(controlPoint1);
 
             PointF controlPoint2 = point.Delta(DeltaControlPoint2);
             PointF endPoint = point.Delta(DeltaEndPoint);

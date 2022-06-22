@@ -21,22 +21,19 @@ namespace Animator.Engine.Elements
         /// <summary>
         /// Utility class to simplify handling relative positions
         /// </summary>
-        protected class RunningPoint
+        protected class RelativePoint
         {
             private PointF point;
 
-            public RunningPoint(PointF start)
+            public RelativePoint(PointF start)
             {
                 point = start;
             }
 
             public PointF Delta(PointF delta)
             {
-                point = new PointF(point.X + delta.X, point.Y + delta.Y);
-                return point;
+                return new PointF(point.X + delta.X, point.Y + delta.Y);                
             }
-
-            public PointF Current => point;
         }
 
         // Protected methods --------------------------------------------------

@@ -16,8 +16,8 @@ namespace Animator.Engine.Elements
 
         protected override PointF[][] BuildBeziers(PointF start)
         {
-            RunningPoint point = new RunningPoint(start);
-            return InternalBuildBeziers(point.Current, RX, RY, Angle, LargeArcFlag, SweepFlag, point.Delta(DeltaEndPoint));
+            RelativePoint point = new RelativePoint(start);
+            return InternalBuildBeziers(start, RX, RY, Angle, LargeArcFlag, SweepFlag, point.Delta(DeltaEndPoint));
         }
 
         // Internal methods ---------------------------------------------------
