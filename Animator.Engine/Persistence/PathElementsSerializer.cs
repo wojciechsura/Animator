@@ -16,7 +16,7 @@ namespace Animator.Engine.Elements.Persistence
     {
         // Private constants --------------------------------------------------
 
-        private readonly char[] whitespace = new char[] { ' ', '\t', '\r', '\n' };        
+        private readonly char[] whitespace = new char[] { ' ', ',', '\t', '\r', '\n' };        
 
         // Private methods ----------------------------------------------------
 
@@ -63,6 +63,12 @@ namespace Animator.Engine.Elements.Persistence
                 throw new ParseException($"Parse error: integer expected on position {index}");
 
             return int.Parse(str.Substring(start, index - start), CultureInfo.InvariantCulture);
+        }
+
+        private bool IsLetter(string str, ref int index)
+        {
+            OmitWhitespace(str, ref index);
+            return (index < str.Length && (str[index] >= 'a' && str[index] <= 'z') || (str[index] >= 'A' && str[index] <= 'Z'));
         }
 
         private char ExpectLetter(string str, ref int index)
@@ -253,11 +259,24 @@ namespace Animator.Engine.Elements.Persistence
         {
             List<Segment> result = new List<Segment>();
 
+            char lastC = 'M';
+
             int index = 0;
             while (index < data.Length)
             {
                 OmitWhitespace(data, ref index);
-                char c = ExpectLetter(data, ref index);
+
+                char c;
+
+                if (!IsLetter(data, ref index))
+                    c = lastC switch
+                    {
+                        'M' => 'L',
+                        'm' => 'l',
+                        _ => lastC
+                    };
+                else
+                    c = ExpectLetter(data, ref index);
 
                 switch (c)
                 {

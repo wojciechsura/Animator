@@ -615,6 +615,58 @@ namespace Animator.Engine.Base
             ProcessChildren<T>(child => child.ProcessElementsRecursive(action));
         }
 
+        public ManagedObject Clone()
+        {
+            var type = GetType();
+            var clone = (ManagedObject) Activator.CreateInstance(type);
+
+            foreach (var property in GetProperties(true))
+            {
+                if (IsPropertySet(property))
+                {
+                    if (property is ManagedSimpleProperty)
+                    {
+                        clone.SetValue(property, GetValue(property));
+                    }
+                    else if (property is ManagedReferenceProperty)
+                    {
+                        object value = GetValue(property);
+
+                        if (value is ManagedObject managedObject)
+                        {
+                            clone.SetValue(property, managedObject.Clone());
+                        }
+                        else if (value is ICloneable cloneable)
+                        {
+                            clone.SetValue(property, cloneable.Clone());
+                        }
+                        else if (value == null)
+                        {
+                            clone.SetValue(property, null);
+                        }
+                        else
+                            throw new InvalidOperationException("Cannot clone: managed reference property is of non-cloneable type!");
+                    }
+                    else if (property is ManagedCollectionProperty)
+                    {
+                        IList otherList = (IList)clone.GetValue(property);
+                        otherList.Clear();
+
+                        IList thisList = (IList)GetValue(property);
+
+                        foreach (var item in thisList.Cast<ManagedObject>())
+                        {
+                            otherList.Add(item.Clone());
+                        }
+                    }
+                    else
+                        throw new InvalidOperationException("Unsupported property type!");
+                }
+            }
+
+            return clone;
+        }
+
         // Public properties --------------------------------------------------
 
         public ManagedObject Parent

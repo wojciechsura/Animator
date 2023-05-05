@@ -371,6 +371,9 @@
             fill, use SolidBrush.
             </summary>
         </member>
+        <member name="P:Animator.Engine.Elements.BrushResource.Value">
+            <summary>Value of this resource</summary>
+        </member>
         <member name="T:Animator.Engine.Elements.Circle">
             <summary>
             Draws a circle on a scene.
@@ -825,6 +828,9 @@
             <summary>
             Width of the line.
             </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.PenResource.Value">
+            <summary>Value of this resource</summary>
         </member>
         <member name="T:Animator.Engine.Elements.PointKeyframe">
             <summary>

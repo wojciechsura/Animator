@@ -84,12 +84,12 @@
 		<Resource Include="Resources\Images\Up32.png" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="AvalonEdit" Version="6.1.2.30" />
+		<PackageReference Include="AvalonEdit" Version="6.3.0.90" />
 		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-		<PackageReference Include="ProCalc.NET" Version="1.0.6" />
+		<PackageReference Include="ProCalc.NET" Version="1.1.0" />
 		<PackageReference Include="Unity" Version="5.11.10" />
-		<PackageReference Include="Fluent.Ribbon" Version="8.0.3" />
-		<PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+		<PackageReference Include="Fluent.Ribbon" Version="9.0.4" />
+		<PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.1" />
 	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<Exec Command="copy &quot;$(SolutionDir)x64\$(ConfigurationName)\Animator.Engine.Native.dll&quot; &quot;$(TargetDir)Animator.Engine.Native.dll&quot;&#xD;&#xA;copy &quot;$(SolutionDir)x64\$(ConfigurationName)\Animator.Engine.Native.pdb&quot; &quot;$(TargetDir)Animator.Engine.Native.pdb&quot;" />

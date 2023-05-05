@@ -34,6 +34,9 @@ namespace Animator.Engine.Elements
 
         private void RegisterName(string name, SceneElement baseElement)
         {
+            if (name == null)
+                return;
+
             if (!names.TryGetValue(name, out List<SceneElement> list))
             {
                 list = new List<SceneElement>();
@@ -45,6 +48,9 @@ namespace Animator.Engine.Elements
 
         private void UnregisterName(string name, SceneElement baseElement)
         {
+            if (name == null)
+                return;
+
             if (names.TryGetValue(name, out List<SceneElement> list))
             {
                 list.Remove(baseElement);

@@ -32,6 +32,8 @@ namespace Animator.Engine.Animation.Maths
                 return 0.0f;
             else if (currentMs > endMs)
                 return 1.0f;
+            else if (Math.Abs(endMs - startMs) < float.Epsilon)
+                return 0.0f;
             else
                 return (currentMs - startMs) / (endMs - startMs);
         }

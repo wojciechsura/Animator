@@ -123,11 +123,11 @@
     <EmbeddedResource Include="Resources\NewDocumentTemplate.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AvalonEdit" Version="6.1.1" />
-    <PackageReference Include="GuiLabs.Language.Xml" Version="1.2.46" />
+    <PackageReference Include="AvalonEdit" Version="6.3.0.90" />
+    <PackageReference Include="GuiLabs.Language.Xml" Version="1.2.60" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Unity" Version="5.11.10" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.1" />
   </ItemGroup>
 </Project>

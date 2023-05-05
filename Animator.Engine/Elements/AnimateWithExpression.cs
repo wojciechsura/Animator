@@ -179,7 +179,7 @@ namespace Animator.Engine.Elements
             else if (propType == typeof(string))
             {
                 if (result is StringNumeric stringNumeric)
-                    return (string)stringNumeric.AsString();
+                    return (string)stringNumeric.AsString;
             }
             else if (propType == typeof(bool))
             {
@@ -189,14 +189,14 @@ namespace Animator.Engine.Elements
             else if (propType == typeof(PointF))
             {
                 if (result is MatrixNumeric matrixNumeric &&
-                    matrixNumeric.GetWidth() == 2 &&
-                    matrixNumeric.GetHeight() == 1 &&
+                    matrixNumeric.Width == 2 &&
+                    matrixNumeric.Height == 1 &&
                     matrixNumeric.GetElementAt(0, 0) is FloatValueNumeric xNumeric &&
                     matrixNumeric.GetElementAt(1, 0) is FloatValueNumeric yNumeric)
                     return new PointF((float)xNumeric.GetRealValue(), (float)yNumeric.GetRealValue());
             }
 
-            throw new InvalidOperationException($"Expression result {result.AsString()} cannot be converted into property type {propType.Name}");
+            throw new InvalidOperationException($"Expression result {result.AsString} cannot be converted into property type {propType.Name}");
         }
 
         // Protected methods --------------------------------------------------

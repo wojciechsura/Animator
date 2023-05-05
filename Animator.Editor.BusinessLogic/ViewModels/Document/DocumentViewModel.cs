@@ -465,8 +465,20 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             var movieAssembly = movieType.Assembly;
             var elementsNamespace = movieType.Namespace;
 
+            if (name == "x:Macros")
+            {
+                var result = new List<CompletionInfo>();
 
-            if (Regex.IsMatch(name, @"[^\.]+\.[^\.]+"))
+                foreach (var type in movieAssembly.GetTypes()
+                    .Where(t => t.IsPublic && !t.IsAbstract && t.Namespace == elementsNamespace))
+                {
+                    var contentPropertyAttributes = type.GetCustomAttributes(typeof(ContentPropertyAttribute), false);
+                    result.Add(TagToCompletionInfo(type.Name, !contentPropertyAttributes.Any()));
+                }
+
+                return result;
+            }
+            else if (Regex.IsMatch(name, @"[^\.]+\.[^\.]+"))
             {
                 string[] splitted = name.Split('.');
                 string typeName = splitted[0];
@@ -481,22 +493,26 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
             else
             {
                 var type = movieAssembly.GetType($"{elementsNamespace}.{name}");
-
-                List<CompletionInfo> result = new();
-                foreach (var property in ManagedProperty.FindAllByType(type, true))
-                    result.Add(TagToCompletionInfo($"{type.Name}.{property.Name}", false));
-
-                var contentPropertyAttribute = (ContentPropertyAttribute[])type.GetCustomAttributes(typeof(ContentPropertyAttribute), false);
-                if (contentPropertyAttribute.Length == 1)
+                if (type != null)
                 {
-                    var defaultPropertyName = contentPropertyAttribute[0].PropertyName;
-                    var collectionSuggestions = CollectPropertySuggestions(type, defaultPropertyName);
-                    if (collectionSuggestions != null)
-                        result.AddRange(collectionSuggestions);
-                }
+                    List<CompletionInfo> result = new();
+                    foreach (var property in ManagedProperty.FindAllByType(type, true))
+                        result.Add(TagToCompletionInfo($"{type.Name}.{property.Name}", false));
 
-                return result;
+                    var contentPropertyAttribute = (ContentPropertyAttribute[])type.GetCustomAttributes(typeof(ContentPropertyAttribute), false);
+                    if (contentPropertyAttribute.Length == 1)
+                    {
+                        var defaultPropertyName = contentPropertyAttribute[0].PropertyName;
+                        var collectionSuggestions = CollectPropertySuggestions(type, defaultPropertyName);
+                        if (collectionSuggestions != null)
+                            result.AddRange(collectionSuggestions);
+                    }
+
+                    return result;
+                }
             }
+
+            return null;
         }
 
         private List<CompletionInfo> CollectPropertySuggestionsFor(string name)
