@@ -1,18 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net5.0-windows7.0</TargetFramework>
+		<TargetFramework>net6.0-windows7.0</TargetFramework>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<UseWindowsForms>true</UseWindowsForms>
 		<UseWPF>true</UseWPF>
 		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
 		<StartupObject>Animator.Editor.App</StartupObject>
 		<Platforms>x64</Platforms>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="global.json" />
+		<None Remove="Resources\Images\icon.ico" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Content Include="icon.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\Images\icon.ico" />
 		<Resource Include="Resources\Images\New32.png" />
 	</ItemGroup>
 	<ItemGroup>
