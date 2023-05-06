@@ -17,6 +17,8 @@ namespace Animator.Engine.Elements
     {
         // Private fields -----------------------------------------------------
 
+        private static readonly object bitmapLockObject = new();
+
         private Bitmap cachedImage;
         private string cachedImagePath;
 
@@ -31,8 +33,13 @@ namespace Animator.Engine.Elements
 
             if (cachedImagePath != Source)
             {
-                cachedImage = new Bitmap(Source);
-                cachedImagePath = Source;
+                lock (bitmapLockObject)
+                {
+                    var bytes = File.ReadAllBytes(Source);
+                    var ms = new MemoryStream(bytes);
+                    cachedImage = (Bitmap)System.Drawing.Image.FromStream(ms);
+                    cachedImagePath = Source;
+                }
             }
         }
 

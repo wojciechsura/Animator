@@ -7,10 +7,12 @@ using Animator.Engine.Exceptions;
 using Animator.Options;
 using CommandLine;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace Animator
@@ -26,6 +28,16 @@ namespace Animator
             Movie animation = animationSerializer.Deserialize(document);
 
             return animation;
+        }
+
+        private static Movie[] LoadAnimations(string path, int copies)
+        {
+            var result = new Movie[copies];
+
+            for (int i = 0; i < copies; i++)
+                result[i] = LoadAnimation(path);
+
+            return result;
         }
 
         private static void DisplayError(Exception e)
@@ -155,11 +167,64 @@ namespace Animator
             }
         }
 
+        private static void RenderParallel(RenderParallelOptions options)
+        {
+            Movie[] animations = null;
+
+            if (!IsSuccessful(() => { animations = LoadAnimations(options.Source, options.Threads); }))
+                return;
+
+            var framesPerSecond = animations[0].Config.FramesPerSecond;
+            var totalAnimationTime = animations[0].Scenes.Sum(s => s.Duration.TotalMilliseconds);
+            var totalFrames = (int)(totalAnimationTime / 1000.0f * framesPerSecond);
+
+            object availableMoviesLock = new();
+            Stack<Movie> availableMovies = new();
+            foreach (var movie in animations)
+                availableMovies.Push(movie);
+
+            ParallelOptions parallelOptions = new ParallelOptions
+            {
+                MaxDegreeOfParallelism = options.Threads
+            };
+
+            Parallel.For(0, totalFrames, parallelOptions, (frame, state) =>
+                {
+                    Movie animation;
+
+                    lock (availableMoviesLock)
+                    {
+                        animation = availableMovies.Pop();
+                    }
+
+                    var time = TimeSpan.FromSeconds(1 / framesPerSecond * frame);
+
+                    string fileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(options.OutFile),
+                        $"{System.IO.Path.GetFileNameWithoutExtension(options.OutFile)}{frame}{System.IO.Path.GetExtension(options.OutFile)}");
+
+                    if (!IsSuccessful(() => RenderAnimationAt(animation, time, fileName), $"Rendered frame {frame + 1} from {totalFrames}"))
+                    {
+                        Console.WriteLine("Failed to render animation!");
+                        state.Break();
+                        return;
+                    }
+
+                    lock (availableMoviesLock) 
+                    { 
+                        availableMovies.Push(animation);
+                    }
+                });
+        }
+
         static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<RenderOptions, RenderFrameOptions>(args)
-                .WithParsed<RenderOptions>(Render)
-                .WithParsed<RenderFrameOptions>(RenderFrame);            
+            using (new DisposableStopwatch("Finished"))
+            {
+                Parser.Default.ParseArguments<RenderOptions, RenderFrameOptions, RenderParallelOptions>(args)
+                    .WithParsed<RenderOptions>(Render)
+                    .WithParsed<RenderParallelOptions>(RenderParallel)
+                    .WithParsed<RenderFrameOptions>(RenderFrame);
+            }
         }
     }
 }

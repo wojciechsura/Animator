@@ -336,3 +336,34 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 			}
 		}
 }
+
+extern "C" void __cdecl Scanlines(unsigned char* bitmapData,
+	int stride,
+	int width,
+	int height,
+	int lineHeight,
+	int darkenLevel) {
+
+	for (int y = 0; y < height; y++) {
+
+		if ((y / lineHeight) % 2 == 0) {
+
+			for (int x = 0; x < width; x++)
+			{
+				unsigned char a = bitmapData[y * stride + x * BYTES_PER_PIXEL + ALPHA_OFFSET];
+				unsigned char r = bitmapData[y * stride + x * BYTES_PER_PIXEL + R_OFFSET];
+				unsigned char g = bitmapData[y * stride + x * BYTES_PER_PIXEL + G_OFFSET];
+				unsigned char b = bitmapData[y * stride + x * BYTES_PER_PIXEL + B_OFFSET];
+
+				r = r >= darkenLevel ? r - (unsigned char)darkenLevel : 0;
+				g = g >= darkenLevel ? g - (unsigned char)darkenLevel : 0;
+				b = b >= darkenLevel ? b - (unsigned char)darkenLevel : 0;
+
+				bitmapData[y * stride + x * BYTES_PER_PIXEL + ALPHA_OFFSET] = a;
+				bitmapData[y * stride + x * BYTES_PER_PIXEL + R_OFFSET] = r;
+				bitmapData[y * stride + x * BYTES_PER_PIXEL + G_OFFSET] = g;
+				bitmapData[y * stride + x * BYTES_PER_PIXEL + B_OFFSET] = b;
+			}
+		}
+	}
+}

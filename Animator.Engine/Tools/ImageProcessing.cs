@@ -86,5 +86,13 @@ namespace Animator.Engine.Tools
             int dx,
             int dy,
             int radius);
+
+        [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void Scanlines(IntPtr bitmapData,
+            int stride,
+            int width,
+            int height,
+            int lineHeight,
+            int darkenLevel);
     }
 }

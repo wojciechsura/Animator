@@ -1076,6 +1076,14 @@
             Defines scale in Y axis
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.ScanlinesEffect">
+            <summary>Add a scanline effect to an image</summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.ScanlinesEffect.LineHeight">
+            <summary>
+            Height of a single scanline
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.Scene">
             <summary>
             Contains description of a single scene in animation.

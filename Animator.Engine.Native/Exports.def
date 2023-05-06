@@ -8,3 +8,4 @@ EXPORTS
 	Blur=Blur
 	GaussianBlur=GaussianBlur
 	DropShadow=DropShadow
+	Scanlines=Scanlines
