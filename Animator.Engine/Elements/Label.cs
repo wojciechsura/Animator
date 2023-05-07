@@ -46,7 +46,26 @@ namespace Animator.Engine.Elements
             };
 
             using var font = new Font(fontFamily, FontSize, fontStyle, unit);
-            buffer.Graphics.DrawString(Text, font, brush, new PointF(0.0f, 0.0f));
+
+            SizeF size = buffer.Graphics.MeasureString(Text, font);
+
+            float x = HorizontalAlignment switch
+            {
+                HorizontalAlignment.Left => 0.0f,
+                HorizontalAlignment.Center => -size.Width / 2.0f,
+                HorizontalAlignment.Right => -size.Width,
+                _ => throw new InvalidOperationException("Unsupported horizontal alignment!")
+            };
+
+            float y = VerticalAlignment switch
+            {
+                VerticalAlignment.Top => 0.0f,
+                VerticalAlignment.Center => -size.Height / 2.0f,
+                VerticalAlignment.Bottom => -size.Height,
+                _ => throw new InvalidOperationException("Unsupported vertical alignment")
+            };
+
+            buffer.Graphics.DrawString(Text, font, brush, new PointF(x, y));
         }
 
         // Public properties --------------------------------------------------
@@ -200,6 +219,36 @@ namespace Animator.Engine.Elements
             nameof(SizeUnit),
             typeof(FontSizeUnit),
             new ManagedSimplePropertyMetadata { DefaultValue = FontSizeUnit.Points });
+
+        #endregion
+
+        #region HorizontalAlignment
+
+        public HorizontalAlignment HorizontalAlignment
+        {
+            get => (HorizontalAlignment)GetValue(HorizontalAlignmentProperty);
+            set => SetValue(HorizontalAlignmentProperty, value);
+        }
+
+        public static readonly ManagedProperty HorizontalAlignmentProperty = ManagedProperty.Register(typeof(Label),
+            nameof(HorizontalAlignment),
+            typeof(HorizontalAlignment),
+            new ManagedSimplePropertyMetadata { DefaultValue = HorizontalAlignment.Left });
+
+        #endregion
+
+        #region VerticalAlignment
+
+        public VerticalAlignment VerticalAlignment
+        {
+            get => (VerticalAlignment)GetValue(VerticalAlignmentProperty);
+            set => SetValue(VerticalAlignmentProperty, value);
+        }
+
+        public static readonly ManagedProperty VerticalAlignmentProperty = ManagedProperty.Register(typeof(Label),
+            nameof(VerticalAlignment),
+            typeof(VerticalAlignment),
+            new ManagedSimplePropertyMetadata { DefaultValue = VerticalAlignment.Top });
 
         #endregion
     }
