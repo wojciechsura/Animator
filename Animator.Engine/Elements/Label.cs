@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,9 +27,8 @@ namespace Animator.Engine.Elements
 
             using System.Drawing.Brush brush = Brush.BuildBrush();
 
-            System.Drawing.FontFamily fontFamily = System.Drawing.FontFamily.Families.FirstOrDefault(ff => ff.Name == FontFamily);
-            if (fontFamily == null)
-                throw new AnimationException($"Cannot find font family {FontFamily}.", GetPath());
+            FontFamily fontFamily = System.Drawing.FontFamily.Families.FirstOrDefault(ff => ff.Name == FontFamily)
+                ?? throw new AnimationException($"Cannot find font family {FontFamily}.", GetPath());
 
             FontStyle fontStyle = 0;
             if (Bold)
@@ -38,14 +38,7 @@ namespace Animator.Engine.Elements
             if (Underline)
                 fontStyle |= FontStyle.Underline;
             
-            var unit = SizeUnit switch
-            {
-                FontSizeUnit.Pixels => GraphicsUnit.Pixel,
-                FontSizeUnit.Points => GraphicsUnit.Point,
-                _ => throw new InvalidEnumArgumentException("Unsupported font size unit!"),
-            };
-
-            using var font = new Font(fontFamily, FontSize, fontStyle, unit);
+            using var font = new Font(fontFamily, FontSize, fontStyle, GraphicsUnit.Pixel);
 
             SizeF size = buffer.Graphics.MeasureString(Text, font);
 
@@ -65,7 +58,12 @@ namespace Animator.Engine.Elements
                 _ => throw new InvalidOperationException("Unsupported vertical alignment")
             };
 
-            buffer.Graphics.DrawString(Text, font, brush, new PointF(x, y));
+            var path = new GraphicsPath();
+            path.AddString(Text, fontFamily, (int)fontStyle, FontSize, new PointF(x, y), null);
+            path.FillMode = FillMode.Winding;
+            buffer.Graphics.FillPath(brush, path);
+
+            // buffer.Graphics.DrawString(Text, font, brush, new PointF(x, y));
         }
 
         // Public properties --------------------------------------------------
@@ -196,29 +194,6 @@ namespace Animator.Engine.Elements
             nameof(Underline),
             typeof(bool),
             new ManagedSimplePropertyMetadata { DefaultValue = false });
-
-        #endregion
-
-        #region SizeUnit managed property
-
-        /// <summary>
-        /// Defines unit in which size of font is expressed.
-        /// Possible values:
-        /// <ul>
-        ///   <li>Points</li>
-        ///   <li>Pixels</li>
-        /// </ul>
-        /// </summary>
-        public FontSizeUnit SizeUnit
-        {
-            get => (FontSizeUnit)GetValue(SizeUnitProperty);
-            set => SetValue(SizeUnitProperty, value);
-        }
-
-        public static readonly ManagedProperty SizeUnitProperty = ManagedProperty.Register(typeof(Label),
-            nameof(SizeUnit),
-            typeof(FontSizeUnit),
-            new ManagedSimplePropertyMetadata { DefaultValue = FontSizeUnit.Points });
 
         #endregion
 

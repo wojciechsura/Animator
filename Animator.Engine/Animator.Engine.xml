@@ -570,16 +570,6 @@
             Set this property to true to make text underlined.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.Label.SizeUnit">
-            <summary>
-            Defines unit in which size of font is expressed.
-            Possible values:
-            <ul>
-              <li>Points</li>
-              <li>Pixels</li>
-            </ul>
-            </summary>
-        </member>
         <member name="T:Animator.Engine.Elements.Layer">
             <summary>
             Allows grouping visuals. You can use it to apply
