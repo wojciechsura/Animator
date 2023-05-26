@@ -84,7 +84,7 @@ namespace Animator.Editor
 
         private void HandleLoaded(object sender, RoutedEventArgs e)
         {
-            Uri iconUri = new Uri("pack://application:,,,/Resources/Images/icon.ico", UriKind.RelativeOrAbsolute);
+            Uri iconUri = new Uri("pack://application:,,,/Resources/Images/animator.ico", UriKind.RelativeOrAbsolute);
             this.Icon = BitmapFrame.Create(iconUri, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
         }
 

@@ -8,17 +8,18 @@
 		<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
 		<StartupObject>Animator.Editor.App</StartupObject>
 		<Platforms>x64</Platforms>
-		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<ApplicationIcon>animator.ico</ApplicationIcon>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Remove="global.json" />
+		<None Remove="Resources\Images\animator.ico" />
 		<None Remove="Resources\Images\icon.ico" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Content Include="icon.ico" />
+	  <Content Include="animator.ico" />
 	</ItemGroup>
 	<ItemGroup>
-		<Resource Include="Resources\Images\icon.ico" />
+		<Resource Include="Resources\Images\animator.ico" />
 		<Resource Include="Resources\Images\New32.png" />
 	</ItemGroup>
 	<ItemGroup>
