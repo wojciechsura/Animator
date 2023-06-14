@@ -589,5 +589,137 @@ namespace Animator.Engine.Base.Tests
             Assert.AreEqual(1, data.Items.Count);
             Assert.AreEqual(44, data.Items[0].IntValue);
         }
+
+        [TestMethod]
+        public void ExtendedMarkupExtensionParametersTest1()
+        {
+            // Arrange
+
+            string xml = $"<StringDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" StringValue=\"{{StringMarkupExtension 'Test'}}\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            StringDataClass data = (StringDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual("Test", data.StringValue);
+        }
+
+        [TestMethod]
+        public void ExtendedMarkupExtensionParametersTest2()
+        {
+            // Arrange
+
+            string xml = $"<StringDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" StringValue=\"{{StringMarkupExtension 'Test', Optional=Test2}}\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            StringDataClass data = (StringDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual("TestTest2", data.StringValue);
+        }
+
+        [TestMethod]
+        public void ExtendedMarkupExtensionParametersTest3()
+        {
+            // Arrange
+
+            string xml = $"<StringDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" StringValue=\"{{StringMarkupExtension 'Test', Optional='Test2'}}\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            StringDataClass data = (StringDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual("TestTest2", data.StringValue);
+        }
+
+        [TestMethod]
+        public void ExtendedMarkupExtensionParametersTest4()
+        {
+            // Arrange
+
+            string xml = $"<StringDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" StringValue=\"{{StringMarkupExtension 'Test\\'', Optional='Test2\\''}}\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            StringDataClass data = (StringDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual("Test'Test2'", data.StringValue);
+        }
+
+        [TestMethod]
+        public void ExtendedMarkupExtensionParametersTest5()
+        {
+            // Arrange
+
+            string xml = $"<StringDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" StringValue=\"{{StringMarkupExtension 'Test,', Optional='Test2='}}\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            StringDataClass data = (StringDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual("Test,Test2=", data.StringValue);
+        }
+
+        [TestMethod]
+        public void ExtendedMarkupExtensionParametersTest6()
+        {
+            // Arrange
+
+            string xml = $"<StringDataClass xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimplePropertyClass).Namespace}\" StringValue=\"{{StringMarkupExtension 'Test=', Optional='Test2,'}}\" />";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            StringDataClass data = (StringDataClass)serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(data);
+            Assert.AreEqual("Test=Test2,", data.StringValue);
+        }
     }
 }

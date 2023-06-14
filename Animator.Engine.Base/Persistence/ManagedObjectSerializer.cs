@@ -1,5 +1,6 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Base.Exceptions;
+using Animator.Engine.Base.Extensions;
 using Animator.Engine.Base.Persistence.Types;
 using Animator.Engine.Base.Utils;
 using System;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -36,7 +38,7 @@ namespace Animator.Engine.Base.Persistence
         private const string MARKUP_EXTENSION_ESCAPED_BEGIN = "{{";
         private const string MARKUP_EXTENSION_END = "}";
 
-        private static readonly Regex markupExtensionRegex = new Regex($@"\{{\s*(?<Name>[^\s,=\}}]+)\s*(?<Params>[^\s]|[^\s].*[^\s])?\s*\}}");
+        private static readonly Regex markupExtensionRegex = new Regex(@"\{\s*(?<Name>[^\s,=\}]+)\s*(?<Params>[^\s]|[^\s].*[^\s])?\s*\}");
 
         // Private types ------------------------------------------------------
 
@@ -89,19 +91,30 @@ namespace Animator.Engine.Base.Persistence
             var paramStringGroup = match.Groups.OfType<Group>().Where(g => g.Name == "Params" && g.Success).SingleOrDefault();
             if (paramStringGroup != null)
             {
-                var paramStrings = paramStringGroup.Value.Split(',').Select(x => x.Trim()).ToArray();
+                string[] paramStrings;
+                try
+                {
+                    paramStrings = paramStringGroup.Value
+                        .SplitUnquoted(',')
+                        .Select(x => x.Trim())
+                        .ToArray();
+                }
+                catch (Exception e)
+                {
+                    throw new SerializerException("Invalid markup extension structure!", node.FindXPath(), e);
+                }
 
                 for (int i = 0; i < paramStrings.Length; i++)
                 {
-                    if (i == 0 && !paramStrings[i].Contains('='))
-                        defaultParam = paramStrings[i];
+                    if (i == 0 && !paramStrings[i].ContainsUnquoted('='))
+                        defaultParam = paramStrings[i].ExpandQuotes();
                     else
                     {
-                        var values = paramStrings[i].Split('=');
+                        var values = paramStrings[i].SplitUnquoted('=');
                         if (values.Length != 2)
                             throw new SerializerException($"Invalid markup extension structure: invalid parameter definition: {paramStrings[i]}!", node.FindXPath());
 
-                        @params.Add((values[0], values[1]));
+                        @params.Add((values[0], values[1].ExpandQuotes()));
                     }
                 }
             }
