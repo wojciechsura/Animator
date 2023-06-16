@@ -2,6 +2,7 @@
 using Animator.Engine.Base.Persistence;
 using ProCalc.NET;
 using ProCalc.NET.Numerics;
+using ProCalc.NET.Resolvers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -15,7 +16,50 @@ namespace Animator.Engine.Elements
     [DefaultProperty(nameof(Formula))]
     public class Eval : BaseMarkupExtension
     {
-        private static readonly ProCalcCore proCalc = new ProCalcCore();
+        private class IdentifierResolver : BaseExternalIdentifierResolver
+        {
+            public override BaseResolvedIdentifier ResolveIdentifier(string identifierName)
+            {
+                return new ResolvedExternalVariable(identifierName);
+            }
+        }
+
+        private class VariableResolver : BaseExternalVariableResolver
+        {
+            private readonly SceneElement root;
+
+            public VariableResolver(SceneElement root)
+            {
+                this.root = root;
+            }
+
+            public override BaseNumeric ResolveVariable(string externalVariableName)
+            {
+                var current = root;
+
+                while (current != null) 
+                {
+                    var variable = current.Variables.FirstOrDefault(v => v.Name == externalVariableName);
+                    if (variable != null)
+                    {
+                        return variable switch
+                        {
+                            IntVariable intVariable => new IntNumeric(intVariable.Value),
+                            FloatVariable floatVariable => new FloatNumeric(floatVariable.Value),
+                            PointVariable pointVariable => new VectorNumeric(2, new[] {
+                                new FloatNumeric(pointVariable.Value.X),
+                                new FloatNumeric(pointVariable.Value.Y) }
+                            ),
+                            _ => throw new InvalidOperationException("Unsupported variable type!")
+                        };
+                    }
+
+                    current = current.Parent as SceneElement;
+                }
+
+                throw new InvalidOperationException($"Unknown variable: {externalVariableName}!");
+            }
+        }
 
         private string formula;
         private CompiledExpression cachedFormula;
@@ -56,14 +100,16 @@ namespace Animator.Engine.Elements
         {
             BaseNumeric result;
 
+            var proCalc = new ProCalcCore();
+
             try
             {
                 if (cachedFormula == null)
                 {
-                    cachedFormula = proCalc.Compile(formula);
+                    cachedFormula = proCalc.Compile(formula, new IdentifierResolver());
                 }
 
-                result = proCalc.Execute(cachedFormula);
+                result = proCalc.Execute(cachedFormula, externalVariableResolver: new VariableResolver(@object as SceneElement));
             }
             catch (Exception e)
             {

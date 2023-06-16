@@ -1294,6 +1294,9 @@
             Defines translation distance over X axis
             </summary>
         </member>
+        <member name="P:Animator.Engine.Elements.Variable.Name">
+            <summary>Name of this variable</summary>
+        </member>
         <member name="T:Animator.Engine.Elements.VerticalLineSegment">
             <summary>
             Represents a path part, which is drawn as a vertical line.

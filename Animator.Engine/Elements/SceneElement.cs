@@ -279,6 +279,19 @@ namespace Animator.Engine.Elements
 
         #endregion
 
+        #region Variables managed collection
+
+        public ManagedCollection<Variable> Variables
+        {
+            get => (ManagedCollection<Variable>)GetValue(VariablesProperty);
+        }
+
+        public static readonly ManagedProperty VariablesProperty = ManagedProperty.RegisterCollection(typeof(SceneElement),
+            nameof(Variables),
+            typeof(ManagedCollection<Variable>));
+
+        #endregion
+
         [DoNotDocument]
         public Scene Scene
         {
