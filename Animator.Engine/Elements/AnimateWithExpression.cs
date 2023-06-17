@@ -139,42 +139,42 @@ namespace Animator.Engine.Elements
             if (propType == typeof(char))
             {
                 if (result is IntNumeric intNumeric)
-                    return (char)intNumeric.GetValue();
+                    return (char)intNumeric.Value;
             }
             else if (propType == typeof(byte))
             {
                 if (result is IntNumeric intNumeric)
-                    return (byte)intNumeric.GetValue();
+                    return (byte)intNumeric.Value;
             }
             else if (propType == typeof(short))
             {
                 if (result is IntNumeric intNumeric)
-                    return (short)intNumeric.GetValue();
+                    return (short)intNumeric.Value;
             }
             else if (propType == typeof(ushort))
             {
                 if (result is IntNumeric intNumeric)
-                    return (ushort)intNumeric.GetValue();
+                    return (ushort)intNumeric.Value;
             }
             else if (propType == typeof(int))
             {
                 if (result is IntNumeric intNumeric)
-                    return (int)intNumeric.GetValue();
+                    return (int)intNumeric.Value;
             }
             else if (propType == typeof(uint))
             {
                 if (result is IntNumeric intNumeric)
-                    return (uint)intNumeric.GetValue();
+                    return (uint)intNumeric.Value;
             }
             else if (propType == typeof(float))
             {
                 if (result is FloatValueNumeric floatNumeric)
-                    return (float)floatNumeric.GetRealValue();
+                    return (float)floatNumeric.RealValue;
             }
             else if (propType == typeof(double))
             {
                 if (result is FloatValueNumeric floatNumeric)
-                    return (double)floatNumeric.GetRealValue();
+                    return (double)floatNumeric.RealValue;
             }
             else if (propType == typeof(string))
             {
@@ -184,16 +184,15 @@ namespace Animator.Engine.Elements
             else if (propType == typeof(bool))
             {
                 if (result is BoolNumeric boolNumeric)
-                    return (bool)boolNumeric.GetValue();
+                    return (bool)boolNumeric.Value;
             }
             else if (propType == typeof(PointF))
             {
-                if (result is MatrixNumeric matrixNumeric &&
-                    matrixNumeric.Width == 2 &&
-                    matrixNumeric.Height == 1 &&
-                    matrixNumeric.GetElementAt(0, 0) is FloatValueNumeric xNumeric &&
-                    matrixNumeric.GetElementAt(1, 0) is FloatValueNumeric yNumeric)
-                    return new PointF((float)xNumeric.GetRealValue(), (float)yNumeric.GetRealValue());
+                if (result is VectorNumeric vectorNumeric &&
+                    vectorNumeric.Count == 2 &&
+                    vectorNumeric[0] is FloatValueNumeric xNumeric &&
+                    vectorNumeric[1] is FloatValueNumeric yNumeric)
+                    return new PointF((float)xNumeric.RealValue, (float)yNumeric.RealValue);
             }
 
             throw new InvalidOperationException($"Expression result {result.AsString} cannot be converted into property type {propType.Name}");

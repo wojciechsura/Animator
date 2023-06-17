@@ -46,7 +46,7 @@ namespace Animator.Engine.Elements
                         {
                             IntVariable intVariable => new IntNumeric(intVariable.Value),
                             FloatVariable floatVariable => new FloatNumeric(floatVariable.Value),
-                            PointVariable pointVariable => new VectorNumeric(2, new[] {
+                            PointVariable pointVariable => new VectorNumeric(new[] {
                                 new FloatNumeric(pointVariable.Value.X),
                                 new FloatNumeric(pointVariable.Value.Y) }
                             ),
@@ -68,9 +68,9 @@ namespace Animator.Engine.Elements
         {
             return numeric switch
             {
-                IntNumeric intNumeric => intNumeric.GetValue(),
-                FloatNumeric floatNumeric => (long)floatNumeric.GetValue(),
-                IntFractionNumeric intFractionNumeric => (long)intFractionNumeric.GetRealValue(),
+                IntNumeric intNumeric => intNumeric.Value,
+                FloatNumeric floatNumeric => (long)floatNumeric.Value,
+                IntFractionNumeric intFractionNumeric => (long)intFractionNumeric.RealValue,
                 _ => throw new InvalidOperationException($"Cannot represent result of evaulation ({numeric.AsString}) as an int value!"),
             };
         }
@@ -79,9 +79,9 @@ namespace Animator.Engine.Elements
         {
             return numeric switch
             {
-                IntNumeric intNumeric => intNumeric.GetValue(),
-                FloatNumeric floatNumeric => floatNumeric.GetValue(),
-                IntFractionNumeric intFractionNumeric => intFractionNumeric.GetRealValue(),
+                IntNumeric intNumeric => intNumeric.Value,
+                FloatNumeric floatNumeric => floatNumeric.Value,
+                IntFractionNumeric intFractionNumeric => intFractionNumeric.RealValue,
                 _ => throw new InvalidOperationException($"Cannot represent result of evaulation ({numeric.AsString}) as a float value!"),
             };
         }
