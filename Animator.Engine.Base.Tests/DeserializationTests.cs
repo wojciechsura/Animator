@@ -721,5 +721,30 @@ namespace Animator.Engine.Base.Tests
             Assert.IsNotNull(data);
             Assert.AreEqual("Test=Test2,", data.StringValue);
         }
+
+        [TestMethod]
+        public void GeneratorTest()
+        {
+            // Arrange
+
+            string xml = $"<x:Generate xmlns:x=\"https://spooksoft.pl/animator\"><SimpleGenerator xmlns=\"assembly={Assembly.GetExecutingAssembly().FullName};namespace={typeof(SimpleGenerator).Namespace}\" /></x:Generate>";
+
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(xml);
+
+            var serializer = new ManagedObjectSerializer();
+
+            // Act
+
+            ManagedObject obj = serializer.Deserialize(document);
+
+            // Assert
+
+            Assert.IsNotNull(obj);
+            Assert.IsInstanceOfType(obj, typeof(SimplePropertyClass));
+
+            var propClass = (SimplePropertyClass)obj;
+            Assert.AreEqual(99, propClass.IntValue);
+        }
     }
 }

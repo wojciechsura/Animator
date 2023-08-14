@@ -28,6 +28,7 @@ namespace Animator.Engine.Base.Persistence
         private const string MACROS_ELEMENT = "Macros";
         private const string MACRO_ELEMENT = "Macro";
         private const string INCLUDE_ELEMENT = "Include";
+        private const string GENERATE_ELEMENT = "Generate";
 
         private const string KEY_ATTRIBUTE = "Key";
         
@@ -252,6 +253,10 @@ namespace Animator.Engine.Base.Persistence
                         // This one will be processed later, no action required
                     }
                     else if (child.LocalName == INCLUDE_ELEMENT)
+                    {
+                        // This one will be processed later, no action required
+                    }
+                    else if (child.LocalName == GENERATE_ELEMENT)
                     {
                         // This one will be processed later, no action required
                     }
@@ -687,6 +692,31 @@ namespace Animator.Engine.Base.Persistence
                     DeserializeAttributes(node, objectFromMacro, context, new HashSet<string>());
 
                     return objectFromMacro;
+                }
+                else if (node.LocalName == GENERATE_ELEMENT)
+                {
+                    if (node.ChildNodes.Count != 1)
+                        throw new SerializerException("Generate element must contain exactly one child!", node.FindXPath());
+
+                    var child = node.ChildNodes[0];
+
+                    BaseGenerator generator;
+
+                    try
+                    {
+                        generator = (BaseGenerator)Instantiate(child.NamespaceURI, child.LocalName, typeof(BaseGenerator), context);
+                    }
+                    catch (ActivatorException e)
+                    {
+                        throw new SerializerException($"Failed to instantiate generator {child.LocalName} from namespace {child.NamespaceURI}.", node.FindXPath(), e);
+                    }
+
+                    var obj = generator.Generate(child);
+
+                    if (obj == null)
+                        throw new SerializerException("Generator failed to provide any object!", node.FindXPath());
+
+                    return obj;
                 }
                 else
                 {

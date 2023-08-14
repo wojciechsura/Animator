@@ -259,6 +259,8 @@ namespace Animator.Editor.Controls
 
         private void HandleLoaded(object sender, RoutedEventArgs e)
         {
+            teEditor.Options.IndentationSize = 2;
+
             Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => teEditor.Focus()),
                 DispatcherPriority.Normal);
         }

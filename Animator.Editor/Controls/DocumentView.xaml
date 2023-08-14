@@ -38,11 +38,11 @@
         </Grid.ColumnDefinitions>
         
         <ae:TextEditor x:Name="teEditor"
-                   Grid.Column="0" 
-                   FontFamily="Consolas"                   
-                   Loaded="HandleLoaded" 
-                   WordWrap="{Binding ElementName=Root, Path=Handler.WordWrap}"
-                   ShowLineNumbers="{Binding ElementName=Root, Path=Handler.LineNumbers}" 
+                       Grid.Column="0" 
+                       FontFamily="Consolas"                   
+                       Loaded="HandleLoaded"                        
+                       WordWrap="{Binding ElementName=Root, Path=Handler.WordWrap}"
+                       ShowLineNumbers="{Binding ElementName=Root, Path=Handler.LineNumbers}" 
                        KeyDown="HandleEditorKeyDown"/>
 
         <Grid Grid.Column="2">
