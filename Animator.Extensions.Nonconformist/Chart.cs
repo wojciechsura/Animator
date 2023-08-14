@@ -20,7 +20,8 @@ namespace Animator.Extensions.Nonconformist
         // Private types ------------------------------------------------------
         private sealed record SeriesInfo(float MinValue, 
             float MaxValue, 
-            int SeriesCount, 
+            int BarSeriesCount, 
+            int SeriesCount,
             int PointCount);
 
         private sealed record LineDefinition(System.Drawing.PointF Start,
@@ -44,18 +45,19 @@ namespace Animator.Extensions.Nonconformist
             float XLineWidth,
             float ScaleMin,
             float ScaleMax,
-            int pointCount,
-            int seriesCount,
-            float barWidth)
+            int PointCount,
+            int SeriesCount,
+            int BarSeriesCount,
+            float BarWidth)
         {
             public float GetYForValue(float value) =>            
                 ((ScaleMax - value) / (ScaleMax - ScaleMin)) * ChartArea.Height + ChartArea.Top;
 
             public float GetXForPoint(int point) =>
-                ChartArea.Left + ((point + 0.5f) / pointCount) * ChartArea.Width;
+                ChartArea.Left + ((point + 0.5f) / PointCount) * ChartArea.Width;
 
-            public float GetLeftForBar(int point, int series) =>
-                ChartArea.Left + ((point + 0.5f) / pointCount) * ChartArea.Width - (barWidth / 2) + ((float)series / seriesCount) * (barWidth / seriesCount);
+            public float GetLeftForBar(int point, int barSeries) =>
+                ChartArea.Left + ((point + 0.5f) / PointCount) * ChartArea.Width - (BarWidth / 2) + ((float)barSeries / BarSeriesCount) * (BarWidth / BarSeriesCount);
         }
 
         // Private constants --------------------------------------------------
@@ -91,15 +93,17 @@ namespace Animator.Extensions.Nonconformist
 
                 int seriesCount = config.Data.Series.Count;
 
+                int barSeriesCount = config.Data.Series.Count(s => s.Type == SeriesType.Bar);
+
                 int pointCount = config.Data.Series
                     .Select(s => s.Points.Count)
                     .Max();
 
-                return new SeriesInfo(minValue, maxValue, seriesCount, pointCount);
+                return new SeriesInfo(minValue, maxValue, barSeriesCount, seriesCount, pointCount);
             }
             else
             {
-                return new SeriesInfo(0, 1, 0, 0);
+                return new SeriesInfo(0, 1, 0, 0, 0);
             }
         }
 
@@ -157,6 +161,7 @@ namespace Animator.Extensions.Nonconformist
                 scaleMax,
                 seriesInfo.PointCount,
                 seriesInfo.SeriesCount,
+                seriesInfo.BarSeriesCount,
                 barWidth);
         }
 
@@ -294,7 +299,7 @@ namespace Animator.Extensions.Nonconformist
         {
             var backgroundColor = (System.Drawing.Color)TypeSerialization.Deserialize(config.ChartBackgroundColor, typeof(System.Drawing.Color));
 
-            return new Rectangle
+            var result = new Rectangle
             {
                 Position = new System.Drawing.PointF(metrics.ChartArea.X, metrics.ChartArea.Y),
                 Width = metrics.ChartArea.Width,
@@ -302,50 +307,15 @@ namespace Animator.Extensions.Nonconformist
                 Brush = new SolidBrush
                 {
                     Color = backgroundColor
-                },
-                Animations =
-                {
-                    new Storyboard
-                    {
-                        Keyframes =
-                        {
-                            new For
-                            {
-                                PropertyRef = nameof(Rectangle.Alpha),
-                                Keyframes =
-                                {
-                                    new FloatKeyframe
-                                    {
-                                        Time = animationTimes.Start,
-                                        Value = 0.0f
-                                    },
-                                    new FloatKeyframe
-                                    {
-                                        Time = animationTimes.Start + animationTimes.FadeDuration,
-                                        Value = 1.0f,
-                                        EasingFunction = EasingFunctionIn
-                                    },
-                                    new FloatKeyframe
-                                    {
-                                        Time = animationTimes.End - animationTimes.FadeDuration,
-                                        Value = 1.0f,
-                                        EasingFunction = EasingFunction.Linear
-                                    },
-                                    new FloatKeyframe
-                                    {
-                                        Time = animationTimes.End,
-                                        Value = 0.0f,
-                                        EasingFunction = EasingFunctionOut
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                },                
             };
+
+            BuildGlobalAlphaAnimation(result.Animations, animationTimes);
+
+            return result;
         }
 
-        private void BuildBarPointAnimations(float x, 
+        private void BuildPointAnimations(float x, 
             Point point, 
             ManagedCollection<Engine.Elements.Animation> animations, 
             string pointPropertyName, 
@@ -420,13 +390,58 @@ namespace Animator.Extensions.Nonconformist
             animations.Add(storyboard);
         }
 
+        private void BuildGlobalAlphaAnimation(ManagedCollection<Engine.Elements.Animation> animations,
+            AnimationTimes animationTimes)
+        {
+            var storyboard = new Storyboard
+            {
+                Keyframes =
+                {
+                    new For
+                    {
+                        PropertyRef = nameof(Visual.Alpha),
+                        Keyframes =
+                        {
+                            new FloatKeyframe
+                            {
+                                Time = animationTimes.Start,
+                                Value = 0.0f
+                            },
+                            new FloatKeyframe
+                            {
+                                Time = animationTimes.Start + animationTimes.FadeDuration,
+                                Value = 1.0f,
+                                EasingFunction = EasingFunctionIn
+                            },
+                            new FloatKeyframe
+                            {
+                                Time = animationTimes.End - animationTimes.FadeDuration,
+                                Value = 1.0f,
+                                EasingFunction = EasingFunction.Linear
+                            },
+                            new FloatKeyframe
+                            {
+                                Time = animationTimes.End,
+                                Value = 0.0f,
+                                EasingFunction = EasingFunctionOut
+                            }
+                        }
+                    }
+                }
+            };
+
+            animations.Add(storyboard);
+        }
+
         private Visual BuildBar(int pointIndex, int seriesIndex, Config config, SeriesMetrics metrics, AnimationTimes animationTimes)
         {
             var series = config.Data.Series[seriesIndex];
             var point = series.Points[pointIndex];
 
-            float xFrom = metrics.GetLeftForBar(pointIndex, seriesIndex);
-            float width = metrics.barWidth / config.Data.Series.Count;
+            // BarSeriesIndex represents the index of these series among bar-only series.
+            var barSeriesIndex = config.Data.Series.Take(seriesIndex).Count(s => s.Type == SeriesType.Bar);
+            float xFrom = metrics.GetLeftForBar(pointIndex, barSeriesIndex);
+            float width = metrics.BarWidth / metrics.BarSeriesCount;
 
             float yZero = metrics.GetYForValue(0);
 
@@ -438,47 +453,9 @@ namespace Animator.Extensions.Nonconformist
                 Brush = new SolidBrush
                 {
                     Color = barColor
-                },
-                Animations =
-                {
-                    new Storyboard
-                    {
-                        Keyframes =
-                        {
-                            new For
-                            {
-                                PropertyRef = nameof(Animator.Engine.Elements.Path.Alpha),
-                                Keyframes =
-                                {
-                                    new FloatKeyframe
-                                    {
-                                        Time = animationTimes.Start,
-                                        Value = 0
-                                    },
-                                    new FloatKeyframe
-                                    {
-                                        Time = animationTimes.Start + animationTimes.FadeDuration,
-                                        Value = 1,
-                                        EasingFunction = EasingFunctionIn
-                                    },
-                                    new FloatKeyframe
-                                    {
-                                        Time = animationTimes.End - animationTimes.FadeDuration,
-                                        Value = 1,
-                                        EasingFunction = EasingFunction.Linear
-                                    },
-                                    new FloatKeyframe
-                                    {
-                                        Time = animationTimes.End,
-                                        Value = 0,
-                                        EasingFunction = EasingFunctionOut
-                                    },
-                                }
-                            }
-                        }
-                    }
-                }
+                }                
             };
+            BuildGlobalAlphaAnimation(bar.Animations, animationTimes);
 
             var s1 = new MoveSegment
             {
@@ -496,20 +473,70 @@ namespace Animator.Extensions.Nonconformist
             {
                 EndPoint = new System.Drawing.PointF(xFrom + width, yZero), // Will be animated anyway                
             };
-            BuildBarPointAnimations(xFrom + width, point, s3.Animations, nameof(LineSegment.EndPoint), config, metrics, animationTimes);
+            BuildPointAnimations(xFrom + width, point, s3.Animations, nameof(LineSegment.EndPoint), config, metrics, animationTimes);
             bar.Definition.Add(s3);
 
             var s4 = new LineSegment
             {
                 EndPoint = new System.Drawing.PointF(xFrom, yZero) // Will be animated anyway
             };
-            BuildBarPointAnimations(xFrom, point, s4.Animations, nameof(LineSegment.EndPoint), config, metrics, animationTimes);
+            BuildPointAnimations(xFrom, point, s4.Animations, nameof(LineSegment.EndPoint), config, metrics, animationTimes);
             bar.Definition.Add(s4);
 
             var s5 = new CloseShapeSegment();
             bar.Definition.Add(s5);
 
             return bar;
+        }
+
+        private Visual BuildLineChart(int seriesIndex, Config config, SeriesMetrics metrics, AnimationTimes animationTimes)
+        {
+            var series = config.Data.Series[seriesIndex];
+
+            var color = (System.Drawing.Color)TypeSerialization.Deserialize(series.Color, typeof(System.Drawing.Color));
+
+            var path = new Animator.Engine.Elements.Path
+            {
+                Pen = new Pen
+                {
+                    Width = series.LineWidth,
+                    Color = color
+                }
+            };
+            BuildGlobalAlphaAnimation(path.Animations, animationTimes);
+
+            if (series.Points.Count < 2)
+                return path;
+
+            // Initial moveto
+
+            var x = metrics.GetXForPoint(0);
+            var y = metrics.GetYForValue(0);
+            var m1 = new MoveSegment
+            {
+                EndPoint = new System.Drawing.PointF(x, y)
+            };
+            BuildPointAnimations(x, series.Points[0], m1.Animations, nameof(MoveSegment.EndPoint), config, metrics, animationTimes);
+            path.Definition.Add(m1);
+
+            // Subsequent lineto-s
+
+            for (int i = 1; i < series.Points.Count; i++)
+            {
+                var point = series.Points[i];
+
+                x = metrics.GetXForPoint(i);
+                y = metrics.GetYForValue(point.Value);
+
+                var l = new LineSegment
+                {
+                    EndPoint = new System.Drawing.PointF(x, y)
+                };
+                BuildPointAnimations(x, point, l.Animations, nameof(LineSegment.EndPoint), config, metrics, animationTimes);
+                path.Definition.Add(l);
+            }
+
+            return path;
         }
 
         // Public methods -----------------------------------------------------
@@ -590,6 +617,10 @@ namespace Animator.Extensions.Nonconformist
 
                         break;
                     case SeriesType.Line:
+
+                        var line = BuildLineChart(seriesIndex, config, metrics, animationTimes);
+                        result.Items.Add(line);
+
                         break;
                     default:
                         throw new InvalidOperationException("Unsupported series type!");

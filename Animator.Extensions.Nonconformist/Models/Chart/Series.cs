@@ -20,5 +20,8 @@ namespace Animator.Extensions.Nonconformist.Models.Chart
 
         [XmlAttribute]
         public string Color { get; set; } = "#60EBF2";
+
+        [XmlAttribute]
+        public float LineWidth { get; set; } = 2.0f;
     }
 }
