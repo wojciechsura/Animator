@@ -19,6 +19,9 @@ namespace Animator.Extensions.Nonconformist.Models.Chart
         [XmlAttribute]
         public float LineWidth { get; set; } = 1.0f;
 
+        [XmlAttribute]
+        public string ChartBackgroundColor { get; set; } = "#00000000";
+
         [XmlElement]
         public Axis Axis { get; set; } = new();
 

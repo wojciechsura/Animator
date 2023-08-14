@@ -3,6 +3,7 @@ using Animator.Engine.Base.Persistence.Types;
 using Animator.Engine.Elements;
 using Animator.Engine.Elements.Types;
 using Animator.Extensions.Nonconformist.Models.Chart;
+using Animator.Extensions.Nonconformist.Types;
 using Animator.Extensions.Utils.Extensions;
 using System;
 using System.Collections.Generic;
@@ -27,8 +28,8 @@ namespace Animator.Extensions.Nonconformist
             System.Drawing.Color Color,
             float Width);
 
-        private sealed record AnimationTimes(TimeSpan AnimationStart, 
-            TimeSpan AnimationEnd, 
+        private sealed record AnimationTimes(TimeSpan Start, 
+            TimeSpan End, 
             TimeSpan FadeDuration, 
             List<TimeSpan> SeriesSwitchTimes);
 
@@ -61,6 +62,7 @@ namespace Animator.Extensions.Nonconformist
 
         private const EasingFunction EasingFunctionIn = EasingFunction.QuadSlowDown;
         private const EasingFunction EasingFunctionOut = EasingFunction.QuadSpeedUp;
+        private const EasingFunction EasingFunctionInOut = EasingFunction.QuadBoth;
 
         // Private methods ----------------------------------------------------
 
@@ -79,12 +81,12 @@ namespace Animator.Extensions.Nonconformist
             {
                 float minValue = config.Data.Series
                     .SelectMany(s => s.Points)
-                    .Select(p => p.Value)
+                    .SelectMany(p => new[] { p.Value }.Concat(p.NextValues))
                     .Min();
 
                 float maxValue = config.Data.Series
                     .SelectMany(s => s.Points)
-                    .Select(p => p.Value)
+                    .SelectMany(p => new[] { p.Value }.Concat(p.NextValues))
                     .Max();
 
                 int seriesCount = config.Data.Series.Count;
@@ -158,7 +160,55 @@ namespace Animator.Extensions.Nonconformist
                 barWidth);
         }
 
-        private Engine.Elements.Path BuildAxisLine(LineDefinition lineDefinition, AnimationTimes animationTimes)
+        private Layer CreateMainLayer(Config config, AnimationTimes animationTimes)
+        {
+            return new Layer
+            {
+                Origin = new System.Drawing.PointF(config.Width / 2, config.Height / 2),
+                Position = new System.Drawing.PointF(config.Width / 2, config.Height / 2),
+                Animations =
+                {
+                    new Storyboard
+                    {
+                        Keyframes =
+                        {
+                            new For
+                            {
+                                PropertyRef = "Scale",
+                                Keyframes =
+                                {
+                                    new PointKeyframe
+                                    {
+                                        Time = animationTimes.Start,
+                                        Value = new System.Drawing.PointF(0.8f, 0.8f)
+                                    },
+                                    new PointKeyframe
+                                    {
+                                        Time = animationTimes.Start + animationTimes.FadeDuration,
+                                        Value = new System.Drawing.PointF(1.0f, 1.0f),
+                                        EasingFunction = EasingFunctionIn
+                                    },
+                                    new PointKeyframe
+                                    {
+                                        Time = animationTimes.End - animationTimes.FadeDuration,
+                                        Value = new System.Drawing.PointF(1.0f, 1.0f),
+                                        EasingFunction = EasingFunction.Linear
+                                    },
+                                    new PointKeyframe
+                                    {
+                                        Time = animationTimes.End,
+                                        Value = new System.Drawing.PointF(1.2f, 1.2f),
+                                        EasingFunction = EasingFunctionOut
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        private Visual BuildAxisLine(LineDefinition lineDefinition, AnimationTimes animationTimes)
         {
             return new Animator.Engine.Elements.Path
             {
@@ -191,18 +241,18 @@ namespace Animator.Extensions.Nonconformist
                                 {
                                     new FloatKeyframe
                                     {
-                                        Time = animationTimes.AnimationStart,
+                                        Time = animationTimes.Start,
                                         Value = 0.0f
                                     },
                                     new FloatKeyframe
                                     {
-                                        Time = animationTimes.AnimationEnd - animationTimes.FadeDuration,
+                                        Time = animationTimes.End - animationTimes.FadeDuration,
                                         Value = 0.0f,
                                         EasingFunction = Engine.Elements.Types.EasingFunction.Linear,
                                     },
                                     new FloatKeyframe
                                     {
-                                        Time = animationTimes.AnimationEnd,
+                                        Time = animationTimes.End,
                                         Value = 1.0f,
                                         EasingFunction = EasingFunctionOut
                                     }
@@ -216,18 +266,18 @@ namespace Animator.Extensions.Nonconformist
                                 {
                                     new FloatKeyframe
                                     {
-                                        Time = animationTimes.AnimationStart,
+                                        Time = animationTimes.Start,
                                         Value = 0.0f
                                     },
                                     new FloatKeyframe
                                     {
-                                        Time = animationTimes.AnimationStart + animationTimes.FadeDuration,
+                                        Time = animationTimes.Start + animationTimes.FadeDuration,
                                         Value = 1.0f,
                                         EasingFunction = EasingFunctionIn
                                     },
                                     new FloatKeyframe
                                     {
-                                        Time = animationTimes.AnimationEnd,
+                                        Time = animationTimes.End,
                                         Value = 1.0f,
                                         EasingFunction = Engine.Elements.Types.EasingFunction.Linear,
                                     }
@@ -238,6 +288,189 @@ namespace Animator.Extensions.Nonconformist
                 }
 
             };
+        }
+
+        private Visual CreateBackground(Config config, SeriesMetrics metrics, AnimationTimes animationTimes)
+        {
+            var backgroundColor = (System.Drawing.Color)TypeSerialization.Deserialize(config.ChartBackgroundColor, typeof(System.Drawing.Color));
+
+            return new Rectangle
+            {
+                Position = new System.Drawing.PointF(metrics.ChartArea.X, metrics.ChartArea.Y),
+                Width = metrics.ChartArea.Width,
+                Height = metrics.ChartArea.Height,
+                Brush = new SolidBrush
+                {
+                    Color = backgroundColor
+                },
+                Animations =
+                {
+                    new Storyboard
+                    {
+                        Keyframes =
+                        {
+                            new For
+                            {
+                                PropertyRef = nameof(Rectangle.Alpha),
+                                Keyframes =
+                                {
+                                    new FloatKeyframe
+                                    {
+                                        Time = animationTimes.Start,
+                                        Value = 0.0f
+                                    },
+                                    new FloatKeyframe
+                                    {
+                                        Time = animationTimes.Start + animationTimes.FadeDuration,
+                                        Value = 1.0f,
+                                        EasingFunction = EasingFunctionIn
+                                    },
+                                    new FloatKeyframe
+                                    {
+                                        Time = animationTimes.End - animationTimes.FadeDuration,
+                                        Value = 1.0f,
+                                        EasingFunction = EasingFunction.Linear
+                                    },
+                                    new FloatKeyframe
+                                    {
+                                        Time = animationTimes.End,
+                                        Value = 0.0f,
+                                        EasingFunction = EasingFunctionOut
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        private void BuildBarPointAnimations(float x, 
+            Point point, 
+            ManagedCollection<Engine.Elements.Animation> animations, 
+            string pointPropertyName, 
+            Config config, 
+            SeriesMetrics metrics, 
+            AnimationTimes animationTimes)
+        {
+            var storyboard = new Storyboard();
+            var @for = new For
+            {
+                PropertyRef = pointPropertyName
+            };
+            storyboard.Keyframes.Add(@for);
+
+            float yZero = metrics.GetYForValue(0);
+            float yCurrent = metrics.GetYForValue(point.Value);
+
+            // Two keyframes for initial reveal of the bar
+
+            @for.Keyframes.Add(new PointKeyframe
+            {
+                Time = animationTimes.Start,
+                Value = new System.Drawing.PointF(x, yZero)
+            });
+
+            @for.Keyframes.Add(new PointKeyframe
+            {
+                Time = animationTimes.Start + animationTimes.FadeDuration,
+                Value = new System.Drawing.PointF(x, yCurrent),
+                EasingFunction = EasingFunctionIn
+            });
+
+            // Two keyframes for every next value
+
+            for (int i = 0; i < point.NextValues.Count; i++)
+            {
+                float yPrevious = yCurrent;
+                yCurrent = metrics.GetYForValue(point.NextValues[i]);
+                TimeSpan time = (TimeSpan)TypeSerialization.Deserialize(config.Animation.SeriesSwitchTimes[i], typeof(TimeSpan));
+
+                @for.Keyframes.Add(new PointKeyframe
+                {
+                    Time = time,
+                    Value = new System.Drawing.PointF(x, yPrevious),
+                    EasingFunction = EasingFunction.Linear
+                });
+
+                @for.Keyframes.Add(new PointKeyframe
+                {
+                    Time = time + animationTimes.FadeDuration,
+                    Value = new System.Drawing.PointF(x, yCurrent),
+                    EasingFunction = EasingFunctionInOut
+                });
+            }
+
+            // Two keyframes for final fade
+
+            @for.Keyframes.Add(new PointKeyframe
+            {
+                Time = animationTimes.End - animationTimes.FadeDuration,
+                Value = new System.Drawing.PointF(x, yCurrent),
+                EasingFunction = EasingFunction.Linear
+            });
+
+            @for.Keyframes.Add(new PointKeyframe
+            {
+                Time = animationTimes.End,
+                Value = new System.Drawing.PointF(x, yZero),
+                EasingFunction = EasingFunctionOut
+            });
+
+            animations.Add(storyboard);
+        }
+
+        private Visual BuildBar(int pointIndex, int seriesIndex, Config config, SeriesMetrics metrics, AnimationTimes animationTimes)
+        {
+            var series = config.Data.Series[seriesIndex];
+            var point = series.Points[pointIndex];
+
+            float xFrom = metrics.GetLeftForBar(pointIndex, seriesIndex);
+            float width = metrics.barWidth / config.Data.Series.Count;
+
+            float yZero = metrics.GetYForValue(0);
+
+            var barColor = (System.Drawing.Color)TypeSerialization.Deserialize(series.Color, typeof(System.Drawing.Color));
+
+            var bar = new Animator.Engine.Elements.Path
+            {
+                Name = $"Series_{seriesIndex}_Bar_{pointIndex}",
+                Brush = new SolidBrush
+                {
+                    Color = barColor
+                }
+            };
+
+            var s1 = new MoveSegment
+            {
+                EndPoint = new System.Drawing.PointF(xFrom, yZero)
+            };
+            bar.Definition.Add(s1);
+
+            var s2 = new LineSegment
+            {
+                EndPoint = new System.Drawing.PointF(xFrom + width, yZero)
+            };
+            bar.Definition.Add(s2);
+
+            var s3 = new LineSegment
+            {
+                EndPoint = new System.Drawing.PointF(xFrom + width, yZero), // Will be animated anyway                
+            };
+            BuildBarPointAnimations(xFrom + width, point, s3.Animations, nameof(LineSegment.EndPoint), config, metrics, animationTimes);
+            bar.Definition.Add(s3);
+
+            var s4 = new LineSegment
+            {
+                EndPoint = new System.Drawing.PointF(xFrom, yZero) // Will be animated anyway
+            };
+            BuildBarPointAnimations(xFrom, point, s4.Animations, nameof(LineSegment.EndPoint), config, metrics, animationTimes);
+            bar.Definition.Add(s4);
+
+            var s5 = new CloseShapeSegment();
+            bar.Definition.Add(s5);
+
+            return bar;
         }
 
         // Public methods -----------------------------------------------------
@@ -251,9 +484,9 @@ namespace Animator.Extensions.Nonconformist
             SeriesMetrics metrics = BuildSeriesMetrics(config);
 
             // Calculate animation times
-            
-            TimeSpan animationStart = (TimeSpan)TypeSerialization.Deserialize(config.Animation.AnimationStart, typeof(TimeSpan));
-            TimeSpan animationEnd = (TimeSpan)TypeSerialization.Deserialize(config.Animation.AnimationEnd, typeof(TimeSpan));
+
+            TimeSpan animationStart = (TimeSpan)TypeSerialization.Deserialize(config.Animation.Start, typeof(TimeSpan));
+            TimeSpan animationEnd = (TimeSpan)TypeSerialization.Deserialize(config.Animation.End, typeof(TimeSpan));
             TimeSpan fadeDuration = (TimeSpan)TypeSerialization.Deserialize(config.Animation.FadeDuration, typeof(TimeSpan));
 
             List<TimeSpan> seriesSwitchTimes = config.Animation.SeriesSwitchTimes
@@ -288,80 +521,36 @@ namespace Animator.Extensions.Nonconformist
                 throw new InvalidOperationException($"There are not enough series switch times defined ({seriesSwitchTimes.Count} defined, {maxSwitches} required)");
 
             var animationTimes = new AnimationTimes(animationStart, animationEnd, fadeDuration, seriesSwitchTimes);
+            
+            Layer result = CreateMainLayer(config, animationTimes);
 
-            // Render
+            // Render background
 
-            var result = new Layer();
+            var backgroundColor = (System.Drawing.Color)TypeSerialization.Deserialize(config.ChartBackgroundColor, typeof(System.Drawing.Color));
+            if (backgroundColor.A > 0)
+            {
+                Visual background = CreateBackground(config, metrics, animationTimes);
+                result.Items.Add(background);
+            }
 
             // Render series
 
-            for (int i = 0; i < config.Data.Series.Count; i++)
+            for (int seriesIndex = 0; seriesIndex < config.Data.Series.Count; seriesIndex++)
             {
-                var series = config.Data.Series[i];
+                var series = config.Data.Series[seriesIndex];
 
-                switch (config.Data.Series[i].Type)
+                switch (config.Data.Series[seriesIndex].Type)
                 {
-                    case Types.SeriesType.Bar:
+                    case SeriesType.Bar:
 
-                        for (int j = 0; j < series.Points.Count; j++)
+                        for (int pointIndex = 0; pointIndex < series.Points.Count; pointIndex++)
                         {
-                            float xFrom = metrics.GetLeftForBar(j, i) + config.LineWidth / 2.0f;
-                            float width = metrics.barWidth / config.Data.Series.Count - config.LineWidth;
-
-                            float yFrom, yTo;
-                            if (series.Points[j].Value >= 0)
-                            {
-                                yFrom = metrics.GetYForValue(series.Points[j].Value);
-                                yTo = metrics.GetYForValue(0);
-                            }
-                            else
-                            {
-                                yFrom = metrics.GetYForValue(0);
-                                yTo = metrics.GetYForValue(series.Points[j].Value);
-                            }
-
-                            var borderColor = (System.Drawing.Color)TypeSerialization.Deserialize(series.Color, typeof(System.Drawing.Color));
-                            var fillColor = borderColor.BrightenBy(0.2f);
-
-                            var bar = new Rectangle
-                            {
-                                Position = new System.Drawing.PointF(xFrom, yFrom),
-                                Width = width,
-                                Height = yTo - yFrom,
-                                Pen = new Pen
-                                {
-                                    Color = borderColor,
-                                    Width = config.LineWidth
-                                },
-                                Brush = new LinearGradientBrush
-                                {
-                                    Color1 = fillColor.BrightenBy(0.1f),
-                                    Color2 = fillColor.DarkenBy(0.1f),
-                                    Point1 = new System.Drawing.PointF(0.0f, 0.0f),
-                                    Point2 = new System.Drawing.PointF(0.0f, yTo - yFrom)
-                                },
-                                Name = $"Series_{i}_Bar_{j}"
-                            };
-
+                            var bar = BuildBar(pointIndex, seriesIndex, config, metrics, animationTimes);
                             result.Items.Add(bar);
-
-                            var innerBar = new Rectangle
-                            {
-                                Position = new System.Drawing.PointF(xFrom + 2 * config.LineWidth, yFrom + 2 * config.LineWidth),
-                                Width = width - 4 * config.LineWidth,
-                                Height = yTo - yFrom - 4 * config.LineWidth,
-                                Brush = new SolidBrush
-                                {
-                                    Color = System.Drawing.Color.FromArgb(128, 255, 255, 255)
-                                },
-                                Name = $"Series_{i}_BarInner_{j}"
-                            };
-
-                            result.Items.Add(innerBar);
                         }
 
                         break;
-                    case Types.SeriesType.Line:
+                    case SeriesType.Line:
                         break;
                     default:
                         throw new InvalidOperationException("Unsupported series type!");
@@ -374,7 +563,7 @@ namespace Animator.Extensions.Nonconformist
             var yLine = BuildAxisLine(new LineDefinition(metrics.YLineStart, metrics.YLineEnd, yLineColor, config.LineWidth),
                 animationTimes);
             result.Items.Add(yLine);
-            
+
             var xLineColor = (System.Drawing.Color)TypeSerialization.Deserialize(config.Axis.XAxis.Color, typeof(System.Drawing.Color));
             var xLine = BuildAxisLine(new LineDefinition(metrics.XLineStart, metrics.XLineEnd, xLineColor, config.LineWidth),
                 animationTimes);

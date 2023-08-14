@@ -11,10 +11,10 @@ namespace Animator.Extensions.Nonconformist.Models.Chart
     public class Animation
     {
         [XmlAttribute]
-        public string AnimationStart { get; set; } = "0:0:0.0";
+        public string Start { get; set; } = "0:0:0.0";
 
         [XmlAttribute]
-        public string AnimationEnd { get; set; } = "0:0:5.0";
+        public string End { get; set; } = "0:0:5.0";
 
         [XmlAttribute]
         public string FadeDuration { get; set; } = "0:0:1.0";
