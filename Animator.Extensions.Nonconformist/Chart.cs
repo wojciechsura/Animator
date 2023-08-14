@@ -60,9 +60,9 @@ namespace Animator.Extensions.Nonconformist
 
         // Private constants --------------------------------------------------
 
-        private const EasingFunction EasingFunctionIn = EasingFunction.QuadSlowDown;
-        private const EasingFunction EasingFunctionOut = EasingFunction.QuadSpeedUp;
-        private const EasingFunction EasingFunctionInOut = EasingFunction.QuadBoth;
+        private const EasingFunction EasingFunctionIn = EasingFunction.CubicSlowDown;
+        private const EasingFunction EasingFunctionOut = EasingFunction.CubicSpeedUp;
+        private const EasingFunction EasingFunctionInOut = EasingFunction.CubicBoth;
 
         // Private methods ----------------------------------------------------
 
@@ -180,24 +180,24 @@ namespace Animator.Extensions.Nonconformist
                                     new PointKeyframe
                                     {
                                         Time = animationTimes.Start,
-                                        Value = new System.Drawing.PointF(0.8f, 0.8f)
+                                        Value = new System.Drawing.PointF(0.75f, 0.75f)
                                     },
                                     new PointKeyframe
                                     {
                                         Time = animationTimes.Start + animationTimes.FadeDuration,
-                                        Value = new System.Drawing.PointF(1.0f, 1.0f),
+                                        Value = config.Animation.SlowZoom ? new System.Drawing.PointF(0.95f, 0.95f) : new System.Drawing.PointF(1.0f, 1.0f),
                                         EasingFunction = EasingFunctionIn
                                     },
                                     new PointKeyframe
                                     {
                                         Time = animationTimes.End - animationTimes.FadeDuration,
-                                        Value = new System.Drawing.PointF(1.0f, 1.0f),
+                                        Value = config.Animation.SlowZoom ? new System.Drawing.PointF(1.05f, 1.05f) : new System.Drawing.PointF(1.0f, 1.0f),
                                         EasingFunction = EasingFunction.Linear
                                     },
                                     new PointKeyframe
                                     {
                                         Time = animationTimes.End,
-                                        Value = new System.Drawing.PointF(1.2f, 1.2f),
+                                        Value = new System.Drawing.PointF(1.25f, 1.25f),
                                         EasingFunction = EasingFunctionOut
                                     }
                                 }
@@ -438,6 +438,45 @@ namespace Animator.Extensions.Nonconformist
                 Brush = new SolidBrush
                 {
                     Color = barColor
+                },
+                Animations =
+                {
+                    new Storyboard
+                    {
+                        Keyframes =
+                        {
+                            new For
+                            {
+                                PropertyRef = nameof(Animator.Engine.Elements.Path.Alpha),
+                                Keyframes =
+                                {
+                                    new FloatKeyframe
+                                    {
+                                        Time = animationTimes.Start,
+                                        Value = 0
+                                    },
+                                    new FloatKeyframe
+                                    {
+                                        Time = animationTimes.Start + animationTimes.FadeDuration,
+                                        Value = 1,
+                                        EasingFunction = EasingFunctionIn
+                                    },
+                                    new FloatKeyframe
+                                    {
+                                        Time = animationTimes.End - animationTimes.FadeDuration,
+                                        Value = 1,
+                                        EasingFunction = EasingFunction.Linear
+                                    },
+                                    new FloatKeyframe
+                                    {
+                                        Time = animationTimes.End,
+                                        Value = 0,
+                                        EasingFunction = EasingFunctionOut
+                                    },
+                                }
+                            }
+                        }
+                    }
                 }
             };
 

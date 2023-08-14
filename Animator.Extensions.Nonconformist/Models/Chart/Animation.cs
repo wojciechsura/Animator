@@ -19,6 +19,9 @@ namespace Animator.Extensions.Nonconformist.Models.Chart
         [XmlAttribute]
         public string FadeDuration { get; set; } = "0:0:1.0";
 
+        [XmlAttribute]
+        public bool SlowZoom { get; set; } = false;
+
         [XmlElement("NextSeriesAt")]
         public List<string> SeriesSwitchTimes { get; set; } = new();
     }
