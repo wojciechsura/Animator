@@ -22,7 +22,7 @@ namespace Animator.Engine.Elements
     {
         // Private fields -----------------------------------------------------
 
-        private static readonly string nameRegexString = "[a-zA-Z][a-zA-Z0-9]*";
+        private static readonly string nameRegexString = "[a-zA-Z_][a-zA-Z0-9_]*";
         private static readonly Regex nameRegex = new Regex($"^{nameRegexString}$");
         private static readonly Regex collectionAccessRegex = new Regex($@"^({nameRegexString})\[({nameRegexString})\]$");
 

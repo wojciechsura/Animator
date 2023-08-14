@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Animator.Engine.Base\Animator.Engine.Base.csproj" />
     <ProjectReference Include="..\Animator.Engine\Animator.Engine.csproj" />
+    <ProjectReference Include="..\Animator.Extensions.Utils\Animator.Extensions.Utils.csproj" />
   </ItemGroup>
 
 </Project>

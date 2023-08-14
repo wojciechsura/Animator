@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Animator.Extensions.Nonconformist.Models.Histogram
+namespace Animator.Extensions.Nonconformist.Models.Chart
 {
     [XmlRoot]
     public class Config
@@ -24,5 +24,9 @@ namespace Animator.Extensions.Nonconformist.Models.Histogram
 
         [XmlElement]
         public Data Data { get; set; } = new();
+
+        [XmlElement]
+
+        public Animation Animation { get; set; } = new();
     }
 }

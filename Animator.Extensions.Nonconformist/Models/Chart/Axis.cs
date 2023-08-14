@@ -5,12 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Animator.Extensions.Nonconformist.Models.Histogram
+namespace Animator.Extensions.Nonconformist.Models.Chart
 {
     [XmlRoot]
-    public class Data
+    public class Axis
     {
         [XmlElement]
-        public List<Series> Series { get; set; } = new();
+        public XAxis XAxis { get; set; } = new();
+
+        [XmlElement]
+        public YAxis YAxis { get; set; } = new();
     }
 }

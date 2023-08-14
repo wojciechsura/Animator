@@ -18,17 +18,21 @@ namespace Animator.Engine.Elements
         {
             if (IsPropertySet(BrushProperty))
             {
-                using (var brush = Brush.BuildBrush())
+                System.Drawing.Brush brush;
+                using (brush = Brush.BuildBrush())
                 {
                     RectangleF rect = new RectangleF(0.0f, 0.0f, Width, Height);
                     buffer.Graphics.FillRectangle(brush, rect);
                 }
+                brush = null;
             }
 
             if (IsPropertySet(PenProperty))
             {
-                using (var pen = Pen.BuildPen())
+                System.Drawing.Pen pen;
+                using (pen = Pen.BuildPen())
                     buffer.Graphics.DrawRectangle(pen, 0.0f, 0.0f, Width, Height);
+                pen = null;
             }
         }
         

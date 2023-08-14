@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace Animator.Extensions.Nonconformist.Models.Histogram
+namespace Animator.Extensions.Nonconformist.Models.Chart
 {
     [XmlRoot]
     public class YAxis
@@ -17,5 +17,8 @@ namespace Animator.Extensions.Nonconformist.Models.Histogram
 
         [XmlAttribute]
         public int Skip { get; set; } = 1;
+
+        [XmlAttribute]
+        public string Color { get; set; } = "#60EBF2";
     }
 }

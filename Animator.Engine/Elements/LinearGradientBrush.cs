@@ -1,6 +1,7 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Base.Persistence;
 using Animator.Engine.Exceptions;
+using Animator.Engine.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,24 +20,33 @@ namespace Animator.Engine.Elements
     {
         internal override System.Drawing.Brush BuildBrush()
         {
-            System.Drawing.Drawing2D.LinearGradientBrush brush;
+            System.Drawing.Brush brush;
 
-            if (Stops.Any())
+            if (Point1.DistanceTo(Point2).IsZero())
             {
-                if (Stops.Count < 2)
-                    throw new AnimationException("You should specify at least two steps.", GetPath());
-
-                brush = new(Point1, Point2, Color.Transparent, Color.Transparent);
-
-                var blend = new System.Drawing.Drawing2D.ColorBlend();
-                blend.Colors = Stops.Select(s => s.Color).ToArray();
-                blend.Positions = Stops.Select(s => s.Position).ToArray();
-
-                brush.InterpolationColors = blend;
+                brush = new System.Drawing.SolidBrush(Color1);
             }
             else
             {
-                brush = new System.Drawing.Drawing2D.LinearGradientBrush(Point1, Point2, Color1, Color2);
+                if (Stops.Any())
+                {
+                    if (Stops.Count < 2)
+                        throw new AnimationException("You should specify at least two steps.", GetPath());
+
+                    var gradientBrush = new System.Drawing.Drawing2D.LinearGradientBrush(Point1, Point2, Color.Transparent, Color.Transparent);
+
+                    var blend = new System.Drawing.Drawing2D.ColorBlend();
+                    blend.Colors = Stops.Select(s => s.Color).ToArray();
+                    blend.Positions = Stops.Select(s => s.Position).ToArray();
+
+                    gradientBrush.InterpolationColors = blend;
+
+                    brush = gradientBrush;
+                }
+                else
+                {
+                    brush = new System.Drawing.Drawing2D.LinearGradientBrush(Point1, Point2, Color1, Color2);
+                }
             }
 
             return brush;
