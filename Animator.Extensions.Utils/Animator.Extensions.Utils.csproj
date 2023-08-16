@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Animator.Engine\Animator.Engine.csproj" />
+  </ItemGroup>
+
 </Project>
