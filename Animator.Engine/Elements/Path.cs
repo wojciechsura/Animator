@@ -1,6 +1,7 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Elements.Persistence;
 using Animator.Engine.Elements.Utilities;
+using Animator.Engine.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -114,18 +115,28 @@ namespace Animator.Engine.Elements
 
                     // In this case there is nothing to draw (ie. from = 1)
                     if (i == Definition.Count)
-                        return;
+                    {
+                        element = Definition.Count - 1;
+                        factor = 1.0f;
+                    }
+                    else
+                    {
+                        element = i;
 
-                    element = i;
-
-                    // FromLength now should be smaller than lengths[i]
-                    positionLength -= lengthAcc;
-                    factor = lengths[i] > 0 ? positionLength / lengths[i] : 0.0f;
+                        // FromLength now should be smaller than lengths[i]
+                        positionLength -= lengthAcc;
+                        factor = lengths[i] > 0 ? positionLength / lengths[i] : 0.0f;
+                    }
                 }
             }
 
             evalElementAndFactor(from, ref startElement, ref startFactor);
             evalElementAndFactor(to, ref endElement, ref endFactor);
+
+            // If the distance between start and end factor is negligible,
+            // there is nothing to be drawn.
+            if (startElement == endElement && (endFactor - startFactor).IsZero())
+                return;
 
             // Now draw
             GraphicsPath path = new();

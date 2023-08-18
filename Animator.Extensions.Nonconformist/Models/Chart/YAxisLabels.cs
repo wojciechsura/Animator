@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Elements.Types;
+using Animator.Extensions.Nonconformist.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,10 +48,10 @@ namespace Animator.Extensions.Nonconformist.Models.Chart
         public string LabelFormat { get; set; } = "{0}";
 
         [XmlAttribute]
-        public bool UseSIRounding { get; set; } = false;
+        public RoundingType Rounding { get; set; } = RoundingType.None;
 
         [XmlAttribute]
-        public int Skip { get; set; } = 1;
+        public float Skip { get; set; } = 1;
 
     }
 }

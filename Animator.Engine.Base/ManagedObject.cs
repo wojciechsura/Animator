@@ -199,7 +199,7 @@ namespace Animator.Engine.Base
 
             (object coercedValue, bool coerced) = InternalCoerceValue(property);
 
-            if (coerced && !object.Equals(coercedValue, propertyValue.BaseValue))
+            if (coerced && !object.Equals(coercedValue, propertyValue.FinalBaseValue))
                 propertyValue.CoercedValue = coercedValue;
             else
                 propertyValue.ClearCoercedValue();
@@ -440,7 +440,7 @@ namespace Animator.Engine.Base
 
             var propertyValue = EnsurePropertyValue(simpleProperty);
 
-            if (!propertyValue.IsAnimated || !object.Equals(propertyValue.AnimatedValue, value))
+            if (!propertyValue.IsAnimated || !object.Equals(propertyValue.EffectiveValue, value))
             {
                 var oldEffectiveValue = propertyValue.EffectiveValue;
 

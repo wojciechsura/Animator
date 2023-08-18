@@ -12,6 +12,23 @@ namespace Animator.Engine.Utils
 
         public static bool IsZero(this float value) => Math.Abs(value) < EPSILON;
 
+        public static string ToMoneyString(this float f, string format = null)
+        {
+            char[] incPrefixes = new[] { 'k', 'M', 'B', 'T' };
+
+            // No prefix in this case
+            if (Math.Abs(f) >= 0 && Math.Abs(f) < 1000)
+                return f.ToString(format);
+
+            int degree = (int)Math.Floor(Math.Log10(Math.Abs(f)) / 3);
+            if (degree >= incPrefixes.Length)
+                degree = incPrefixes.Length;
+            double scaled = f * Math.Pow(1000, -degree);
+
+            char? prefix = incPrefixes[degree - 1];
+            return scaled.ToString(format) + prefix;
+        }
+
         public static string ToSIString(this float f, string format = null)
         {
             char[] incPrefixes = new[] { 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' };
@@ -22,6 +39,17 @@ namespace Animator.Engine.Utils
                 return f.ToString(format);
 
             int degree = (int)Math.Floor(Math.Log10(Math.Abs(f)) / 3);
+            switch (Math.Sign(degree))
+            {
+                case 1: 
+                    if (degree >= incPrefixes.Length)
+                        degree = incPrefixes.Length - 1;
+                    break;
+                case -1:
+                    if (degree >= decPrefixes.Length) 
+                        degree = decPrefixes.Length - 1;
+                    break;
+            }
             double scaled = f * Math.Pow(1000, -degree);
 
             char? prefix = null;
