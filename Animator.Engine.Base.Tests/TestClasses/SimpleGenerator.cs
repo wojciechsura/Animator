@@ -9,7 +9,7 @@ namespace Animator.Engine.Base.Tests.TestClasses
 {
     internal class SimpleGenerator : BaseGenerator
     {
-        public override ManagedObject Generate(XmlNode node)
+        public override ManagedObject Generate(XmlElement node)
         {
             var result = new SimplePropertyClass();
             result.IntValue = 99;
