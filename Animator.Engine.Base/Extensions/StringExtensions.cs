@@ -8,6 +8,12 @@ namespace Animator.Engine.Base.Extensions
 {
     public static class StringExtensions
     {
+        /// <summary>
+        /// Splits a string with given separator, but
+        /// ignores separators placed inside single-quote
+        /// sequences. Also handles escaping characters inside
+        /// sequences inside single-quotes.
+        /// </summary>
         public static string[] SplitUnquoted(this string s, char separator)
         {
             bool quote = false;
@@ -57,6 +63,10 @@ namespace Animator.Engine.Base.Extensions
             return result.ToArray();
         }
 
+        /// <summary>
+        /// Checks if string contains a character but except
+        /// sequences placed inside single-quotes.
+        /// </summary>
         public static bool ContainsUnquoted(this string s, char ch)
         {
             bool quote = false;
@@ -95,6 +105,11 @@ namespace Animator.Engine.Base.Extensions
             return false;
         }
 
+        /// <summary>
+        /// Expands sequences delimited by single-quotes. This
+        /// includes removing single-quotes as well as properly
+        /// unescaping escaped characters.
+        /// </summary>
         public static string ExpandQuotes(this string s)
         {
             // If there are no single-quotes, string is already unquoted

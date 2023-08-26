@@ -321,7 +321,6 @@ namespace Animator.Engine.Elements
 
         #endregion
 
-
         #region MaskCoordinateSystem managed property
 
         /// <summary>

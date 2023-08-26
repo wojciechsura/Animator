@@ -698,7 +698,7 @@ namespace Animator.Engine.Base.Persistence
                     if (node.ChildNodes.Count != 1)
                         throw new SerializerException("Generate element must contain exactly one child!", node.FindXPath());
 
-                    var child = node.ChildNodes[0];
+                    var child = (XmlElement)node.ChildNodes[0];
 
                     BaseGenerator generator;
 

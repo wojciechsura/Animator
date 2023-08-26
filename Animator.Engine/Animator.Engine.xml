@@ -170,6 +170,19 @@
             Time, when animation should finish.
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.AnimateStopwatch">
+            <summary>
+            Allows applying an animation to a string property of some
+            object. The value will be set to a stopwatch started
+            at StartTime and stopped on EndTime.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.AnimateStopwatch.Format">
+            <summary>
+            Specifies format of the stopwatch. Compatible
+            with TimeSpan formatting strings.
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.AnimateWithExpression">
             <summary>
             Allows evaluating animated value of an property basing on a mathematical expression.

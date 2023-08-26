@@ -310,7 +310,6 @@ namespace Animator.Documentation
 
             Documentation.LoadXmlDocumentation(File.ReadAllText(args[0]));
 
-
             // Find assembly with elements and its current namespace
 
             var elementsNamespace = typeof(Movie).Namespace;

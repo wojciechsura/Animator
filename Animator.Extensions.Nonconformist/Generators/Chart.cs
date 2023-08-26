@@ -4,8 +4,9 @@ using Animator.Engine.Elements;
 using Animator.Engine.Elements.Types;
 using Animator.Engine.Utils;
 using Animator.Extensions.Nonconformist.Models.Chart;
-using Animator.Extensions.Nonconformist.Types;
+using Animator.Extensions.Nonconformist.Types.Chart;
 using Animator.Extensions.Utils.Extensions;
+using Animator.Extensions.Utils.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +16,14 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Animator.Extensions.Nonconformist
+namespace Animator.Extensions.Nonconformist.Generators
 {
     public class Chart : BaseGenerator
     {
         // Private types ------------------------------------------------------
-        private sealed record SeriesInfo(float MinValue, 
-            float MaxValue, 
-            int BarSeriesCount, 
+        private sealed record SeriesInfo(float MinValue,
+            float MaxValue,
+            int BarSeriesCount,
             int SeriesCount,
             int PointCount);
 
@@ -31,9 +32,9 @@ namespace Animator.Extensions.Nonconformist
             System.Drawing.Color Color,
             float Width);
 
-        private sealed record AnimationTimes(TimeSpan Start, 
-            TimeSpan End, 
-            TimeSpan FadeDuration, 
+        private sealed record AnimationTimes(TimeSpan Start,
+            TimeSpan End,
+            TimeSpan FadeDuration,
             List<TimeSpan> SeriesSwitchTimes);
 
         private sealed record SeriesMetrics(System.Drawing.RectangleF HeaderArea,
@@ -54,14 +55,14 @@ namespace Animator.Extensions.Nonconformist
             float BarWidth,
             float ScaleStep)
         {
-            public float GetYForValue(float value) =>            
-                ((ScaleMax - value) / (ScaleMax - ScaleMin)) * ChartArea.Height + ChartArea.Top;
+            public float GetYForValue(float value) =>
+                (ScaleMax - value) / (ScaleMax - ScaleMin) * ChartArea.Height + ChartArea.Top;
 
             public float GetXForPoint(int point) =>
-                ChartArea.Left + ((point + 0.5f) / PointCount) * ChartArea.Width;
+                ChartArea.Left + (point + 0.5f) / PointCount * ChartArea.Width;
 
             public float GetLeftForBar(int point, int barSeries) =>
-                ChartArea.Left + ((point + 0.5f) / PointCount) * ChartArea.Width - (BarWidth / 2) + ((float)barSeries / BarSeriesCount) * (BarWidth / BarSeriesCount);
+                ChartArea.Left + (point + 0.5f) / PointCount * ChartArea.Width - BarWidth / 2 + (float)barSeries / BarSeriesCount * (BarWidth / BarSeriesCount);
         }
 
         // Private constants --------------------------------------------------
@@ -103,7 +104,7 @@ namespace Animator.Extensions.Nonconformist
                 if (seriesSwitchTimes[i] + fadeDuration >= animationEnd - fadeDuration)
                     throw new InvalidOperationException($"Series switch {i} exceeds animation end time");
             }
-            
+
             int maxSwitches = new[] { 0 }
                 .Concat(config.Data.Series
                     .SelectMany(s => s.Points
@@ -119,7 +120,7 @@ namespace Animator.Extensions.Nonconformist
 
         private Visual BuildAxisLine(LineDefinition lineDefinition, AnimationTimes animationTimes)
         {
-            return new Animator.Engine.Elements.Path
+            return new Engine.Elements.Path
             {
                 Pen = new Pen
                 {
@@ -157,7 +158,7 @@ namespace Animator.Extensions.Nonconformist
                                     {
                                         Time = animationTimes.End - animationTimes.FadeDuration,
                                         Value = 0.0f,
-                                        EasingFunction = Engine.Elements.Types.EasingFunction.Linear,
+                                        EasingFunction = EasingFunction.Linear,
                                     },
                                     new FloatKeyframe
                                     {
@@ -188,7 +189,7 @@ namespace Animator.Extensions.Nonconformist
                                     {
                                         Time = animationTimes.End,
                                         Value = 1.0f,
-                                        EasingFunction = Engine.Elements.Types.EasingFunction.Linear,
+                                        EasingFunction = EasingFunction.Linear,
                                     }
                                 }
                             }
@@ -214,7 +215,7 @@ namespace Animator.Extensions.Nonconformist
             var barColor = (System.Drawing.Color)TypeSerialization.Deserialize(series.Color, typeof(System.Drawing.Color));
             var altColor = (System.Drawing.Color)TypeSerialization.Deserialize(series.AltColor, typeof(System.Drawing.Color));
 
-            var bar = new Animator.Engine.Elements.Path
+            var bar = new Engine.Elements.Path
             {
                 Name = $"Series_{seriesIndex}_Bar_{pointIndex}",
                 Brush = new SolidBrush
@@ -257,7 +258,7 @@ namespace Animator.Extensions.Nonconformist
 
             var yLast = metrics.GetYForValue(point.NextValues.Any() ? point.NextValues.Last() : point.Value);
 
-            return (bar);
+            return bar;
         }
 
         private void BuildGlobalAlphaAnimation(ManagedCollection<Engine.Elements.Animation> animations,
@@ -312,7 +313,7 @@ namespace Animator.Extensions.Nonconformist
                 {
                     new For
                     {
-                        PropertyRef = nameof(Animator.Engine.Elements.Path.CutFrom),
+                        PropertyRef = nameof(Engine.Elements.Path.CutFrom),
                         Keyframes =
                         {
                             new FloatKeyframe
@@ -331,7 +332,7 @@ namespace Animator.Extensions.Nonconformist
                     },
                     new For
                     {
-                        PropertyRef = nameof(Animator.Engine.Elements.Path.CutTo),
+                        PropertyRef = nameof(Engine.Elements.Path.CutTo),
                         Keyframes =
                         {
                             new FloatKeyframe
@@ -344,7 +345,7 @@ namespace Animator.Extensions.Nonconformist
                                 Time = animationTimes.Start + animationTimes.FadeDuration,
                                 Value = 1.0f,
                                 EasingFunction = EasingFunctionIn
-                            }                            
+                            }
                         }
                     }
                 }
@@ -359,7 +360,7 @@ namespace Animator.Extensions.Nonconformist
 
             var color = (System.Drawing.Color)TypeSerialization.Deserialize(series.Color, typeof(System.Drawing.Color));
 
-            var path = new Animator.Engine.Elements.Path
+            var path = new Engine.Elements.Path
             {
                 Pen = new Pen
                 {
@@ -410,7 +411,7 @@ namespace Animator.Extensions.Nonconformist
             Config config,
             SeriesMetrics metrics,
             AnimationTimes animationTimes,
-            bool first = true, 
+            bool first = true,
             bool last = true)
         {
             var storyboard = new Storyboard();
@@ -526,7 +527,7 @@ namespace Animator.Extensions.Nonconformist
             if (config.Axis.YAxis.Scale > 1.0f)
             {
                 float currentDataSpan = scaleMax - scaleMin;
-                float additional = ((config.Axis.YAxis.Scale - 1.0f) * currentDataSpan) / 2.0f;
+                float additional = (config.Axis.YAxis.Scale - 1.0f) * currentDataSpan / 2.0f;
 
                 scaleMin -= additional;
                 scaleMax += additional;
@@ -540,11 +541,11 @@ namespace Animator.Extensions.Nonconformist
             System.Drawing.PointF xLineEnd = new System.Drawing.PointF(chartArea.Right, zeroY);
 
             float dataSpan = scaleMax - scaleMin;
-            
-            int scale10thPower = (int)Math.Ceiling(Math.Log10(dataSpan)) - 1;
-            float scaleStep = (float) Math.Pow(10, scale10thPower);
 
-            float barWidth = (chartAreaWidth / seriesInfo.PointCount) * (Math.Max(0.0f, Math.Min(1.0f, config.Axis.XAxis.BarScale)));
+            int scale10thPower = (int)Math.Ceiling(Math.Log10(dataSpan)) - 1;
+            float scaleStep = (float)Math.Pow(10, scale10thPower);
+
+            float barWidth = chartAreaWidth / seriesInfo.PointCount * Math.Max(0.0f, Math.Min(1.0f, config.Axis.XAxis.BarScale));
 
             return new SeriesMetrics(headerArea,
                 yLabelArea,
@@ -631,15 +632,6 @@ namespace Animator.Extensions.Nonconformist
                     }
                 }
             };
-        }
-
-        private Config DeserializeConfig(XmlNode node)
-        {
-            var configNode = node.ChildNodes[0];
-            XmlSerializer serializer = new XmlSerializer(typeof(Models.Chart.Config));
-            var reader = new StringReader($"{configNode.OuterXml}");
-            Models.Chart.Config config = (Models.Chart.Config)serializer.Deserialize(reader);
-            return config;
         }
 
         private SeriesInfo GetSeriesInfo(Config config)
@@ -904,12 +896,12 @@ namespace Animator.Extensions.Nonconformist
 
         // Public methods -----------------------------------------------------
 
-        public override ManagedObject Generate(XmlNode node)
+        public override ManagedObject Generate(XmlElement node)
         {
             if (node.ChildNodes.Count != 1)
                 throw new InvalidOperationException("Histogram node should have only one child: Config!");
 
-            Config config = DeserializeConfig(node);
+            Config config = node.Deserialize<Config>();
             SeriesMetrics metrics = BuildSeriesMetrics(config);
             AnimationTimes animationTimes = CalculateAnimationTimes(config);
 

@@ -9,6 +9,6 @@ namespace Animator.Engine.Base
 {
     public abstract class BaseGenerator
     {
-        public abstract ManagedObject Generate(XmlNode node);
+        public abstract ManagedObject Generate(XmlElement node);
     }
 }
