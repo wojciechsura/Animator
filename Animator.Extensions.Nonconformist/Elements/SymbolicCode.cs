@@ -24,8 +24,6 @@ namespace Animator.Extensions.Nonconformist.Elements
             int lineCount = (int)Math.Floor((Height / CharHeight) / 2);
             int maxLineLength = (int)Math.Floor(Width / CharHeight);
 
-            var result = new Layer();
-
             var random = new Random(Seed);
 
             int indent = 0;
@@ -69,7 +67,7 @@ namespace Animator.Extensions.Nonconformist.Elements
 
                     while (pos < lineLength)
                     {
-                        if (pos <= lineLength - 3 && !lastWasSpecial && random.Next() / (float)int.MaxValue < SpecialCharProbability)
+                        if (SpecialCharacters && pos <= lineLength - 3 && !lastWasSpecial && random.Next() / (float)int.MaxValue < SpecialCharProbability)
                         {
                             buffer.Graphics.FillRectangle(specialCharBrush, 
                                 (indent * 5 + pos) * CharHeight, 

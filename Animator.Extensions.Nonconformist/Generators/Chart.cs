@@ -901,7 +901,7 @@ namespace Animator.Extensions.Nonconformist.Generators
             if (node.ChildNodes.Count != 1)
                 throw new InvalidOperationException("Histogram node should have only one child: Config!");
 
-            Config config = node.Deserialize<Config>();
+            Config config = ((XmlElement)node.ChildNodes[0]).Deserialize<Config>();
             SeriesMetrics metrics = BuildSeriesMetrics(config);
             AnimationTimes animationTimes = CalculateAnimationTimes(config);
 
