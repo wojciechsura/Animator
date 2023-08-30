@@ -3,12 +3,12 @@
 #include <math.h>
 #include <memory>
 
-Color::Color()
+FloatColor::FloatColor()
 {
 	R = G = B = A = 0;
 }
 
-Color::Color(float r, float g, float b, float a)
+FloatColor::FloatColor(float r, float g, float b, float a)
 {
 	R = r;
 	G = g;
@@ -16,7 +16,7 @@ Color::Color(float r, float g, float b, float a)
 	A = a;
 }
 
-Color::Color(int colorArgb)
+FloatColor::FloatColor(int colorArgb)
 {
 	A = ((colorArgb & 0xff000000) >> 24) / 255.0f;
 	R = ((colorArgb & 0x00ff0000) >> 16) * 1.0f;
@@ -43,14 +43,6 @@ IntColor::IntColor(unsigned int colorArgb)
 	R = ((colorArgb & 0x00ff0000) >> 16);
 	G = ((colorArgb & 0x0000ff00) >> 8);
 	B = (colorArgb & 0x000000ff);
-}
-
-IntColor::IntColor(Color color) 
-{
-	A = (unsigned char)(color.A * 255);
-	R = (unsigned char)(color.R);
-	G = (unsigned char)(color.G);
-	B = (unsigned char)(color.B);
 }
 
 std::shared_ptr<float[]> generateGaussKernel(int diameter)

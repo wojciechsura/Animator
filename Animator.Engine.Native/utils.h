@@ -11,7 +11,7 @@ const int ALPHA_OFFSET = 3;
 
 static std::vector<std::shared_ptr<float[]>> gaussKernels;
 
-struct Color 
+struct FloatColor 
 {
 public:
     float R;
@@ -19,9 +19,9 @@ public:
     float B;
     float A;
 
-    Color();
-    Color(float r, float g, float b, float a);
-    Color(int colorArgb);
+    FloatColor();
+    FloatColor(float r, float g, float b, float a);
+    FloatColor(int colorArgb);
 };
 
 union IntColor
@@ -39,20 +39,24 @@ public:
     IntColor();
     IntColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
     IntColor(unsigned int colorBgra);
-    IntColor(Color color);
 };
 
 
 std::shared_ptr<float[]> generateGaussKernel(int radius);
 
-inline unsigned char getAlpha(unsigned char* bitmap, int stride, int x, int y)
+inline float getFloatAlpha(unsigned char* bitmap, int stride, int x, int y)
+{
+    return bitmap[y * stride + x * BYTES_PER_PIXEL + ALPHA_OFFSET] / 255.0f;
+}
+
+inline unsigned char getIntAlpha(unsigned char* bitmap, int stride, int x, int y)
 {
     return bitmap[y * stride + x * BYTES_PER_PIXEL + ALPHA_OFFSET];
 }
 
-inline Color getColor(unsigned char* bitmap, int stride, int x, int y)
+inline FloatColor getFloatColor(unsigned char* bitmap, int stride, int x, int y)
 {
-    Color result;
+    FloatColor result;
     result.A = bitmap[y * stride + x * BYTES_PER_PIXEL + ALPHA_OFFSET] / 255.0f;
     result.R = bitmap[y * stride + x * BYTES_PER_PIXEL + R_OFFSET];
     result.G = bitmap[y * stride + x * BYTES_PER_PIXEL + G_OFFSET];
@@ -80,12 +84,31 @@ inline void setIntColor(unsigned char* bitmap, int stride, int x, int y, IntColo
     bitmap[y * stride + x * BYTES_PER_PIXEL + B_OFFSET] = value.B;
 }
 
-inline void setColor(unsigned char* bitmap, int stride, int x, int y, Color value)
+inline void setFloatColor(unsigned char* bitmap, int stride, int x, int y, FloatColor value)
 {
     bitmap[y * stride + x * BYTES_PER_PIXEL + ALPHA_OFFSET] = (unsigned char)(value.A * 255.0f);
     bitmap[y * stride + x * BYTES_PER_PIXEL + R_OFFSET] = (unsigned char)(value.R);
     bitmap[y * stride + x * BYTES_PER_PIXEL + G_OFFSET] = (unsigned char)(value.G);
     bitmap[y * stride + x * BYTES_PER_PIXEL + B_OFFSET] = (unsigned char)(value.B);
+}
+
+inline void alphaBlend(FloatColor& baseColor, FloatColor targetColor)
+{
+    float newAlpha = (1 - targetColor.A) * baseColor.A + targetColor.A;
+    if (newAlpha > 0.0f)
+    {
+        baseColor.R = ((1 - targetColor.A) * baseColor.A * baseColor.R + targetColor.A * targetColor.R) / newAlpha;
+        baseColor.G = ((1 - targetColor.A) * baseColor.A * baseColor.G + targetColor.A * targetColor.G) / newAlpha;
+        baseColor.B = ((1 - targetColor.A) * baseColor.A * baseColor.B + targetColor.A * targetColor.B) / newAlpha;
+        baseColor.A = newAlpha;
+    }
+    else
+    {
+        baseColor.R = 0.0f;
+        baseColor.G = 0.0f;
+        baseColor.B = 0.0f;
+        baseColor.A = 0.0f;
+    }
 }
 
 inline void alphaBlend(IntColor& baseColor, IntColor targetColor)

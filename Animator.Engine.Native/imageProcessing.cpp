@@ -16,7 +16,7 @@ extern "C" void __cdecl ApplyAlpha(unsigned char* bitmapData,
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
 		{
-			unsigned char oldAlpha = getAlpha(bitmapData, stride, x, y);
+			unsigned char oldAlpha = getIntAlpha(bitmapData, stride, x, y);
 			unsigned char newAlpha = (unsigned char)(((unsigned int)oldAlpha * alpha) >> 8);
 			setAlpha(bitmapData, stride, x, y, newAlpha);
 		}
@@ -64,17 +64,17 @@ extern "C" void __cdecl Blur(unsigned char* bitmapData,
 		for (int x = 0; x < width; x++)
 		{
 			int count = 0;
-			Color sum;
+			FloatColor sum;
 
 			for (int x1 = x - radius; x1 <= x + radius; x1++)
 				for (int y1 = y - radius; y1 <= y + radius; y1++)
 				{
 					// Premultiply alpha
-					Color color;
+					FloatColor color;
 					if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height)
-						color = getColor(copy.get(), stride, x1, y1);
+						color = getFloatColor(copy.get(), stride, x1, y1);
 					else
-						color = Color(0);
+						color = FloatColor(0);
 
 					sum.R += color.R * color.A;
 					sum.G += color.G * color.A;
@@ -86,7 +86,7 @@ extern "C" void __cdecl Blur(unsigned char* bitmapData,
 
 			if (count > 0)
 			{
-				Color result;
+				FloatColor result;
 
 				result.A = sum.A / count;
 				if (result.A > 0)
@@ -96,7 +96,7 @@ extern "C" void __cdecl Blur(unsigned char* bitmapData,
 					result.B = ((sum.B / count) / result.A);
 				}
 
-				setColor(bitmapData, stride, x, y, result);
+				setFloatColor(bitmapData, stride, x, y, result);
 			}
 		}
 }
@@ -200,7 +200,7 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 
 	// Drop shadow
 
-	Color shadow(colorArgb);
+	FloatColor shadow(colorArgb);
 
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
@@ -218,16 +218,16 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 			for (int x1 = xStart; x1 <= xEnd; x1++)
 				for (int y1 = yStart; y1 <= yEnd; y1++)
 				{
-					unsigned char alpha;
+					float alpha;
 
 					// Find weight
 					if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height)
 					{
-						alpha = (unsigned char)(((unsigned int)getAlpha(frameData, frameStride, x1, y1) * shadow.A) / 255);
+						alpha = getFloatAlpha(frameData, frameStride, x1, y1) * shadow.A;
 					}
 					else
 					{
-						alpha = 0;
+						alpha = 0.0f;
 					}
 
 					int kernelX = x1 - xStart;
@@ -241,33 +241,27 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 
 			if (count > 0)
 			{
-				IntColor result;
+				FloatColor result;
 
-				result.A = (unsigned char)(aSum / weight);
+				result.A = aSum / weight;
 				if (result.A > 0)
 				{
 					result.R = shadow.R;
 					result.G = shadow.G;
 					result.B = shadow.B;
 				}
-				else
-				{
-					result.R = 0;
-					result.G = 0;
-					result.B = 0;
-				}
 
-				IntColor org = getIntColor(backData, backStride, x, y);
+				FloatColor org = getFloatColor(backData, backStride, x, y);
 				alphaBlend(org, result);
-				setIntColor(backData, backStride, x, y, org);
+				setFloatColor(backData, backStride, x, y, org);
 			}
 		}
 }
 
-extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData, 
-	int stride, 
-	int width, 
-	int height, 
+extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
+	int stride,
+	int width,
+	int height,
 	int radius)
 {
 	// Gaussian kernel
@@ -285,7 +279,7 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
 		{
-			float sumR = 0, sumG = 0, sumB = 0, sumA = 0;
+			FloatColor sum;
 			float weight = 0.0f;
 			int count = 0;
 
@@ -305,16 +299,16 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 
 					// Premultiply alpha
 
-					IntColor color;
+					FloatColor color;
 					if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height)
-						color = getIntColor(copy.get(), stride, x1, y1);
+						color = getFloatColor(copy.get(), stride, x1, y1);
 					else
-						color = IntColor(0);
+						color = FloatColor(0);
 
-					sumR += (float)(((unsigned int)color.R) * color.A) * kernelValue;
-					sumG += (float)(((unsigned int)color.G) * color.A) * kernelValue;
-					sumB += (float)(((unsigned int)color.B) * color.A) * kernelValue;
-					sumA += color.A * kernelValue;
+					sum.R += (float)(color.R * color.A) * kernelValue;
+					sum.G += (float)(color.G * color.A) * kernelValue;
+					sum.B += (float)(color.B * color.A) * kernelValue;
+					sum.A += color.A * kernelValue;
 
 					weight += kernelValue;
 					count++;
@@ -322,17 +316,17 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 
 			if (count > 0)
 			{
-				IntColor result;
-				result.A = (unsigned char)(sumA / weight);
+				FloatColor result;
+				result.A = sum.A / weight;
 
 				if (result.A > 0)
 				{
-					result.R = ((sumR / weight) / result.A);
-					result.G = ((sumG / weight) / result.A);
-					result.B = ((sumB / weight) / result.A);
+					result.R = ((sum.R / weight) / result.A);
+					result.G = ((sum.G / weight) / result.A);
+					result.B = ((sum.B / weight) / result.A);
 				}
 
-				setIntColor(bitmapData, stride, x, y, result);
+				setFloatColor(bitmapData, stride, x, y, result);
 			}
 		}
 }
