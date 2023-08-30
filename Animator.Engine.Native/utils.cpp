@@ -24,6 +24,35 @@ Color::Color(int colorArgb)
 	B = (colorArgb & 0x000000ff) * 1.0f;
 }
 
+IntColor::IntColor()
+{
+	R = G = B = A = 0;
+}
+
+IntColor::IntColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+	R = r;
+	G = g;
+	B = b;
+	A = a;
+}
+
+IntColor::IntColor(unsigned int colorArgb)
+{
+	A = ((colorArgb & 0xff000000) >> 24);
+	R = ((colorArgb & 0x00ff0000) >> 16);
+	G = ((colorArgb & 0x0000ff00) >> 8);
+	B = (colorArgb & 0x000000ff);
+}
+
+IntColor::IntColor(Color color) 
+{
+	A = (unsigned char)(color.A * 255);
+	R = (unsigned char)(color.R);
+	G = (unsigned char)(color.G);
+	B = (unsigned char)(color.B);
+}
+
 std::shared_ptr<float[]> generateGaussKernel(int diameter)
 {
 	float sigma = diameter / 4.0f;

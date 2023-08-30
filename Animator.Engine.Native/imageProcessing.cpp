@@ -135,14 +135,14 @@ extern "C" void __cdecl CombineThree(unsigned char* base,
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
 		{
-			Color baseColor = getColor(base, baseStride, x, y);
-			Color firstColor = getColor(first, firstStride, x, y);
-			Color secondColor = getColor(second, secondStride, x, y);
+			IntColor baseColor = getIntColor(base, baseStride, x, y);
+			IntColor firstColor = getIntColor(first, firstStride, x, y);
+			IntColor secondColor = getIntColor(second, secondStride, x, y);
 
 			alphaBlend(baseColor, firstColor);
 			alphaBlend(baseColor, secondColor);
 
-			setColor(base, baseStride, x, y, baseColor);
+			setIntColor(base, baseStride, x, y, baseColor);
 		}
 }
 
@@ -156,12 +156,12 @@ extern "C" void __cdecl CombineTwo(unsigned char* base,
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
 		{
-			Color baseColor = getColor(base, baseStride, x, y);
-			Color imageColor = getColor(image, imageStride, x, y);
+			IntColor baseColor = getIntColor(base, baseStride, x, y);
+			IntColor imageColor = getIntColor(image, imageStride, x, y);
 
 			alphaBlend(baseColor, imageColor);
 
-			setColor(base, baseStride, x, y, baseColor);
+			setIntColor(base, baseStride, x, y, baseColor);
 		}
 }
 
@@ -177,14 +177,14 @@ extern "C" void __cdecl CombineWithMask(unsigned char* base,
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < height; x++)
 		{
-			Color sourceColor = getColor(base, baseStride, x, y);
-			Color maskColor = getColor(mask, maskStride, x, y);
+			IntColor sourceColor = getIntColor(base, baseStride, x, y);
+			IntColor maskColor = getIntColor(mask, maskStride, x, y);
 
-			sourceColor.A *= maskColor.A;
+			sourceColor.A = (unsigned char)(((int)sourceColor.A * maskColor.A) / 255);
 
-			Color targetColor = getColor(target, targetStride, x, y);
+			IntColor targetColor = getIntColor(target, targetStride, x, y);
 			alphaBlend(targetColor, sourceColor);
-			setColor(target, targetStride, x, y, targetColor);
+			setIntColor(target, targetStride, x, y, targetColor);
 		}
 }
 
@@ -257,9 +257,9 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 					result.B = shadow.B;
 				}
 
-				Color org = getColor(backData, backStride, x, y);
-				alphaBlend(org, result);
-				setColor(backData, backStride, x, y, org);
+				IntColor org = getIntColor(backData, backStride, x, y);
+				alphaBlend(org, IntColor(result));
+				setIntColor(backData, backStride, x, y, org);
 			}
 		}
 }
