@@ -26,7 +26,7 @@ namespace Animator.Engine.Elements
         {
             var data = image.LockBits(new System.Drawing.Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
 
-            ImageProcessing.ApplyAlpha(data.Scan0, data.Stride, data.Width, data.Height, alpha);
+            ImageProcessing.ApplyAlpha(data.Scan0, data.Stride, data.Width, data.Height, (byte)(alpha * 255.0f));
 
             image.UnlockBits(data);
         }

@@ -1,12 +1,15 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 const int BYTES_PER_PIXEL = 4;
 const int B_OFFSET = 0;
 const int G_OFFSET = 1;
 const int R_OFFSET = 2;
 const int ALPHA_OFFSET = 3;
+
+static std::vector<std::shared_ptr<float[]>> gaussKernels;
 
 struct Color 
 {
@@ -42,12 +45,10 @@ public:
 
 std::shared_ptr<float[]> generateGaussKernel(int radius);
 
-inline float getAlpha(unsigned char* bitmap, int stride, int x, int y)
+inline unsigned char getAlpha(unsigned char* bitmap, int stride, int x, int y)
 {
-    return bitmap[y * stride + x * BYTES_PER_PIXEL + ALPHA_OFFSET] / 255.0f;
+    return bitmap[y * stride + x * BYTES_PER_PIXEL + ALPHA_OFFSET];
 }
-
-
 
 inline Color getColor(unsigned char* bitmap, int stride, int x, int y)
 {
@@ -66,9 +67,9 @@ inline IntColor getIntColor(unsigned char* bitmap, int stride, int x, int y)
     return IntColor(colorBgra);
 }
 
-inline void setAlpha(unsigned char* bitmap, int stride, int x, int y, float value)
+inline void setAlpha(unsigned char* bitmap, int stride, int x, int y, unsigned char value)
 {
-    bitmap[y * stride + x * BYTES_PER_PIXEL + ALPHA_OFFSET] = (unsigned char)(value * 255.0f);
+    bitmap[y * stride + x * BYTES_PER_PIXEL + ALPHA_OFFSET] = value;
 }
 
 inline void setIntColor(unsigned char* bitmap, int stride, int x, int y, IntColor value) 

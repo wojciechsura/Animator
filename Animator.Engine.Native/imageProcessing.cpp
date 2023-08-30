@@ -11,19 +11,13 @@ extern "C" void __cdecl ApplyAlpha(unsigned char* bitmapData,
 	int stride, 
 	int width, 
 	int height, 
-	float alpha)
+	unsigned char alpha)
 {
-	if (alpha < 0.0f)
-		alpha = 0.0f;
-
-	if (alpha > 1.0f)
-		alpha = 1.0f;
-
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
 		{
-			float oldAlpha = getAlpha(bitmapData, stride, x, y);
-			float newAlpha = oldAlpha * alpha;
+			unsigned char oldAlpha = getAlpha(bitmapData, stride, x, y);
+			unsigned char newAlpha = (unsigned char)(((unsigned int)oldAlpha * alpha) >> 8);
 			setAlpha(bitmapData, stride, x, y, newAlpha);
 		}
 }
@@ -39,15 +33,15 @@ extern "C" void __cdecl ApplyMask(unsigned char* bitmapData,
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
 		{
-			Color color = getColor(bitmapData, bitmapStride, x, y);
-			Color maskColor = getColor(maskData, maskStride, x, y);
+			IntColor color = getIntColor(bitmapData, bitmapStride, x, y);
+			IntColor maskColor = getIntColor(maskData, maskStride, x, y);
 
 			if (invertMask)
-				color.A *= (1.0f - maskColor.A);
+				color.A = (unsigned char)(((unsigned int)color.A * (255 - maskColor.A)) >> 8);
 			else
-				color.A *= maskColor.A;
+				color.A = (unsigned char)(((unsigned int)color.A * maskColor.A) >> 8);
 
-			setColor(bitmapData, bitmapStride, x, y, color);
+			setIntColor(bitmapData, bitmapStride, x, y, color);
 		}
 }
 
@@ -224,16 +218,16 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 			for (int x1 = xStart; x1 <= xEnd; x1++)
 				for (int y1 = yStart; y1 <= yEnd; y1++)
 				{
-					float alpha;
+					unsigned char alpha;
 
 					// Find weight
 					if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height)
 					{
-						alpha = getAlpha(frameData, frameStride, x1, y1) * shadow.A;
+						alpha = (unsigned char)(((unsigned int)getAlpha(frameData, frameStride, x1, y1) * shadow.A) / 255);
 					}
 					else
 					{
-						alpha = 0.0f;					
+						alpha = 0;
 					}
 
 					int kernelX = x1 - xStart;
@@ -247,18 +241,24 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 
 			if (count > 0)
 			{
-				Color result;
+				IntColor result;
 
-				result.A = aSum / weight;
+				result.A = (unsigned char)(aSum / weight);
 				if (result.A > 0)
 				{
 					result.R = shadow.R;
 					result.G = shadow.G;
 					result.B = shadow.B;
 				}
+				else
+				{
+					result.R = 0;
+					result.G = 0;
+					result.B = 0;
+				}
 
 				IntColor org = getIntColor(backData, backStride, x, y);
-				alphaBlend(org, IntColor(result));
+				alphaBlend(org, result);
 				setIntColor(backData, backStride, x, y, org);
 			}
 		}
@@ -285,7 +285,7 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
 		{
-			Color sum;
+			float sumR = 0, sumG = 0, sumB = 0, sumA = 0;
 			float weight = 0.0f;
 			int count = 0;
 
@@ -305,16 +305,16 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 
 					// Premultiply alpha
 
-					Color color;
+					IntColor color;
 					if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height)
-						color = getColor(copy.get(), stride, x1, y1);
+						color = getIntColor(copy.get(), stride, x1, y1);
 					else
-						color = Color(0);
+						color = IntColor(0);
 
-					sum.R += (float)(color.R * color.A) * kernelValue;
-					sum.G += (float)(color.G * color.A) * kernelValue;
-					sum.B += (float)(color.B * color.A) * kernelValue;
-					sum.A += color.A * kernelValue;
+					sumR += (float)(((unsigned int)color.R) * color.A) * kernelValue;
+					sumG += (float)(((unsigned int)color.G) * color.A) * kernelValue;
+					sumB += (float)(((unsigned int)color.B) * color.A) * kernelValue;
+					sumA += color.A * kernelValue;
 
 					weight += kernelValue;
 					count++;
@@ -322,17 +322,17 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 
 			if (count > 0)
 			{
-				Color result;
-				result.A = sum.A / weight;
+				IntColor result;
+				result.A = (unsigned char)(sumA / weight);
 
 				if (result.A > 0)
 				{
-					result.R = ((sum.R / weight) / result.A);
-					result.G = ((sum.G / weight) / result.A);
-					result.B = ((sum.B / weight) / result.A);
+					result.R = ((sumR / weight) / result.A);
+					result.G = ((sumG / weight) / result.A);
+					result.B = ((sumB / weight) / result.A);
 				}
 
-				setColor(bitmapData, stride, x, y, result);
+				setIntColor(bitmapData, stride, x, y, result);
 			}
 		}
 }

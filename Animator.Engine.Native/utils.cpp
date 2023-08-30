@@ -55,22 +55,30 @@ IntColor::IntColor(Color color)
 
 std::shared_ptr<float[]> generateGaussKernel(int diameter)
 {
-	float sigma = diameter / 4.0f;
-	std::shared_ptr<float[]> kernel(new float[diameter * diameter]);
-	int mean = diameter / 2;
-	float sum = 0.0; // For accumulating the kernel values
-	for (int x = 0; x < diameter; ++x)
-		for (int y = 0; y < diameter; ++y) {
-			kernel[y * diameter + x] = (float)(exp(-0.5 * (pow((x - mean) / sigma, 2.0) + pow((y - mean) / sigma, 2.0))) / (2 * M_PI * sigma * sigma));
+	while (gaussKernels.size() <= diameter)
+		gaussKernels.push_back(std::shared_ptr<float[]>(nullptr));
 
-			// Accumulate the kernel values
-			sum += kernel[y * diameter + x];
-		}
+	if (gaussKernels[diameter].get() == nullptr)
+	{
+		float sigma = diameter / 4.0f;
+		std::shared_ptr<float[]> kernel(new float[diameter * diameter]);
+		int mean = diameter / 2;
+		float sum = 0.0; // For accumulating the kernel values
+		for (int x = 0; x < diameter; ++x)
+			for (int y = 0; y < diameter; ++y) {
+				kernel[y * diameter + x] = (float)(exp(-0.5 * (pow((x - mean) / sigma, 2.0) + pow((y - mean) / sigma, 2.0))) / (2 * M_PI * sigma * sigma));
 
-	// Normalize the kernel
-	for (int x = 0; x < diameter; ++x)
-		for (int y = 0; y < diameter; ++y)
-			kernel[y * diameter + x] /= sum;
+				// Accumulate the kernel values
+				sum += kernel[y * diameter + x];
+			}
 
-	return kernel;
+		// Normalize the kernel
+		for (int x = 0; x < diameter; ++x)
+			for (int y = 0; y < diameter; ++y)
+				kernel[y * diameter + x] /= sum;
+
+		gaussKernels[diameter] = std::shared_ptr<float[]>(kernel);
+	}
+
+	return gaussKernels[diameter];
 }
