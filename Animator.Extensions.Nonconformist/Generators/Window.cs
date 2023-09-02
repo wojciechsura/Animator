@@ -35,15 +35,15 @@ namespace Animator.Extensions.Nonconformist.Generators
             var showStart = (TimeSpan)TypeSerialization.Deserialize(config.Animation.ShowStart, typeof(TimeSpan));
             var showEnd = (TimeSpan)TypeSerialization.Deserialize(config.Animation.ShowEnd, typeof(TimeSpan));
             var length = showEnd - showStart;
-            var cornerMoveStart = showStart + (length / 2.0f);
-            var cornerMoveEnd = showStart + (3 * length / 4.0f);
-            var cornerShowStart = showStart + (length / 2.0f);
-            var cornerShowEnd = showStart + (3 * length / 5.0f);
-            var edgeAnimStart = showStart + (length / 2.0f);
-            var edgeAnimEnd = showStart + (3 * length / 4.0f);
-            var contentStart = showStart + (3 * length / 5.0f);
-            var contentEnd = showStart + (4 * length / 5.0f);
-            var headerShowStart = showStart + (3 * length / 4.0f);
+            var cornerMoveStart = showStart;
+            var cornerMoveEnd = showStart + (length / 2.0f);
+            var cornerShowStart = showStart + (length / 5.0f);
+            var cornerShowEnd = showStart + (length / 2.0f);
+            var edgeAnimStart = showStart + (length / 10.0f);
+            var edgeAnimEnd = showStart + (length / 2.0f);
+            var contentStart = showStart + (length / 5.0f);
+            var contentEnd = showStart + (3 * length / 5.0f);
+            var headerShowStart = showStart + (length / 2.0f);
             var headerShowEnd = showEnd;
 
             return new AnimationTimes

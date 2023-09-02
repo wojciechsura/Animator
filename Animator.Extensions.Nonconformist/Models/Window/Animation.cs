@@ -14,6 +14,6 @@ namespace Animator.Extensions.Nonconformist.Models.Window
         public string ShowStart { get; set; } = "0:0:0.0";
 
         [XmlAttribute]
-        public string ShowEnd { get; set; } = "0:0:2.0";
+        public string ShowEnd { get; set; } = "0:0:1.0";
     }
 }

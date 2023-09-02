@@ -13,13 +13,13 @@ namespace Animator.Extensions.Nonconformist.Models.Window
     public class Config
     {
         [XmlAttribute]
-        public float Width { get; set; } = 800.0f;
+        public float Width { get; set; } = 1700.0f;
 
         [XmlAttribute]
-        public float Height { get; set; } = 600.0f;
+        public float Height { get; set; } = 800.0f;
 
         [XmlAttribute]
-        public float DecorSize { get; set; } = 48.0f;
+        public float DecorSize { get; set; } = 40.0f;
 
         [XmlAttribute]
         public float CornerThickness { get; set; } = 6.0f;
@@ -34,10 +34,10 @@ namespace Animator.Extensions.Nonconformist.Models.Window
         public bool ShowHeader { get; set; } = true;
 
         [XmlAttribute]
-        public float HeaderWidth { get; set; } = 350.0f;
+        public float HeaderWidth { get; set; } = 600.0f;
 
         [XmlAttribute]
-        public float HeaderLineWidth { get; set; } = 200.0f;
+        public float HeaderLineWidth { get; set; } = 300.0f;
 
         [XmlAttribute]
         public float HeaderHeight { get; set; } = 100.0f;
@@ -49,7 +49,7 @@ namespace Animator.Extensions.Nonconformist.Models.Window
         public bool ShowFooter { get; set; } = true;
 
         [XmlAttribute]
-        public float FooterWidth { get; set; } = 300.0f;
+        public float FooterWidth { get; set; } = 500.0f;
 
         [XmlElement]
         public Animation Animation { get; set; } = new();
