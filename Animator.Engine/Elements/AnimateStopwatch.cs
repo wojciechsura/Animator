@@ -10,6 +10,11 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    /// <summary>
+    /// Allows applying an animation to a string property of some
+    /// object. The value will be set to a stopwatch started
+    /// at StartTime and stopped on EndTime.
+    /// </summary>
     public class AnimateStopwatch : AnimatePropertyInTime
     {
         public override void ApplyAnimation(float timeMs)
@@ -32,6 +37,10 @@ namespace Animator.Engine.Elements
 
         #region Format managed property
 
+        /// <summary>
+        /// Specifies format of the stopwatch. Compatible
+        /// with TimeSpan formatting strings.
+        /// </summary>
         public string Format
         {
             get => (string)GetValue(FormatProperty);

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Extensions.Nonconformist.Types
+namespace Animator.Extensions.Nonconformist.Types.Chart
 {
     public enum SeriesType
     {

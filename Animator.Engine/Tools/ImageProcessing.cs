@@ -14,7 +14,7 @@ namespace Animator.Engine.Tools
             int stride,
             int width,
             int height,
-            float alpha);
+            byte alpha);
 
         [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void ApplyMask(IntPtr bitmapData,

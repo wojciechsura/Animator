@@ -11,19 +11,13 @@ extern "C" void __cdecl ApplyAlpha(unsigned char* bitmapData,
 	int stride, 
 	int width, 
 	int height, 
-	float alpha)
+	unsigned char alpha)
 {
-	if (alpha < 0.0f)
-		alpha = 0.0f;
-
-	if (alpha > 1.0f)
-		alpha = 1.0f;
-
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
 		{
-			float oldAlpha = getAlpha(bitmapData, stride, x, y);
-			float newAlpha = oldAlpha * alpha;
+			unsigned char oldAlpha = getIntAlpha(bitmapData, stride, x, y);
+			unsigned char newAlpha = (unsigned char)(((unsigned int)oldAlpha * alpha) >> 8);
 			setAlpha(bitmapData, stride, x, y, newAlpha);
 		}
 }
@@ -39,15 +33,15 @@ extern "C" void __cdecl ApplyMask(unsigned char* bitmapData,
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
 		{
-			Color color = getColor(bitmapData, bitmapStride, x, y);
-			Color maskColor = getColor(maskData, maskStride, x, y);
+			IntColor color = getIntColor(bitmapData, bitmapStride, x, y);
+			IntColor maskColor = getIntColor(maskData, maskStride, x, y);
 
 			if (invertMask)
-				color.A *= (1.0f - maskColor.A);
+				color.A = (unsigned char)(((unsigned int)color.A * (255 - maskColor.A)) >> 8);
 			else
-				color.A *= maskColor.A;
+				color.A = (unsigned char)(((unsigned int)color.A * maskColor.A) >> 8);
 
-			setColor(bitmapData, bitmapStride, x, y, color);
+			setIntColor(bitmapData, bitmapStride, x, y, color);
 		}
 }
 
@@ -70,17 +64,17 @@ extern "C" void __cdecl Blur(unsigned char* bitmapData,
 		for (int x = 0; x < width; x++)
 		{
 			int count = 0;
-			Color sum;
+			FloatColor sum;
 
 			for (int x1 = x - radius; x1 <= x + radius; x1++)
 				for (int y1 = y - radius; y1 <= y + radius; y1++)
 				{
 					// Premultiply alpha
-					Color color;
+					FloatColor color;
 					if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height)
-						color = getColor(copy.get(), stride, x1, y1);
+						color = getFloatColor(copy.get(), stride, x1, y1);
 					else
-						color = Color(0);
+						color = FloatColor(0);
 
 					sum.R += color.R * color.A;
 					sum.G += color.G * color.A;
@@ -92,7 +86,7 @@ extern "C" void __cdecl Blur(unsigned char* bitmapData,
 
 			if (count > 0)
 			{
-				Color result;
+				FloatColor result;
 
 				result.A = sum.A / count;
 				if (result.A > 0)
@@ -102,7 +96,7 @@ extern "C" void __cdecl Blur(unsigned char* bitmapData,
 					result.B = ((sum.B / count) / result.A);
 				}
 
-				setColor(bitmapData, stride, x, y, result);
+				setFloatColor(bitmapData, stride, x, y, result);
 			}
 		}
 }
@@ -135,14 +129,14 @@ extern "C" void __cdecl CombineThree(unsigned char* base,
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
 		{
-			Color baseColor = getColor(base, baseStride, x, y);
-			Color firstColor = getColor(first, firstStride, x, y);
-			Color secondColor = getColor(second, secondStride, x, y);
+			IntColor baseColor = getIntColor(base, baseStride, x, y);
+			IntColor firstColor = getIntColor(first, firstStride, x, y);
+			IntColor secondColor = getIntColor(second, secondStride, x, y);
 
 			alphaBlend(baseColor, firstColor);
 			alphaBlend(baseColor, secondColor);
 
-			setColor(base, baseStride, x, y, baseColor);
+			setIntColor(base, baseStride, x, y, baseColor);
 		}
 }
 
@@ -156,12 +150,12 @@ extern "C" void __cdecl CombineTwo(unsigned char* base,
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
 		{
-			Color baseColor = getColor(base, baseStride, x, y);
-			Color imageColor = getColor(image, imageStride, x, y);
+			IntColor baseColor = getIntColor(base, baseStride, x, y);
+			IntColor imageColor = getIntColor(image, imageStride, x, y);
 
 			alphaBlend(baseColor, imageColor);
 
-			setColor(base, baseStride, x, y, baseColor);
+			setIntColor(base, baseStride, x, y, baseColor);
 		}
 }
 
@@ -177,14 +171,14 @@ extern "C" void __cdecl CombineWithMask(unsigned char* base,
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < height; x++)
 		{
-			Color sourceColor = getColor(base, baseStride, x, y);
-			Color maskColor = getColor(mask, maskStride, x, y);
+			IntColor sourceColor = getIntColor(base, baseStride, x, y);
+			IntColor maskColor = getIntColor(mask, maskStride, x, y);
 
-			sourceColor.A *= maskColor.A;
+			sourceColor.A = (unsigned char)(((int)sourceColor.A * maskColor.A) / 255);
 
-			Color targetColor = getColor(target, targetStride, x, y);
+			IntColor targetColor = getIntColor(target, targetStride, x, y);
 			alphaBlend(targetColor, sourceColor);
-			setColor(target, targetStride, x, y, targetColor);
+			setIntColor(target, targetStride, x, y, targetColor);
 		}
 }
 
@@ -206,7 +200,7 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 
 	// Drop shadow
 
-	Color shadow(colorArgb);
+	FloatColor shadow(colorArgb);
 
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
@@ -229,11 +223,11 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 					// Find weight
 					if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height)
 					{
-						alpha = getAlpha(frameData, frameStride, x1, y1) * shadow.A;
+						alpha = getFloatAlpha(frameData, frameStride, x1, y1) * shadow.A;
 					}
 					else
 					{
-						alpha = 0.0f;					
+						alpha = 0.0f;
 					}
 
 					int kernelX = x1 - xStart;
@@ -247,7 +241,7 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 
 			if (count > 0)
 			{
-				Color result;
+				FloatColor result;
 
 				result.A = aSum / weight;
 				if (result.A > 0)
@@ -257,17 +251,17 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 					result.B = shadow.B;
 				}
 
-				Color org = getColor(backData, backStride, x, y);
+				FloatColor org = getFloatColor(backData, backStride, x, y);
 				alphaBlend(org, result);
-				setColor(backData, backStride, x, y, org);
+				setFloatColor(backData, backStride, x, y, org);
 			}
 		}
 }
 
-extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData, 
-	int stride, 
-	int width, 
-	int height, 
+extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
+	int stride,
+	int width,
+	int height,
 	int radius)
 {
 	// Gaussian kernel
@@ -285,7 +279,7 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 	for (int y = 0; y < height; y++)
 		for (int x = 0; x < width; x++)
 		{
-			Color sum;
+			FloatColor sum;
 			float weight = 0.0f;
 			int count = 0;
 
@@ -305,11 +299,11 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 
 					// Premultiply alpha
 
-					Color color;
+					FloatColor color;
 					if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height)
-						color = getColor(copy.get(), stride, x1, y1);
+						color = getFloatColor(copy.get(), stride, x1, y1);
 					else
-						color = Color(0);
+						color = FloatColor(0);
 
 					sum.R += (float)(color.R * color.A) * kernelValue;
 					sum.G += (float)(color.G * color.A) * kernelValue;
@@ -322,7 +316,7 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 
 			if (count > 0)
 			{
-				Color result;
+				FloatColor result;
 				result.A = sum.A / weight;
 
 				if (result.A > 0)
@@ -332,7 +326,7 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 					result.B = ((sum.B / weight) / result.A);
 				}
 
-				setColor(bitmapData, stride, x, y, result);
+				setFloatColor(bitmapData, stride, x, y, result);
 			}
 		}
 }
