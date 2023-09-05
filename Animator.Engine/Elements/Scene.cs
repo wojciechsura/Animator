@@ -71,6 +71,12 @@ namespace Animator.Engine.Elements
 
         // Public properties --------------------------------------------------
 
+        /// <summary>
+        /// See <see cref="Visual.AlwaysRender" />
+        /// </summary>
+        public override bool AlwaysRender => Items
+            .Any(se => se.AlwaysRender);
+
         #region Duration managed property
 
         /// <summary>

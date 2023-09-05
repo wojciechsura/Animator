@@ -139,6 +139,10 @@ namespace Animator.Engine.Elements
                 RenderCloned(buffer, buffers);
         }
 
+        // Public properites --------------------------------------------------
+
+        public override bool AlwaysRender => Items.Any(i => i.AlwaysRender);
+
         #region Items managed collection
 
         /// <summary>

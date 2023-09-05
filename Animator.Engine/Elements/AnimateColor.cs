@@ -15,7 +15,7 @@ namespace Animator.Engine.Elements
     /// and ColorKeyframe to define the whole animation.
     public class AnimateColor : AnimateNumericPropertyInTime
     {
-        public override void ApplyAnimation(float timeMs)
+        public override bool ApplyAnimation(float timeMs)
         {
             (var obj, var prop) = AnimatedObject.FindProperty(PropertyRef);
 
@@ -31,7 +31,14 @@ namespace Animator.Engine.Elements
             var g = (int)Math.Min(255, Math.Max(0, (from.G + (to.G - from.G) * easedValue)));
             var b = (int)Math.Min(255, Math.Max(0, (from.B + (to.B - from.B) * easedValue)));
 
-            obj.SetAnimatedValue(prop, Color.FromArgb(a, r, g, b));
+            var previous = (Color)obj.GetValue(prop);
+            var value = Color.FromArgb(a, r, g, b);
+            obj.SetAnimatedValue(prop, value);
+            var next = (Color)obj.GetValue(prop);
+
+            // if (!object.Equals(next, previous)) { Console.WriteLine($"{obj}.{prop} changed from {previous} to {next}"); }
+
+            return previous != next;
         }
 
         // Public properties --------------------------------------------------

@@ -23,8 +23,10 @@ namespace Animator.Engine.Elements
     {
         // Public methods -----------------------------------------------------
 
-        public override void ApplyAnimation(float timeMs)
+        public override bool ApplyAnimation(float timeMs)
         {
+            bool changed = false;
+
             List<Keyframe> allKeyframes = new List<Keyframe>();
             foreach (var item in Keyframes)
                 item.AddKeyframesRecursive(allKeyframes);
@@ -53,22 +55,42 @@ namespace Animator.Engine.Elements
                     // object fromValue = obj.GetBaseValue(simpleProperty);
                     // object value = keyframes[0].EvalValue(0, fromValue, timeMs);
                     object value = keyframes[0].GetValue();
+
+                    var previous = obj.GetValue(prop);
                     obj.SetAnimatedValue(prop, value);
+                    var next = obj.GetValue(prop);
+                    changed |= !object.Equals(previous, next);
+
+                    // if (!object.Equals(next, previous)) { Console.WriteLine($"{obj}.{prop} changed from {previous} to {next}"); }
                 }
                 else if (i == keyframes.Count - 1)
                 {
                     // Past last keyframe
                     object value = keyframes[i].GetValue();
+
+                    var previous = obj.GetValue(prop);
                     obj.SetAnimatedValue(prop, value);
+                    var next = obj.GetValue(prop);
+                    changed |= !object.Equals(previous, next);
+
+                    // if (!object.Equals(next, previous)) { Console.WriteLine($"{obj}.{prop} changed from {previous} to {next}"); }
                 }
                 else
                 {
                     object fromValue = keyframes[i].GetValue();
                     TimeSpan fromTime = keyframes[i].Time;
                     object value = keyframes[i + 1].EvalValue((float)fromTime.TotalMilliseconds, fromValue, timeMs);
+
+                    var previous = obj.GetValue(prop);
                     obj.SetAnimatedValue(prop, value);
+                    var next = obj.GetValue(prop);
+                    changed |= !object.Equals(previous, next);
+
+                    // if (!object.Equals(next, previous)) { Console.WriteLine($"{obj}.{prop} changed from {previous} to {next}"); }
                 }
             }
+
+            return changed;
         }
 
         public override void ResetAnimation()

@@ -21,13 +21,17 @@ namespace Animator.Engine.Elements
     {
         // Public methods -----------------------------------------------------
 
-        public override void ApplyAnimation(float timeMs)
+        public override bool ApplyAnimation(float timeMs)
         {
+            bool changed = false;
+
             if (IsPropertySet(TimeOffsetProperty))
                 timeMs -= (float)TimeOffset.TotalMilliseconds;
 
             foreach (var animation in Animations)
-                animation.ApplyAnimation(timeMs);
+                changed |= animation.ApplyAnimation(timeMs);
+
+            return changed;
         }
 
         public override void ResetAnimation()

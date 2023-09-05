@@ -5,19 +5,28 @@ namespace Animator
 {
     public class DisposableStopwatch : IDisposable
     {
-        private readonly string comment;
-        private readonly Stopwatch stopwatch;
+        private static readonly object writeLock = new();
 
-        public DisposableStopwatch(string comment)
+        private readonly Stopwatch stopwatch;
+        private readonly Action writeMessage;
+
+        public DisposableStopwatch(Action writeMessage)
         {
-            this.comment = comment;
             stopwatch = Stopwatch.StartNew();
+            this.writeMessage = writeMessage;
         }
 
         public void Dispose()
         {
-            stopwatch.Stop();
-            Console.WriteLine($"{comment} ({stopwatch.ElapsedMilliseconds}ms)");
+            lock (writeLock)
+            {
+                stopwatch.Stop();
+                writeMessage();
+                var color = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine($" ({stopwatch.ElapsedMilliseconds}ms)");
+                Console.ForegroundColor = color;
+            }
         }
     }
 }
