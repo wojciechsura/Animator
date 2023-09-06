@@ -14,7 +14,9 @@
     xmlns:nav="clr-namespace:Animator.Editor.BusinessLogic.Models.Navigation;assembly=Animator.Editor.BusinessLogic"
     xmlns:wpf="clr-namespace:Animator.Editor.Wpf"
     xmlns:vm="clr-namespace:Animator.Editor.BusinessLogic.ViewModels.Document;assembly=Animator.Editor.BusinessLogic"
-    xmlns:uit="clr-namespace:Animator.Editor.BusinessLogic.Types.UI;assembly=Animator.Editor.BusinessLogic"
+    xmlns:uit="clr-namespace:Animator.Editor.BusinessLogic.Types.UI;assembly=Animator.Editor.BusinessLogic" 
+    xmlns:mvm="clr-namespace:Animator.Editor.BusinessLogic.ViewModels.Main;assembly=Animator.Editor.BusinessLogic" 
+    d:DataContext="{d:DesignInstance Type=mvm:MainWindowViewModel}"
     mc:Ignorable="d"
     Title="Animator.Editor" Height="450" Width="800" Closing="HandleWindowClosing"  UseLayoutRounding="True"
     Loaded="HandleLoaded">
@@ -298,6 +300,13 @@
                     <f:Button Header="{x:Static p:Strings.Ribbon_File_SaveAs}" Command="{Binding SaveAsCommand}" SizeDefinition="Middle, Small"
                               LargeIcon="pack://application:,,,/Animator.Editor;component/Resources/Images/Save32.png"
                               Icon="pack://application:,,,/Animator.Editor;component/Resources/Images/Save16.png"/>
+
+                    <Separator />
+                    
+                    <f:Button Header="{x:Static p:Strings.Ribbon_File_SaveFrameAs}" Command="{Binding SaveFrameAsCommand}" SizeDefinition="Large"
+                              LargeIcon="pack://application:,,,/Animator.Editor;component/Resources/Images/Save32.png"
+                              Icon="pack://application:,,,/Animator.Editor;component/Resources/Images/Save16.png"/>
+
                 </f:RibbonGroupBox>
 
                 <!-- Edit -->

@@ -6,6 +6,14 @@
     <Platforms>x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Commands\**" />
+    <Compile Remove="Conditions\**" />
+    <EmbeddedResource Remove="Commands\**" />
+    <EmbeddedResource Remove="Conditions\**" />
+    <None Remove="Commands\**" />
+    <None Remove="Conditions\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>

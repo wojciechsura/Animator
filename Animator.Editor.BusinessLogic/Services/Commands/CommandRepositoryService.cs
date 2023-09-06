@@ -1,6 +1,6 @@
 ﻿using Animator.Editor.BusinessLogic.Models.Commands;
-using Animator.Editor.Common.Commands;
-using Animator.Editor.Common.Conditions;
+using Spooksoft.VisualStateManager.Commands;
+using Spooksoft.VisualStateManager.Conditions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

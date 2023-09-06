@@ -2,12 +2,12 @@
 using Animator.Editor.BusinessLogic.Services.Messaging;
 using Animator.Editor.BusinessLogic.Types.Search;
 using Animator.Editor.BusinessLogic.ViewModels.Base;
-using Animator.Editor.Common.Commands;
-using Animator.Editor.Common.Conditions;
 using Animator.Editor.Common.Tools;
 using Animator.Editor.Resources;
+using Spooksoft.VisualStateManager.Commands;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -136,9 +136,9 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Search
             }
         }
 
-        private void HandleSelectionAvailableChanged(object sender, ValueChangedEventArgs e)
+        private void HandleSelectionAvailableChanged(object sender, PropertyChangedEventArgs e)
         {
-            SelectionAvailable = searchHost.SelectionAvailableCondition.GetValue();
+            SelectionAvailable = searchHost.SelectionAvailableCondition.Value;
             if (!SelectionAvailable)
                 ReplaceAllInSelection = false;
         }
@@ -159,8 +159,8 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Search
             wholeWordsOnly = false;
             searchMode = SearchMode.Normal;
 
-            selectionAvailable = searchHost.SelectionAvailableCondition.GetValue();
-            searchHost.SelectionAvailableCondition.ValueChanged += HandleSelectionAvailableChanged;
+            selectionAvailable = searchHost.SelectionAvailableCondition.Value;
+            searchHost.SelectionAvailableCondition.PropertyChanged += HandleSelectionAvailableChanged;
 
             FindNextCommand = new AppCommand(obj => DoFindNext(), searchHost.CanSearchCondition);
             ReplaceCommand = new AppCommand(obj => DoReplace(), searchHost.CanSearchCondition);
@@ -176,7 +176,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Search
 
         public void ShowReplace()
         {
-            replaceAllInSelection = searchHost.SelectionAvailableCondition.GetValue();
+            replaceAllInSelection = searchHost.SelectionAvailableCondition.Value;
 
             access.ChooseReplaceTab();
             access.ShowAndFocus();

@@ -1,5 +1,5 @@
 ﻿using Animator.Editor.BusinessLogic.ViewModels.Document;
-using Animator.Editor.Common.Conditions;
+using Spooksoft.VisualStateManager.Conditions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,12 +13,12 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
     {
         // Private fields -----------------------------------------------------
 
-        private readonly Condition documentExistsCondition;
-        private readonly MutableSourcePropertyWatchCondition<MainWindowViewModel, DocumentViewModel> canUndoCondition;
-        private readonly MutableSourcePropertyWatchCondition<MainWindowViewModel, DocumentViewModel> canRedoCondition;
-        private readonly MutableSourcePropertyWatchCondition<MainWindowViewModel, DocumentViewModel> selectionAvailableCondition;
-        private readonly MutableSourcePropertyWatchCondition<MainWindowViewModel, DocumentViewModel> regularSelectionAvailableCondition;
-        private readonly MutableSourcePropertyNotNullWatchCondition<MainWindowViewModel, DocumentViewModel> searchPerformedCondition;
+        private readonly SimpleCondition documentExistsCondition;
+        private readonly BaseCondition canUndoCondition;
+        private readonly BaseCondition canRedoCondition;
+        private readonly BaseCondition selectionAvailableCondition;
+        private readonly BaseCondition regularSelectionAvailableCondition;
+        private readonly BaseCondition searchPerformedCondition;
 
         // Public properties --------------------------------------------------
 
@@ -28,6 +28,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
         public ICommand OpenCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand SaveAsCommand { get; }
+        public ICommand SaveFrameAsCommand { get; }
 
         // Edit
 

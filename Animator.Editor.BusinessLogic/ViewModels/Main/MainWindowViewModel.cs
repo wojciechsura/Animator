@@ -5,8 +5,6 @@ using Animator.Editor.BusinessLogic.Services.Messaging;
 using Animator.Editor.BusinessLogic.ViewModels.Base;
 using Animator.Editor.BusinessLogic.ViewModels.Document;
 using Animator.Editor.BusinessLogic.ViewModels.Search;
-using Animator.Editor.Common.Commands;
-using Animator.Editor.Common.Conditions;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -35,6 +33,9 @@ using Animator.Editor.BusinessLogic.Types.UI;
 using Animator.Editor.BusinessLogic.Models.UI;
 using ICSharpCode.AvalonEdit.Document;
 using Animator.Engine.Base;
+using System.Linq.Expressions;
+using Spooksoft.VisualStateManager.Conditions;
+using Spooksoft.VisualStateManager.Commands;
 
 namespace Animator.Editor.BusinessLogic.ViewModels.Main
 {
@@ -313,15 +314,15 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
             highlightings = new List<HighlightingInfo>(highlightingProvider.HighlightingDefinitions);
             highlightings.Sort((h1, h2) => h1.Name.CompareTo(h2.Name));
 
-            documentExistsCondition = new Condition(activeDocument != null);
+            documentExistsCondition = Condition.Simple(activeDocument != null);
 
             // Initializing conditions
 
-            canUndoCondition = new MutableSourcePropertyWatchCondition<MainWindowViewModel, DocumentViewModel>(this, vm => vm.ActiveDocument, doc => doc.CanUndo, false);
-            canRedoCondition = new MutableSourcePropertyWatchCondition<MainWindowViewModel, DocumentViewModel>(this, vm => vm.ActiveDocument, doc => doc.CanRedo, false);
-            selectionAvailableCondition = new MutableSourcePropertyWatchCondition<MainWindowViewModel, DocumentViewModel>(this, vm => ActiveDocument, doc => doc.SelectionAvailable, false);
-            regularSelectionAvailableCondition = new MutableSourcePropertyWatchCondition<MainWindowViewModel, DocumentViewModel>(this, vm => ActiveDocument, doc => doc.RegularSelectionAvailable, false);
-            searchPerformedCondition = new MutableSourcePropertyNotNullWatchCondition<MainWindowViewModel, DocumentViewModel>(this, vm => ActiveDocument, doc => doc.LastSearch);
+            canUndoCondition = Condition.ChainedLambda(this, vm => vm.ActiveDocument, doc => doc.CanUndo, false);
+            canRedoCondition = Condition.ChainedLambda(this, vm => vm.ActiveDocument, doc => doc.CanRedo, false);
+            selectionAvailableCondition = Condition.ChainedLambda(this, vm => vm.ActiveDocument, doc => doc.SelectionAvailable, false);
+            regularSelectionAvailableCondition = Condition.ChainedLambda(this, vm => vm.ActiveDocument, doc => doc.RegularSelectionAvailable, false);
+            searchPerformedCondition = Condition.ChainedLambda(this, vm => vm.ActiveDocument, doc => doc.LastSearch != null, false);
 
             // Initializing commands
 
@@ -332,6 +333,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
             OpenCommand = commandRepositoryService.RegisterCommand(Resources.Strings.Ribbon_File_Open, "Open16.png", obj => DoOpen());
             SaveCommand = commandRepositoryService.RegisterCommand(Resources.Strings.Ribbon_File_Save, "Save16.png", obj => DoSave(), documentExistsCondition);
             SaveAsCommand = commandRepositoryService.RegisterCommand(Resources.Strings.Ribbon_File_SaveAs, "Save16.png", obj => DoSaveAs(), documentExistsCondition);
+            SaveFrameAsCommand = commandRepositoryService.RegisterCommand(Resources.Strings.Ribbon_File_SaveFrameAs, "Save16.png", obj => DoSaveFrameAs(), documentExistsCondition);
 
             UndoCommand = commandRepositoryService.RegisterCommand(Resources.Strings.Ribbon_Edit_Undo, "Undo16.png", obj => DoUndo(), canUndoCondition);
             RedoCommand = commandRepositoryService.RegisterCommand(Resources.Strings.Ribbon_Edit_Redo, "Redo16.png", obj => DoRedo(), canRedoCondition);

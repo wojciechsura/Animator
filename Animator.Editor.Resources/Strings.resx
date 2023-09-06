@@ -336,4 +336,10 @@
   <data name="Message.RenderingFrame" xml:space="preserve">
     <value>Rendering frame...</value>
   </data>
+  <data name="Ribbon.File.SaveFrameAs" xml:space="preserve">
+    <value>Save frame as...</value>
+  </data>
+  <data name="Message_FixErrorsBeforeRenderingFrame" xml:space="preserve">
+    <value>Fix all errors before rendering frame: {0}</value>
+  </data>
 </root>

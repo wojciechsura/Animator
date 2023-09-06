@@ -18,8 +18,6 @@ using Animator.Editor.BusinessLogic.Models.Documents;
 using Animator.Editor.BusinessLogic.Models.Highlighting;
 using Animator.Editor.BusinessLogic.Models.Search;
 using Animator.Editor.BusinessLogic.ViewModels.Base;
-using Animator.Editor.Common.Commands;
-using Animator.Editor.Common.Conditions;
 using Animator.Engine.Base;
 using Animator.Engine.Base.Exceptions;
 using Animator.Engine.Base.Persistence;
@@ -29,6 +27,7 @@ using Animator.Engine.Exceptions;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Document;
 using Microsoft.Language.Xml;
+using Spooksoft.VisualStateManager.Commands;
 
 namespace Animator.Editor.BusinessLogic.ViewModels.Document
 {

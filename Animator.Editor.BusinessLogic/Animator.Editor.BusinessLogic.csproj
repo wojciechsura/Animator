@@ -127,6 +127,7 @@
     <PackageReference Include="GuiLabs.Language.Xml" Version="1.2.60" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Spooksoft.VisualStateManager" Version="1.2.1" />
     <PackageReference Include="Unity" Version="5.11.10" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="7.0.1" />
   </ItemGroup>

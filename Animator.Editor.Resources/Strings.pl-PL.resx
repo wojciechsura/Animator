@@ -336,4 +336,10 @@
   <data name="Message.RenderingFrame" xml:space="preserve">
     <value>Trwa renderowanie klatki...</value>
   </data>
+  <data name="Ribbon.File.SaveFrameAs" xml:space="preserve">
+    <value>Zapisz klatkę jako...</value>
+  </data>
+  <data name="Message_FixErrorsBeforeRenderingFrame" xml:space="preserve">
+    <value>Popraw błędy przed wyrenderowaniem klatki: {0}</value>
+  </data>
 </root>

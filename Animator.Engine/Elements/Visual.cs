@@ -280,12 +280,22 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty AlphaProperty = ManagedProperty.Register(typeof(Visual),
             nameof(Alpha),
             typeof(float),
-            new ManagedSimplePropertyMetadata { DefaultValue = 1.0f });
+            new ManagedSimplePropertyMetadata 
+            { 
+                DefaultValue = 1.0f,
+                CoerceValueHandler = CoerceAlpha
+            });
+
+        private static object CoerceAlpha(ManagedObject obj, object baseValue)
+        {
+            var value = (float)baseValue;
+            return Math.Max(0.0f, Math.Min(1.0f, value));
+        }
 
         #endregion
 
         #region Effects managed collection
-        
+
         /// <summary>
         /// List of effects, which will be applied to
         /// a visual after rendering.

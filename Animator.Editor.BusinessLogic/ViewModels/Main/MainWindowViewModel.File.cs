@@ -7,6 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+using Animator.Engine.Elements.Persistence;
+using Animator.Engine.Elements;
+using System.Xml;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+using System.Drawing;
 
 namespace Animator.Editor.BusinessLogic.ViewModels.Main
 {
@@ -76,7 +81,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
             document.Document.UndoStack.ClearAll();
             document.Document.UndoStack.MarkAsOriginalFile();
             document.FilenameVirtual = false;
-            document.Highlighting = highlightingProvider.GetDefinitionByExtension(Path.GetExtension(filename));
+            document.Highlighting = highlightingProvider.GetDefinitionByExtension(System.IO.Path.GetExtension(filename));
         }
 
         private void LoadDocument(string filename)
@@ -115,6 +120,65 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
             }
 
             return false;
+        }
+
+        private void SaveFrameAs(DocumentViewModel document)
+        {
+            Bitmap result;
+
+            try
+            {
+                // Load movie
+
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(document.Document.Text);
+
+                var movieSerializer = new MovieSerializer();
+                var movie = movieSerializer.Deserialize(xmlDoc);
+
+                // Calculate time to apply animations
+
+                var framesPerSecond = movie.Config.FramesPerSecond;
+                TimeSpan time = TimeSpan.FromSeconds(1 / framesPerSecond * document.FrameIndex);
+
+                // Render frame
+
+                if (movie.Scenes.Count == 0)
+                    throw new InvalidOperationException("No scenes to render!");
+                TimeSpan summedTime = TimeSpan.FromSeconds(0);
+
+                int i = 0;
+                while (i < movie.Scenes.Count && summedTime + movie.Scenes[i].Duration < time)
+                {
+                    summedTime += movie.Scenes[i].Duration;
+                    i++;
+                }
+
+                if (i >= movie.Scenes.Count)
+                    throw new InvalidOperationException("Given time exceedes whole movie time!");
+
+                TimeSpan sceneTimeOffset = time - summedTime;
+
+                movie.Scenes[i].ApplyAnimation((float)sceneTimeOffset.TotalMilliseconds);
+
+                result = new Bitmap(movie.Config.Width, movie.Config.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+                movie.Scenes[i].Render(result);
+            }
+            catch (Exception e)
+            {
+                messagingService.ShowError(String.Format(Resources.Strings.Message_FixErrorsBeforeRenderingFrame, e.Message));
+                return;
+            }
+
+            // Show save dialog
+
+            var saveDialogResult = dialogService.SaveDialog("Images (*.png)|*.png");
+
+            if (saveDialogResult.Result)
+            {
+                result.Save(saveDialogResult.FileName);
+            }
         }
 
         private void DoNew()
@@ -167,6 +231,11 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
         private void DoSaveAs()
         {
             SaveDocumentAs(activeDocument);
+        }
+
+        private void DoSaveFrameAs()
+        {
+            SaveFrameAs(activeDocument);
         }
     }
 }

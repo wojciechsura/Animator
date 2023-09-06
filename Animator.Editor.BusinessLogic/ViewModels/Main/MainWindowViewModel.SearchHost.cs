@@ -1,12 +1,12 @@
 ﻿using Animator.Editor.BusinessLogic.Models.Search;
 using Animator.Editor.BusinessLogic.ViewModels.Search;
-using Animator.Editor.Common.Conditions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using Spooksoft.VisualStateManager.Conditions;
 
 namespace Animator.Editor.BusinessLogic.ViewModels.Main
 {

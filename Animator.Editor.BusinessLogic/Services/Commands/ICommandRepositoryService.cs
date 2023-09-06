@@ -1,5 +1,5 @@
 ﻿using Animator.Editor.BusinessLogic.Models.Commands;
-using Animator.Editor.Common.Conditions;
+using Spooksoft.VisualStateManager.Conditions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
