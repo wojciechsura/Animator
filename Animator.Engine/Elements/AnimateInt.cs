@@ -18,7 +18,7 @@ namespace Animator.Engine.Elements
     {
         // Public methods -----------------------------------------------------
 
-        public override void ApplyAnimation(float timeMs)
+        public override bool ApplyAnimation(float timeMs)
         {
             (var obj, var prop) = AnimatedObject.FindProperty(PropertyRef);
 
@@ -28,7 +28,14 @@ namespace Animator.Engine.Elements
             int from = IsPropertySet(FromProperty) ? From : (int)obj.GetBaseValue(prop);
             int to = IsPropertySet(ToProperty) ? To : (int)obj.GetBaseValue(prop);
 
-            obj.SetAnimatedValue(prop, (int)Math.Round(from + (to - from) * easedValue));
+            var previous = (int)obj.GetValue(prop);
+            var value = (int)Math.Round(from + (to - from) * easedValue);
+            obj.SetAnimatedValue(prop, value);
+            var next = (int)obj.GetValue(prop);
+
+            // if (!object.Equals(next, previous)) { Console.WriteLine($"{obj}.{prop} changed from {previous} to {next}"); }
+
+            return previous != next;
         }
 
         // Public properties --------------------------------------------------

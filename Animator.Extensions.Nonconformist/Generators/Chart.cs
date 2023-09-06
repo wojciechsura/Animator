@@ -672,12 +672,13 @@ namespace Animator.Extensions.Nonconformist.Generators
 
             List<TimeSpan> times = new[] { animationTimes.Start }
                 .Concat(animationTimes.SeriesSwitchTimes)
-                .Concat(new[] { animationTimes.End - animationTimes.FadeDuration })
+                .Concat(new[] { animationTimes.End - animationTimes.FadeDuration / 2})
                 .ToList();
 
             float x = metrics.HeaderArea.Left + metrics.HeaderArea.Width / 2;
             float y = metrics.HeaderArea.Top + metrics.HeaderArea.Height / 2;
             float xDelta = config.Width / 15.0f;
+            float yDelta = config.Height / 10.0f;
 
             var color = (System.Drawing.Color)TypeSerialization.Deserialize(config.Header.Color, typeof(System.Drawing.Color));
 
@@ -690,6 +691,9 @@ namespace Animator.Extensions.Nonconformist.Generators
                     VerticalAlignment = VerticalAlignment.Center,
                     FontFamily = config.Header.FontFamily,
                     FontSize = config.Header.FontSize,
+                    Bold = config.Header.Bold,
+                    Italic = config.Header.Italic,
+                    Underline = config.Header.Underline,
                     Text = headers[i],
                     Brush = new SolidBrush
                     {
@@ -719,13 +723,13 @@ namespace Animator.Extensions.Nonconformist.Generators
                                         },
                                         new FloatKeyframe
                                         {
-                                            Time = times[i + 1],
+                                            Time = times[i + 1] - animationTimes.FadeDuration / 2,
                                             Value = 1,
                                             EasingFunction = EasingFunction.Linear
                                         },
                                         new FloatKeyframe
                                         {
-                                            Time = times[i + 1] + animationTimes.FadeDuration,
+                                            Time = times[i + 1] + animationTimes.FadeDuration / 2,
                                             Value = 0,
                                             EasingFunction = EasingFunctionOut
                                         }
@@ -739,7 +743,7 @@ namespace Animator.Extensions.Nonconformist.Generators
                                         new PointKeyframe
                                         {
                                             Time = times[i],
-                                            Value = new System.Drawing.PointF(x + xDelta, y)
+                                            Value = new System.Drawing.PointF(x, y - yDelta)
                                         },
                                         new PointKeyframe
                                         {
@@ -749,14 +753,14 @@ namespace Animator.Extensions.Nonconformist.Generators
                                         },
                                         new PointKeyframe
                                         {
-                                            Time = times[i + 1],
+                                            Time = times[i + 1] - animationTimes.FadeDuration / 2,
                                             Value = new System.Drawing.PointF(x, y),
                                             EasingFunction = EasingFunction.Linear
                                         },
                                         new PointKeyframe
                                         {
-                                            Time = times[i + 1] + animationTimes.FadeDuration,
-                                            Value = new System.Drawing.PointF(x - xDelta, y),
+                                            Time = times[i + 1] + animationTimes.FadeDuration / 2,
+                                            Value = new System.Drawing.PointF(x, y + yDelta),
                                             EasingFunction = EasingFunctionOut
                                         }
                                     }
@@ -804,6 +808,9 @@ namespace Animator.Extensions.Nonconformist.Generators
                         VerticalAlignment = config.Axis.XAxis.Labels.VerticalAlignment,
                         FontFamily = config.Axis.XAxis.Labels.FontFamily,
                         FontSize = config.Axis.XAxis.Labels.FontSize,
+                        Bold = config.Axis.XAxis.Labels.Bold,
+                        Italic = config.Axis.XAxis.Labels.Italic,
+                        Underline = config.Axis.XAxis.Labels.Underline,
                         Brush = new SolidBrush
                         {
                             Color = labelColor
@@ -848,6 +855,9 @@ namespace Animator.Extensions.Nonconformist.Generators
                     VerticalAlignment = config.Axis.YAxis.Labels.VerticalAlignment,
                     FontFamily = config.Axis.YAxis.Labels.FontFamily,
                     FontSize = config.Axis.YAxis.Labels.FontSize,
+                    Bold = config.Axis.YAxis.Labels.Bold,
+                    Italic = config.Axis.YAxis.Labels.Italic,
+                    Underline = config.Axis.YAxis.Labels.Underline,
                     Brush = new SolidBrush
                     {
                         Color = labelColor

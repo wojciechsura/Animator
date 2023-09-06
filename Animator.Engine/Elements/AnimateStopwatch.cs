@@ -17,7 +17,7 @@ namespace Animator.Engine.Elements
     /// </summary>
     public class AnimateStopwatch : AnimatePropertyInTime
     {
-        public override void ApplyAnimation(float timeMs)
+        public override bool ApplyAnimation(float timeMs)
         {
             (var obj, var prop) = AnimatedObject.FindProperty(PropertyRef);
 
@@ -30,7 +30,14 @@ namespace Animator.Engine.Elements
             else
                 timeSpan = TimeSpan.FromMilliseconds(timeMs - StartTime.TotalMilliseconds);
 
-            obj.SetAnimatedValue(prop, timeSpan.ToString(Format));
+            var previous = (string)obj.GetValue(prop);
+            var value = timeSpan.ToString(Format);
+            obj.SetAnimatedValue(prop, value);
+            var next = (string)obj.GetValue(prop);
+
+            // if (!object.Equals(next, previous)) { Console.WriteLine($"{obj}.{prop} changed from {previous} to {next}"); }
+
+            return previous != next;
         }
 
         // Public properties --------------------------------------------------

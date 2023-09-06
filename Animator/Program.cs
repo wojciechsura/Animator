@@ -19,6 +19,49 @@ namespace Animator
 {
     class Program
     {
+        private readonly static object consoleLock = new object();
+
+        private static void Write(string text = "", ConsoleColor color = ConsoleColor.Gray)
+        {
+            lock (consoleLock)
+            {
+                Console.ForegroundColor = color;
+                Console.Write(text);
+            }
+        }
+
+        private static void WriteLine(string text = "", ConsoleColor color = ConsoleColor.Gray)
+        {
+            lock (consoleLock)
+            {
+                Console.ForegroundColor = color;
+                Console.WriteLine(text);
+            }
+        }
+
+        private static void Write(string text1, string text2, ConsoleColor color1, ConsoleColor color2 = ConsoleColor.Gray)
+        {
+            lock (consoleLock)
+            {
+                Console.ForegroundColor = color1;
+                Console.Write(text1);
+                Console.ForegroundColor = color2;
+                Console.Write(text2);
+            }
+        }
+
+
+        private static void WriteLine(string text1, string text2, ConsoleColor color1, ConsoleColor color2 = ConsoleColor.Gray)
+        {
+            lock (consoleLock)
+            {
+                Console.ForegroundColor = color1;
+                Console.Write(text1);
+                Console.ForegroundColor = color2;
+                Console.WriteLine(text2);
+            }
+        }
+
         private static Movie LoadAnimation(string path)
         {
             XmlDocument document = new();
@@ -42,38 +85,38 @@ namespace Animator
 
         private static void DisplayError(Exception e)
         {
-            Console.WriteLine("--- Reason: ---");
-            Console.WriteLine();
+            WriteLine("--- Reason: ---");
+            WriteLine();
 
             while (e != null)
             {
                 if (e is SerializerException serializerException)
                 {
-                    Console.WriteLine(serializerException.Message);
-                    Console.WriteLine($"(on {serializerException.XPath})");
+                    WriteLine(serializerException.Message);
+                    WriteLine($"(on {serializerException.XPath})");
                 }
                 else if (e is AnimationException animationException)
                 {
-                    Console.WriteLine(animationException.Message);
-                    Console.WriteLine($"(on {animationException.Path})");
+                    WriteLine(animationException.Message);
+                    WriteLine($"(on {animationException.Path})");
                 }
                 else
-                    Console.WriteLine(e.Message);
+                    WriteLine(e.Message);
 
                 if (e.InnerException != null)
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("--- Because: ---");
-                    Console.WriteLine();
+                    WriteLine();
+                    WriteLine("--- Because: ---");
+                    WriteLine();
                 }
 
                 e = e.InnerException;
             }
         }
 
-        private static bool IsSuccessful(Action action, string message)
+        private static bool IsSuccessful(Action action, Action writeMessage)
         {
-            using (new DisposableStopwatch(message))
+            using (new DisposableStopwatch(writeMessage))
                 return IsSuccessful(action);
         }
 
@@ -86,13 +129,13 @@ namespace Animator
             }
             catch (Exception e)
             {
-                Console.WriteLine("Generating animation stopped with an error.");
+                WriteLine("Erorr: ", "Failed to generate animation.", ConsoleColor.Red);
                 DisplayError(e);
                 return false;
             }
         }
 
-        private static void RenderAnimationAt(Movie animation, TimeSpan time, string outFile)
+        private static Bitmap RenderAnimationAt(Movie animation, TimeSpan time, Bitmap previousFrame, string outFile)
         {
             // Determine scene
 
@@ -110,13 +153,21 @@ namespace Animator
 
             TimeSpan sceneTimeOffset = time - summedTime;
 
-            animation.Scenes[i].ApplyAnimation((float)sceneTimeOffset.TotalMilliseconds);
+            bool changed = animation.Scenes[i].ApplyAnimation((float)sceneTimeOffset.TotalMilliseconds);
 
-            var bitmap = new Bitmap(animation.Config.Width, animation.Config.Height, PixelFormat.Format32bppArgb);
+            if (!changed && previousFrame != null && !animation.Scenes[i].AlwaysRender)
+            {
+                previousFrame.Save(outFile);
+                return previousFrame;
+            }
+            else
+            {
+                var bitmap = new Bitmap(animation.Config.Width, animation.Config.Height, PixelFormat.Format32bppArgb);
+                animation.Scenes[i].Render(bitmap);
+                bitmap.Save(outFile);
 
-            animation.Scenes[i].Render(bitmap);
-
-            bitmap.Save(outFile);
+                return bitmap;
+            }            
         }
 
         private static void RenderFrame(RenderFrameOptions options)
@@ -124,7 +175,7 @@ namespace Animator
             Movie animation = null;
 
 
-            if (!IsSuccessful(() => { animation = LoadAnimation(options.Source); }, "Loaded animation"))
+            if (!IsSuccessful(() => { animation = LoadAnimation(options.Source); }, () => Write("Loaded animation")))
                 return;
 
             var framesPerSecond = animation.Config.FramesPerSecond;
@@ -133,13 +184,13 @@ namespace Animator
             {
                 TimeSpan time = TimeSpan.FromSeconds(1 / framesPerSecond * options.FrameIndex.Value);
 
-                if (!IsSuccessful(() => RenderAnimationAt(animation, time, options.OutFile), "Rendered single frame"))
+                if (!IsSuccessful(() => RenderAnimationAt(animation, time, null, options.OutFile), () => Write("Rendered single frame")))
                     return;
                 
             }
             else if (options.TimeOffset != null)
             {
-                if (!IsSuccessful(() => RenderAnimationAt(animation, options.TimeOffset.Value, options.OutFile), "Rendered single frame"))
+                if (!IsSuccessful(() => RenderAnimationAt(animation, options.TimeOffset.Value, null, options.OutFile), () => Write("Rendered single frame")))
                     return;
             }
         }
@@ -154,6 +205,7 @@ namespace Animator
             var framesPerSecond = animation.Config.FramesPerSecond;
             var totalAnimationTime = animation.Scenes.Sum(s => s.Duration.TotalMilliseconds);
             var totalFrames = (int)(totalAnimationTime / 1000.0f * framesPerSecond);
+            Bitmap previousFrame = null;
 
             for (int frame = 0; frame < totalFrames; frame++)
             {
@@ -162,8 +214,17 @@ namespace Animator
                 string fileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(options.OutFile),
                     $"{System.IO.Path.GetFileNameWithoutExtension(options.OutFile)}{frame}{System.IO.Path.GetExtension(options.OutFile)}");
 
-                if (!IsSuccessful(() => RenderAnimationAt(animation, time, fileName), $"Rendered frame {frame + 1} from {totalFrames}"))
+                if (!IsSuccessful(() =>
+                    {
+                        previousFrame = RenderAnimationAt(animation, time, previousFrame, fileName);
+                    }, () => 
+                    {
+                        Write("Rendered frame ", $"{frame + 1}", ConsoleColor.Gray, ConsoleColor.White);
+                        Write(" from ", $"{totalFrames}", ConsoleColor.Gray, ConsoleColor.White);
+                    }))
+                {
                     return;
+                }
             }
         }
 
@@ -178,7 +239,31 @@ namespace Animator
             var totalAnimationTime = animations[0].Scenes.Sum(s => s.Duration.TotalMilliseconds);
             var totalFrames = (int)(totalAnimationTime / 1000.0f * framesPerSecond);
 
-            object availableMoviesLock = new();
+            object sharedDataLock = new();
+
+            // Frame ranges
+
+            List<(int Start, int End)> frameRanges;
+
+            if (totalFrames < options.Threads)
+            {
+                frameRanges = new List<(int Start, int End)> { (0, totalFrames - 1) };
+            }
+            else
+            {
+                frameRanges = Enumerable.Range(0, options.Threads - 1)
+                    .Select(i => ( Start: Math.Min(totalFrames - 1, i * totalFrames / (options.Threads - 1)), 
+                        End: Math.Min(totalFrames, (i + 1) * totalFrames / (options.Threads - 1))))
+                    .ToList();
+            }
+
+            WriteLine("Render plan:", ConsoleColor.White);
+
+            for (int i = 0; i < frameRanges.Count; i++)
+                WriteLine($"{i + 1}. ", $"({frameRanges[i].Start} - {frameRanges[i].End})", ConsoleColor.White);
+
+            // Movie object repository
+
             Stack<Movie> availableMovies = new();
             foreach (var movie in animations)
                 availableMovies.Push(movie);
@@ -188,29 +273,43 @@ namespace Animator
                 MaxDegreeOfParallelism = options.Threads
             };
 
-            Parallel.For(0, totalFrames, parallelOptions, (frame, state) =>
+            Parallel.For(0, frameRanges.Count, parallelOptions, (index, state) =>
                 {
                     Movie animation;
+                    (int Start, int End) frameRange;                    
 
-                    lock (availableMoviesLock)
+                    lock (sharedDataLock)
                     {
                         animation = availableMovies.Pop();
+                        frameRange = frameRanges[index];
                     }
 
-                    var time = TimeSpan.FromSeconds(1 / framesPerSecond * frame);
+                    Bitmap previousFrame = null;
 
-                    string fileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(options.OutFile),
-                        $"{System.IO.Path.GetFileNameWithoutExtension(options.OutFile)}{frame}{System.IO.Path.GetExtension(options.OutFile)}");
-
-                    if (!IsSuccessful(() => RenderAnimationAt(animation, time, fileName), $"Rendered frame {frame + 1} from {totalFrames}"))
+                    for (int frame = frameRange.Start; frame < frameRange.End; frame++)
                     {
-                        Console.WriteLine("Failed to render animation!");
-                        state.Break();
-                        return;
+                        var time = TimeSpan.FromSeconds(1 / framesPerSecond * frame);
+
+                        string fileName = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(options.OutFile),
+                            $"{System.IO.Path.GetFileNameWithoutExtension(options.OutFile)}{frame}{System.IO.Path.GetExtension(options.OutFile)}");
+
+                        if (!IsSuccessful(() =>
+                            {
+                                previousFrame = RenderAnimationAt(animation, time, previousFrame, fileName);
+                            }, () =>
+                            {
+                                Write("Rendered frame ", $"{frame + 1}", ConsoleColor.Gray, ConsoleColor.White);
+                                Write(" from ", $"{totalFrames}", ConsoleColor.Gray, ConsoleColor.White);
+                            }))
+                        {
+                            Console.WriteLine("Failed to render animation!");
+                            state.Break();
+                            return;
+                        }
                     }
 
-                    lock (availableMoviesLock) 
-                    { 
+                    lock (sharedDataLock)
+                    {
                         availableMovies.Push(animation);
                     }
                 });
@@ -218,13 +317,15 @@ namespace Animator
 
         static void Main(string[] args)
         {
-            using (new DisposableStopwatch("Finished"))
+            using (new DisposableStopwatch(() => Write("Finished!", ConsoleColor.Green)))
             {
                 Parser.Default.ParseArguments<RenderOptions, RenderFrameOptions, RenderParallelOptions>(args)
                     .WithParsed<RenderOptions>(Render)
                     .WithParsed<RenderParallelOptions>(RenderParallel)
                     .WithParsed<RenderFrameOptions>(RenderFrame);
             }
+
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
     }
 }

@@ -200,7 +200,7 @@ namespace Animator.Engine.Elements
 
         // Protected methods --------------------------------------------------
 
-        public override void ApplyAnimation(float timeMs)
+        public override bool ApplyAnimation(float timeMs)
         {
             if (compiled == null)
                 throw new AnimationException("No expression provided for PropertyExpressionAnimator or expression is invalid!", GetPath());
@@ -211,9 +211,15 @@ namespace Animator.Engine.Elements
 
             var propType = prop.Type;
 
-            object resultValue = ValueFromNumeric(result, propType);
-            
-            obj.SetValue(prop, resultValue);
+            object value = ValueFromNumeric(result, propType);
+
+            var previous = obj.GetValue(prop);
+            obj.SetAnimatedValue(prop, value);
+            var next = obj.GetValue(prop);
+
+            // if (!object.Equals(next, previous)) { Console.WriteLine($"{obj}.{prop} changed from {previous} to {next}"); }
+
+            return !object.Equals(previous, next);
         }
 
         // Public properties --------------------------------------------------

@@ -36,6 +36,15 @@ namespace Animator.Extensions.Nonconformist.Models.Chart
         public float FontSize { get; set; } = 20.0f;
 
         [XmlAttribute]
+        public bool Bold { get; set; } = false;
+
+        [XmlAttribute]
+        public bool Italic { get; set; } = false;
+
+        [XmlAttribute]
+        public bool Underline { get; set; } = false;
+
+        [XmlAttribute]
         public string Color { get; set; } = "#60EBF2";
 
         [XmlAttribute]

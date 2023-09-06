@@ -14,7 +14,13 @@ namespace Animator.Engine.Elements
     /// </summary>
     public abstract class Animation : Element
     {
-        public abstract void ApplyAnimation(float timeMs);
+        /// <summary>
+        /// Applies animation to property of an element.
+        /// </summary>
+        /// <param name="timeMs">Time since the scene started.</param>
+        /// <returns>True if applying animation caused change in one of this or child
+        /// element's ManagedProperties.</returns>
+        public abstract bool ApplyAnimation(float timeMs);
 
         public abstract void ResetAnimation();
 

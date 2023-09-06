@@ -216,6 +216,14 @@
             the scene.
             </summary>
         </member>
+        <member name="M:Animator.Engine.Elements.Animation.ApplyAnimation(System.Single)">
+            <summary>
+            Applies animation to property of an element.
+            </summary>
+            <param name="timeMs">Time since the scene started.</param>
+            <returns>True if applying animation caused change in one of this or child
+            element's ManagedProperties.</returns>
+        </member>
         <member name="T:Animator.Engine.Elements.AnimationGroup">
             <summary>
             Allows grouping a couple of animators, so that you don't have to specify
@@ -1092,6 +1100,11 @@
             Contains description of a single scene in animation.
             </summary>
         </member>
+        <member name="P:Animator.Engine.Elements.Scene.AlwaysRender">
+            <summary>
+            See <see cref="!:Visual.AlwaysRender" />
+            </summary>
+        </member>
         <member name="P:Animator.Engine.Elements.Scene.Duration">
             <summary>
             Defines duration of the scene.
@@ -1121,6 +1134,15 @@
             scene, though this is not enforced. However, elements
             are reachable through PropertyRef properties only if
             their names are unique.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.SceneElement.AlwaysRender">
+            <summary>
+            Defines, whether object should be always rendered. Animator application uses 
+            a mechanism to avoid rendering frames which contains no changes from the 
+            previous one. If object always requires rendering (because e.g. its contents 
+            are generated on every frame), this will enforce rendering the whole frame 
+            even if no effective value of object's properties has changed.
             </summary>
         </member>
         <member name="P:Animator.Engine.Elements.SceneElement.Animations">

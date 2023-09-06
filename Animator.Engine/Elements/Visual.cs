@@ -170,7 +170,6 @@ namespace Animator.Engine.Elements
 
         // Public properties --------------------------------------------------
 
-
         #region Visible managed property
 
         /// <summary>

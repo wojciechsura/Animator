@@ -29,6 +29,15 @@ namespace Animator.Extensions.Nonconformist.Models.Chart
         [XmlAttribute]
         public string Color { get; set; } = "#FF8E32";
 
+        [XmlAttribute]
+        public bool Bold { get; set; } = false;
+
+        [XmlAttribute]
+        public bool Italic { get; set; } = false;
+
+        [XmlAttribute]
+        public bool Underline { get; set; } = false;
+
         [XmlElement]
         public List<string> NextHeader { get; set; } = new();
     }

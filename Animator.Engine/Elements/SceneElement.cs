@@ -199,15 +199,19 @@ namespace Animator.Engine.Elements
             return (finalElement, property);
         }
 
-        public void ApplyAnimation(float timeMs)
+        public bool ApplyAnimation(float timeMs)
         {
+            bool changed = false;
+
             ProcessElementsRecursive<SceneElement>(baseElement =>
             {
                 foreach (var animator in baseElement.Animations)
                 {
-                    animator.ApplyAnimation(timeMs);
+                    changed |= animator.ApplyAnimation(timeMs);
                 }
             });
+
+            return changed;
         }
 
         // Public properties --------------------------------------------------
@@ -248,6 +252,17 @@ namespace Animator.Engine.Elements
         }
 
         #endregion
+
+        /// <summary>
+        /// Defines, whether object should be always rendered. Animator application uses 
+        /// a mechanism to avoid rendering frames which contains no changes from the 
+        /// previous one. If object always requires rendering (because e.g. its contents 
+        /// are generated on every frame), this will enforce rendering the whole frame 
+        /// even if no effective value of object's properties has changed.
+        /// </summary>
+        [DoNotDocument]
+        public virtual bool AlwaysRender { get; } = false;
+
 
         #region Animators managed collection
 

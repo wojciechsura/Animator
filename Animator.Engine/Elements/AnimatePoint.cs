@@ -19,7 +19,7 @@ namespace Animator.Engine.Elements
     {
         // Public methods -----------------------------------------------------
 
-        public override void ApplyAnimation(float timeMs)
+        public override bool ApplyAnimation(float timeMs)
         {
             (var obj, var prop) = AnimatedObject.FindProperty(PropertyRef);
 
@@ -29,7 +29,14 @@ namespace Animator.Engine.Elements
             PointF from = IsPropertySet(FromProperty) ? From : (PointF)obj.GetBaseValue(prop);
             PointF to = IsPropertySet(ToProperty) ? To : (PointF)obj.GetBaseValue(prop);
 
-            obj.SetAnimatedValue(prop, new PointF(from.X + (to.X - from.X) * easedValue, from.Y + (to.Y - from.Y) * easedValue));
+            var previous = (PointF)obj.GetValue(prop);
+            var value = new PointF(from.X + (to.X - from.X) * easedValue, from.Y + (to.Y - from.Y) * easedValue);
+            obj.SetAnimatedValue(prop, value);
+            var next = (PointF)obj.GetValue(prop);
+
+            // if (!object.Equals(next, previous)) { Console.WriteLine($"{obj}.{prop} changed from {previous} to {next}"); }
+
+            return previous != next;
         }
 
         // Public properties --------------------------------------------------
@@ -52,7 +59,6 @@ namespace Animator.Engine.Elements
             new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0.0f, 0.0f) });
 
         #endregion
-
 
         #region To managed property
 
