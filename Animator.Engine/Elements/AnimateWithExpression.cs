@@ -76,7 +76,7 @@ namespace Animator.Engine.Elements
                 else if (value.GetType() == typeof(PointF))
                 {
                     var point = (PointF)value;
-                    return (true, new MatrixNumeric(2, 1, new[] { new FloatNumeric(point.X), new FloatNumeric(point.Y) }));
+                    return (true, new VectorNumeric(new[] { new FloatNumeric(point.X), new FloatNumeric(point.Y) }));
                 }
                 else
                     return (false, null);                    
