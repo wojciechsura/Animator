@@ -2,6 +2,7 @@
 using Animator.Engine.Elements.Types;
 using Animator.Engine.Elements.Utilities;
 using Animator.Engine.Tools;
+using Animator.Engine.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -82,7 +83,7 @@ namespace Animator.Engine.Elements
 
         internal void Render(BitmapBuffer buffer, BitmapBufferRepository buffers)
         {
-            if (!Visible)
+            if (!Visible || Alpha.IsZero())
                 return;
 
             var originalTransform = buffer.Graphics.Transform;
