@@ -298,17 +298,54 @@ namespace Animator.Documentation
 
         static void Main(string[] args)
         {
+            string xmlPath, outfileHtml, outfileDot;
+
             if (args.Length < 3)
             {
-                Console.WriteLine("Usage: ");
-                Console.WriteLine("");
-                Console.WriteLine("Animator.Documentation <path to Animator.Engine.xml> <outfile.html> <outfile.dot>");
+                // Try to find animator.engine.xml
 
-                Console.WriteLine("Run with full path to Animator.Engine.xml documentation file.");
-                return;
+                string binPath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string rootPath = string.Join('\\', binPath.Split('\\')[0..^5]);
+                if (!rootPath.EndsWith('\\'))
+                    rootPath += '\\';
+
+                xmlPath = rootPath + "Animator\\bin\\x64\\Release\\net6.0-windows7.0\\Animator.Engine.xml";
+                if (!File.Exists(xmlPath))
+                    xmlPath = rootPath + "Animator\\bin\\x64\\Debug\\net6.0-windows7.0\\Animator.Engine.xml";
+
+                outfileHtml = rootPath + "Animator.html";
+                outfileDot = rootPath + "Animator.dot";
+
+                if (!File.Exists(xmlPath))
+                {
+                    Console.WriteLine("Usage: ");
+                    Console.WriteLine("");
+                    Console.WriteLine("Animator.Documentation <path to Animator.Engine.xml> <outfile.html> <outfile.dot>");
+
+                    Console.WriteLine("Run with full path to Animator.Engine.xml documentation file.");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("No paths provided, using defaults:");
+                    Console.WriteLine();
+                    Console.WriteLine($"Animator.XML path: {xmlPath}");
+                    Console.WriteLine($"HTML output file path: {outfileHtml}");
+                    Console.WriteLine($"Dot output file path: {outfileDot}");
+
+                    Console.WriteLine();
+                    Console.WriteLine("Press any key to continue...");
+                    Console.ReadKey();
+                }
+            }
+            else
+            {
+                xmlPath = args[0];
+                outfileHtml = args[1];
+                outfileDot = args[2];
             }
 
-            Documentation.LoadXmlDocumentation(File.ReadAllText(args[0]));
+            Documentation.LoadXmlDocumentation(File.ReadAllText(xmlPath));
 
             // Find assembly with elements and its current namespace
 
@@ -322,7 +359,7 @@ namespace Animator.Documentation
 
             // Save documentation
 
-            File.WriteAllText(args[1], sb.ToString());
+            File.WriteAllText(outfileHtml, sb.ToString());
 
             // Build class tree
 
@@ -330,7 +367,7 @@ namespace Animator.Documentation
 
             // Save class tree
 
-            File.WriteAllText(args[2], sb.ToString());
+            File.WriteAllText(outfileDot, sb.ToString());
         }
     }
 }
