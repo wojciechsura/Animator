@@ -72,6 +72,9 @@ namespace Animator.Engine.Elements
 
         #region Source managed property
 
+        /// <summary>
+        /// Path of the image
+        /// </summary>
         public string Source
         {
             get => (string)GetValue(SourceProperty);
@@ -85,6 +88,9 @@ namespace Animator.Engine.Elements
 
         #endregion
 
+        /// <summary>
+        /// Horizontal aligment of the image
+        /// </summary>
         #region HorizontalAlignment
 
         public HorizontalAlignment HorizontalAlignment
@@ -102,6 +108,9 @@ namespace Animator.Engine.Elements
 
         #region VerticalAlignment
 
+        /// <summary>
+        /// Vertical alignment of the image
+        /// </summary>
         public VerticalAlignment VerticalAlignment
         {
             get => (VerticalAlignment)GetValue(VerticalAlignmentProperty);
