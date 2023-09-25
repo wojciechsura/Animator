@@ -26,15 +26,18 @@ namespace Animator.Engine.Elements
         {
             if (string.IsNullOrEmpty(Source)) 
                 throw new AnimationException("Source property of SvgImage is empty!", GetPath());
-            if (!File.Exists(Source))
-                throw new AnimationException($"SVG image {Source} does not exist!", GetPath());
 
-            if (cachedDocumentPath != Source)
+            var resolvedPath = ResolvePath(Source);
+
+            if (!File.Exists(resolvedPath))
+                throw new AnimationException($"SVG image {resolvedPath} does not exist!", GetPath());
+
+            if (cachedDocumentPath != resolvedPath)
             {
                 lock(svgLockObject)
                 {
-                    cachedDocument = SvgDocument.Open(Source);
-                    cachedDocumentPath = Source;
+                    cachedDocument = SvgDocument.Open(resolvedPath);
+                    cachedDocumentPath = resolvedPath;
                 }
             }
         }

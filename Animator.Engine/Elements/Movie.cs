@@ -1,5 +1,6 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Base.Persistence;
+using Animator.Engine.Types;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,6 +20,9 @@ namespace Animator.Engine.Elements
         {
             Config = new MovieConfig();
         }
+
+        [DoNotDocument]
+        public string Path { get; set; }
 
         #region Config managed property
 

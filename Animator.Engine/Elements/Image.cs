@@ -28,17 +28,20 @@ namespace Animator.Engine.Elements
         {
             if (String.IsNullOrEmpty(Source))
                 throw new AnimationException("Source property of Image is empty!", GetPath());
-            if (!File.Exists(Source))
-                throw new AnimationException($"Image {Source} does not exist!", GetPath());
 
-            if (cachedImagePath != Source)
+            string resolvedPath = ResolvePath(Source);
+
+            if (!File.Exists(resolvedPath))
+                throw new AnimationException($"Image {resolvedPath} does not exist!", GetPath());
+
+            if (cachedImagePath != resolvedPath)
             {
                 lock (bitmapLockObject)
                 {
-                    var bytes = File.ReadAllBytes(Source);
+                    var bytes = File.ReadAllBytes(resolvedPath);
                     var ms = new MemoryStream(bytes);
                     cachedImage = (Bitmap)System.Drawing.Image.FromStream(ms);
-                    cachedImagePath = Source;
+                    cachedImagePath = resolvedPath;
                 }
             }
         }

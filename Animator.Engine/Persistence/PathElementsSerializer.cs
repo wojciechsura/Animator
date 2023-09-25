@@ -27,7 +27,7 @@ namespace Animator.Engine.Elements.Persistence
         }
 
         private float ExpectFloat(string str, ref int index)
-        {
+        {                       
             OmitWhitespace(str, ref index);
 
             int start = index;
@@ -67,7 +67,6 @@ namespace Animator.Engine.Elements.Persistence
 
         private bool IsLetter(string str, ref int index)
         {
-            OmitWhitespace(str, ref index);
             return (index < str.Length && (str[index] >= 'a' && str[index] <= 'z') || (str[index] >= 'A' && str[index] <= 'Z'));
         }
 
@@ -265,6 +264,9 @@ namespace Animator.Engine.Elements.Persistence
             while (index < data.Length)
             {
                 OmitWhitespace(data, ref index);
+
+                if (index >= data.Length)
+                    break;
 
                 char c;
 

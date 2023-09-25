@@ -37,12 +37,14 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 
         private class UpdateMovieInput
         {
-            public UpdateMovieInput(string movieXml)
+            public UpdateMovieInput(string movieXml, string path)
             {
                 MovieXml = movieXml;
+                Path = path;
             }
 
             public string MovieXml { get; }
+            public string Path { get; }
         }
 
         private class MovieUpdatedResult
@@ -80,6 +82,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
                     document.LoadXml(input.MovieXml);
 
                     movie = movieSerializer.Deserialize(document);
+                    movie.Path = input.Path;
                     e.Result = new MovieUpdatedResult(movie);
                 }
                 catch (Exception ex)
@@ -677,7 +680,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 
             updateMovieWorker = new UpdateMovieWorker();
             updateMovieWorker.RunWorkerCompleted += UpdateMovieFinished;
-            updateMovieWorker.RunWorkerAsync(new UpdateMovieInput(text));
+            updateMovieWorker.RunWorkerAsync(new UpdateMovieInput(text, FilenameVirtual ? string.Empty : FileName));
         }
 
         public List<CompletionInfo> GetCompletionList(int selectionStart)
