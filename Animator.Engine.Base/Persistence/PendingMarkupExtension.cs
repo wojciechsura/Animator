@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Base.Persistence
 {
-    internal class PendingMarkupExtension
+    public sealed class PendingMarkupExtension
     {
         public PendingMarkupExtension(BaseMarkupExtension markupExtension, ManagedProperty property, ManagedObject @object)
         {

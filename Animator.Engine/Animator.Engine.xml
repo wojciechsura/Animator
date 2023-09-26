@@ -1117,7 +1117,7 @@
         </member>
         <member name="P:Animator.Engine.Elements.Scene.AlwaysRender">
             <summary>
-            See <see cref="!:Visual.AlwaysRender" />
+            See <see cref="P:Animator.Engine.Elements.SceneElement.AlwaysRender" />
             </summary>
         </member>
         <member name="P:Animator.Engine.Elements.Scene.Duration">

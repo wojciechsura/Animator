@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.3.310801">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Spooksoft.VisualStateManager" Version="1.0.8.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Animator.Engine.Base\Animator.Engine.Base.csproj" />
+    <ProjectReference Include="..\..\Animator.Engine\Animator.Engine.csproj" />
+    <ProjectReference Include="..\Animator.Designer.Common\Animator.Designer.Common.csproj" />
+    <ProjectReference Include="..\Animator.Designer.Dependencies\Animator.Designer.Dependencies.csproj" />
+    <ProjectReference Include="..\Animator.Designer.Resources\Animator.Designer.Resources.csproj" />
+  </ItemGroup>
+</Project>
