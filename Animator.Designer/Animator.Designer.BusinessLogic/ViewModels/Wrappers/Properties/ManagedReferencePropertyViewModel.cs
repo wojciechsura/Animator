@@ -29,7 +29,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 if (value is StringValueViewModel)
                     Set(ref this.value, value);
                 else if (value is ReferenceValueViewModel)
-                    Set(ref this.value, value);                
+                    Set(ref this.value, value);   
+                else if (value is MarkupExtensionViewModel)
+                    Set(ref this.value, value);
                 else
                     throw new ArgumentException($"ManagedReferencePropertyViewModel does not support value of type {value}!");
             }

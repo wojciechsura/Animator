@@ -28,6 +28,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                     Set(ref this.value, value);
                 else if (value is CollectionValueViewModel)
                     Set(ref this.value, value);
+                else if (value is MarkupExtensionViewModel)
+                    Set(ref this.value, value);
                 else                    
                     throw new ArgumentException($"ManagedCollectionPropertyViewModel does not support value of type {value}!");
             }

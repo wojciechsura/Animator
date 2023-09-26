@@ -1,4 +1,5 @@
-﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;
+﻿using Animator.Designer.BusinessLogic.ViewModels.Base;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
-    public abstract class BaseObjectViewModel
+    public abstract class BaseObjectViewModel : BaseViewModel
     {
         public TProperty Property<TProperty>(string name)
             where TProperty : PropertyViewModel =>        

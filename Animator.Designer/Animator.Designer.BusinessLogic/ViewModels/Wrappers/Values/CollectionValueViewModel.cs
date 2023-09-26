@@ -10,8 +10,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
 {
     public class CollectionValueViewModel : ValueViewModel
     {
-        private readonly ObservableCollection<ManagedObjectViewModel> items = new();
+        private readonly ObservableCollection<BaseObjectViewModel> items = new();
 
-        public IList<ManagedObjectViewModel> Items => items;
+        public IList<BaseObjectViewModel> Items => items;
     }
 }

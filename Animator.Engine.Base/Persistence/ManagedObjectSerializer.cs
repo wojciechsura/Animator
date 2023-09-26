@@ -51,10 +51,6 @@ namespace Animator.Engine.Base.Persistence
             XmlNode node,
             DeserializationContext context)
         {
-            string name, fullTypeName;
-            List<(string property, string value)> @params;
-            Type objectType;
-
             // 1. Deserialize data related to markup extension
 
             var markupData = DeserializeMarkupExtension(value, node, context.Namespaces);
@@ -182,10 +178,10 @@ namespace Animator.Engine.Base.Persistence
                         throw new SerializerException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}",
                             node.FindXPath());
 
-                    if (property is ManagedSimpleProperty simpleProperty)
+                    if (property is ManagedSimpleProperty)
                     {
-                        deserializedObject.SetValue(simpleProperty, content);
-                        propertiesSet.Add(string.Format(CONTENT_DECORATION, property.Name));
+                        throw new SerializerException($"Property {property.Name} is a simple managed property and cannot be content property of object {deserializedObject.GetType().Name}",
+                            node.FindXPath());
                     }
                     else if (property is ManagedReferenceProperty referenceProperty)
                     {

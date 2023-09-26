@@ -14,6 +14,7 @@ using System.Xml;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;
 using System.Collections;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
+using System.Reflection;
 
 namespace Animator.Designer.BusinessLogic.Infrastructure
 {
@@ -21,7 +22,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
     {
         // Private classes ----------------------------------------------------
 
-        private class DeserializationContext
+        private sealed class DeserializationContext
         {
             public DeserializationContext(Models.MovieSerialization.DeserializationOptions options)
             {
@@ -34,17 +35,252 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
         // Private methods ----------------------------------------------------
 
-        private void DeserializeChildren(XmlElement node, ManagedObjectViewModel deserializedObject, DeserializationContext context, HashSet<string> setProperties)
+        private void DeserializeChildren(XmlNode node, 
+            ManagedObjectViewModel deserializedObject, 
+            DeserializationContext context, 
+            HashSet<string> propertiesSet)
         {
-            throw new NotImplementedException();
+            foreach (XmlNode child in node.ChildNodes)
+            {
+                if (child is XmlComment)
+                    continue;
+
+                // 0. Check if it is any of internal elements
+
+                if (child.NamespaceURI == ENGINE_NAMESPACE)
+                {
+                    if (child.LocalName == MACROS_ELEMENT)
+                    {
+                        foreach (var macroNode in child.ChildNodes.OfType<XmlElement>())
+                        {
+                            var keyAttribute = macroNode.Attributes
+                                .OfType<XmlAttribute>()
+                                .Where(a => a.NamespaceURI == ENGINE_NAMESPACE && a.LocalName == KEY_ATTRIBUTE)
+                                .FirstOrDefault();
+
+                            if (keyAttribute == null)
+                                throw new SerializerException("Macro is missing its key!", macroNode.FindXPath());
+
+                            var xKey = keyAttribute.Value;
+
+                            BaseObjectViewModel macroContent = DeserializeElement(macroNode, context);
+
+                            var macroItem = new MacroEntryViewModel();
+                            macroItem.Property<StringPropertyViewModel>("x:Key").Value = xKey;
+                            macroItem.Content = macroContent;
+
+                            deserializedObject.Macros.Add(macroItem);
+                        }
+
+                        // This doesn't need immediate processing
+                        continue;
+                    }
+                    else if (child.LocalName == MACRO_ELEMENT)
+                    {
+                        // This one will be processed later, no action required
+                    }
+                    else if (child.LocalName == INCLUDE_ELEMENT)
+                    {
+                        // This one will be processed later, no action required
+                    }
+                    else if (child.LocalName == GENERATE_ELEMENT)
+                    {
+                        // This one will be processed later, no action required
+                    }
+                    else
+                        throw new SerializerException($"Not recognized internal element: {child.LocalName}!", child.FindXPath());
+                }
+
+                // 1. Check if it is a property with extended notation
+
+                if (child.NamespaceURI == node.NamespaceURI &&
+                    child.LocalName.StartsWith($"{node.LocalName}."))
+                {
+                    // 1.1.1 Loading property
+
+                    string propertyName = child.LocalName.Substring(node.LocalName.Length + 1);
+
+                    var property = deserializedObject.Property<ManagedPropertyViewModel>(propertyName);
+                    
+                    if (property == null)
+                        throw new SerializerException($"Property {propertyName} not found on object of type {deserializedObject.GetType().Name}",
+                            node.FindXPath());
+
+                    if (property.ManagedProperty.Metadata.NotSerializable)
+                        throw new SerializerException($"Property {propertyName} on object {deserializedObject.GetType().Name} is not serializable!\r\nRemove it from input file.",
+                            node.FindXPath());
+
+                    DeserializeObjectProperty(child, deserializedObject, property, context, propertiesSet);
+                }
+                else
+                {
+                    // 1.2.1 Find, which property is set as a so-called content property
+
+                    var property = deserializedObject.ContentProperty;
+
+                    if (property == null)
+                        throw new SerializerException($"Type {deserializedObject.GetType().Name} does not have ContentProperty specified. You have to specify property explicitly.",
+                            node.FindXPath());
+
+                    if (property.ManagedProperty.Metadata.NotSerializable)
+                        throw new SerializerException($"Property {property.ManagedProperty.Name} on object {deserializedObject.GetType().Name} is not serializable!\r\nThe data structure is ill-formed: content property should be serializable.",
+                            node.FindXPath());
+
+                    // 1.2.2 Deserialize object
+
+                    var content = DeserializeElement(child, context);
+
+                    if (propertiesSet.Contains(property.Name))
+                        throw new SerializerException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}",
+                            node.FindXPath());
+
+                    if (property is ManagedSimplePropertyViewModel)
+                    {
+                        throw new SerializerException($"Property {property.Name} is a simple managed property and cannot be content property of object {deserializedObject.GetType().Name}",
+                            node.FindXPath());
+                    }
+                    else if (property is ManagedReferencePropertyViewModel referenceProperty)
+                    {
+                        var value = new ReferenceValueViewModel();
+                        value.Value = content;
+
+                        referenceProperty.Value = value;
+                        propertiesSet.Add(string.Format(CONTENT_DECORATION, property.Name));
+                    }
+                    else if (property is ManagedCollectionPropertyViewModel collectionProperty)
+                    {
+                        var collectionValue = collectionProperty.Value as CollectionValueViewModel;
+                        if (collectionValue == null)
+                        {
+                            collectionValue = new CollectionValueViewModel();
+                            collectionProperty.Value = collectionValue;
+                        }
+
+                        collectionValue.Items.Add(content);
+                        propertiesSet.Add(string.Format(CONTENT_DECORATION, property.Name));
+                    }
+                    else
+                        throw new InvalidOperationException("Unsupported managed property!");
+                }
+            }
         }
 
-        private void ProcessMarkupExtension(ManagedObjectViewModel deserializedObject, ManagedPropertyViewModel managedProperty, string value, XmlElement node, DeserializationContext context)
+        private void DeserializeObjectProperty(XmlNode propertyNode, 
+            ManagedObjectViewModel deserializedObject, 
+            ManagedPropertyViewModel property, 
+            DeserializationContext context, 
+            HashSet<string> propertiesSet)
         {
-            throw new NotImplementedException();
+            if (property.ManagedProperty.Metadata.NotSerializable)
+                throw new SerializerException($"Cannot deserialize non-serializable property {property.Name}!",
+                    propertyNode.FindXPath());
+
+            if (propertiesSet.Contains(property.Name) || propertiesSet.Contains(string.Format(CONTENT_DECORATION, property.Name)))
+                throw new SerializerException($"Property {property.Name} has been already set on type {deserializedObject.GetType().Name}",
+                    propertyNode.FindXPath());
+
+            if (property is ManagedSimplePropertyViewModel simple)
+            {
+                if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 0)
+                {
+                    var stringValue = new StringValueViewModel(propertyNode.InnerText);
+                    simple.Value = stringValue;
+
+                    propertiesSet.Add(property.Name);
+                }
+                else if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 1)
+                {
+                    throw new SerializerException($"Cannot set managed object to a simple property {property.Name} of object {deserializedObject.GetType().Name}",
+                        propertyNode.FindXPath());
+                }
+                else
+                    throw new SerializerException($"Property {property.Name} on type {deserializedObject.GetType().Name} is a simple property, but is provided with multiple values.",
+                        propertyNode.FindXPath());
+            }
+            if (property is ManagedReferencePropertyViewModel reference)
+            {
+                if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 0)
+                {
+                    var stringValue = new StringValueViewModel(propertyNode.InnerText);
+                    reference.Value = stringValue;
+                    
+                    propertiesSet.Add(property.Name);
+                }
+                else if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 1)
+                {
+                    var content = DeserializeElement(propertyNode.ChildNodes.OfType<XmlElement>().Single(), context);
+                    var referenceValue = new ReferenceValueViewModel();
+                    referenceValue.Value = content;
+
+                    reference.Value = referenceValue;
+
+                    propertiesSet.Add(property.Name);
+                }
+                else
+                    throw new SerializerException($"Property {property.Name} on type {deserializedObject.GetType().Name} is a simple property, but is provided with multiple values.",
+                        propertyNode.FindXPath());
+            }
+            else if (property is ManagedCollectionPropertyViewModel collectionProperty)
+            {
+                if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 0)
+                {
+                    var value = new StringValueViewModel(propertyNode.InnerText);
+                    collectionProperty.Value = value;
+                }
+                else
+                {
+                    var collectionValue = collectionProperty.Value as CollectionValueViewModel;
+                    if (collectionValue == null)
+                    {
+                        collectionValue = new CollectionValueViewModel();
+                        collectionProperty.Value = collectionValue;
+                    }
+
+                    foreach (XmlNode child in propertyNode.ChildNodes.OfType<XmlElement>())
+                    {
+                        var content = DeserializeElement(child, context);
+                        collectionValue.Items.Add(content);
+                    }
+
+                    propertiesSet.Add(property.Name);
+                }
+            }
+            else
+                throw new InvalidOperationException("Unsupported managed property!");
+        }
+
+        private void ProcessMarkupExtension(ManagedObjectViewModel deserializedObject, 
+            ManagedPropertyViewModel managedProperty, 
+            string value, 
+            XmlNode node, 
+            DeserializationContext context)
+        {
+            var markupData = DeserializeMarkupExtension(value, node, context.Namespaces);
+
+            var markupExt = new MarkupExtensionViewModel(markupData.TypeData.Type, markupData.TypeData.FullClassName);
+
+            foreach (var param in markupData.Params)
+            {
+                markupExt[param.property].Value = param.value;
+            }
+
+            if (managedProperty is ManagedSimplePropertyViewModel simple)
+            {
+                simple.Value = markupExt;
+            }
+            else if (managedProperty is ManagedReferencePropertyViewModel reference)
+            {
+                reference.Value = markupExt;
+            }
+            else if (managedProperty is ManagedCollectionPropertyViewModel collection)
+            {
+                collection.Value = markupExt;
+            }
+            else
+                throw new InvalidOperationException("Unsupported property type!");
         }
     
-        private void DeserializeAttributes(XmlElement node, 
+        private void DeserializeAttributes(XmlNode node, 
             ManagedObjectViewModel deserializedObject, 
             DeserializationContext context, 
             HashSet<string> propertiesSet)
@@ -126,7 +362,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             }
         }
 
-        private BaseObjectViewModel DeserializeElement(XmlElement node, DeserializationContext context)
+        private BaseObjectViewModel DeserializeElement(XmlNode node, DeserializationContext context)
         {
             // 1. Check control nodes
 
@@ -162,11 +398,16 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                     var macroViewModel = new MacroViewModel();
                     macroViewModel.Property<StringPropertyViewModel>(KEY_ATTRIBUTE).Value = key;
 
-                    // Using new HashSet here on purpose.
-                    // This allows overriding attributes, which are set in macro.
-                    // eg.
-                    // <x:Macro x:Key="SomeMacro" Name="Test" Position="20,30" />
-                    DeserializeAttributes(node, macroViewModel, context, new HashSet<string>());
+                    foreach (var attribute in node.Attributes
+                        .OfType<XmlAttribute>()
+                        .Where(a => a.NamespaceURI != ENGINE_NAMESPACE || a.LocalName != KEY_ATTRIBUTE))
+                    {
+                        string name = attribute.LocalName;
+                        string value = attribute.Value;
+
+                        var prop = macroViewModel.AddProperty(name);
+                        prop.Value = value;
+                    }
 
                     return macroViewModel;
                 }
