@@ -21,7 +21,7 @@
             </Style.Setters>
         </Style>
 
-        <Style x:Key="MacroText" TargetType="TextBlock">
+        <Style x:Key="EngineText" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#808080" />
             <Setter Property="FontSize" Value="12" />
             <Setter Property="FontWeight" Value="Bold" />
@@ -34,6 +34,11 @@
 
         <Style x:Key="KeyText" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#0000ff" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
+        <Style x:Key="SourceText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#00a040" />
             <Setter Property="FontSize" Value="12" />
         </Style>
 
@@ -133,7 +138,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Name="Key" Style="{StaticResource KeyText}" Text="{Binding Key}" />
                                 <TextBlock Name="NameDash" Style="{StaticResource NameText}" Text=" - " />
-                                <TextBlock Name="Name" Style="{StaticResource MacroText}" Text="Macro" />
+                                <TextBlock Name="Name" Style="{StaticResource EngineText}" Text="Macro" />
                             </StackPanel>
                         </Grid>
 
@@ -146,6 +151,37 @@
                         </HierarchicalDataTemplate.Triggers>
                     </HierarchicalDataTemplate>
 
+                    <HierarchicalDataTemplate DataType="{x:Type vmw:IncludeViewModel}" ItemsSource="{Binding DisplayChildren}">
+                        <Grid Margin="{StaticResource TreeItemMargin}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Name="Source" Style="{StaticResource SourceText}" Text="{Binding Source}" />
+                                <TextBlock Name="NameDash" Style="{StaticResource NameText}" Text=" - " />
+                                <TextBlock Name="Name" Style="{StaticResource EngineText}" Text="Include" />
+                            </StackPanel>
+                        </Grid>
+
+                        <HierarchicalDataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter TargetName="Source" Property="Foreground" Value="#ffffff" />
+                                <Setter TargetName="Name" Property="Foreground" Value="#ffffff" />
+                                <Setter TargetName="NameDash" Property="Foreground" Value="#ffffff" />
+                            </DataTrigger>
+                        </HierarchicalDataTemplate.Triggers>
+                    </HierarchicalDataTemplate>
+
+                    <HierarchicalDataTemplate DataType="{x:Type vmw:GenerateViewModel}" ItemsSource="{Binding DisplayChildren}">
+                        <Grid Margin="{StaticResource TreeItemMargin}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Name="Name" Style="{StaticResource EngineText}" Text="Generate" />
+                            </StackPanel>
+                        </Grid>
+
+                        <HierarchicalDataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter TargetName="Name" Property="Foreground" Value="#ffffff" />
+                            </DataTrigger>
+                        </HierarchicalDataTemplate.Triggers>
+                    </HierarchicalDataTemplate>
 
                 </TreeView.Resources>
             </TreeView>
