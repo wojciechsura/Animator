@@ -407,7 +407,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                     string filename = sourceAttribute.Value;
 
                     var includeViewModel = new IncludeViewModel(context.Namespaces[string.Empty].ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
-                    includeViewModel.Property<StringPropertyViewModel>(SOURCE_ATTRIBUTE).Value = filename;
+                    includeViewModel.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, SOURCE_ATTRIBUTE).Value = filename;
 
                     return includeViewModel;
                 }

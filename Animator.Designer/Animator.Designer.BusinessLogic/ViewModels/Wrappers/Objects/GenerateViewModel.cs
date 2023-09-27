@@ -16,7 +16,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             : base(defaultNamespace, engineNamespace)
         {
             Namespace = ns;
-            properties.Add(new MultilineStringPropertyViewModel(null, "Generator"));
+            properties.Add(new MultilineStringPropertyViewModel(defaultNamespace, "Generator"));
         }
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
