@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -15,9 +16,20 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         /// <remarks>See <see cref="Animator.Engine.Base.ManagedProperty.nameRegex"/></remarks>
         private readonly Regex nameRegex = new Regex("^[a-zA-Z_][a-zA-Z_0-9]*$");
 
-        public MacroViewModel()
+        private readonly StringPropertyViewModel keyProperty;
+
+        private void HandleKeyChanged(object sender, PropertyChangedEventArgs e)
         {
-            properties.Add(new StringPropertyViewModel("x:Key"));
+            OnPropertyChanged(nameof(Key));
+        }
+
+        public MacroViewModel(string defaultNamespace, string engineNamespace, string ns) 
+            : base(defaultNamespace, engineNamespace)
+        {
+            Namespace = ns;
+            keyProperty = new StringPropertyViewModel(ns, "Key");
+            keyProperty.PropertyChanged += HandleKeyChanged;
+            properties.Add(keyProperty);
         }
 
         public StringPropertyViewModel AddProperty(string propertyName)
@@ -28,7 +40,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             if (!nameRegex.IsMatch(propertyName))
                 throw new ArgumentException("Invalid property name!");
 
-            var property = new StringPropertyViewModel(propertyName);
+            var property = new StringPropertyViewModel(defaultNamespace, propertyName);
             properties.Add(property);
             return property;
         }
@@ -43,5 +55,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         }
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
+
+        public string Key => keyProperty.Value;
+
+        public string Namespace { get; }
     }
 }

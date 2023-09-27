@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Base.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    [ContentProperty(nameof(Value))]
     public class PointResource : Resource
     {
         public override object GetValue() => Value;

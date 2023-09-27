@@ -81,7 +81,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
                     XmlDocument document = new XmlDocument();
                     document.LoadXml(input.MovieXml);
 
-                    movie = movieSerializer.Deserialize(document);
+                    movie = movieSerializer.Deserialize(document, System.IO.Path.GetDirectoryName(input.Path));
                     movie.Path = input.Path;
                     e.Result = new MovieUpdatedResult(movie);
                 }

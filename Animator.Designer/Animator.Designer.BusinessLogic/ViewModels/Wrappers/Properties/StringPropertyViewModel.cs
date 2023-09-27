@@ -10,12 +10,15 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     {
         private string value;
 
-        public StringPropertyViewModel(string name)
+        public StringPropertyViewModel(string ns, string name)
         {
             Name = name;
+            Namespace = ns;
         }
 
         public override string Name { get; }
+
+        public override string Namespace { get; }
 
         public string Value
         {

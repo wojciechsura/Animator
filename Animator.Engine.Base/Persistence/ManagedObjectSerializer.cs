@@ -404,8 +404,6 @@ namespace Animator.Engine.Base.Persistence
             return null;
         }
 
-
-
         private object CreateObject(DeserializationContext context, ObjectTypeData typeData)
         {
             // Try to instantiate object
@@ -477,7 +475,6 @@ namespace Animator.Engine.Base.Persistence
             return result;
         }
 
-
         private ManagedObject DeserializeElement(XmlNode node, DeserializationContext context)
         {
             // 1. Check control nodes
@@ -486,11 +483,15 @@ namespace Animator.Engine.Base.Persistence
             {
                 if (node.LocalName == INCLUDE_ELEMENT)
                 {
-                    var sourceAttribute = node.Attributes["Source"];
-                    if (sourceAttribute == null)
-                        throw new SerializerException("Include element must contain attribute Source!", node.FindXPath());
+                    var sourceAttribute = node.Attributes
+                            .OfType<XmlAttribute>()
+                            .Where(a => a.NamespaceURI == ENGINE_NAMESPACE && a.LocalName == SOURCE_ATTRIBUTE)
+                            .FirstOrDefault();
 
-                    string filename = node.Attributes["Source"].Value;
+                    if (sourceAttribute == null)
+                        throw new SerializerException("Include element must contain attribute x:Source!", node.FindXPath());
+
+                    string filename = sourceAttribute.Value;
                     if (!Path.IsPathRooted(filename))
                         filename = Path.Combine(context.DocumentPath, filename);
 
@@ -634,9 +635,10 @@ namespace Animator.Engine.Base.Persistence
             return InternalDeserialize(document, options, documentPath);
         }
 
-        public ManagedObject Deserialize(XmlDocument document, DeserializationOptions options = null)
+        public ManagedObject Deserialize(XmlDocument document, DeserializationOptions options = null, string searchPath = null)
         {
-            return InternalDeserialize(document, options, Directory.GetCurrentDirectory());
+            // Sanitize path
+            return InternalDeserialize(document, options, searchPath ?? Directory.GetCurrentDirectory());
         }
     }
 }

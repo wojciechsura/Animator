@@ -28,6 +28,7 @@
 		<ProjectReference Include="..\Animator.Editor.Resources\Animator.Editor.Resources.csproj" />
 		<ProjectReference Include="..\Animator.Engine.Native\Animator.Engine.Native.vcxproj" />
 		<ProjectReference Include="..\Animator.Extensions.Nonconformist\Animator.Extensions.Nonconformist.csproj" />
+		<ProjectReference Include="..\Animator.Extensions.Utils\Animator.Extensions.Utils.csproj" />
 		<ProjectReference Include="..\ICSharpCode.AvalonEdit.Dev.Editor\ICSharpCode.AvalonEdit.Animator.Editor.csproj" />
 	</ItemGroup>
 	<ItemGroup>

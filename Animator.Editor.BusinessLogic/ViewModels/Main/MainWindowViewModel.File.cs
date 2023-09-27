@@ -134,7 +134,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
                 xmlDoc.LoadXml(document.Document.Text);
 
                 var movieSerializer = new MovieSerializer();
-                var movie = movieSerializer.Deserialize(xmlDoc);
+                var movie = movieSerializer.Deserialize(xmlDoc, document.FilenameVirtual ? null : System.IO.Path.GetDirectoryName(document.FileName));
 
                 // Calculate time to apply animations
 

@@ -10,17 +10,21 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 {
     public class DocumentViewModel
     {
-        public DocumentViewModel(XmlDocument document, ManagedObjectViewModel rootNode, string filename = "Animation.xml", bool filenameVirtual = true)
+        private readonly BaseObjectViewModel[] displayItems;
+
+        public DocumentViewModel(BaseObjectViewModel rootNode, string filename = "Animation.xml", bool filenameVirtual = true)
         {
-            Document = document;
             RootNode = rootNode;
+            displayItems = new[] { rootNode };
+
             Filename = filename;
             FilenameVirtual = filenameVirtual;
         }
 
         public string Filename { get; set; }
         public bool FilenameVirtual { get; set; }
-        public XmlDocument Document { get; }
-        public ManagedObjectViewModel RootNode { get; }
+        public BaseObjectViewModel RootNode { get; }
+
+        public IEnumerable<BaseObjectViewModel> DisplayItems => displayItems;
     }
 }

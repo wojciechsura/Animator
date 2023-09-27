@@ -2,6 +2,7 @@
 using Animator.Engine.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,38 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         private readonly ManagedSimpleProperty simpleProperty;
         private ValueViewModel value;
 
-        public ManagedSimplePropertyViewModel(ManagedSimpleProperty property)
-            : base(property)
+        private void HandleStringValueChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(StringValueViewModel.Value))
+                OnStringValueChanged();
+        }
+
+        private void SetValue(ValueViewModel value)
+        {
+            // Unhook existing event handlers
+
+            if (Value is StringValueViewModel currentStringValue)
+            {
+                currentStringValue.PropertyChanged -= HandleStringValueChanged;
+            }
+
+            // Hook new event handlers and set value
+
+            if (value is StringValueViewModel)
+            {
+                value.PropertyChanged += HandleStringValueChanged;
+                Set(ref this.value, value);
+            }
+            else if (value is MarkupExtensionViewModel)
+                Set(ref this.value, value);
+            else if (value is DefaultValueViewModel)
+                throw new ArgumentException("Use SetDefault method instead of setting DefaultValueViewModel!");
+            else
+                throw new ArgumentException($"ManagedSimplePropertyViewModel does not support value of type {value}!");
+        }
+
+        public ManagedSimplePropertyViewModel(string defaultNamespace, ManagedSimpleProperty property)
+            : base(defaultNamespace, property)
         {
             this.simpleProperty = property;
             SetDefault(property);
@@ -31,17 +62,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public ValueViewModel Value
         {
             get => value;
-            set
-            {
-                if (value is StringValueViewModel)
-                    Set(ref this.value, value);
-                else if (value is MarkupExtensionViewModel)
-                    Set(ref this.value, value);
-                else if (value is DefaultValueViewModel)
-                    throw new ArgumentException("Use SetDefault method instead of setting DefaultValueViewModel!");
-                else
-                    throw new ArgumentException($"ManagedSimplePropertyViewModel does not support value of type {value}!");
-            }
-        }
+            set => SetValue(value);            
+        }        
     }
 }

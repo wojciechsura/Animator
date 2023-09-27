@@ -12,9 +12,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         private readonly List<PropertyViewModel> properties = new();
         private BaseObjectViewModel content;
 
-        public MacroEntryViewModel()
+        public MacroEntryViewModel(string defaultNamespace, string engineNamespace, string ns)
+            : base(defaultNamespace, engineNamespace)
         {
-            properties.Add(new StringPropertyViewModel("x:Key"));
+            Namespace = ns;
+            properties.Add(new StringPropertyViewModel(ns, "Key"));
         }
 
         public BaseObjectViewModel Content
@@ -24,5 +26,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         }
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
+
+        public string Namespace { get; }
     }
 }

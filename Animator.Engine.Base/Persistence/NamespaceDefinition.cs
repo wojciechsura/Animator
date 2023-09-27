@@ -16,5 +16,7 @@ namespace Animator.Engine.Base.Persistence
 
         public string Assembly { get; }
         public string Namespace { get; }
+
+        public override string ToString() => $"assembly={Assembly};namespace={Namespace}";        
     }
 }

@@ -12,11 +12,15 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
     {
         private readonly ObservableCollection<PropertyViewModel> properties = new();
 
-        public IncludeViewModel() 
+        public IncludeViewModel(string defaultNamespace, string engineNamespace, string ns) 
+            : base(defaultNamespace, engineNamespace)
         {
-            properties.Add(new StringPropertyViewModel("Source"));
+            Namespace = ns;
+            properties.Add(new StringPropertyViewModel(ns, "Source"));
         }
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
+
+        public string Namespace { get; }
     }
 }

@@ -102,6 +102,9 @@ namespace Animator.Engine.Base
             if ((value != null && !value.GetType().IsAssignableTo(simpleProperty.Type)) ||
                 (value == null && simpleProperty.Type != typeof(string)))
                 throw new ArgumentException($"Value of type {value.GetType().Name} cannot be assigned to property {simpleProperty.OwnerClassType.Name}.{simpleProperty.Name} of type {simpleProperty.Type.Name}.");
+
+            if (simpleProperty.Metadata.ValueValidationHandler != null && !simpleProperty.Metadata.ValueValidationHandler.Invoke(this, new ValueValidationEventArgs(value)))
+                throw new ArgumentException($"Value {value} failed validation for property {simpleProperty.OwnerClassType.Name}{simpleProperty.Name}");
         }
 
         private void ValidateReferenceValue(ManagedReferenceProperty refProperty, object value)
@@ -548,6 +551,9 @@ namespace Animator.Engine.Base
         {
             if (property is ManagedSimpleProperty simpleProperty)
             {
+                if (propertyValues.ContainsKey(simpleProperty.GlobalIndex) && simpleProperty.Metadata.ValueIsPermanent)
+                    throw new InvalidOperationException($"Property {property.Name} of type {GetType().Name} has permanent value flag set in metadata. This allows setting its value only once.");
+
                 SetBaseValue(simpleProperty, value);
             }
             else if (property is ManagedReferenceProperty referenceProperty)

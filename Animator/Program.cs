@@ -68,7 +68,7 @@ namespace Animator
             document.Load(path);
 
             MovieSerializer animationSerializer = new MovieSerializer();
-            Movie animation = animationSerializer.Deserialize(document);
+            Movie animation = animationSerializer.Deserialize(document, System.IO.Path.GetDirectoryName(path));
             animation.Path = path;
 
             return animation;

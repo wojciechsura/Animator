@@ -15,6 +15,7 @@ using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;
 using System.Collections;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using System.Reflection;
+using Animator.Designer.BusinessLogic.Helpers;
 
 namespace Animator.Designer.BusinessLogic.Infrastructure
 {
@@ -33,7 +34,29 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             public Models.MovieSerialization.DeserializationOptions Options { get; }
         }
 
+        // Private types ------------------------------------------------------
+
+        private static readonly HashSet<Type> staticallyInitializedTypes = new();
+
         // Private methods ----------------------------------------------------
+
+        private static void StaticInitializeRecursively(Type type)
+        {
+            do
+            {
+                // If type is initialized, its base types must have been initialized too,
+                // don't waste time on them
+                if (staticallyInitializedTypes.Contains(type))
+                    return;
+
+                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
+
+                staticallyInitializedTypes.Add(type);
+
+                type = type.BaseType;
+            }
+            while (type != typeof(ManagedObject) && type != typeof(object));
+        }
 
         private void DeserializeChildren(XmlNode node, 
             ManagedObjectViewModel deserializedObject, 
@@ -65,8 +88,8 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                             BaseObjectViewModel macroContent = DeserializeElement(macroNode, context);
 
-                            var macroItem = new MacroEntryViewModel();
-                            macroItem.Property<StringPropertyViewModel>("x:Key").Value = xKey;
+                            var macroItem = new MacroEntryViewModel(context.Namespaces[string.Empty].ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
+                            macroItem.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, "Key").Value = xKey;
                             macroItem.Content = macroContent;
 
                             deserializedObject.Macros.Add(macroItem);
@@ -257,11 +280,15 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
         {
             var markupData = DeserializeMarkupExtension(value, node, context.Namespaces);
 
-            var markupExt = new MarkupExtensionViewModel(markupData.TypeData.Type, markupData.TypeData.FullClassName);
+            var ns = markupData.TypeData.Type.ToNamespaceDefinition().ToString();
+
+            string defaultNamespace = context.Namespaces[string.Empty].ToString();
+
+            var markupExt = new MarkupExtensionViewModel(defaultNamespace, ns, markupData.Name, markupData.TypeData.Type);
 
             foreach (var param in markupData.Params)
             {
-                markupExt[param.property].Value = param.value;
+                markupExt[defaultNamespace, param.property].Value = param.value;
             }
 
             if (managedProperty is ManagedSimplePropertyViewModel simple)
@@ -299,7 +326,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                 {
                     if (attribute.LocalName == KEY_ATTRIBUTE)
                     {
-                        // This attribute may be safely ignored.
+                        deserializedObject.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, KEY_ATTRIBUTE).Value = attribute.Value;
                         continue;
                     }
                     else
@@ -370,13 +397,16 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             {
                 if (node.LocalName == INCLUDE_ELEMENT)
                 {
-                    var sourceAttribute = node.Attributes[SOURCE_ATTRIBUTE];
+                    var sourceAttribute = node.Attributes
+                        .OfType<XmlAttribute>()
+                        .FirstOrDefault(a => a.NamespaceURI == ENGINE_NAMESPACE && a.LocalName == SOURCE_ATTRIBUTE);
+
                     if (sourceAttribute == null)
-                        throw new SerializerException("Include element must contain attribute Source!", node.FindXPath());
+                        throw new SerializerException("Include element must contain attribute x:Source!", node.FindXPath());
 
-                    string filename = node.Attributes[SOURCE_ATTRIBUTE].Value;
+                    string filename = sourceAttribute.Value;
 
-                    var includeViewModel = new IncludeViewModel();
+                    var includeViewModel = new IncludeViewModel(context.Namespaces[string.Empty].ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
                     includeViewModel.Property<StringPropertyViewModel>(SOURCE_ATTRIBUTE).Value = filename;
 
                     return includeViewModel;
@@ -395,8 +425,8 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                     if (node.ChildNodes.Count > 0)
                         throw new SerializerException("Macro may not contain any child elements!", node.FindXPath());
 
-                    var macroViewModel = new MacroViewModel();
-                    macroViewModel.Property<StringPropertyViewModel>(KEY_ATTRIBUTE).Value = key;
+                    var macroViewModel = new MacroViewModel(context.Namespaces[string.Empty].ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
+                    macroViewModel.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, KEY_ATTRIBUTE).Value = key;
 
                     foreach (var attribute in node.Attributes
                         .OfType<XmlAttribute>()
@@ -418,7 +448,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                     var child = (XmlElement)node.ChildNodes[0];
 
-                    var generateViewModel = new GenerateViewModel();
+                    var generateViewModel = new GenerateViewModel(context.Namespaces[string.Empty].ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
                     generateViewModel.Property<MultilineStringPropertyViewModel>("Generator").Value = child.OuterXml;
 
                     return generateViewModel;
@@ -435,7 +465,15 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                 ManagedObjectViewModel deserializedObject;
 
                 var objectTypeData = ExtractObjectType(node.NamespaceURI, node.LocalName, typeof(ManagedObject), context.Namespaces);
-                deserializedObject = new ManagedObjectViewModel(node.Name, objectTypeData.FullClassName, objectTypeData.Type);
+
+                // We have to ensure that static ctor runs. It will not run by itself
+                // if we deal with the type on the reflection level (aka the Type)
+
+                StaticInitializeRecursively(objectTypeData.Type);
+
+                var ns = objectTypeData.Type.ToNamespaceDefinition().ToString();
+
+                deserializedObject = new ManagedObjectViewModel(context.Namespaces[string.Empty].ToString(), ENGINE_NAMESPACE, ns, node.Name, objectTypeData.Type);
 
                 // 2. Load attributes
 
@@ -455,22 +493,29 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
         private BaseObjectViewModel InternalDeserialize(XmlDocument document, string documentPath, Models.MovieSerialization.DeserializationOptions options)
         {
-            var context = new DeserializationContext(options);
+            if (options == null)
+                throw new ArgumentNullException(nameof(options));
 
-            if (options != null)
-            {
-                if (options.DefaultNamespace != null)
-                {
-                    context.Namespaces[string.Empty] = options.DefaultNamespace;
-                }
-            }
+            if (options.DefaultNamespace == null)
+                throw new ArgumentException("Default namespace is null!", nameof(options));
+
+            var context = new DeserializationContext(options);
+            context.Namespaces[string.Empty] = options.DefaultNamespace;
 
             return DeserializeElement(document.ChildNodes.OfType<XmlElement>().Single(), context);
         }
 
+        private Models.MovieSerialization.DeserializationOptions CreateDefaultDeserializationOptions()
+        {
+            return new Models.MovieSerialization.DeserializationOptions
+            {
+                DefaultNamespace = typeof(Animator.Engine.Elements.Movie).ToNamespaceDefinition()
+            };
+        }
+
         // Public methods -----------------------------------------------------
 
-        public BaseObjectViewModel Deserialize(string filename, Models.MovieSerialization.DeserializationOptions options = null)
+        public BaseObjectViewModel Deserialize(string filename)
         {
             XmlDocument document = new XmlDocument();
             document.LoadXml(filename);
@@ -479,12 +524,12 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             if (string.IsNullOrEmpty(documentPath))
                 documentPath = Directory.GetCurrentDirectory();
 
-            return InternalDeserialize(document, documentPath, options);
+            return InternalDeserialize(document, documentPath, CreateDefaultDeserializationOptions());
         }
 
-        public BaseObjectViewModel Deserialize(XmlDocument document, string documentPath, Models.MovieSerialization.DeserializationOptions options = null)
+        public BaseObjectViewModel Deserialize(XmlDocument document, string documentPath)
         {
-            return InternalDeserialize(document, documentPath, options);
+            return InternalDeserialize(document, documentPath, CreateDefaultDeserializationOptions());
         }
     }
 }

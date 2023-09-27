@@ -1,4 +1,5 @@
-﻿using Animator.Designer.BusinessLogic.Services.Dialogs;
+﻿using Animator.Designer.BusinessLogic.Infrastructure;
+using Animator.Designer.BusinessLogic.Services.Dialogs;
 using Animator.Designer.BusinessLogic.Services.Messaging;
 using Animator.Designer.BusinessLogic.ViewModels.Base;
 using Animator.Designer.Resources.Windows.MainWindow;
@@ -37,7 +38,13 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 
                 try
                 {
-                    throw new NotImplementedException();
+                    var xmlDocument = new XmlDocument();
+                    xmlDocument.Load(path);
+
+                    var serializer = new MovieSerializer();
+                    var root = serializer.Deserialize(xmlDocument, path);
+
+                    Document = new DocumentViewModel(root, path, false);
                 }
                 catch (Exception e)
                 {

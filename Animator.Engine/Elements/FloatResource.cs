@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Base.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
+    [ContentProperty(nameof(Value))]
     public class FloatResource : Resource
     {
         public override object GetValue() => Value;
