@@ -20,10 +20,14 @@ namespace Animator.Designer.Controls
         {
             if (item is StringPropertyViewModel)
                 return StringPropertyTemplate;
+            else if (item is MultilineStringPropertyViewModel)
+                return MultilineStringPropertyTemplate;
 
             return null;
         }
 
         public DataTemplate StringPropertyTemplate { get; set; }
+
+        public DataTemplate MultilineStringPropertyTemplate { get; set; }
     }
 }
