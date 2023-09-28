@@ -1,6 +1,9 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,23 +13,39 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
     public class MacroEntryViewModel : BaseObjectViewModel
     {
         private readonly List<PropertyViewModel> properties = new();
-        private BaseObjectViewModel content;
+        private readonly StringPropertyViewModel key;
+        private readonly ReferencePropertyViewModel content;
 
-        public MacroEntryViewModel(string defaultNamespace, string engineNamespace, string ns)
-            : base(defaultNamespace, engineNamespace)
+        private IEnumerable<BaseObjectViewModel> GetChildren()
         {
-            Namespace = ns;
-            properties.Add(new StringPropertyViewModel(ns, "Key"));
+            if (content.Value is ReferenceValueViewModel refValue)
+                yield return refValue.Value;
         }
 
-        public BaseObjectViewModel Content
+        private void HandleKeyChanged(object sender, PropertyChangedEventArgs e)
         {
-            get => content;
-            set => Set(ref content, value);
+            OnPropertyChanged(nameof(Key));
+        }
+
+        public MacroEntryViewModel(string defaultNamespace, string engineNamespace)
+            : base(defaultNamespace, engineNamespace)
+        {
+            Namespace = engineNamespace;
+
+            key = new StringPropertyViewModel(engineNamespace, "Key");
+            key.PropertyChanged += HandleKeyChanged;
+            properties.Add(key);
+
+            content = new ReferencePropertyViewModel(defaultNamespace, "Content");
+            properties.Add(content);
         }
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
 
+        public override IEnumerable<BaseObjectViewModel> DisplayChildren => GetChildren();
+
         public string Namespace { get; }
+
+        public string Key => key.Value;
     }
 }

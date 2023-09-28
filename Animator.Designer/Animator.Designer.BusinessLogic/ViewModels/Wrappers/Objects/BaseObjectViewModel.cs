@@ -35,7 +35,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 .OfType<TProperty>()
                 .SingleOrDefault(prop => prop.Namespace == ns && prop.Name == name);
         
-        public abstract IReadOnlyList<PropertyViewModel> Properties { get; }
+        public abstract IEnumerable<PropertyViewModel> Properties { get; }
+
+        public abstract IEnumerable<BaseObjectViewModel> DisplayChildren { get; }
 
         public PropertyViewModel this[string name]
         {

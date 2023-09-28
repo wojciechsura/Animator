@@ -13,20 +13,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     public class ManagedCollectionPropertyViewModel : ManagedPropertyViewModel
     {
         private readonly ManagedCollectionProperty collectionProperty;
-        private ValueViewModel value;
-
-        private IEnumerable<BaseObjectViewModel> GetDisplayChildren()
-        {
-            if (value is CollectionValueViewModel collection)
-                foreach (var item in collection.Items)
-                    yield return item;
-        }
+        private ValueViewModel value;        
 
         private void HandleCollectionChanged(object sender, EventArgs e)
         {
             OnCollectionChanged();
-
-            OnPropertyChanged(nameof(DisplayChildren));
         }
 
         private void HandleStringValueChanged(object sender, PropertyChangedEventArgs e)
@@ -76,12 +67,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 Set(ref this.value, value);
             else
                 throw new ArgumentException($"ManagedCollectionPropertyViewModel does not support value of type {value}!");
-
-            OnPropertyChanged(nameof(DisplayChildren));
         }
 
         public override ManagedProperty ManagedProperty => collectionProperty;
-
-        public IEnumerable<BaseObjectViewModel> DisplayChildren => GetDisplayChildren();
     }
 }

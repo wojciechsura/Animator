@@ -25,13 +25,16 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
         private sealed class DeserializationContext
         {
-            public DeserializationContext(Models.MovieSerialization.DeserializationOptions options)
+            public DeserializationContext(Models.MovieSerialization.DeserializationOptions options, NamespaceDefinition defaultNamespace)
             {
                 Options = options;
+                Namespaces[string.Empty] = defaultNamespace;
             }
 
             public Dictionary<string, NamespaceDefinition> Namespaces { get; } = new();
             public Models.MovieSerialization.DeserializationOptions Options { get; }
+
+            public NamespaceDefinition DefaultNamespace => Namespaces[string.Empty];
         }
 
         // Private types ------------------------------------------------------
@@ -88,9 +91,9 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                             BaseObjectViewModel macroContent = DeserializeElement(macroNode, context);
 
-                            var macroItem = new MacroEntryViewModel(context.Namespaces[string.Empty].ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
+                            var macroItem = new MacroEntryViewModel(context.DefaultNamespace.ToString(), ENGINE_NAMESPACE);
                             macroItem.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, "Key").Value = xKey;
-                            macroItem.Content = macroContent;
+                            macroItem.Property<ReferencePropertyViewModel>(context.DefaultNamespace.ToString(), "Content").Value = new ReferenceValueViewModel { Value = macroContent };
 
                             deserializedObject.Macros.Add(macroItem);
                         }
@@ -282,7 +285,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
             var ns = markupData.TypeData.Type.ToNamespaceDefinition().ToString();
 
-            string defaultNamespace = context.Namespaces[string.Empty].ToString();
+            string defaultNamespace = context.DefaultNamespace.ToString();
 
             var markupExt = new MarkupExtensionViewModel(defaultNamespace, ns, markupData.Name, markupData.TypeData.Type);
 
@@ -406,7 +409,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                     string filename = sourceAttribute.Value;
 
-                    var includeViewModel = new IncludeViewModel(context.Namespaces[string.Empty].ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
+                    var includeViewModel = new IncludeViewModel(context.DefaultNamespace.ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
                     includeViewModel.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, SOURCE_ATTRIBUTE).Value = filename;
 
                     return includeViewModel;
@@ -425,7 +428,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                     if (node.ChildNodes.Count > 0)
                         throw new SerializerException("Macro may not contain any child elements!", node.FindXPath());
 
-                    var macroViewModel = new MacroViewModel(context.Namespaces[string.Empty].ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
+                    var macroViewModel = new MacroViewModel(context.DefaultNamespace.ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
                     macroViewModel.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, KEY_ATTRIBUTE).Value = key;
 
                     foreach (var attribute in node.Attributes
@@ -448,7 +451,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                     var child = (XmlElement)node.ChildNodes[0];
 
-                    var generateViewModel = new GenerateViewModel(context.Namespaces[string.Empty].ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
+                    var generateViewModel = new GenerateViewModel(context.DefaultNamespace.ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
                     generateViewModel.Property<MultilineStringPropertyViewModel>("Generator").Value = child.OuterXml;
 
                     return generateViewModel;
@@ -473,7 +476,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                 var ns = objectTypeData.Type.ToNamespaceDefinition().ToString();
 
-                deserializedObject = new ManagedObjectViewModel(context.Namespaces[string.Empty].ToString(), ENGINE_NAMESPACE, ns, node.Name, objectTypeData.Type);
+                deserializedObject = new ManagedObjectViewModel(context.DefaultNamespace.ToString(), ENGINE_NAMESPACE, ns, node.Name, objectTypeData.Type);
 
                 // 2. Load attributes
 
@@ -499,9 +502,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             if (options.DefaultNamespace == null)
                 throw new ArgumentException("Default namespace is null!", nameof(options));
 
-            var context = new DeserializationContext(options);
-            context.Namespaces[string.Empty] = options.DefaultNamespace;
-
+            var context = new DeserializationContext(options, options.DefaultNamespace);
             return DeserializeElement(document.ChildNodes.OfType<XmlElement>().Single(), context);
         }
 

@@ -12,6 +12,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
     public class MacroViewModel : BaseObjectViewModel
     {
+        private readonly List<BaseObjectViewModel> children = new();
         private readonly ObservableCollection<PropertyViewModel> properties = new();
         /// <remarks>See <see cref="Animator.Engine.Base.ManagedProperty.nameRegex"/></remarks>
         private readonly Regex nameRegex = new Regex("^[a-zA-Z_][a-zA-Z_0-9]*$");
@@ -55,6 +56,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         }
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
+        
+        public override IEnumerable<BaseObjectViewModel> DisplayChildren => children;
 
         public string Key => keyProperty.Value;
 

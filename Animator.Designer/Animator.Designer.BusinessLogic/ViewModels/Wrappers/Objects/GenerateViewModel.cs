@@ -10,7 +10,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
     public class GenerateViewModel : BaseObjectViewModel
     {
-        private readonly ObservableCollection<PropertyViewModel> properties = new();
+        private readonly List<BaseObjectViewModel> children = new();
+        private readonly List<PropertyViewModel> properties = new();
 
         public GenerateViewModel(string defaultNamespace, string engineNamespace, string ns)
             : base(defaultNamespace, engineNamespace)
@@ -22,5 +23,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
 
         public string Namespace { get; }
+
+        public override IEnumerable<BaseObjectViewModel> DisplayChildren => children;
     }
 }

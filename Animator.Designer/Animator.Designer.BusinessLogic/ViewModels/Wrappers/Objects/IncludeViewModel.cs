@@ -11,7 +11,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
     public class IncludeViewModel : BaseObjectViewModel
     {
-        private readonly ObservableCollection<PropertyViewModel> properties = new();
+        private readonly List<BaseObjectViewModel> children = new();
+        private readonly List<PropertyViewModel> properties = new();
         private readonly StringPropertyViewModel sourceProperty;
 
         private void HandleSourceChanged(object sender, PropertyChangedEventArgs e)
@@ -28,7 +29,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             properties.Add(sourceProperty);
         }
 
-        public override IReadOnlyList<PropertyViewModel> Properties => properties;
+        public override IEnumerable<PropertyViewModel> Properties => properties;
+
+        public override IEnumerable<BaseObjectViewModel> DisplayChildren => children;
 
         public string Source => sourceProperty.Value;
 

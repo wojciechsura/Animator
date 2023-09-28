@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Animator.Designer.BusinessLogic.ViewModels.Main;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,11 @@ namespace Animator.Designer.Controls
         public DocumentControl()
         {
             InitializeComponent();
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            (DataContext as DocumentViewModel).SelectedElement = e.NewValue as BaseObjectViewModel;
         }
     }
 }

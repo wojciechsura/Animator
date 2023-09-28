@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Animator.Designer.Controls" 
              xmlns:vm="clr-namespace:Animator.Designer.BusinessLogic.ViewModels.Main;assembly=Animator.Designer.BusinessLogic" 
              xmlns:vmw="clr-namespace:Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;assembly=Animator.Designer.BusinessLogic" 
-             xmlns:vmp="clr-namespace:Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;assembly=Animator.Designer.BusinessLogic" 
+             xmlns:vmp="clr-namespace:Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;assembly=Animator.Designer.BusinessLogic"
              xmlns:res="clr-namespace:Animator.Designer.Resources.Controls.DocumentControl;assembly=Animator.Designer.Resources"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:DocumentViewModel}"             
@@ -32,6 +32,11 @@
             <Setter Property="FontSize" Value="12" />
         </Style>
 
+        <Style x:Key="ValueText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#55aaff" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+
         <Style x:Key="KeyText" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#0000ff" />
             <Setter Property="FontSize" Value="12" />
@@ -53,6 +58,12 @@
             <Setter Property="FontSize" Value="12" />
         </Style>
 
+        <DataTemplate x:Key="StringPropertyTemplate" DataType="{x:Type vmp:StringPropertyViewModel}">
+            <Grid Background="Red" />
+        </DataTemplate>
+
+        <local:PropertyEditorTemplateSelector x:Key="PropertyEditorTemplateSelector" StringPropertyTemplate="{StaticResource StringPropertyTemplate}" />
+
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -63,12 +74,22 @@
             <ColumnDefinition Width="300" />
         </Grid.ColumnDefinitions>
 
+        <GroupBox Header="Properties" Grid.Column="0">
+            <DataGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding SelectedElement.Properties}"
+                      AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Width="Auto" Binding="{Binding Name}" />
+                    <DataGridTemplateColumn Header="Value" Width="1*" CellTemplateSelector="{StaticResource PropertyEditorTemplateSelector}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
         <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
         <GroupBox Header="Hierarchy" Grid.Column="4">
-            <TreeView ItemsSource="{Binding DisplayItems}">
+            <TreeView ItemsSource="{Binding DisplayItems}" SelectedItemChanged="TreeView_SelectedItemChanged">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="TreeViewItem">
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
@@ -78,27 +99,38 @@
                 
                 <TreeView.Resources>
 
+                    <!-- Managed object -->
+                    
                     <HierarchicalDataTemplate DataType="{x:Type vmw:ManagedObjectViewModel}" ItemsSource="{Binding DisplayChildren}">
                         <Grid Margin="{StaticResource TreeItemMargin}">
                             <StackPanel Orientation="Horizontal">
+                                <TextBlock Name="Class" Style="{StaticResource ClassNameText}" Text="{Binding ClassName}" />
+
+                                <TextBlock Name="NameDash" Style="{StaticResource NameText}" Text=" - " Visibility="{Binding Name, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
                                 <TextBlock Name="Name" Style="{StaticResource NameText}" Text="{Binding Name}" Visibility="{Binding Name, Converter={StaticResource EmptyStringToVisibilityConverter}}" 
                                            Foreground="{Binding NameColor, Converter={StaticResource ColorCodeToBrushConverter}}" />
-                                <TextBlock Name="NameDash" Style="{StaticResource NameText}" Text=" - " Visibility="{Binding Name, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
-                                
-                                <TextBlock Name="Class" Style="{StaticResource ClassNameText}" Text="{Binding ClassName}" />
+
+                                <TextBlock Name="ValueParen1" Style="{StaticResource NameText}" Text=" (" Visibility="{Binding Value, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
+                                <TextBlock Name="Value" Style="{StaticResource ValueText}" Text="{Binding Value}" Visibility="{Binding Value, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
+                                <TextBlock Name="ValueParen2" Style="{StaticResource NameText}" Text=")" Visibility="{Binding Value, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
                             </StackPanel>
                         </Grid>
 
                         <HierarchicalDataTemplate.Triggers>
                             <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                <Setter TargetName="Name" Property="Foreground" Value="#ffffff" />
-                                <Setter TargetName="NameDash" Property="Foreground" Value="#ffffff" />
                                 <Setter TargetName="Class" Property="Foreground" Value="#ffffff" />
+                                <Setter TargetName="NameDash" Property="Foreground" Value="#ffffff" />
+                                <Setter TargetName="Name" Property="Foreground" Value="#ffffff" />
+                                <Setter TargetName="ValueParen1" Property="Foreground" Value="#ffffff" />
+                                <Setter TargetName="Value" Property="Foreground" Value="#ffffff" />
+                                <Setter TargetName="ValueParen2" Property="Foreground" Value="#ffffff" />
                             </DataTrigger>
                         </HierarchicalDataTemplate.Triggers>
                     </HierarchicalDataTemplate>
 
-                    <HierarchicalDataTemplate DataType="{x:Type vmw:PropertyProxyViewModel}" ItemsSource="{Binding DisplayChildren}">
+                    <!-- Properties proxy -->
+                    
+                    <HierarchicalDataTemplate DataType="{x:Type vmw:PropertiesProxyViewModel}" ItemsSource="{Binding DisplayChildren}">
                         <Grid Margin="{StaticResource TreeItemMargin}">
                             <TextBlock Name="Properties" Style="{StaticResource PropertiesText}" Text="{x:Static res:Strings.Properties}" />
                         </Grid>
@@ -109,7 +141,9 @@
                         </HierarchicalDataTemplate.Triggers>
                     </HierarchicalDataTemplate>
 
-                    <HierarchicalDataTemplate DataType="{x:Type vmp:ManagedReferencePropertyViewModel}" ItemsSource="{Binding DisplayChildren}">
+                    <!-- Property proxy -->
+                            
+                    <HierarchicalDataTemplate DataType="{x:Type vmw:PropertyProxyViewModel}" ItemsSource="{Binding DisplayChildren}">
                         <Grid Margin="{StaticResource TreeItemMargin}">
                             <TextBlock Name="Property" Style="{StaticResource PropertyText}" Text="{Binding Name}" />
                         </Grid>
@@ -118,45 +152,16 @@
                                 <Setter TargetName="Property" Property="Foreground" Value="#ffffff" />
                             </DataTrigger>
                         </HierarchicalDataTemplate.Triggers>
-
                     </HierarchicalDataTemplate>
 
-                    <HierarchicalDataTemplate DataType="{x:Type vmp:ManagedCollectionPropertyViewModel}" ItemsSource="{Binding DisplayChildren}">
-                        <Grid Margin="{StaticResource TreeItemMargin}">
-                            <TextBlock Name="Property" Style="{StaticResource PropertyText}" Text="{Binding Name}" />
-                        </Grid>
-                        <HierarchicalDataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                <Setter TargetName="Property" Property="Foreground" Value="#ffffff" />
-                            </DataTrigger>
-                        </HierarchicalDataTemplate.Triggers>
-
-                    </HierarchicalDataTemplate>
-
-                    <HierarchicalDataTemplate DataType="{x:Type vmw:MacroViewModel}" ItemsSource="{Binding DisplayChildren}">
-                        <Grid Margin="{StaticResource TreeItemMargin}">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Name="Key" Style="{StaticResource KeyText}" Text="{Binding Key}" />
-                                <TextBlock Name="NameDash" Style="{StaticResource NameText}" Text=" - " />
-                                <TextBlock Name="Name" Style="{StaticResource EngineText}" Text="Macro" />
-                            </StackPanel>
-                        </Grid>
-
-                        <HierarchicalDataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                <Setter TargetName="Key" Property="Foreground" Value="#ffffff" />
-                                <Setter TargetName="Name" Property="Foreground" Value="#ffffff" />
-                                <Setter TargetName="NameDash" Property="Foreground" Value="#ffffff" />
-                            </DataTrigger>
-                        </HierarchicalDataTemplate.Triggers>
-                    </HierarchicalDataTemplate>
-
+                    <!-- Include -->
+                            
                     <HierarchicalDataTemplate DataType="{x:Type vmw:IncludeViewModel}" ItemsSource="{Binding DisplayChildren}">
                         <Grid Margin="{StaticResource TreeItemMargin}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Name="Source" Style="{StaticResource SourceText}" Text="{Binding Source}" />
-                                <TextBlock Name="NameDash" Style="{StaticResource NameText}" Text=" - " />
                                 <TextBlock Name="Name" Style="{StaticResource EngineText}" Text="Include" />
+                                <TextBlock Text=" " />
+                                <TextBlock Name="Source" Style="{StaticResource SourceText}" Text="{Binding Source}" />
                             </StackPanel>
                         </Grid>
 
@@ -164,11 +169,48 @@
                             <DataTrigger Binding="{Binding IsSelected}" Value="True">
                                 <Setter TargetName="Source" Property="Foreground" Value="#ffffff" />
                                 <Setter TargetName="Name" Property="Foreground" Value="#ffffff" />
-                                <Setter TargetName="NameDash" Property="Foreground" Value="#ffffff" />
                             </DataTrigger>
                         </HierarchicalDataTemplate.Triggers>
                     </HierarchicalDataTemplate>
 
+                    <!-- Macro -->
+
+                    <HierarchicalDataTemplate DataType="{x:Type vmw:MacroViewModel}" ItemsSource="{Binding DisplayChildren}">
+                        <Grid Margin="{StaticResource TreeItemMargin}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Name="Name" Style="{StaticResource EngineText}" Text="Macro definition" />
+                                <TextBlock Name="Key" Style="{StaticResource KeyText}" Text="{Binding Key}" />
+                            </StackPanel>
+                        </Grid>
+
+                        <HierarchicalDataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter TargetName="Key" Property="Foreground" Value="#ffffff" />
+                                <Setter TargetName="Name" Property="Foreground" Value="#ffffff" />
+                            </DataTrigger>
+                        </HierarchicalDataTemplate.Triggers>
+                    </HierarchicalDataTemplate>
+
+                    <!-- Macro entry -->
+
+                    <HierarchicalDataTemplate DataType="{x:Type vmw:MacroEntryViewModel}" ItemsSource="{Binding DisplayChildren}">
+                        <Grid Margin="{StaticResource TreeItemMargin}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Name="Name" Style="{StaticResource EngineText}" Text="Place macro" />
+                                <TextBlock Name="Key" Style="{StaticResource KeyText}" Text="{Binding Key}" />
+                            </StackPanel>
+                        </Grid>
+
+                        <HierarchicalDataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter TargetName="Key" Property="Foreground" Value="#ffffff" />
+                                <Setter TargetName="Name" Property="Foreground" Value="#ffffff" />
+                            </DataTrigger>
+                        </HierarchicalDataTemplate.Triggers>
+                    </HierarchicalDataTemplate>
+
+                    <!-- Generate -->
+                            
                     <HierarchicalDataTemplate DataType="{x:Type vmw:GenerateViewModel}" ItemsSource="{Binding DisplayChildren}">
                         <Grid Margin="{StaticResource TreeItemMargin}">
                             <StackPanel Orientation="Horizontal">
