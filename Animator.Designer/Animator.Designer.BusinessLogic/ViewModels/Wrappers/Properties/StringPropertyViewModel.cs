@@ -10,7 +10,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     {
         private string value;
 
-        public StringPropertyViewModel(string ns, string name)
+        public StringPropertyViewModel(WrapperContext context, string ns, string name)
+            : base(context)
         {
             Name = name;
             Namespace = ns;

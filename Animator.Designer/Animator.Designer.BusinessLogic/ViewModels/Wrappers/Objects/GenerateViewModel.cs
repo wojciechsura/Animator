@@ -13,11 +13,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         private readonly List<BaseObjectViewModel> children = new();
         private readonly List<PropertyViewModel> properties = new();
 
-        public GenerateViewModel(string defaultNamespace, string engineNamespace, string ns)
-            : base(defaultNamespace, engineNamespace)
+        public GenerateViewModel(WrapperContext context, string defaultNamespace, string engineNamespace, string ns)
+            : base(context, defaultNamespace, engineNamespace)
         {
             Namespace = ns;
-            properties.Add(new MultilineStringPropertyViewModel(defaultNamespace, "Generator"));
+            properties.Add(new MultilineStringPropertyViewModel(context, defaultNamespace, "Generator"));
 
             Icon = "Generator16.png";
         }

@@ -20,11 +20,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             OnPropertyChanged(nameof(Source));
         }
 
-        public IncludeViewModel(string defaultNamespace, string engineNamespace, string ns) 
-            : base(defaultNamespace, engineNamespace)
+        public IncludeViewModel(WrapperContext context, string defaultNamespace, string engineNamespace, string ns) 
+            : base(context, defaultNamespace, engineNamespace)
         {
             Namespace = ns;
-            sourceProperty = new StringPropertyViewModel(ns, "Source");
+            sourceProperty = new StringPropertyViewModel(context, ns, "Source");
             sourceProperty.PropertyChanged += HandleSourceChanged;
             properties.Add(sourceProperty);
 

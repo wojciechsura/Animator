@@ -11,8 +11,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
     {
         private readonly List<PropertyViewModel> properties = new();
 
-        public PropertyProxyViewModel(string defaultNamespace, string engineNamespace, string name, List<BaseObjectViewModel> children)
-            : base(defaultNamespace, engineNamespace)
+        public PropertyProxyViewModel(WrapperContext context, string defaultNamespace, string engineNamespace, string name, List<BaseObjectViewModel> children)
+            : base(context, defaultNamespace, engineNamespace)
         {
             Name = name;
             DisplayChildren = children;

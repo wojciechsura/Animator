@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
 {
     public abstract class ValueViewModel : BaseViewModel
-    {
-
+    {       
+        public IValueHandler Handler { get; set; }
     }
 }

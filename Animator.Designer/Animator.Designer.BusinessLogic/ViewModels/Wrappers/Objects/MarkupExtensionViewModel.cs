@@ -13,20 +13,18 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         private readonly List<BaseObjectViewModel> children = new();
         private readonly List<StringPropertyViewModel> properties = new();
         private readonly Type type;
-        private string defaultNamespace;
 
-        public MarkupExtensionViewModel(string defaultNamespace, string engineNamespace, string ns, string name, Type type)
-            : base(defaultNamespace, engineNamespace)
+        public MarkupExtensionViewModel(WrapperContext context, string defaultNamespace, string engineNamespace, string ns, string name, Type type)
+            : base(context, defaultNamespace, engineNamespace)
         {
             this.type = type;
             this.Name = name;
-            this.defaultNamespace = defaultNamespace;
             this.Namespace = ns;
 
             foreach (var propInfo in type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .OrderBy(prop => prop.Name))
             {
-                var property = new StringPropertyViewModel(defaultNamespace, propInfo.Name);
+                var property = new StringPropertyViewModel(context, defaultNamespace, propInfo.Name);
                 properties.Add(property);
             }
 

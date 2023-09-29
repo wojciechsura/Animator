@@ -43,7 +43,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         protected void OnReferenceValueChanged() =>
             ReferenceValueChanged?.Invoke(this, EventArgs.Empty);
 
-        public ReferencePropertyViewModel(string ns, string name)
+        public ReferencePropertyViewModel(WrapperContext context, string ns, string name)
+            : base(context)
         {
             Namespace = ns;
             Name = name;

@@ -27,16 +27,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             OnPropertyChanged(nameof(Key));
         }
 
-        public MacroEntryViewModel(string defaultNamespace, string engineNamespace)
-            : base(defaultNamespace, engineNamespace)
+        public MacroEntryViewModel(WrapperContext context, string defaultNamespace, string engineNamespace)
+            : base(context, defaultNamespace, engineNamespace)
         {
             Namespace = engineNamespace;
 
-            key = new StringPropertyViewModel(engineNamespace, "Key");
+            key = new StringPropertyViewModel(context, engineNamespace, "Key");
             key.PropertyChanged += HandleKeyChanged;
             properties.Add(key);
 
-            content = new ReferencePropertyViewModel(defaultNamespace, "Content");
+            content = new ReferencePropertyViewModel(context, defaultNamespace, "Content");
             properties.Add(content);
 
             Icon = "MacroDefinition16.png";

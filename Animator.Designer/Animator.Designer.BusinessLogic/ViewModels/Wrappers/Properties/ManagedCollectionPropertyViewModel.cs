@@ -25,7 +25,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 OnStringValueChanged();
         }
 
-        protected override void SetValue(ValueViewModel value)
+        protected override void OnSetValue(ValueViewModel value)
         {
             // Unhook existing event handlers
 
@@ -58,8 +58,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 throw new ArgumentException($"ManagedCollectionPropertyViewModel does not support value of type {value}!");
         }
 
-        public ManagedCollectionPropertyViewModel(string defaultNamespace, ManagedCollectionProperty collectionProperty)
-            : base(defaultNamespace, collectionProperty)
+        public ManagedCollectionPropertyViewModel(WrapperContext context, string defaultNamespace, ManagedCollectionProperty collectionProperty)
+            : base(context, defaultNamespace, collectionProperty)
         {
             this.collectionProperty = collectionProperty;
             value = new CollectionValueViewModel();

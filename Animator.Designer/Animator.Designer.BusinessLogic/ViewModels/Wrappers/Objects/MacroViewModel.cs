@@ -24,11 +24,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             OnPropertyChanged(nameof(Key));
         }
 
-        public MacroViewModel(string defaultNamespace, string engineNamespace, string ns) 
-            : base(defaultNamespace, engineNamespace)
+        public MacroViewModel(WrapperContext context, string defaultNamespace, string engineNamespace, string ns) 
+            : base(context, defaultNamespace, engineNamespace)
         {
             Namespace = ns;
-            keyProperty = new StringPropertyViewModel(ns, "Key");
+            keyProperty = new StringPropertyViewModel(context, ns, "Key");
             keyProperty.PropertyChanged += HandleKeyChanged;
             properties.Add(keyProperty);
 
@@ -43,7 +43,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             if (!nameRegex.IsMatch(propertyName))
                 throw new ArgumentException("Invalid property name!");
 
-            var property = new StringPropertyViewModel(defaultNamespace, propertyName);
+            var property = new StringPropertyViewModel(context, defaultNamespace, propertyName);
             properties.Add(property);
             return property;
         }

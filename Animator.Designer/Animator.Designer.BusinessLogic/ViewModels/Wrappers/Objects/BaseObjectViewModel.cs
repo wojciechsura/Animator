@@ -16,9 +16,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         protected readonly string defaultNamespace;
         protected readonly string engineNamespace;
+        protected readonly WrapperContext context;
 
-        public BaseObjectViewModel(string defaultNamespace, string engineNamespace)
+        public BaseObjectViewModel(WrapperContext context, string defaultNamespace, string engineNamespace)
         {
+            this.context = context;
             this.defaultNamespace = defaultNamespace;
             this.engineNamespace = engineNamespace;
         }

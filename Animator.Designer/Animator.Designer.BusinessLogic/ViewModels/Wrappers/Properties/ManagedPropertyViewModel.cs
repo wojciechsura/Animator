@@ -11,14 +11,26 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 {
     public abstract class ManagedPropertyViewModel : PropertyViewModel
     {
+        private void SetValue(ValueViewModel value)
+        {
+            if (this.value != null)
+                value.Handler = null;
+
+            OnSetValue(value);
+
+            if (this.value != null)
+                value.Handler = this;
+        }
+        
         protected ValueViewModel value;
 
         protected void OnStringValueChanged() => StringValueChanged?.Invoke(this, EventArgs.Empty);
         protected void OnReferenceValueChanged() => ReferenceValueChanged?.Invoke(this, EventArgs.Empty);
         protected void OnCollectionChanged() => CollectionChanged?.Invoke(this, EventArgs.Empty);
-        protected abstract void SetValue(ValueViewModel value);
+        protected abstract void OnSetValue(ValueViewModel value);
 
-        public ManagedPropertyViewModel(string defaultNamespace, ManagedProperty property)
+        public ManagedPropertyViewModel(WrapperContext context, string defaultNamespace, ManagedProperty property)
+            : base(context)
         {
             Name = property.Name;
             Namespace = defaultNamespace;
@@ -33,7 +45,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public ValueViewModel Value
         {
             get => value;
-            set => SetValue(value);
+            set => OnSetValue(value);
         }
 
         public event EventHandler StringValueChanged;

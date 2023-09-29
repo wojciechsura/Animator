@@ -87,26 +87,26 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                     if (managedProperty.Value is ReferenceValueViewModel refValue)
                     {
                         var children = new List<BaseObjectViewModel>() { refValue.Value };
-                        var propertyProxy = new PropertyProxyViewModel(defaultNamespace, engineNamespace, property.Name, children);
+                        var propertyProxy = new PropertyProxyViewModel(context, defaultNamespace, engineNamespace, property.Name, children);
                         proxyProperties.Add(propertyProxy);
                     }
                     else if (managedProperty.Value is CollectionValueViewModel collection)
                     {
                         var children = new List<BaseObjectViewModel>(collection.Items);
-                        var propertyProxy = new PropertyProxyViewModel(defaultNamespace, engineNamespace, property.Name, children);
+                        var propertyProxy = new PropertyProxyViewModel(context, defaultNamespace, engineNamespace, property.Name, children);
                         proxyProperties.Add(propertyProxy);
                     }
                     else if (managedProperty.Value is MarkupExtensionValueViewModel markup)
                     {
                         var children = new List<BaseObjectViewModel>() { markup.Value };
-                        var propertyProxy = new PropertyProxyViewModel(defaultNamespace, engineNamespace, property.Name, children);
+                        var propertyProxy = new PropertyProxyViewModel(context, defaultNamespace, engineNamespace, property.Name, children);
                         proxyProperties.Add(propertyProxy);
                     }
                 }
             }
 
             if (proxyProperties.Any())
-                yield return new PropertiesProxyViewModel(defaultNamespace, engineNamespace, proxyProperties);
+                yield return new PropertiesProxyViewModel(context, defaultNamespace, engineNamespace, proxyProperties);
 
             if (contentProperty != null)
             {
@@ -134,8 +134,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             };
         }
 
-        public ManagedObjectViewModel(string defaultNamespace, string engineNamespace, string ns, string className, Type type)
-            : base(defaultNamespace, engineNamespace)
+        public ManagedObjectViewModel(WrapperContext context, string defaultNamespace, string engineNamespace, string ns, string className, Type type)
+            : base(context, defaultNamespace, engineNamespace)
         {
             this.ClassName = className;
             this.Namespace = ns;
@@ -149,19 +149,19 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 {
                     case ManagedSimpleProperty simple:
                         {
-                            var prop = new ManagedSimplePropertyViewModel(defaultNamespace, simple);
+                            var prop = new ManagedSimplePropertyViewModel(context, defaultNamespace, simple);
                             properties.Add(prop);
                             break;
                         }
                     case ManagedCollectionProperty collection:
                         {
-                            var prop = new ManagedCollectionPropertyViewModel(defaultNamespace, collection);
+                            var prop = new ManagedCollectionPropertyViewModel(context, defaultNamespace, collection);
                             properties.Add(prop);
                             break;
                         }
                     case ManagedReferenceProperty reference:
                         {
-                            var prop = new ManagedReferencePropertyViewModel(defaultNamespace, reference);
+                            var prop = new ManagedReferencePropertyViewModel(context, defaultNamespace, reference);
                             properties.Add(prop);
                             break;
                         }
@@ -170,7 +170,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 }
             }
 
-            var keyProperty = new StringPropertyViewModel(engineNamespace, "Key");
+            var keyProperty = new StringPropertyViewModel(context, engineNamespace, "Key");
             properties.Add(keyProperty);
 
             // Content property

@@ -4,21 +4,17 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
 
 namespace Animator.Designer.Common.Wpf.Converters
 {
-    public class MatchesTypeToVisibilityConverter : IValueConverter
+    public class DoesNotMatchTypeToBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (parameter is Type expectedType && value != null)
+            if (value != null && parameter is Type type)
             {
-                if (value.GetType() == expectedType)
-                    return Visibility.Visible;
-                else
-                    return Visibility.Collapsed;
+                return value.GetType() != type;
             }
 
             return Binding.DoNothing;

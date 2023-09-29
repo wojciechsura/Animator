@@ -18,6 +18,7 @@
             <conv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
             <conv:ColorCodeToBrushConverter x:Key="ColorCodeToBrushConverter" />
             <conv:MatchesTypeToVisibilityConverter x:Key="MatchesTypeToVisibilityConverter" />
+            <conv:DoesNotMatchTypeToBoolConverter x:Key="DoesNotMatchTypeToBoolConverter" />
 
             <lconv:ImageKeyConverter x:Key="ImageKeyConverter" />
 

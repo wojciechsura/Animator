@@ -207,6 +207,7 @@ namespace Animator.Engine.Base.Persistence
                 SingleOrDefault(assembly => assembly.GetName().Name == namespaceDefinition.Assembly);
 
             if (assembly == null)
+            {
                 try
                 {
                     assembly = Assembly.Load(namespaceDefinition.Assembly);
@@ -215,6 +216,7 @@ namespace Animator.Engine.Base.Persistence
                 {
                     // Intentionally left empty, will leave assembly as null.
                 }
+            }
 
             if (assembly == null)
                 throw new ActivatorException($"Cannot access assembly {namespaceDefinition.Assembly}\r\nMake sure, it is loaded or accessible to load.");

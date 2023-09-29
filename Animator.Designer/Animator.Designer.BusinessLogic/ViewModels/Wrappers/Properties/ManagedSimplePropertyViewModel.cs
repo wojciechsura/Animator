@@ -19,7 +19,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 OnStringValueChanged();
         }
 
-        protected override void SetValue(ValueViewModel value)
+        protected override void OnSetValue(ValueViewModel value)
         {
             // Unhook existing event handlers
 
@@ -43,8 +43,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 throw new ArgumentException($"ManagedSimplePropertyViewModel does not support value of type {value}!");
         }
 
-        public ManagedSimplePropertyViewModel(string defaultNamespace, ManagedSimpleProperty property)
-            : base(defaultNamespace, property)
+        public ManagedSimplePropertyViewModel(WrapperContext context, string defaultNamespace, ManagedSimpleProperty property)
+            : base(context, defaultNamespace, property)
         {
             this.simpleProperty = property;
             SetDefault(property);

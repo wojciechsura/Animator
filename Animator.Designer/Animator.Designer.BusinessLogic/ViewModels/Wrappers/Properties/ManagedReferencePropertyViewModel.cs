@@ -26,7 +26,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 OnReferenceValueChanged();
         }
 
-        protected override void SetValue(ValueViewModel value)
+        protected override void OnSetValue(ValueViewModel value)
         {
             // Unhook existing value change handlers
 
@@ -63,8 +63,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 throw new ArgumentException($"ManagedReferencePropertyViewModel does not support value of type {value}!");
         }
 
-        public ManagedReferencePropertyViewModel(string defaultNamespace, ManagedReferenceProperty referenceProperty)
-            : base(defaultNamespace, referenceProperty)
+        public ManagedReferencePropertyViewModel(WrapperContext context, string defaultNamespace, ManagedReferenceProperty referenceProperty)
+            : base(context, defaultNamespace, referenceProperty)
         {
             this.referenceProperty = referenceProperty;
             value = new DefaultValueViewModel(null);
