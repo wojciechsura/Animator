@@ -23,7 +23,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
         private readonly IDialogService dialogService;
         private readonly IMessagingService messagingService;
         private DocumentViewModel document;
-        private WrapperContext wrapperContext;
 
         // Private methods ----------------------------------------------------
 
@@ -46,13 +45,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
                     var serializer = new MovieSerializer();
                     (var root, var wrapperContext) = serializer.Deserialize(xmlDocument, path);
 
-                    Document = new DocumentViewModel(root, path, false);
-                    this.wrapperContext = wrapperContext;
+                    Document = new DocumentViewModel(root, wrapperContext, path, false);                    
                 }
                 catch (Exception e)
                 {
                     Document = null;
-                    wrapperContext = null;
 
                     messagingService.Warn(String.Format(Strings.Message_FailedToOpenDocument, e.Message));
                 }

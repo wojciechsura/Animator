@@ -1,6 +1,7 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
+using Spooksoft.VisualStateManager.Commands;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,6 +26,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 OnStringValueChanged();
         }
 
+        private void SetToString()
+        {
+            Value = new StringValueViewModel(string.Empty);
+        }
+
+        private void SetToCollection()
+        {
+            Value = new CollectionValueViewModel();
+        }
+
         protected override void OnSetValue(ValueViewModel value)
         {
             // Unhook existing event handlers
@@ -43,16 +54,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             if (value is StringValueViewModel)
             {
                 value.PropertyChanged += HandleStringValueChanged;
-                Set(ref this.value, value);
+                Set(ref this.value, value, nameof(Value));
             }
             else if (value is CollectionValueViewModel newCollection)
             {
                 newCollection.CollectionChanged += HandleCollectionChanged;
-                Set(ref this.value, value);
+                Set(ref this.value, value, nameof(Value));
             }
             else if (value is MarkupExtensionValueViewModel)
             {
-                Set(ref this.value, value);
+                Set(ref this.value, value, nameof(Value));
             }
             else
                 throw new ArgumentException($"ManagedCollectionPropertyViewModel does not support value of type {value}!");
@@ -63,6 +74,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         {
             this.collectionProperty = collectionProperty;
             value = new CollectionValueViewModel();
+
+            SetToStringCommand = new AppCommand(obj => SetToString());
+            SetToCollectionCommand = new AppCommand(obj => SetToCollection());
         }
 
         public override ManagedProperty ManagedProperty => collectionProperty;

@@ -120,4 +120,10 @@
   <data name="SwitchToDefault" xml:space="preserve">
     <value>Ustaw wartość domyślną</value>
   </data>
+  <data name="SwitchToString" xml:space="preserve">
+    <value>Wprowadź wartość</value>
+  </data>
+  <data name="SwitchToCollection" xml:space="preserve">
+    <value>Edytuj jako kolekcję</value>
+  </data>
 </root>

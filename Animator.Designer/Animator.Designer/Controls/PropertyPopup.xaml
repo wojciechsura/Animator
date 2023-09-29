@@ -4,24 +4,35 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Animator.Designer.Controls"
-      xmlns:res="clr-namespace:Animator.Designer.Resources.Controls.PropertyPopup;assembly=Animator.Designer.Resources"
+      xmlns:res="clr-namespace:Animator.Designer.Resources.Controls.PropertyPopup;assembly=Animator.Designer.Resources" 
+      xmlns:vmp="clr-namespace:Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;assembly=Animator.Designer.BusinessLogic" 
+      xmlns:e="clr-namespace:Animator.Designer.Common.Wpf.Extensions;assembly=Animator.Designer.Common.Wpf"     
+      d:DataContext="{d:DesignInstance Type=vmp:PropertyViewModel}"
       mc:Ignorable="d" 
       Width="16" Height="16" x:Name="Root">
     <Grid.Resources>
         <Thickness x:Key="PopupItemMargin">4</Thickness>
     </Grid.Resources>
-    <ToggleButton x:Name="PopupOpen" Content="..." IsChecked="{Binding ElementName=Popup, Path=IsOpen, Mode=TwoWay}" />
-    <Popup x:Name="Popup" PlacementTarget="{Binding ElementName=PopupOpen}" Placement="Right" StaysOpen="False">
-        <Border Background="White" BorderBrush="{x:Static SystemColors.ActiveBorderBrush}" BorderThickness="1">
-            <StackPanel Orientation="Vertical">
-                <Label HorizontalAlignment="Center" Content="{Binding Name}" FontWeight="Bold" Margin="4,4,0,4"/>
+    <Button x:Name="PopupOpen" Content="..." e:ContextMenuOnLeftClick.Enabled="True" e:ContextMenuOnLeftClick.Placement="Right"
+            e:ContextMenuOnLeftClick.PlacementTarget="{Binding RelativeSource={RelativeSource Self}}">
+        <Button.ContextMenu>
+            <ContextMenu>
+                <MenuItem Visibility="{Binding ElementName=Root, Path=ShowSetToDefault, Converter={StaticResource BoolToVisibilityConverter}}" 
+                            IsEnabled="{Binding ElementName=Root, Path=EnableSetToDefault}"
+                            Background="#40808080" Header="{x:Static res:Strings.SwitchToDefault}" 
+                            Command="{Binding SetDefaultCommand}" />
 
-                <Border HorizontalAlignment="Stretch" Height="1" BorderThickness="0" Background="#000000" Margin="4" />
+                <MenuItem Visibility="{Binding ElementName=Root, Path=ShowSetToString, Converter={StaticResource BoolToVisibilityConverter}}"
+                            IsEnabled="{Binding ElementName=Root, Path=EnableSetToString}"
+                            Background="#40ffffff" Header="{x:Static res:Strings.SwitchToString}" 
+                            Command="{Binding SetToStringCommand}" />
 
-                <Button Visibility="{Binding ElementName=Root, Path=ShowSetToDefault, Converter={StaticResource BoolToVisibilityConverter}}" 
-                        IsEnabled="{Binding ElementName=Root, Path=EnableSetToDefault}"
-                        Background="#40808080" Margin="{StaticResource PopupItemMargin}" Content="{x:Static res:Strings.SwitchToDefault}" />
-            </StackPanel>
-        </Border>
-    </Popup>
+                <MenuItem Visibility="{Binding ElementName=Root, Path=ShowSetToCollection, Converter={StaticResource BoolToVisibilityConverter}}"
+                            IsEnabled="{Binding ElementName=Root, Path=EnableSetToCollection}"
+                            Background="#4000ff40" Header="{x:Static res:Strings.SwitchToCollection}"
+                            Command="{Binding SetToCollectionCommand}" />
+
+            </ContextMenu>
+        </Button.ContextMenu>
+    </Button>
 </Grid>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 {
@@ -34,5 +35,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             get => isExpanded;
             set => Set(ref isExpanded, value);
         }
+
+        public ICommand SetDefaultCommand { get; init; }
+        public ICommand SetToStringCommand { get; init; }
+        public ICommand SetToCollectionCommand { get; init; }
     }
 }

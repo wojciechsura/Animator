@@ -95,7 +95,9 @@
         <DataTemplate x:Key="ManagedSimplePropertyTemplate" DataType="{x:Type vmp:ManagedSimplePropertyViewModel}">
             <DockPanel>
                 <local:PropertyPopup DockPanel.Dock="Right" Margin="3" 
-                                     ShowSetToDefault="True" EnableSetToDefault="{Binding Value, Converter={StaticResource DoesNotMatchTypeToBoolConverter}, ConverterParameter={x:Type vmv:DefaultValueViewModel}}" />
+                                     ShowSetToDefault="True" EnableSetToDefault="{Binding Value, Converter={StaticResource DoesNotMatchTypeToBoolConverter}, ConverterParameter={x:Type vmv:DefaultValueViewModel}}" 
+                                     ShowSetToString="True" EnableSetToString="{Binding Value, Converter={StaticResource DoesNotMatchTypeToBoolConverter}, ConverterParameter={x:Type vmv:StringValueViewModel}}" 
+                                     ShowSetToCollection="False" />
                 
                 <ContentControl Content="{Binding Value}">
                     <ContentControl.Resources>
@@ -124,7 +126,9 @@
         <DataTemplate x:Key="ManagedCollectionPropertyTemplate" DataType="{x:Type vmp:ManagedCollectionPropertyViewModel}">
             <DockPanel>
                 <local:PropertyPopup DockPanel.Dock="Right" Margin="3" 
-                                     ShowSetToDefault="False" />
+                                     ShowSetToDefault="False" 
+                                     ShowSetToString="True" EnableSetToString="{Binding Value, Converter={StaticResource DoesNotMatchTypeToBoolConverter}, ConverterParameter={x:Type vmv:StringValueViewModel}}" 
+                                     ShowSetToCollection="True" EnableSetToCollection="{Binding Value, Converter={StaticResource DoesNotMatchTypeToBoolConverter}, ConverterParameter={x:Type vmv:CollectionValueViewModel}}" />
 
                 <ContentControl Content="{Binding Value}">
                     <ContentControl.Resources>
@@ -154,7 +158,9 @@
         <DataTemplate x:Key="ManagedReferencePropertyTemplate" DataType="{x:Type vmp:ManagedReferencePropertyViewModel}">
             <DockPanel>
                 <local:PropertyPopup DockPanel.Dock="Right" Margin="3" 
-                                     ShowSetToDefault="True" />
+                                     ShowSetToDefault="True" EnableSetToDefault="{Binding Value, Converter={StaticResource DoesNotMatchTypeToBoolConverter}, ConverterParameter={x:Type vmv:DefaultValueViewModel}}" 
+                                     ShowSetToString="True" EnableSetToString="{Binding Value, Converter={StaticResource DoesNotMatchTypeToBoolConverter}, ConverterParameter={x:Type vmv:StringValueViewModel}}" 
+                                     ShowSetToCollection="False" />
 
                 <ContentControl Content="{Binding Value}">
                     <ContentControl.Resources>

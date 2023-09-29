@@ -1,11 +1,13 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
 using Newtonsoft.Json.Linq;
+using Spooksoft.VisualStateManager.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 {
@@ -21,7 +23,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             if (this.value != null)
                 value.Handler = this;
         }
-        
+
         protected ValueViewModel value;
 
         protected void OnStringValueChanged() => StringValueChanged?.Invoke(this, EventArgs.Empty);

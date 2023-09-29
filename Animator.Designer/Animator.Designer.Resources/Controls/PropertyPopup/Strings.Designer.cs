@@ -61,11 +61,29 @@ namespace Animator.Designer.Resources.Controls.PropertyPopup {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Edit as collection.
+        /// </summary>
+        public static string SwitchToCollection {
+            get {
+                return ResourceManager.GetString("SwitchToCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Set default.
         /// </summary>
         public static string SwitchToDefault {
             get {
                 return ResourceManager.GetString("SwitchToDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Enter custom value.
+        /// </summary>
+        public static string SwitchToString {
+            get {
+                return ResourceManager.GetString("SwitchToString", resourceCulture);
             }
         }
     }
