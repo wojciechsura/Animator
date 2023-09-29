@@ -6,15 +6,17 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
+namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
-    public class MarkupExtensionViewModel : ValueViewModel
+    public class MarkupExtensionViewModel : BaseObjectViewModel
     {
+        private readonly List<BaseObjectViewModel> children = new();
         private readonly List<StringPropertyViewModel> properties = new();
         private readonly Type type;
         private string defaultNamespace;
 
-        public MarkupExtensionViewModel(string defaultNamespace, string ns, string name, Type type)
+        public MarkupExtensionViewModel(string defaultNamespace, string engineNamespace, string ns, string name, Type type)
+            : base(defaultNamespace, engineNamespace)
         {
             this.type = type;
             this.Name = name;
@@ -27,17 +29,13 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
                 var property = new StringPropertyViewModel(defaultNamespace, propInfo.Name);
                 properties.Add(property);
             }
-        }
-       
-        public StringPropertyViewModel this[string ns, string name]
-        {
-            get => properties.Single(prop => prop.Namespace == ns && prop.Name == name);
+
+            Icon = "MarkupExtension16.png";
         }
 
-        public StringPropertyViewModel this[string name]
-        {
-            get => properties.Single(prop => prop.Namespace == defaultNamespace && prop.Name == name);
-        }
+        public override IEnumerable<PropertyViewModel> Properties => properties;
+
+        public override IEnumerable<BaseObjectViewModel> DisplayChildren => children;
 
         public string Name { get; }
 

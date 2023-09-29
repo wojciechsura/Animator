@@ -12,7 +12,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     public class ManagedSimplePropertyViewModel : ManagedPropertyViewModel
     {
         private readonly ManagedSimpleProperty simpleProperty;
-        private ValueViewModel value;
 
         private void HandleStringValueChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -20,7 +19,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 OnStringValueChanged();
         }
 
-        private void SetValue(ValueViewModel value)
+        protected override void SetValue(ValueViewModel value)
         {
             // Unhook existing event handlers
 
@@ -36,7 +35,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 value.PropertyChanged += HandleStringValueChanged;
                 Set(ref this.value, value);
             }
-            else if (value is MarkupExtensionViewModel)
+            else if (value is MarkupExtensionValueViewModel)
                 Set(ref this.value, value);
             else if (value is DefaultValueViewModel)
                 throw new ArgumentException("Use SetDefault method instead of setting DefaultValueViewModel!");
@@ -58,11 +57,5 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         }
 
         public override ManagedProperty ManagedProperty => simpleProperty;
-
-        public ValueViewModel Value
-        {
-            get => value;
-            set => SetValue(value);            
-        }        
     }
 }

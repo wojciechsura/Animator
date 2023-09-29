@@ -33,7 +33,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         private static readonly Dictionary<Type, (NamespaceType Namespace, string Property)> valuePropDefinitions = new()
         {
-            { typeof(Animator.Engine.Elements.Label), (NamespaceType.Default, nameof(Animator.Engine.Elements.Label.Text)) }
+            { typeof(Animator.Engine.Elements.Label), (NamespaceType.Default, nameof(Animator.Engine.Elements.Label.Text)) },
+            { typeof(Animator.Engine.Elements.Image), (NamespaceType.Default, nameof(Animator.Engine.Elements.Image.Source)) },
+            { typeof(Animator.Engine.Elements.SvgImage), (NamespaceType.Default, nameof(Animator.Engine.Elements.SvgImage.Source)) }
         };
 
         private readonly ObservableCollection<PropertyViewModel> properties = new();
@@ -75,22 +77,31 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
             List<PropertyProxyViewModel> proxyProperties = new();
 
-            foreach (var property in properties)
+            foreach (var property in properties.OrderBy(prop => prop.Name))
             {
                 if (property == contentProperty)
                     continue;
 
-                if (property is ManagedReferencePropertyViewModel reference && reference.Value is ReferenceValueViewModel refValue)
+                if (property is ManagedPropertyViewModel managedProperty)
                 {
-                    var children = new List<BaseObjectViewModel>() { refValue.Value };
-                    var propertyProxy = new PropertyProxyViewModel(defaultNamespace, engineNamespace, property.Name, children);
-                    proxyProperties.Add(propertyProxy);
-                }
-                else if (property is ManagedCollectionPropertyViewModel collection && collection.Value is CollectionValueViewModel collectionValue)
-                {
-                    var children = new List<BaseObjectViewModel>(collectionValue.Items);
-                    var propertyProxy = new PropertyProxyViewModel(defaultNamespace, engineNamespace, property.Name, children);
-                    proxyProperties.Add(propertyProxy);
+                    if (managedProperty.Value is ReferenceValueViewModel refValue)
+                    {
+                        var children = new List<BaseObjectViewModel>() { refValue.Value };
+                        var propertyProxy = new PropertyProxyViewModel(defaultNamespace, engineNamespace, property.Name, children);
+                        proxyProperties.Add(propertyProxy);
+                    }
+                    else if (managedProperty.Value is CollectionValueViewModel collection)
+                    {
+                        var children = new List<BaseObjectViewModel>(collection.Items);
+                        var propertyProxy = new PropertyProxyViewModel(defaultNamespace, engineNamespace, property.Name, children);
+                        proxyProperties.Add(propertyProxy);
+                    }
+                    else if (managedProperty.Value is MarkupExtensionValueViewModel markup)
+                    {
+                        var children = new List<BaseObjectViewModel>() { markup.Value };
+                        var propertyProxy = new PropertyProxyViewModel(defaultNamespace, engineNamespace, property.Name, children);
+                        proxyProperties.Add(propertyProxy);
+                    }
                 }
             }
 
@@ -129,7 +140,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             this.ClassName = className;
             this.Namespace = ns;
 
-            foreach (var property in ManagedProperty.FindAllByType(type, true))
+            foreach (var property in ManagedProperty.FindAllByType(type, true).OrderBy(prop => prop.Name))
             {
                 if (property.Metadata.NotSerializable)
                     continue;

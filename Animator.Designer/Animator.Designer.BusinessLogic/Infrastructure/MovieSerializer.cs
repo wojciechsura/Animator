@@ -287,24 +287,24 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
             string defaultNamespace = context.DefaultNamespace.ToString();
 
-            var markupExt = new MarkupExtensionViewModel(defaultNamespace, ns, markupData.Name, markupData.TypeData.Type);
+            var markupExt = new MarkupExtensionViewModel(defaultNamespace, ENGINE_NAMESPACE, ns, markupData.Name, markupData.TypeData.Type);
 
             foreach (var param in markupData.Params)
             {
-                markupExt[defaultNamespace, param.property].Value = param.value;
+                markupExt.Property<StringPropertyViewModel>(defaultNamespace, param.property).Value = param.value;
             }
 
             if (managedProperty is ManagedSimplePropertyViewModel simple)
             {
-                simple.Value = markupExt;
+                simple.Value = new MarkupExtensionValueViewModel(markupExt);
             }
             else if (managedProperty is ManagedReferencePropertyViewModel reference)
             {
-                reference.Value = markupExt;
+                reference.Value = new MarkupExtensionValueViewModel(markupExt);
             }
             else if (managedProperty is ManagedCollectionPropertyViewModel collection)
             {
-                collection.Value = markupExt;
+                collection.Value = new MarkupExtensionValueViewModel(markupExt);
             }
             else
                 throw new InvalidOperationException("Unsupported property type!");

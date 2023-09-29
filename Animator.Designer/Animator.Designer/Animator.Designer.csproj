@@ -11,6 +11,14 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Resources\Images\Icons\Generator16.png" />
+    <None Remove="Resources\Images\Icons\Generic16.png" />
+    <None Remove="Resources\Images\Icons\Include16.png" />
+    <None Remove="Resources\Images\Icons\MacroDefinition16.png" />
+    <None Remove="Resources\Images\Icons\MarkupExtension16.png" />
+    <None Remove="Resources\Images\Icons\PlaceMacro16.png" />
+    <None Remove="Resources\Images\Icons\Properties16.png" />
+    <None Remove="Resources\Images\Icons\Property16.png" />
     <None Remove="Resources\Images\Open16.png" />
     <None Remove="Resources\Images\Open32.png" />
   </ItemGroup>
@@ -32,6 +40,14 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
+    <Resource Include="Resources\Images\Icons\Generator16.png" />
+    <Resource Include="Resources\Images\Icons\Generic16.png" />
+    <Resource Include="Resources\Images\Icons\Include16.png" />
+    <Resource Include="Resources\Images\Icons\MacroDefinition16.png" />
+    <Resource Include="Resources\Images\Icons\MarkupExtension16.png" />
+    <Resource Include="Resources\Images\Icons\PlaceMacro16.png" />
+    <Resource Include="Resources\Images\Icons\Properties16.png" />
+    <Resource Include="Resources\Images\Icons\Property16.png" />
     <Resource Include="Resources\Images\Open16.png" />
     <Resource Include="Resources\Images\Open32.png" />
   </ItemGroup>

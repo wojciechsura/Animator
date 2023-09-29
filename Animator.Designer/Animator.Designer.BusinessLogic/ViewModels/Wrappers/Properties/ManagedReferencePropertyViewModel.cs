@@ -13,9 +13,20 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     public class ManagedReferencePropertyViewModel : ManagedPropertyViewModel
     {
         private readonly ManagedReferenceProperty referenceProperty;
-        private ValueViewModel value;
 
-        private void SetValue(ValueViewModel value)
+        private void HandleStringValueChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(StringValueViewModel.Value))
+                OnStringValueChanged();
+        }
+
+        private void HandleReferenceValueChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ReferenceValueViewModel.Value))
+                OnReferenceValueChanged();
+        }
+
+        protected override void SetValue(ValueViewModel value)
         {
             // Unhook existing value change handlers
 
@@ -40,7 +51,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 value.PropertyChanged += HandleReferenceValueChanged;
                 Set(ref this.value, value);
             }
-            else if (value is MarkupExtensionViewModel)
+            else if (value is MarkupExtensionValueViewModel)
+            {
+                Set(ref this.value, value);
+            }
+            else if (value is DefaultValueViewModel)
             {
                 Set(ref this.value, value);
             }
@@ -48,30 +63,13 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 throw new ArgumentException($"ManagedReferencePropertyViewModel does not support value of type {value}!");
         }
 
-        private void HandleStringValueChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(StringValueViewModel.Value))
-                OnStringValueChanged();
-        }
-
-        private void HandleReferenceValueChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(ReferenceValueViewModel.Value))
-                OnReferenceValueChanged();
-        }
-
         public ManagedReferencePropertyViewModel(string defaultNamespace, ManagedReferenceProperty referenceProperty)
             : base(defaultNamespace, referenceProperty)
         {
             this.referenceProperty = referenceProperty;
+            value = new DefaultValueViewModel(null);
         }
 
         public override ManagedProperty ManagedProperty => referenceProperty;
-
-        public ValueViewModel Value
-        {
-            get => value;
-            set => SetValue(value);            
-        }
    }
 }

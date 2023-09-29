@@ -38,6 +38,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
             content = new ReferencePropertyViewModel(defaultNamespace, "Content");
             properties.Add(content);
+
+            Icon = "MacroDefinition16.png";
         }
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;

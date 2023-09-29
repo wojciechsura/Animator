@@ -27,6 +27,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             sourceProperty = new StringPropertyViewModel(ns, "Source");
             sourceProperty.PropertyChanged += HandleSourceChanged;
             properties.Add(sourceProperty);
+
+            Icon = "Include16.png";
         }
 
         public override IEnumerable<PropertyViewModel> Properties => properties;

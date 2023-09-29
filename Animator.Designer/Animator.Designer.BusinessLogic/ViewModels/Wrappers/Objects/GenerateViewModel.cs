@@ -18,6 +18,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         {
             Namespace = ns;
             properties.Add(new MultilineStringPropertyViewModel(defaultNamespace, "Generator"));
+
+            Icon = "Generator16.png";
         }
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;

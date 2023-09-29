@@ -60,5 +60,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             get => isExpanded;
             set => Set(ref isExpanded, value);
         }
+
+        public string Icon { get; init; } = "Generic16.png";
     }
 }

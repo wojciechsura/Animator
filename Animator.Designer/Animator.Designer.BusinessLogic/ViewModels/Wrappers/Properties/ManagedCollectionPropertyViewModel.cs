@@ -13,7 +13,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     public class ManagedCollectionPropertyViewModel : ManagedPropertyViewModel
     {
         private readonly ManagedCollectionProperty collectionProperty;
-        private ValueViewModel value;        
 
         private void HandleCollectionChanged(object sender, EventArgs e)
         {
@@ -26,19 +25,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 OnStringValueChanged();
         }
 
-        public ManagedCollectionPropertyViewModel(string defaultNamespace, ManagedCollectionProperty collectionProperty)
-            : base(defaultNamespace, collectionProperty)
-        {
-            this.collectionProperty = collectionProperty;
-        }
-
-        public ValueViewModel Value
-        {
-            get => value;
-            set => SetValue(value);            
-        }
-
-        private void SetValue(ValueViewModel value)
+        protected override void SetValue(ValueViewModel value)
         {
             // Unhook existing event handlers
 
@@ -63,10 +50,19 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 newCollection.CollectionChanged += HandleCollectionChanged;
                 Set(ref this.value, value);
             }
-            else if (value is MarkupExtensionViewModel)
+            else if (value is MarkupExtensionValueViewModel)
+            {
                 Set(ref this.value, value);
+            }
             else
                 throw new ArgumentException($"ManagedCollectionPropertyViewModel does not support value of type {value}!");
+        }
+
+        public ManagedCollectionPropertyViewModel(string defaultNamespace, ManagedCollectionProperty collectionProperty)
+            : base(defaultNamespace, collectionProperty)
+        {
+            this.collectionProperty = collectionProperty;
+            value = new CollectionValueViewModel();
         }
 
         public override ManagedProperty ManagedProperty => collectionProperty;

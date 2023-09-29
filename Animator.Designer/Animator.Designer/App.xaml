@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:Animator.Designer" 
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:conv="clr-namespace:Animator.Designer.Common.Wpf.Converters;assembly=Animator.Designer.Common.Wpf"
+             xmlns:lconv="clr-namespace:Animator.Designer.Converters"
              StartupUri="Windows\MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -16,6 +17,9 @@
             <conv:InverseEmptyStringToVisibilityConverter x:Key="InverseEmptyStringToVisibilityConverter" />
             <conv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
             <conv:ColorCodeToBrushConverter x:Key="ColorCodeToBrushConverter" />
+            <conv:MatchesTypeToVisibilityConverter x:Key="MatchesTypeToVisibilityConverter" />
+
+            <lconv:ImageKeyConverter x:Key="ImageKeyConverter" />
 
             <Style x:Key="DialogButton" TargetType="Button">
                 <Setter Property="Margin" Value="4" />

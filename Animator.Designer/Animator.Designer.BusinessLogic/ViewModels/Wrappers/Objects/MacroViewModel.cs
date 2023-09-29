@@ -31,6 +31,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             keyProperty = new StringPropertyViewModel(ns, "Key");
             keyProperty.PropertyChanged += HandleKeyChanged;
             properties.Add(keyProperty);
+
+            Icon = "PlaceMacro16.png";
         }
 
         public StringPropertyViewModel AddProperty(string propertyName)
