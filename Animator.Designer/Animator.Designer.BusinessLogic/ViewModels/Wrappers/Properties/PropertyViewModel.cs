@@ -36,6 +36,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             set => Set(ref isExpanded, value);
         }
 
+        public virtual IEnumerable<TypeViewModel> AvailableTypes { get; } = null;
+
         public ICommand SetDefaultCommand { get; init; }
         public ICommand SetToStringCommand { get; init; }
         public ICommand SetToCollectionCommand { get; init; }

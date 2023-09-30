@@ -1,6 +1,7 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
 using Spooksoft.VisualStateManager.Commands;
+using Spooksoft.VisualStateManager.Conditions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -62,8 +63,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             this.simpleProperty = property;
             SetDefault();
 
-            SetDefaultCommand = new AppCommand(obj => SetDefault());
-            SetToStringCommand = new AppCommand(obj => SetToString());
+            var valueIsStringCondition = Condition.Lambda(this, vm => vm.Value is StringValueViewModel, false);
+            var valueIsDefaultCondition = Condition.Lambda(this, vm => vm.Value is DefaultValueViewModel, false);
+
+            SetDefaultCommand = new AppCommand(obj => SetDefault(), !valueIsDefaultCondition);
+            SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
         }
 
         public override ManagedProperty ManagedProperty => simpleProperty;        

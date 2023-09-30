@@ -2,6 +2,7 @@
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
 using Spooksoft.VisualStateManager.Commands;
+using Spooksoft.VisualStateManager.Conditions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -82,10 +83,24 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             this.referenceProperty = referenceProperty;
             value = new DefaultValueViewModel(null);
 
-            SetDefaultCommand = new AppCommand(obj => SetDefault());
-            SetToStringCommand = new AppCommand(obj => SetToString());
+            var valueIsStringCondition = Condition.Lambda(this, vm => vm.Value is StringValueViewModel, false);
+            var valueIsDefaultCondition = Condition.Lambda(this, vm => vm.Value is DefaultValueViewModel, false);
+
+            SetDefaultCommand = new AppCommand(obj => SetDefault(), !valueIsStringCondition);
+            SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsDefaultCondition);            
         }
 
-        public override ManagedProperty ManagedProperty => referenceProperty;        
-   }
+        public override ManagedProperty ManagedProperty => referenceProperty;
+
+        public override IEnumerable<TypeViewModel> AvailableTypes
+        {
+            get
+            {
+                var refPropertyType = referenceProperty.Type;
+                return context.Namespaces
+                    .SelectMany(ns => ns.GetAvailableTypesFor(refPropertyType))
+                    .OrderBy(tvm => tvm.Name);
+            }
+        }
+    }
 }

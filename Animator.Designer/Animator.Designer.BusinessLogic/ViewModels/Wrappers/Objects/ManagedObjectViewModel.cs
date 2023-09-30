@@ -134,6 +134,32 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             };
         }
 
+        private void HandleReferencePropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            OnPropertyChanged(nameof(DisplayChildren));
+        }
+
+        private void HandleCollectionPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            OnPropertyChanged(nameof(DisplayChildren));
+        }
+
+        private void HandleReferencePropertyReferenceChanged(object sender, EventArgs e)
+        {
+            if (sender == contentProperty)
+                OnPropertyChanged(nameof(DisplayChildren));
+
+            // Other cases are covered in appropriate PropertyProxys
+        }
+
+        private void HandleCollectionPropertyCollectionChanged(object sender, EventArgs e)
+        {
+            if (sender == contentProperty)
+                OnPropertyChanged(nameof(DisplayChildren));
+
+            // Other cases are covered in appropriate PropertyProxys
+        }
+
         public ManagedObjectViewModel(WrapperContext context, string defaultNamespace, string engineNamespace, string ns, string className, Type type)
             : base(context, defaultNamespace, engineNamespace)
         {
@@ -156,12 +182,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                     case ManagedCollectionProperty collection:
                         {
                             var prop = new ManagedCollectionPropertyViewModel(context, defaultNamespace, collection);
+                            prop.PropertyChanged += HandleCollectionPropertyChanged;
+                            prop.CollectionChanged += HandleCollectionPropertyCollectionChanged;
                             properties.Add(prop);
                             break;
                         }
                     case ManagedReferenceProperty reference:
                         {
                             var prop = new ManagedReferencePropertyViewModel(context, defaultNamespace, reference);
+                            prop.PropertyChanged += HandleReferencePropertyChanged;
+                            prop.ReferenceValueChanged += HandleReferencePropertyReferenceChanged;
                             properties.Add(prop);
                             break;
                         }

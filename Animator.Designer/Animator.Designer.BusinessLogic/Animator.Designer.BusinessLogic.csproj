@@ -6,11 +6,11 @@
     <Platforms>x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="Autofac" Version="7.1.0" />
     <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.3.310801">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Spooksoft.VisualStateManager" Version="1.0.8.1" />
+    <PackageReference Include="Spooksoft.VisualStateManager" Version="1.2.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Animator.Engine.Base\Animator.Engine.Base.csproj" />

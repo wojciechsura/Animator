@@ -2,10 +2,12 @@
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
 using Spooksoft.VisualStateManager.Commands;
+using Spooksoft.VisualStateManager.Conditions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -75,10 +77,25 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             this.collectionProperty = collectionProperty;
             value = new CollectionValueViewModel();
 
-            SetToStringCommand = new AppCommand(obj => SetToString());
-            SetToCollectionCommand = new AppCommand(obj => SetToCollection());
+            var valueIsStringCondition = Condition.Lambda(this, vm => vm.Value is StringValueViewModel, false);
+            var valueIsCollectionCondition = Condition.Lambda(this, vm => vm.Value is CollectionValueViewModel, false);
+
+            SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
+            SetToCollectionCommand = new AppCommand(obj => SetToCollection(), !valueIsCollectionCondition);
         }
 
         public override ManagedProperty ManagedProperty => collectionProperty;
+
+        public override IEnumerable<TypeViewModel> AvailableTypes
+        {
+            get
+            {
+                var collectionType = collectionProperty.Type;
+
+                return context.Namespaces
+                    .SelectMany(ns => ns.GetAvailableTypesFor(collectionType))
+                    .OrderBy(tvm => tvm.Name);
+            }
+        }
     }
 }

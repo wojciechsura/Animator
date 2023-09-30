@@ -513,7 +513,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                     .FirstOrDefault(a => a.GetName().Name == kvp.Value.Assembly);
 
                 var info = new NamespaceViewModel(prefix, assembly, kvp.Value.Namespace);
-                wrapperContext.Namespaces.Add(info);
+                wrapperContext.AddNamespace(info);
             }
         }
 

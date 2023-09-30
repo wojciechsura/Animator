@@ -17,17 +17,17 @@
             e:ContextMenuOnLeftClick.PlacementTarget="{Binding RelativeSource={RelativeSource Self}}">
         <Button.ContextMenu>
             <ContextMenu>
-                <MenuItem Visibility="{Binding ElementName=Root, Path=ShowSetToDefault, Converter={StaticResource BoolToVisibilityConverter}}" 
+                <MenuItem Visibility="{Binding SetDefaultCommand, Converter={StaticResource NullToVisibilityConverter}}" 
                             IsEnabled="{Binding ElementName=Root, Path=EnableSetToDefault}"
                             Background="#40808080" Header="{x:Static res:Strings.SwitchToDefault}" 
                             Command="{Binding SetDefaultCommand}" />
 
-                <MenuItem Visibility="{Binding ElementName=Root, Path=ShowSetToString, Converter={StaticResource BoolToVisibilityConverter}}"
+                <MenuItem Visibility="{Binding SetToStringCommand, Converter={StaticResource NullToVisibilityConverter}}" 
                             IsEnabled="{Binding ElementName=Root, Path=EnableSetToString}"
                             Background="#40ffffff" Header="{x:Static res:Strings.SwitchToString}" 
                             Command="{Binding SetToStringCommand}" />
 
-                <MenuItem Visibility="{Binding ElementName=Root, Path=ShowSetToCollection, Converter={StaticResource BoolToVisibilityConverter}}"
+                <MenuItem Visibility="{Binding SetToCollectionCommand, Converter={StaticResource NullToVisibilityConverter}}" 
                             IsEnabled="{Binding ElementName=Root, Path=EnableSetToCollection}"
                             Background="#4000ff40" Header="{x:Static res:Strings.SwitchToCollection}"
                             Command="{Binding SetToCollectionCommand}" />

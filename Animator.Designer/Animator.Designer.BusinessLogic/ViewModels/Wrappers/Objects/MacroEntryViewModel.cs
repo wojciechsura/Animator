@@ -27,6 +27,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             OnPropertyChanged(nameof(Key));
         }
 
+        private void HandleContentChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(DisplayChildren));
+        }
+
         public MacroEntryViewModel(WrapperContext context, string defaultNamespace, string engineNamespace)
             : base(context, defaultNamespace, engineNamespace)
         {
@@ -37,6 +42,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             properties.Add(key);
 
             content = new ReferencePropertyViewModel(context, defaultNamespace, "Content");
+            content.PropertyChanged += HandleContentChanged;
             properties.Add(content);
 
             Icon = "MacroDefinition16.png";
