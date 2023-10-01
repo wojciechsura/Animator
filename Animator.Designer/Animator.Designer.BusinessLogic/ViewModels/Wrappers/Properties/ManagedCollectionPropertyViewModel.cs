@@ -1,4 +1,5 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
 using Spooksoft.VisualStateManager.Commands;
@@ -36,6 +37,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         private void SetToCollection()
         {
             Value = new CollectionValueViewModel();
+        }
+
+        private void AddInstance(Type type)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void OnSetValue(ValueViewModel value)
@@ -82,6 +88,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
             SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
             SetToCollectionCommand = new AppCommand(obj => SetToCollection(), !valueIsCollectionCondition);
+            AddInstanceCommand = new AppCommand(obj => AddInstance((Type)obj));
         }
 
         public override ManagedProperty ManagedProperty => collectionProperty;
@@ -90,11 +97,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         {
             get
             {
-                var collectionType = collectionProperty.Type;
+                var collectionType = collectionProperty.ItemType;
 
                 return context.Namespaces
                     .SelectMany(ns => ns.GetAvailableTypesFor(collectionType))
-                    .OrderBy(tvm => tvm.Name);
+                    .OrderBy(tvm => tvm.Name)
+                    .Select(t => new TypeViewModel(t, AddInstanceCommand));
             }
         }
     }

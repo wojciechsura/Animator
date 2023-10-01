@@ -10,7 +10,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
 {
     public class NamespaceViewModel
     {
-        private readonly Dictionary<Type, HashSet<TypeViewModel>> availableTypes = new();
+        private readonly Dictionary<Type, HashSet<Type>> availableTypes = new();
 
         public NamespaceViewModel(string empty, Assembly assembly, string @namespace)
         {
@@ -33,7 +33,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
                             availableTypes.Add(current, types);
                         }
 
-                        types.Add(TypeViewModel.For(type));
+                        types.Add(type);
 
                         current = current.BaseType;
                     }
@@ -46,12 +46,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
         public Assembly Assembly { get; }
         public string Empty { get; }
 
-        public IEnumerable<TypeViewModel> GetAvailableTypesFor(Type type)
+        public IEnumerable<Type> GetAvailableTypesFor(Type type)
         {
             if (availableTypes.TryGetValue(type, out var types))
                 return types;
 
-            return Enumerable.Empty<TypeViewModel>();
+            return Enumerable.Empty<Type>();
         }
     }
 }

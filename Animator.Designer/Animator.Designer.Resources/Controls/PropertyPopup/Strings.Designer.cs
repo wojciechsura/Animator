@@ -61,29 +61,47 @@ namespace Animator.Designer.Resources.Controls.PropertyPopup {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Edit as collection.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Add object to collection.
         /// </summary>
-        public static string SwitchToCollection {
+        public static string AddInstance {
             get {
-                return ResourceManager.GetString("SwitchToCollection", resourceCulture);
+                return ResourceManager.GetString("AddInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Switch to collection.
+        /// </summary>
+        public static string SetToCollection {
+            get {
+                return ResourceManager.GetString("SetToCollection", resourceCulture);
             }
         }
         
         /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Set default.
         /// </summary>
-        public static string SwitchToDefault {
+        public static string SetToDefault {
             get {
-                return ResourceManager.GetString("SwitchToDefault", resourceCulture);
+                return ResourceManager.GetString("SetToDefault", resourceCulture);
             }
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Enter custom value.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Insert object.
         /// </summary>
-        public static string SwitchToString {
+        public static string SetToInstance {
             get {
-                return ResourceManager.GetString("SwitchToString", resourceCulture);
+                return ResourceManager.GetString("SetToInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Switch to value.
+        /// </summary>
+        public static string SetToString {
+            get {
+                return ResourceManager.GetString("SetToString", resourceCulture);
             }
         }
     }

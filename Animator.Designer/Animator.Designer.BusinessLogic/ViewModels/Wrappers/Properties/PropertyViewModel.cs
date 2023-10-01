@@ -1,4 +1,5 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Base;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using System;
 using System.Collections.Generic;
@@ -41,5 +42,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public ICommand SetDefaultCommand { get; init; }
         public ICommand SetToStringCommand { get; init; }
         public ICommand SetToCollectionCommand { get; init; }
+        public ICommand SetToInstanceCommand { get; init; }
+        public ICommand AddInstanceCommand { get; init; }
     }
 }

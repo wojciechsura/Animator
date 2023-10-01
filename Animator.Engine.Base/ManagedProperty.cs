@@ -96,8 +96,8 @@ namespace Animator.Engine.Base
 
         private static void ValidateListType(Type propertyType)
         {
-            if (!propertyType.IsAssignableTo(typeof(ManagedCollection)))
-                throw new ArgumentException("When registering a collection, property type must derive from ManagedCollection!\r\nYou can also use ManagedCollection<T> for convenience.");
+            if (!propertyType.IsGenericType || propertyType.GetGenericTypeDefinition() != typeof(ManagedCollection<>))
+                throw new ArgumentException("When registering a collection, property type must be a ManagedCollection<T>!");
         }
 
         private static void AddPropertyByType(Type ownerClassType, ManagedProperty prop)

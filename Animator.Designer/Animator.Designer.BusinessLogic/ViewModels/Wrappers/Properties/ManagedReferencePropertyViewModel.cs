@@ -1,4 +1,5 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
 using Spooksoft.VisualStateManager.Commands;
@@ -38,6 +39,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         private void SetToString()
         {
             Value = new StringValueViewModel(string.Empty);
+        }
+
+        private void SetToInstance(Type obj)
+        {
+            throw new NotImplementedException();
         }
 
         protected override void OnSetValue(ValueViewModel value)
@@ -87,7 +93,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             var valueIsDefaultCondition = Condition.Lambda(this, vm => vm.Value is DefaultValueViewModel, false);
 
             SetDefaultCommand = new AppCommand(obj => SetDefault(), !valueIsStringCondition);
-            SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsDefaultCondition);            
+            SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsDefaultCondition);
+            SetToInstanceCommand = new AppCommand(obj => SetToInstance((Type)obj));
         }
 
         public override ManagedProperty ManagedProperty => referenceProperty;
@@ -99,7 +106,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 var refPropertyType = referenceProperty.Type;
                 return context.Namespaces
                     .SelectMany(ns => ns.GetAvailableTypesFor(refPropertyType))
-                    .OrderBy(tvm => tvm.Name);
+                    .OrderBy(tvm => tvm.Name)
+                    .Select(t => new TypeViewModel(t, SetToInstanceCommand));
             }
         }
     }

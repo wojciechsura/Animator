@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:Animator.Designer.Controls"
       xmlns:res="clr-namespace:Animator.Designer.Resources.Controls.PropertyPopup;assembly=Animator.Designer.Resources" 
       xmlns:vmp="clr-namespace:Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;assembly=Animator.Designer.BusinessLogic" 
+      xmlns:vmw="clr-namespace:Animator.Designer.BusinessLogic.ViewModels.Wrappers;assembly=Animator.Designer.BusinessLogic"
       xmlns:e="clr-namespace:Animator.Designer.Common.Wpf.Extensions;assembly=Animator.Designer.Common.Wpf"     
       d:DataContext="{d:DesignInstance Type=vmp:PropertyViewModel}"
       mc:Ignorable="d" 
@@ -18,19 +19,36 @@
         <Button.ContextMenu>
             <ContextMenu>
                 <MenuItem Visibility="{Binding SetDefaultCommand, Converter={StaticResource NullToVisibilityConverter}}" 
-                            IsEnabled="{Binding ElementName=Root, Path=EnableSetToDefault}"
-                            Background="#40808080" Header="{x:Static res:Strings.SwitchToDefault}" 
+                            Background="#40808080" Header="{x:Static res:Strings.SetToDefault}" 
                             Command="{Binding SetDefaultCommand}" />
 
                 <MenuItem Visibility="{Binding SetToStringCommand, Converter={StaticResource NullToVisibilityConverter}}" 
-                            IsEnabled="{Binding ElementName=Root, Path=EnableSetToString}"
-                            Background="#40ffffff" Header="{x:Static res:Strings.SwitchToString}" 
+                            Background="#40ffffff" Header="{x:Static res:Strings.SetToString}" 
                             Command="{Binding SetToStringCommand}" />
 
                 <MenuItem Visibility="{Binding SetToCollectionCommand, Converter={StaticResource NullToVisibilityConverter}}" 
-                            IsEnabled="{Binding ElementName=Root, Path=EnableSetToCollection}"
-                            Background="#4000ff40" Header="{x:Static res:Strings.SwitchToCollection}"
+                            Background="#4000ff40" Header="{x:Static res:Strings.SetToCollection}"
                             Command="{Binding SetToCollectionCommand}" />
+
+                <MenuItem Visibility="{Binding SetToInstanceCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                          Background="#400040ff" Header="{x:Static res:Strings.SetToInstance}" ItemsSource="{Binding AvailableTypes}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="{x:Type MenuItem}">
+                            <Setter Property="Header" Value="{Binding Name}" />
+                            <Setter Property="Command" Value="{Binding Command}" />
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+
+                <MenuItem Visibility="{Binding AddInstanceCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                          Background="#400040ff" Header="{x:Static res:Strings.AddInstance}" ItemsSource="{Binding AvailableTypes}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="{x:Type MenuItem}">
+                            <Setter Property="Header" Value="{Binding Name}" />
+                            <Setter Property="Command" Value="{Binding Command}" />
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
 
             </ContextMenu>
         </Button.ContextMenu>

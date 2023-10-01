@@ -117,13 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="SwitchToDefault" xml:space="preserve">
+  <data name="SetToDefault" xml:space="preserve">
     <value>Set default</value>
   </data>
-  <data name="SwitchToString" xml:space="preserve">
-    <value>Enter custom value</value>
+  <data name="SetToString" xml:space="preserve">
+    <value>Switch to value</value>
   </data>
-  <data name="SwitchToCollection" xml:space="preserve">
-    <value>Edit as collection</value>
+  <data name="SetToCollection" xml:space="preserve">
+    <value>Switch to collection</value>
+  </data>
+  <data name="SetToInstance" xml:space="preserve">
+    <value>Insert object</value>
+  </data>
+  <data name="AddInstance" xml:space="preserve">
+    <value>Add object to collection</value>
   </data>
 </root>
