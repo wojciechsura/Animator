@@ -1,6 +1,7 @@
 using Animator.Engine.Elements;
 using Animator.Engine.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace Animator.Engine.Tests
 {
@@ -107,6 +108,20 @@ namespace Animator.Engine.Tests
             // Assert
 
             Assert.ThrowsException<AnimationException>(() => scene.FindElement("Rectangle.MyPen"));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void AttemptToSetNameTwiceTest()
+        {
+            // Arrange
+
+            Rectangle rectangle = new Rectangle();
+
+            // Act
+
+            rectangle.Name = "Test1";
+            rectangle.Name = "Test2";
         }
     }
 }
