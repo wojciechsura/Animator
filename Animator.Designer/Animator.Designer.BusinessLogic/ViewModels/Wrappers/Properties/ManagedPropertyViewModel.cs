@@ -34,15 +34,15 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         protected ValueViewModel value;
 
         protected void OnStringValueChanged() => StringValueChanged?.Invoke(this, EventArgs.Empty);
-        protected void OnReferenceValueChanged() => ReferenceValueChanged?.Invoke(this, EventArgs.Empty);
         protected void OnCollectionChanged() => CollectionChanged?.Invoke(this, EventArgs.Empty);
+
         protected abstract void OnSetValue(ValueViewModel value);
 
-        public ManagedPropertyViewModel(ObjectViewModel parent, WrapperContext context, string defaultNamespace, ManagedProperty property)
+        public ManagedPropertyViewModel(ObjectViewModel parent, WrapperContext context, ManagedProperty property)
             : base(parent, context)
         {
             Name = property.Name;
-            Namespace = defaultNamespace;
+            Namespace = context.DefaultNamespace;
         }
 
         public abstract ManagedProperty ManagedProperty { get; }
@@ -58,7 +58,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         }
 
         public event EventHandler StringValueChanged;
-        public event EventHandler ReferenceValueChanged;
         public event EventHandler CollectionChanged;
     }
 }

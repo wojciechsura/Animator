@@ -1,6 +1,7 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
+using Animator.Engine.Base.Persistence.Types;
 using Spooksoft.VisualStateManager.Commands;
 using Spooksoft.VisualStateManager.Conditions;
 using System;
@@ -25,13 +26,20 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
         private void SetDefault()
         {
-            var defaultValue = simpleProperty.Metadata.DefaultValue;
-            Value = new DefaultValueViewModel(defaultValue);
+            string defaultValue = TypeSerialization.Serialize(simpleProperty.Metadata.DefaultValue);
+            Value = new DefaultValueViewModel(defaultValue, true);
         }
 
         private void SetToString()
         {
-            Value = new StringValueViewModel(string.Empty);
+            string newValue = string.Empty;
+
+            if (value is DefaultValueViewModel defaultValue)
+            {
+                newValue = defaultValue.Value;
+            }
+
+            Value = new StringValueViewModel(newValue);
         }
 
         protected override void OnSetValue(ValueViewModel value)
@@ -58,8 +66,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 throw new ArgumentException($"ManagedSimplePropertyViewModel does not support value of type {value}!");
         }
 
-        public ManagedSimplePropertyViewModel(ObjectViewModel parent, WrapperContext context, string defaultNamespace, ManagedSimpleProperty property)
-            : base(parent, context, defaultNamespace, property)
+        public ManagedSimplePropertyViewModel(ObjectViewModel parent, WrapperContext context, ManagedSimpleProperty property)
+            : base(parent, context, property)
         {
             this.simpleProperty = property;
             SetDefault();
@@ -71,6 +79,13 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
         }
 
+        public override void RequestSwitchToString()
+        {
+            if (value is not StringValueViewModel)
+            {
+                SetToString();
+            }
+        }
         public override ManagedProperty ManagedProperty => simpleProperty;        
     }
 }

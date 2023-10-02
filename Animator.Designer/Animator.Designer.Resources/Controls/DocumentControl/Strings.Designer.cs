@@ -61,11 +61,47 @@ namespace Animator.Designer.Resources.Controls.DocumentControl {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Add.
+        /// </summary>
+        public static string AddInstance {
+            get {
+                return ResourceManager.GetString("AddInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Add to content.
+        /// </summary>
+        public static string AddInstanceToContent {
+            get {
+                return ResourceManager.GetString("AddInstanceToContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Properties.
         /// </summary>
         public static string Properties {
             get {
                 return ResourceManager.GetString("Properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Set content to.
+        /// </summary>
+        public static string SetContentInstance {
+            get {
+                return ResourceManager.GetString("SetContentInstance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Set to.
+        /// </summary>
+        public static string SetToInstance {
+            get {
+                return ResourceManager.GetString("SetToInstance", resourceCulture);
             }
         }
     }

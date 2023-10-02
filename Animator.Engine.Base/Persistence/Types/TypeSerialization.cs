@@ -53,6 +53,9 @@ namespace Animator.Engine.Base.Persistence.Types
 
         public static string Serialize(object value)
         {
+            if (value == null)
+                return null;
+
             if (value.GetType().IsEnum)
                 return value.ToString();
 

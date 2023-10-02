@@ -13,8 +13,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         private bool isSelected;
         private bool isExpanded;
 
-        protected readonly string defaultNamespace;
-        protected readonly string engineNamespace;
         protected readonly WrapperContext context;
 
         public bool IsSelected
@@ -29,18 +27,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             set => Set(ref isExpanded, value);
         }
 
-        public BaseObjectViewModel(WrapperContext context, string defaultNamespace, string engineNamespace)
+        public BaseObjectViewModel(WrapperContext context)
         {
             this.context = context;
-            this.defaultNamespace = defaultNamespace;
-            this.engineNamespace = engineNamespace;
         }
 
         public TProperty Property<TProperty>(string name)
             where TProperty : PropertyViewModel =>
             Properties
                 .OfType<TProperty>()
-                .SingleOrDefault(prop => prop.Namespace == defaultNamespace && prop.Name == name);
+                .SingleOrDefault(prop => prop.Namespace == context.DefaultNamespace && prop.Name == name);
 
         public TProperty Property<TProperty>(string ns, string name)
             where TProperty : PropertyViewModel =>
@@ -54,7 +50,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public PropertyViewModel this[string name]
         {
-            get => Properties.SingleOrDefault(prop => prop.Namespace == defaultNamespace && prop.Name == name);
+            get => Properties.SingleOrDefault(prop => prop.Namespace == context.DefaultNamespace && prop.Name == name);
         }
 
         public PropertyViewModel this[string ns, string name]

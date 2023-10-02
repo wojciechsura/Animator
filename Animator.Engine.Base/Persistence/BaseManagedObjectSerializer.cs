@@ -221,6 +221,8 @@ namespace Animator.Engine.Base.Persistence
             if (assembly == null)
                 throw new ActivatorException($"Cannot access assembly {namespaceDefinition.Assembly}\r\nMake sure, it is loaded or accessible to load.");
 
+            assembly.InitializeStaticTypes(namespaceDefinition.Namespace);
+
             string fullClassTypeName = string.Join('.', namespaceDefinition.Namespace, className);
             Type objType = assembly.GetType(fullClassTypeName, false);
             if (objType == null)

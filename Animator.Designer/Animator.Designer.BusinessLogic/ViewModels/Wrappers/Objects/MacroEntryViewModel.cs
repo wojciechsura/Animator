@@ -32,16 +32,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             OnPropertyChanged(nameof(DisplayChildren));
         }
 
-        public MacroEntryViewModel(WrapperContext context, string defaultNamespace, string engineNamespace)
-            : base(context, defaultNamespace, engineNamespace)
+        public MacroEntryViewModel(WrapperContext context)
+            : base(context)
         {
-            Namespace = engineNamespace;
+            Namespace = context.EngineNamespace;
 
-            key = new StringPropertyViewModel(this, context, engineNamespace, "Key");
+            key = new StringPropertyViewModel(this, context, context.EngineNamespace, "Key");
             key.PropertyChanged += HandleKeyChanged;
             properties.Add(key);
 
-            content = new ReferencePropertyViewModel(this, context, defaultNamespace, "Content");
+            content = new ReferencePropertyViewModel(this, context, context.DefaultNamespace, "Content");
             content.PropertyChanged += HandleContentChanged;
             properties.Add(content);
 

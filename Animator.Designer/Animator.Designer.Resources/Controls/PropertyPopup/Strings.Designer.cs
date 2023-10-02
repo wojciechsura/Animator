@@ -61,7 +61,7 @@ namespace Animator.Designer.Resources.Controls.PropertyPopup {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Add object to collection.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Add to collection.
         /// </summary>
         public static string AddInstance {
             get {
@@ -88,7 +88,7 @@ namespace Animator.Designer.Resources.Controls.PropertyPopup {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Insert object.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Set to.
         /// </summary>
         public static string SetToInstance {
             get {

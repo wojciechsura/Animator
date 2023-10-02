@@ -36,6 +36,7 @@
                         <Style TargetType="{x:Type MenuItem}">
                             <Setter Property="Header" Value="{Binding Name}" />
                             <Setter Property="Command" Value="{Binding Command}" />
+                            <Setter Property="CommandParameter" Value="{Binding Type}" />
                         </Style>
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>
@@ -46,6 +47,7 @@
                         <Style TargetType="{x:Type MenuItem}">
                             <Setter Property="Header" Value="{Binding Name}" />
                             <Setter Property="Command" Value="{Binding Command}" />
+                            <Setter Property="CommandParameter" Value="{Binding Type}" />
                         </Style>
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>

@@ -19,6 +19,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
         protected readonly WrapperContext context;
 
+        public abstract void RequestSwitchToString();
+
         public abstract string Name { get; }
         public abstract string Namespace { get; }
 

@@ -14,6 +14,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     {
         private ValueViewModel value;
 
+        private void HandleReferenceValueChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ReferenceValueViewModel.Value))
+                OnReferenceValueChanged();
+        }
+
         private void SetValue(ValueViewModel value)
         {
             // Clear parent
@@ -39,12 +45,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             }
         }
 
-        private void HandleReferenceValueChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(ReferenceValueViewModel.Value))
-                OnReferenceValueChanged();
-        }
-
         protected void OnReferenceValueChanged() =>
             ReferenceValueChanged?.Invoke(this, EventArgs.Empty);
 
@@ -55,15 +55,20 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             Name = name;
         }
 
+        public override void RequestSwitchToString()
+        {
+            throw new NotSupportedException();
+        }
+        public override string Name { get; }
+
+        public override string Namespace { get; }
+
+        public event EventHandler ReferenceValueChanged;
+
         public ValueViewModel Value
         {
             get => value;
             set => SetValue(value);
         }
-
-        public override string Name { get; }
-        public override string Namespace { get; }
-
-        public event EventHandler ReferenceValueChanged;
     }
 }

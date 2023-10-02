@@ -14,8 +14,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         private readonly List<StringPropertyViewModel> properties = new();
         private readonly Type type;
 
-        public MarkupExtensionViewModel(WrapperContext context, string defaultNamespace, string engineNamespace, string ns, string name, Type type)
-            : base(context, defaultNamespace, engineNamespace)
+        public MarkupExtensionViewModel(WrapperContext context, string ns, string name, Type type)
+            : base(context)
         {
             this.type = type;
             this.Name = name;
@@ -24,7 +24,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             foreach (var propInfo in type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .OrderBy(prop => prop.Name))
             {
-                var property = new StringPropertyViewModel(this, context, defaultNamespace, propInfo.Name);
+                var property = new StringPropertyViewModel(this, context, context.DefaultNamespace, propInfo.Name);
                 properties.Add(property);
             }
 

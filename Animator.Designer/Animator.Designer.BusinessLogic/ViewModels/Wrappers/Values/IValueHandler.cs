@@ -8,5 +8,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
 {
     public interface IValueHandler
     {
+        void RequestSwitchToString();
     }
 }

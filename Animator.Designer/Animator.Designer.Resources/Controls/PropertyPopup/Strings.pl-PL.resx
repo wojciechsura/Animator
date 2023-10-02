@@ -127,9 +127,9 @@
     <value>Przełącz na kolekcję</value>
   </data>
   <data name="SetToInstance" xml:space="preserve">
-    <value>Wstaw obiekt</value>
+    <value>Ustaw na</value>
   </data>
   <data name="AddInstance" xml:space="preserve">
-    <value>Dodaj obiekt do kolekcji</value>
+    <value>Dodaj do kolekcji</value>
   </data>
 </root>

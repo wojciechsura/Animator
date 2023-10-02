@@ -2,6 +2,7 @@
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
+using Animator.Engine.Base.Extensions;
 using Spooksoft.VisualStateManager.Commands;
 using Spooksoft.VisualStateManager.Conditions;
 using System;
@@ -24,28 +25,31 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 OnStringValueChanged();
         }
 
-        private void HandleReferenceValueChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(ReferenceValueViewModel.Value))
-                OnReferenceValueChanged();
-        }
-
         private void SetDefault()
         {
-            var value = new DefaultValueViewModel(null);
+            var value = new DefaultValueViewModel(null, false);
             Value = value;
+        }
+
+        private void SetToInstance(Type type)
+        {
+            // Find namespace model
+            var namespaceViewModel = context.Namespaces.FirstOrDefault(cns => cns.Assembly == type.Assembly && cns.Namespace == type.Namespace);
+
+            // Sanity check
+            if (namespaceViewModel == null)
+                throw new InvalidOperationException("Namespace for created object is missing in WrapperContext!");
+
+            var ns = type.ToNamespaceDefinition().ToString();
+
+            var obj = new ManagedObjectViewModel(context, ns, type.Name, type);
+            Value = new ReferenceValueViewModel(obj);
         }
 
         private void SetToString()
         {
             Value = new StringValueViewModel(string.Empty);
         }
-
-        private void SetToInstance(Type obj)
-        {
-            throw new NotImplementedException();
-        }
-
         protected override void OnSetValue(ValueViewModel value)
         {
             // Unhook existing value change handlers
@@ -53,10 +57,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             if (Value is StringValueViewModel currentString)
             {
                 currentString.PropertyChanged -= HandleStringValueChanged;
-            }
-            else if (Value is ReferenceValueViewModel currentReference)
-            {
-                currentReference.PropertyChanged -= HandleReferenceValueChanged;
             }
 
             // Hook value change handlers and set new value
@@ -66,16 +66,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 value.PropertyChanged += HandleStringValueChanged;
                 Set(ref this.value, value, nameof(Value));
             }
-            else if (value is ReferenceValueViewModel)
-            {
-                value.PropertyChanged += HandleReferenceValueChanged;
-                Set(ref this.value, value, nameof(Value));
-            }
-            else if (value is MarkupExtensionValueViewModel)
-            {
-                Set(ref this.value, value, nameof(Value));
-            }
-            else if (value is DefaultValueViewModel)
+            else if (value is ReferenceValueViewModel or MarkupExtensionValueViewModel or DefaultValueViewModel)
             {
                 Set(ref this.value, value, nameof(Value));
             }
@@ -83,11 +74,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 throw new ArgumentException($"ManagedReferencePropertyViewModel does not support value of type {value}!");
         }
 
-        public ManagedReferencePropertyViewModel(ObjectViewModel parent, WrapperContext context, string defaultNamespace, ManagedReferenceProperty referenceProperty)
-            : base(parent, context, defaultNamespace, referenceProperty)
+        public ManagedReferencePropertyViewModel(ObjectViewModel parent, WrapperContext context, ManagedReferenceProperty referenceProperty)
+            : base(parent, context, referenceProperty)
         {
             this.referenceProperty = referenceProperty;
-            value = new DefaultValueViewModel(null);
+            SetDefault();
 
             var valueIsStringCondition = Condition.Lambda(this, vm => vm.Value is StringValueViewModel, false);
             var valueIsDefaultCondition = Condition.Lambda(this, vm => vm.Value is DefaultValueViewModel, false);
@@ -97,8 +88,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             SetToInstanceCommand = new AppCommand(obj => SetToInstance((Type)obj));
         }
 
-        public override ManagedProperty ManagedProperty => referenceProperty;
-
+        public override void RequestSwitchToString()
+        {
+            throw new NotSupportedException();
+        }
         public override IEnumerable<TypeViewModel> AvailableTypes
         {
             get
@@ -110,5 +103,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                     .Select(t => new TypeViewModel(t, SetToInstanceCommand));
             }
         }
+
+        public override ManagedProperty ManagedProperty => referenceProperty;
     }
 }

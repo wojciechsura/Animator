@@ -100,4 +100,16 @@
   <data name="Properties" xml:space="preserve">
     <value>Properties</value>
   </data>
+  <data name="AddInstance" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="SetToInstance" xml:space="preserve">
+    <value>Set to</value>
+  </data>
+  <data name="AddInstanceToContent" xml:space="preserve">
+    <value>Add to content</value>
+  </data>
+  <data name="SetContentInstance" xml:space="preserve">
+    <value>Set content to</value>
+  </data>
 </root>

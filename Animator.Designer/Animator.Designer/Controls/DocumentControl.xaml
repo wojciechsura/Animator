@@ -8,7 +8,8 @@
              xmlns:vmw="clr-namespace:Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;assembly=Animator.Designer.BusinessLogic" 
              xmlns:vmp="clr-namespace:Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;assembly=Animator.Designer.BusinessLogic"
              xmlns:vmv="clr-namespace:Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;assembly=Animator.Designer.BusinessLogic"
-             xmlns:res="clr-namespace:Animator.Designer.Resources.Controls.DocumentControl;assembly=Animator.Designer.Resources"
+             xmlns:res="clr-namespace:Animator.Designer.Resources.Controls.DocumentControl;assembly=Animator.Designer.Resources" 
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:DocumentViewModel}"             
              d:DesignHeight="450" d:DesignWidth="800">
@@ -27,7 +28,6 @@
         <Style x:Key="EngineText" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#808080" />
             <Setter Property="FontSize" Value="12" />
-            <Setter Property="FontWeight" Value="Bold" />
         </Style>
 
         <Style x:Key="NameText" TargetType="TextBlock">
@@ -79,6 +79,8 @@
 
         <!--#endregion-->
         
+        <!--#region Templates for Properties data grid-->
+        
         <DataTemplate x:Key="StringPropertyTemplate" DataType="{x:Type vmp:StringPropertyViewModel}">
             <DockPanel Background="{StaticResource StringBackground}">
                 <TextBox Margin="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="False" />
@@ -109,6 +111,11 @@
 
                         <DataTemplate DataType="{x:Type vmv:DefaultValueViewModel}">
                             <DockPanel Background="{StaticResource DefaultBackground}">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="PreviewMouseDown">
+                                        <b:InvokeCommandAction Command="{Binding SwitchToStringIfPossibleCommand}" />
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
                                 <TextBlock Margin="3" Text="{Binding Value}" />
                             </DockPanel>
                         </DataTemplate>
@@ -199,6 +206,8 @@
                                               ManagedCollectionPropertyTemplate="{StaticResource ManagedCollectionPropertyTemplate}" 
                                               ManagedReferencePropertyTemplate="{StaticResource ManagedReferencePropertyTemplate}" />
 
+        <!--#endregion-->
+        
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -209,6 +218,8 @@
             <ColumnDefinition Width="300" />
         </Grid.ColumnDefinitions>
 
+        <!-- Properties table -->
+        
         <GroupBox Header="Properties" Grid.Column="0">
             <DataGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding SelectedElement.Properties}"
                       AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" GridLinesVisibility="None" 
@@ -250,6 +261,8 @@
 
         <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
+        <!-- Hierarchy tree -->
+        
         <GroupBox Header="Hierarchy" Grid.Column="4">
             <TreeView ItemsSource="{Binding DisplayItems}" SelectedItemChanged="TreeView_SelectedItemChanged">
                 <TreeView.ItemContainerStyle>
@@ -266,6 +279,32 @@
                     <HierarchicalDataTemplate DataType="{x:Type vmw:ManagedObjectViewModel}" ItemsSource="{Binding DisplayChildren}">
                         <Grid Margin="{StaticResource TreeItemMargin}">
                             <StackPanel Orientation="Horizontal">
+                                <StackPanel.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Visibility="{Binding SetToInstanceCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                                              Background="#400040ff" Header="{x:Static res:Strings.SetContentInstance}" ItemsSource="{Binding AvailableTypes}">
+                                            <MenuItem.ItemContainerStyle>
+                                                <Style TargetType="{x:Type MenuItem}">
+                                                    <Setter Property="Header" Value="{Binding Name}" />
+                                                    <Setter Property="Command" Value="{Binding Command}" />
+                                                    <Setter Property="CommandParameter" Value="{Binding Type}" />
+                                                </Style>
+                                            </MenuItem.ItemContainerStyle>
+                                        </MenuItem>
+
+                                        <MenuItem Visibility="{Binding AddInstanceCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                                              Background="#400040ff" Header="{x:Static res:Strings.AddInstanceToContent}" ItemsSource="{Binding AvailableTypes}">
+                                            <MenuItem.ItemContainerStyle>
+                                                <Style TargetType="{x:Type MenuItem}">
+                                                    <Setter Property="Header" Value="{Binding Name}" />
+                                                    <Setter Property="Command" Value="{Binding Command}" />
+                                                    <Setter Property="CommandParameter" Value="{Binding Type}" />
+                                                </Style>
+                                            </MenuItem.ItemContainerStyle>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </StackPanel.ContextMenu>
+
                                 <Image Margin="{StaticResource IconMargin}" Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource ImageKeyConverter}}" />
 
                                 <TextBlock Name="Class" Style="{StaticResource ClassNameText}" Text="{Binding ClassName}" />
@@ -311,6 +350,31 @@
                             
                     <HierarchicalDataTemplate DataType="{x:Type vmw:PropertyProxyViewModel}" ItemsSource="{Binding DisplayChildren}">
                         <StackPanel Orientation="Horizontal" Margin="{StaticResource TreeItemMargin}">
+                            <StackPanel.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Visibility="{Binding SetToInstanceCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                                              Background="#400040ff" Header="{x:Static res:Strings.SetToInstance}" ItemsSource="{Binding AvailableTypes}">
+                                        <MenuItem.ItemContainerStyle>
+                                            <Style TargetType="{x:Type MenuItem}">
+                                                <Setter Property="Header" Value="{Binding Name}" />
+                                                <Setter Property="Command" Value="{Binding Command}" />
+                                                <Setter Property="CommandParameter" Value="{Binding Type}" />
+                                            </Style>
+                                        </MenuItem.ItemContainerStyle>
+                                    </MenuItem>
+
+                                    <MenuItem Visibility="{Binding AddInstanceCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                                              Background="#400040ff" Header="{x:Static res:Strings.AddInstance}" ItemsSource="{Binding AvailableTypes}">
+                                        <MenuItem.ItemContainerStyle>
+                                            <Style TargetType="{x:Type MenuItem}">
+                                                <Setter Property="Header" Value="{Binding Name}" />
+                                                <Setter Property="Command" Value="{Binding Command}" />
+                                                <Setter Property="CommandParameter" Value="{Binding Type}" />
+                                            </Style>
+                                        </MenuItem.ItemContainerStyle>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </StackPanel.ContextMenu>
                             <Image Margin="{StaticResource IconMargin}" Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource ImageKeyConverter}}" />
 
                             <TextBlock Name="Property" Style="{StaticResource PropertyText}" Text="{Binding Name}" />

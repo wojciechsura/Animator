@@ -2,6 +2,7 @@
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
+using Animator.Engine.Base.Extensions;
 using Spooksoft.VisualStateManager.Commands;
 using Spooksoft.VisualStateManager.Conditions;
 using System;
@@ -18,6 +19,26 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     {
         private readonly ManagedCollectionProperty collectionProperty;
 
+        private void AddInstance(Type type)
+        {
+            if (!type.IsAssignableTo(collectionProperty.ItemType))
+                throw new InvalidOperationException("Invalid object type!");
+            if (value is not CollectionValueViewModel)
+                throw new InvalidOperationException("Switch to collection mode first!");
+
+            // Find namespace model
+            var namespaceViewModel = context.Namespaces.FirstOrDefault(cns => cns.Assembly == type.Assembly && cns.Namespace == type.Namespace);
+
+            // Sanity check
+            if (namespaceViewModel == null)
+                throw new InvalidOperationException("Namespace for created object is missing in WrapperContext!");
+
+            var ns = type.ToNamespaceDefinition().ToString();
+
+            var obj = new ManagedObjectViewModel(context, ns, type.Name, type);
+            (value as CollectionValueViewModel).Items.Add(obj);
+        }
+
         private void HandleCollectionChanged(object sender, EventArgs e)
         {
             OnCollectionChanged();
@@ -29,39 +50,33 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 OnStringValueChanged();
         }
 
-        private void SetToString()
-        {
-            Value = new StringValueViewModel(string.Empty);
-        }
-
         private void SetToCollection()
         {
             Value = new CollectionValueViewModel();
         }
 
-        private void AddInstance(Type type)
+        private void SetToString()
         {
-            throw new NotImplementedException();
+            Value = new StringValueViewModel(string.Empty);
         }
-
         protected override void OnSetValue(ValueViewModel value)
         {
             // Unhook existing event handlers
 
-            if (Value is StringValueViewModel currentString)
+            if (this.value is StringValueViewModel currentString)
             {
                 currentString.PropertyChanged -= HandleStringValueChanged;
             }
-            if (Value is CollectionValueViewModel currentCollection)
+            if (this.value is CollectionValueViewModel currentCollection)
             {
                 currentCollection.CollectionChanged -= HandleCollectionChanged;
             }
 
             // Hook new event handlers and set value
 
-            if (value is StringValueViewModel)
+            if (value is StringValueViewModel strProperty)
             {
-                value.PropertyChanged += HandleStringValueChanged;
+                strProperty.PropertyChanged += HandleStringValueChanged;
                 Set(ref this.value, value, nameof(Value));
             }
             else if (value is CollectionValueViewModel newCollection)
@@ -77,11 +92,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 throw new ArgumentException($"ManagedCollectionPropertyViewModel does not support value of type {value}!");
         }
 
-        public ManagedCollectionPropertyViewModel(ObjectViewModel parent, WrapperContext context, string defaultNamespace, ManagedCollectionProperty collectionProperty)
-            : base(parent, context, defaultNamespace, collectionProperty)
+        public ManagedCollectionPropertyViewModel(ObjectViewModel parent, WrapperContext context, ManagedCollectionProperty collectionProperty)
+            : base(parent, context, collectionProperty)
         {
             this.collectionProperty = collectionProperty;
-            value = new CollectionValueViewModel();
+            SetToCollection();
 
             var valueIsStringCondition = Condition.Lambda(this, vm => vm.Value is StringValueViewModel, false);
             var valueIsCollectionCondition = Condition.Lambda(this, vm => vm.Value is CollectionValueViewModel, false);
@@ -91,8 +106,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             AddInstanceCommand = new AppCommand(obj => AddInstance((Type)obj));
         }
 
-        public override ManagedProperty ManagedProperty => collectionProperty;
-
+        public override void RequestSwitchToString()
+        {
+            throw new NotSupportedException();
+        }
         public override IEnumerable<TypeViewModel> AvailableTypes
         {
             get
@@ -105,5 +122,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                     .Select(t => new TypeViewModel(t, AddInstanceCommand));
             }
         }
+
+        public override ManagedProperty ManagedProperty => collectionProperty;
     }
 }

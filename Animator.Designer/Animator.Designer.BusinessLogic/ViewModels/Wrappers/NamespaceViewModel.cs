@@ -12,9 +12,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
     {
         private readonly Dictionary<Type, HashSet<Type>> availableTypes = new();
 
-        public NamespaceViewModel(string empty, Assembly assembly, string @namespace)
+        public NamespaceViewModel(string prefix, Assembly assembly, string @namespace)
         {
-            Empty = empty;
+            Prefix = prefix;
             Assembly = assembly;
             Namespace = @namespace;
 
@@ -44,7 +44,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
         public string Prefix { get; }
         public string Namespace { get; }
         public Assembly Assembly { get; }
-        public string Empty { get; }
 
         public IEnumerable<Type> GetAvailableTypesFor(Type type)
         {

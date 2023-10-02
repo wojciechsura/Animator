@@ -1,5 +1,6 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Base;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
 using Animator.Engine.Base.Persistence;
@@ -11,18 +12,23 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
     public class ManagedObjectViewModel : ObjectViewModel
     {
-        private const int MAX_VALUE_LENGTH = 64;
+        // Private types ------------------------------------------------------
 
         private enum NamespaceType
         {
             Default,
             Engine
         }
+
+        // Private constants --------------------------------------------------
+
+        private const int MAX_VALUE_LENGTH = 64;
 
         private static readonly Dictionary<Type, (NamespaceType Namespace, string Property, string Color)> namePropDefinitions = new()
         {
@@ -38,11 +44,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             { typeof(Animator.Engine.Elements.SvgImage), (NamespaceType.Default, nameof(Animator.Engine.Elements.SvgImage.Source)) }
         };
 
+        // Private fields -----------------------------------------------------
+
         private readonly ObservableCollection<PropertyViewModel> properties = new();
         private readonly ObservableCollection<MacroEntryViewModel> macros = new();
         private readonly ManagedPropertyViewModel contentProperty;
         private readonly ManagedSimplePropertyViewModel nameProperty;
         private readonly ManagedSimplePropertyViewModel valueProperty;
+        private readonly PropertiesProxyViewModel propertiesProxy;
+
+        // Private methods ----------------------------------------------------
 
         private string TruncateValue(string value)
         {
@@ -75,38 +86,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             // Collect all reference or collection properies,
             // which currently have reference or collection value
 
-            List<PropertyProxyViewModel> proxyProperties = new();
-
-            foreach (var property in properties.OrderBy(prop => prop.Name))
-            {
-                if (property == contentProperty)
-                    continue;
-
-                if (property is ManagedPropertyViewModel managedProperty)
-                {
-                    if (managedProperty.Value is ReferenceValueViewModel refValue)
-                    {
-                        var children = new List<ObjectViewModel>() { refValue.Value };
-                        var propertyProxy = new PropertyProxyViewModel(context, defaultNamespace, engineNamespace, property.Name, children);
-                        proxyProperties.Add(propertyProxy);
-                    }
-                    else if (managedProperty.Value is CollectionValueViewModel collection)
-                    {
-                        var children = new List<ObjectViewModel>(collection.Items);
-                        var propertyProxy = new PropertyProxyViewModel(context, defaultNamespace, engineNamespace, property.Name, children);
-                        proxyProperties.Add(propertyProxy);
-                    }
-                    else if (managedProperty.Value is MarkupExtensionValueViewModel markup)
-                    {
-                        var children = new List<ObjectViewModel>() { markup.Value };
-                        var propertyProxy = new PropertyProxyViewModel(context, defaultNamespace, engineNamespace, property.Name, children);
-                        proxyProperties.Add(propertyProxy);
-                    }
-                }
-            }
-
-            if (proxyProperties.Any())
-                yield return new PropertiesProxyViewModel(context, defaultNamespace, engineNamespace, proxyProperties);
+            if (propertiesProxy != null)
+                yield return propertiesProxy;
 
             if (contentProperty != null)
             {
@@ -128,41 +109,28 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         {
             return ns switch
             {
-                NamespaceType.Default => defaultNamespace,
-                NamespaceType.Engine => engineNamespace,
+                NamespaceType.Default => context.DefaultNamespace,
+                NamespaceType.Engine => context.EngineNamespace,
                 _ => throw new InvalidEnumArgumentException("Unsupported namespace type!")
             };
         }
 
-        private void HandleReferencePropertyChanged(object sender, PropertyChangedEventArgs args)
+        private void HandleContentPropertyValueChanged(object sender, PropertyChangedEventArgs e)
         {
-            OnPropertyChanged(nameof(DisplayChildren));
+            if (e.PropertyName == nameof(ManagedPropertyViewModel.Value))
+                NotifyDisplayChildrenChanged();
         }
 
-        private void HandleCollectionPropertyChanged(object sender, PropertyChangedEventArgs args)
+        private void HandleContentPropertyCollectionChanged(object sender, EventArgs e)
         {
-            OnPropertyChanged(nameof(DisplayChildren));
+            NotifyDisplayChildrenChanged();
         }
 
-        private void HandleReferencePropertyReferenceChanged(object sender, EventArgs e)
-        {
-            if (sender == contentProperty)
-                OnPropertyChanged(nameof(DisplayChildren));
+        // Public methods -----------------------------------------------------
 
-            // Other cases are covered in appropriate PropertyProxys
-        }
-
-        private void HandleCollectionPropertyCollectionChanged(object sender, EventArgs e)
-        {
-            if (sender == contentProperty)
-                OnPropertyChanged(nameof(DisplayChildren));
-
-            // Other cases are covered in appropriate PropertyProxys
-        }
-
-        public ManagedObjectViewModel(WrapperContext context, string defaultNamespace, string engineNamespace, string ns, string className, Type type)
-            : base(context, defaultNamespace, engineNamespace)
-        {
+        public ManagedObjectViewModel(WrapperContext context, string ns, string className, Type type)
+            : base(context)
+        {           
             this.ClassName = className;
             this.Namespace = ns;
 
@@ -175,23 +143,19 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 {
                     case ManagedSimpleProperty simple:
                         {
-                            var prop = new ManagedSimplePropertyViewModel(this, context, defaultNamespace, simple);
+                            var prop = new ManagedSimplePropertyViewModel(this, context, simple);
                             properties.Add(prop);
                             break;
                         }
                     case ManagedCollectionProperty collection:
                         {
-                            var prop = new ManagedCollectionPropertyViewModel(this, context, defaultNamespace, collection);
-                            prop.PropertyChanged += HandleCollectionPropertyChanged;
-                            prop.CollectionChanged += HandleCollectionPropertyCollectionChanged;
+                            var prop = new ManagedCollectionPropertyViewModel(this, context, collection);
                             properties.Add(prop);
                             break;
                         }
                     case ManagedReferenceProperty reference:
                         {
-                            var prop = new ManagedReferencePropertyViewModel(this, context, defaultNamespace, reference);
-                            prop.PropertyChanged += HandleReferencePropertyChanged;
-                            prop.ReferenceValueChanged += HandleReferencePropertyReferenceChanged;
+                            var prop = new ManagedReferencePropertyViewModel(this, context, reference);
                             properties.Add(prop);
                             break;
                         }
@@ -200,7 +164,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 }
             }
 
-            var keyProperty = new StringPropertyViewModel(this, context, engineNamespace, "Key");
+            // Key property
+
+            var keyProperty = new StringPropertyViewModel(this, context, context.EngineNamespace, "Key");
             properties.Add(keyProperty);
 
             // Content property
@@ -209,8 +175,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             if (contentPropertyAttribute != null)
             {
                 contentProperty = properties.OfType<ManagedPropertyViewModel>().Single(prop => prop.Name == contentPropertyAttribute.PropertyName);
-                contentProperty.ReferenceValueChanged += (s, e) => NotifyDisplayChildrenChanged();
-                contentProperty.CollectionChanged += (s, e) => NotifyDisplayChildrenChanged();
+                contentProperty.PropertyChanged += HandleContentPropertyValueChanged;
+                contentProperty.CollectionChanged += HandleContentPropertyCollectionChanged;
             }
             else
                 contentProperty = null;
@@ -258,7 +224,31 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                     valueProperty.StringValueChanged += HandleValueChanged;
                 }
             }
+
+            // Property proxies
+
+            List<PropertyProxyViewModel> proxyProperties = new();
+
+            foreach (var property in properties.OrderBy(prop => prop.Name))
+            {
+                if (property == contentProperty)
+                    continue;
+
+                if (property is ManagedPropertyViewModel managedProperty)
+                {
+                    if (managedProperty.Value is ReferenceValueViewModel or CollectionValueViewModel or MarkupExtensionValueViewModel)
+                    {
+                        var propertyProxy = new PropertyProxyViewModel(context, (ManagedPropertyViewModel)property);
+                        proxyProperties.Add(propertyProxy);
+                    }
+                }
+            }
+
+            if (proxyProperties.Any())
+                propertiesProxy = new PropertiesProxyViewModel(context, proxyProperties);
         }
+
+        // Public properties --------------------------------------------------
 
         public IList<MacroEntryViewModel> Macros => macros;
 
@@ -277,5 +267,13 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public string Namespace { get; }
 
         public override IEnumerable<BaseObjectViewModel> DisplayChildren => GetDisplayChildren();
+
+        // Transported from the content property
+
+        public ICommand AddInstanceCommand => contentProperty?.AddInstanceCommand;
+
+        public ICommand SetToInstanceCommand => contentProperty?.SetToInstanceCommand;
+
+        public IEnumerable<TypeViewModel> AvailableTypes => contentProperty?.AvailableTypes;
     }
 }

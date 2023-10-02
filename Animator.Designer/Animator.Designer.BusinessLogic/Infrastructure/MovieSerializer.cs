@@ -15,8 +15,8 @@ using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;
 using System.Collections;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using System.Reflection;
-using Animator.Designer.BusinessLogic.Helpers;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers;
+using Animator.Engine.Base.Extensions;
 
 namespace Animator.Designer.BusinessLogic.Infrastructure
 {
@@ -48,24 +48,6 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
         // Private methods ----------------------------------------------------
 
-        private static void StaticInitializeRecursively(Type type)
-        {
-            do
-            {
-                // If type is initialized, its base types must have been initialized too,
-                // don't waste time on them
-                if (staticallyInitializedTypes.Contains(type))
-                    return;
-
-                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
-
-                staticallyInitializedTypes.Add(type);
-
-                type = type.BaseType;
-            }
-            while (type != typeof(ManagedObject) && type != typeof(object));
-        }
-
         private void DeserializeChildren(XmlNode node, 
             ManagedObjectViewModel deserializedObject, 
             DeserializationContext context, 
@@ -96,7 +78,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                             ObjectViewModel macroContent = DeserializeElement(macroNode, context);
 
-                            var macroItem = new MacroEntryViewModel(context.WrapperContext, context.DefaultNamespace.ToString(), ENGINE_NAMESPACE);
+                            var macroItem = new MacroEntryViewModel(context.WrapperContext);
                             macroItem.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, "Key").Value = xKey;
                             macroItem.Property<ReferencePropertyViewModel>(context.DefaultNamespace.ToString(), "Content").Value = new ReferenceValueViewModel(macroContent);
 
@@ -290,7 +272,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
             string defaultNamespace = context.DefaultNamespace.ToString();
 
-            var markupExt = new MarkupExtensionViewModel(context.WrapperContext, defaultNamespace, ENGINE_NAMESPACE, ns, markupData.Name, markupData.TypeData.Type);
+            var markupExt = new MarkupExtensionViewModel(context.WrapperContext, ns, markupData.Name, markupData.TypeData.Type);
 
             foreach (var param in markupData.Params)
             {
@@ -412,7 +394,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                     string filename = sourceAttribute.Value;
 
-                    var includeViewModel = new IncludeViewModel(context.WrapperContext, context.DefaultNamespace.ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
+                    var includeViewModel = new IncludeViewModel(context.WrapperContext, ENGINE_NAMESPACE);
                     includeViewModel.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, SOURCE_ATTRIBUTE).Value = filename;
 
                     return includeViewModel;
@@ -431,7 +413,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                     if (node.ChildNodes.Count > 0)
                         throw new SerializerException("Macro may not contain any child elements!", node.FindXPath());
 
-                    var macroViewModel = new MacroViewModel(context.WrapperContext, context.DefaultNamespace.ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
+                    var macroViewModel = new MacroViewModel(context.WrapperContext, ENGINE_NAMESPACE);
                     macroViewModel.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, KEY_ATTRIBUTE).Value = key;
 
                     foreach (var attribute in node.Attributes
@@ -454,7 +436,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                     var child = (XmlElement)node.ChildNodes[0];
 
-                    var generateViewModel = new GenerateViewModel(context.WrapperContext, context.DefaultNamespace.ToString(), ENGINE_NAMESPACE, ENGINE_NAMESPACE);
+                    var generateViewModel = new GenerateViewModel(context.WrapperContext, ENGINE_NAMESPACE);
                     generateViewModel.Property<MultilineStringPropertyViewModel>("Generator").Value = child.OuterXml;
 
                     return generateViewModel;
@@ -475,11 +457,9 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                 // We have to ensure that static ctor runs. It will not run by itself
                 // if we deal with the type on the reflection level (aka the Type)
 
-                StaticInitializeRecursively(objectTypeData.Type);
-
                 var ns = objectTypeData.Type.ToNamespaceDefinition().ToString();
 
-                deserializedObject = new ManagedObjectViewModel(context.WrapperContext, context.DefaultNamespace.ToString(), ENGINE_NAMESPACE, ns, node.Name, objectTypeData.Type);
+                deserializedObject = new ManagedObjectViewModel(context.WrapperContext, ns, node.Name, objectTypeData.Type);
 
                 // 2. Load attributes
 
@@ -523,7 +503,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             if (options.DefaultNamespace == null)
                 throw new ArgumentException("Default namespace is null!", nameof(options));
 
-            var wrapperContext = new WrapperContext();
+            var wrapperContext = new WrapperContext(ENGINE_NAMESPACE, options.DefaultNamespace.ToString());
 
             var context = new DeserializationContext(options, options.DefaultNamespace, wrapperContext);
             

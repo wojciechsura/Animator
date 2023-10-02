@@ -13,8 +13,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
     public abstract class ObjectViewModel : BaseObjectViewModel, IParentedItem<ValueViewModel>
     {
-        protected ObjectViewModel(WrapperContext context, string defaultNamespace, string engineNamespace) 
-            : base(context, defaultNamespace, engineNamespace)
+        protected ObjectViewModel(WrapperContext context) 
+            : base(context)
         {
 
         }

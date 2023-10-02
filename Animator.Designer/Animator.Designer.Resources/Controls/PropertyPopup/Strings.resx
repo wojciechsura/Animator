@@ -127,9 +127,9 @@
     <value>Switch to collection</value>
   </data>
   <data name="SetToInstance" xml:space="preserve">
-    <value>Insert object</value>
+    <value>Set to</value>
   </data>
   <data name="AddInstance" xml:space="preserve">
-    <value>Add object to collection</value>
+    <value>Add to collection</value>
   </data>
 </root>

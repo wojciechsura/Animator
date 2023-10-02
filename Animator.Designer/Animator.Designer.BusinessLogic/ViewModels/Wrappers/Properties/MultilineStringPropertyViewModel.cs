@@ -18,6 +18,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             Namespace = ns;
         }
 
+        public override void RequestSwitchToString()
+        {
+            throw new NotSupportedException();
+        }
         public override string Name { get; }
 
         public override string Namespace { get; }

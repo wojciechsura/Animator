@@ -9,8 +9,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
     public abstract class VirtualObjectViewModel : BaseObjectViewModel
     {
-        protected VirtualObjectViewModel(WrapperContext context, string defaultNamespace, string engineNamespace) 
-            : base(context, defaultNamespace, engineNamespace)
+        protected VirtualObjectViewModel(WrapperContext context) 
+            : base(context)
         {
 
         }
