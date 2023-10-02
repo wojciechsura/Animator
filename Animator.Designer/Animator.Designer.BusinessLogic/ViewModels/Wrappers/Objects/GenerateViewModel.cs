@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
-    public class GenerateViewModel : BaseObjectViewModel
+    public class GenerateViewModel : ObjectViewModel
     {
-        private readonly List<BaseObjectViewModel> children = new();
+        private readonly List<ObjectViewModel> children = new();
         private readonly List<PropertyViewModel> properties = new();
 
         public GenerateViewModel(WrapperContext context, string defaultNamespace, string engineNamespace, string ns)
             : base(context, defaultNamespace, engineNamespace)
         {
             Namespace = ns;
-            properties.Add(new MultilineStringPropertyViewModel(context, defaultNamespace, "Generator"));
+            properties.Add(new MultilineStringPropertyViewModel(this, context, defaultNamespace, "Generator"));
 
             Icon = "Generator16.png";
         }
@@ -26,6 +26,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public string Namespace { get; }
 
-        public override IEnumerable<BaseObjectViewModel> DisplayChildren => children;
+        public override IEnumerable<ObjectViewModel> DisplayChildren => children;
     }
 }

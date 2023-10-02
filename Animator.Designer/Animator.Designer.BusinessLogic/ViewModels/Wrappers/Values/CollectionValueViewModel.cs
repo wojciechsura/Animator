@@ -1,4 +1,5 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using Animator.Designer.BusinessLogic.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,19 +12,18 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
 {
     public class CollectionValueViewModel : ValueViewModel
     {
-        private readonly ObservableCollection<BaseObjectViewModel> items = new();
+        private readonly ParentedObservableCollection<ObjectViewModel, ValueViewModel> items;
 
-        private void HandleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
+        private void HandleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => 
             this.CollectionChanged?.Invoke(this, EventArgs.Empty);
-        }
 
         public CollectionValueViewModel()
         {
+            items = new(this);
             items.CollectionChanged += HandleCollectionChanged;
         }
 
-        public IList<BaseObjectViewModel> Items => items;
+        public IList<ObjectViewModel> Items => items;
 
         public event EventHandler CollectionChanged;
     }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
-    public class PropertiesProxyViewModel : BaseObjectViewModel
+    public class PropertiesProxyViewModel : VirtualObjectViewModel
     {        
         private static readonly List<PropertyViewModel> emptyProperties = new();
 

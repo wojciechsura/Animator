@@ -16,22 +16,27 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
         private void SetValue(ValueViewModel value)
         {
-            // Unhook existing value change handlers
+            // Clear parent
+            if (this.value != null)
+                this.value.Parent = null;
 
+            // Unhook existing value change handlers
             if (Value is ReferenceValueViewModel currentReference)
             {
                 currentReference.PropertyChanged -= HandleReferenceValueChanged;
             }
 
-            // Hook value change handlers and set new value
-
+            // Set new value
             if (value is ReferenceValueViewModel)
             {
-                value.PropertyChanged += HandleReferenceValueChanged;
                 Set(ref this.value, value);
+                value.PropertyChanged += HandleReferenceValueChanged;
+                value.Parent = this;
             }
             else
+            {
                 throw new ArgumentException($"ManagedReferencePropertyViewModel does not support value of type {value}!");
+            }
         }
 
         private void HandleReferenceValueChanged(object sender, PropertyChangedEventArgs e)
@@ -43,8 +48,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         protected void OnReferenceValueChanged() =>
             ReferenceValueChanged?.Invoke(this, EventArgs.Empty);
 
-        public ReferencePropertyViewModel(WrapperContext context, string ns, string name)
-            : base(context)
+        public ReferencePropertyViewModel(ObjectViewModel parent, WrapperContext context, string ns, string name)
+            : base(parent, context)
         {
             Namespace = ns;
             Name = name;

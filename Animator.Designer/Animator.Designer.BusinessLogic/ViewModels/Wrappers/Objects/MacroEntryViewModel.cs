@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
-    public class MacroEntryViewModel : BaseObjectViewModel
+    public class MacroEntryViewModel : ObjectViewModel
     {
         private readonly List<PropertyViewModel> properties = new();
         private readonly StringPropertyViewModel key;
         private readonly ReferencePropertyViewModel content;
 
-        private IEnumerable<BaseObjectViewModel> GetChildren()
+        private IEnumerable<ObjectViewModel> GetChildren()
         {
             if (content.Value is ReferenceValueViewModel refValue)
                 yield return refValue.Value;
@@ -37,11 +37,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         {
             Namespace = engineNamespace;
 
-            key = new StringPropertyViewModel(context, engineNamespace, "Key");
+            key = new StringPropertyViewModel(this, context, engineNamespace, "Key");
             key.PropertyChanged += HandleKeyChanged;
             properties.Add(key);
 
-            content = new ReferencePropertyViewModel(context, defaultNamespace, "Content");
+            content = new ReferencePropertyViewModel(this, context, defaultNamespace, "Content");
             content.PropertyChanged += HandleContentChanged;
             properties.Add(content);
 
@@ -50,7 +50,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
 
-        public override IEnumerable<BaseObjectViewModel> DisplayChildren => GetChildren();
+        public override IEnumerable<ObjectViewModel> DisplayChildren => GetChildren();
 
         public string Namespace { get; }
 

@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
-    public class MarkupExtensionViewModel : BaseObjectViewModel
+    public class MarkupExtensionViewModel : ObjectViewModel
     {
-        private readonly List<BaseObjectViewModel> children = new();
+        private readonly List<ObjectViewModel> children = new();
         private readonly List<StringPropertyViewModel> properties = new();
         private readonly Type type;
 
@@ -24,7 +24,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             foreach (var propInfo in type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .OrderBy(prop => prop.Name))
             {
-                var property = new StringPropertyViewModel(context, defaultNamespace, propInfo.Name);
+                var property = new StringPropertyViewModel(this, context, defaultNamespace, propInfo.Name);
                 properties.Add(property);
             }
 
@@ -33,7 +33,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public override IEnumerable<PropertyViewModel> Properties => properties;
 
-        public override IEnumerable<BaseObjectViewModel> DisplayChildren => children;
+        public override IEnumerable<ObjectViewModel> DisplayChildren => children;
 
         public string Name { get; }
 

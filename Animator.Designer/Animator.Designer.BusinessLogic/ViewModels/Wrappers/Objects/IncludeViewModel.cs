@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
-    public class IncludeViewModel : BaseObjectViewModel
+    public class IncludeViewModel : ObjectViewModel
     {
-        private readonly List<BaseObjectViewModel> children = new();
+        private readonly List<ObjectViewModel> children = new();
         private readonly List<PropertyViewModel> properties = new();
         private readonly StringPropertyViewModel sourceProperty;
 
@@ -24,7 +24,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             : base(context, defaultNamespace, engineNamespace)
         {
             Namespace = ns;
-            sourceProperty = new StringPropertyViewModel(context, ns, "Source");
+            sourceProperty = new StringPropertyViewModel(this, context, ns, "Source");
             sourceProperty.PropertyChanged += HandleSourceChanged;
             properties.Add(sourceProperty);
 
@@ -33,7 +33,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public override IEnumerable<PropertyViewModel> Properties => properties;
 
-        public override IEnumerable<BaseObjectViewModel> DisplayChildren => children;
+        public override IEnumerable<ObjectViewModel> DisplayChildren => children;
 
         public string Source => sourceProperty.Value;
 

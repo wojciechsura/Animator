@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
-    public class MacroViewModel : BaseObjectViewModel
+    public class MacroViewModel : ObjectViewModel
     {
-        private readonly List<BaseObjectViewModel> children = new();
+        private readonly List<ObjectViewModel> children = new();
         private readonly ObservableCollection<PropertyViewModel> properties = new();
         /// <remarks>See <see cref="Animator.Engine.Base.ManagedProperty.nameRegex"/></remarks>
         private readonly Regex nameRegex = new Regex("^[a-zA-Z_][a-zA-Z_0-9]*$");
@@ -28,7 +28,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             : base(context, defaultNamespace, engineNamespace)
         {
             Namespace = ns;
-            keyProperty = new StringPropertyViewModel(context, ns, "Key");
+            keyProperty = new StringPropertyViewModel(this, context, ns, "Key");
             keyProperty.PropertyChanged += HandleKeyChanged;
             properties.Add(keyProperty);
 
@@ -43,7 +43,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             if (!nameRegex.IsMatch(propertyName))
                 throw new ArgumentException("Invalid property name!");
 
-            var property = new StringPropertyViewModel(context, defaultNamespace, propertyName);
+            var property = new StringPropertyViewModel(this, context, defaultNamespace, propertyName);
             properties.Add(property);
             return property;
         }
@@ -59,7 +59,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
         
-        public override IEnumerable<BaseObjectViewModel> DisplayChildren => children;
+        public override IEnumerable<ObjectViewModel> DisplayChildren => children;
 
         public string Key => keyProperty.Value;
 

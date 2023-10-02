@@ -83,8 +83,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 throw new ArgumentException($"ManagedReferencePropertyViewModel does not support value of type {value}!");
         }
 
-        public ManagedReferencePropertyViewModel(WrapperContext context, string defaultNamespace, ManagedReferenceProperty referenceProperty)
-            : base(context, defaultNamespace, referenceProperty)
+        public ManagedReferencePropertyViewModel(ObjectViewModel parent, WrapperContext context, string defaultNamespace, ManagedReferenceProperty referenceProperty)
+            : base(parent, context, defaultNamespace, referenceProperty)
         {
             this.referenceProperty = referenceProperty;
             value = new DefaultValueViewModel(null);
@@ -92,8 +92,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             var valueIsStringCondition = Condition.Lambda(this, vm => vm.Value is StringValueViewModel, false);
             var valueIsDefaultCondition = Condition.Lambda(this, vm => vm.Value is DefaultValueViewModel, false);
 
-            SetDefaultCommand = new AppCommand(obj => SetDefault(), !valueIsStringCondition);
-            SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsDefaultCondition);
+            SetDefaultCommand = new AppCommand(obj => SetDefault(), !valueIsDefaultCondition);
+            SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
             SetToInstanceCommand = new AppCommand(obj => SetToInstance((Type)obj));
         }
 

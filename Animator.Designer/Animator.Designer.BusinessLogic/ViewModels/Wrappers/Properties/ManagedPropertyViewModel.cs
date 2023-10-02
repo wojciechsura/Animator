@@ -1,4 +1,5 @@
-﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
+﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
 using Newtonsoft.Json.Linq;
 using Spooksoft.VisualStateManager.Commands;
@@ -15,13 +16,19 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     {
         private void SetValue(ValueViewModel value)
         {
-            if (this.value != null)
+            if (this.value != null) 
+            {                
                 value.Handler = null;
+                value.Parent = null;
+            }
 
             OnSetValue(value);
 
             if (this.value != null)
+            {
+                value.Parent = this;
                 value.Handler = this;
+            }
         }
 
         protected ValueViewModel value;
@@ -31,8 +38,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         protected void OnCollectionChanged() => CollectionChanged?.Invoke(this, EventArgs.Empty);
         protected abstract void OnSetValue(ValueViewModel value);
 
-        public ManagedPropertyViewModel(WrapperContext context, string defaultNamespace, ManagedProperty property)
-            : base(context)
+        public ManagedPropertyViewModel(ObjectViewModel parent, WrapperContext context, string defaultNamespace, ManagedProperty property)
+            : base(parent, context)
         {
             Name = property.Name;
             Namespace = defaultNamespace;
@@ -47,7 +54,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public ValueViewModel Value
         {
             get => value;
-            set => OnSetValue(value);
+            set => SetValue(value);
         }
 
         public event EventHandler StringValueChanged;

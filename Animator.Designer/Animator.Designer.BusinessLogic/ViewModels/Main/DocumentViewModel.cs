@@ -12,10 +12,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 {
     public class DocumentViewModel : BaseViewModel
     {
-        private readonly BaseObjectViewModel[] displayItems;
-        private BaseObjectViewModel selectedElement;
+        private readonly ObjectViewModel[] displayItems;
+        private ObjectViewModel selectedElement;
 
-        public DocumentViewModel(BaseObjectViewModel rootNode, WrapperContext wrapperContext, string filename = "Animation.xml", bool filenameVirtual = true)
+        public DocumentViewModel(ObjectViewModel rootNode, WrapperContext wrapperContext, string filename = "Animation.xml", bool filenameVirtual = true)
         {
             RootNode = rootNode;
             WrapperContext = wrapperContext;
@@ -27,12 +27,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 
         public string Filename { get; set; }
         public bool FilenameVirtual { get; set; }
-        public BaseObjectViewModel RootNode { get; }
+        public ObjectViewModel RootNode { get; }
         public WrapperContext WrapperContext { get; }
 
-        public IEnumerable<BaseObjectViewModel> DisplayItems => displayItems;
+        public IEnumerable<ObjectViewModel> DisplayItems => displayItems;
         
-        public BaseObjectViewModel SelectedElement 
+        public ObjectViewModel SelectedElement 
         {
             get => selectedElement;
             set

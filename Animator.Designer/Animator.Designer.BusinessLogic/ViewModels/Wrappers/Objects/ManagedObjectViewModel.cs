@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
-    public class ManagedObjectViewModel : BaseObjectViewModel
+    public class ManagedObjectViewModel : ObjectViewModel
     {
         private const int MAX_VALUE_LENGTH = 64;
 
@@ -86,19 +86,19 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 {
                     if (managedProperty.Value is ReferenceValueViewModel refValue)
                     {
-                        var children = new List<BaseObjectViewModel>() { refValue.Value };
+                        var children = new List<ObjectViewModel>() { refValue.Value };
                         var propertyProxy = new PropertyProxyViewModel(context, defaultNamespace, engineNamespace, property.Name, children);
                         proxyProperties.Add(propertyProxy);
                     }
                     else if (managedProperty.Value is CollectionValueViewModel collection)
                     {
-                        var children = new List<BaseObjectViewModel>(collection.Items);
+                        var children = new List<ObjectViewModel>(collection.Items);
                         var propertyProxy = new PropertyProxyViewModel(context, defaultNamespace, engineNamespace, property.Name, children);
                         proxyProperties.Add(propertyProxy);
                     }
                     else if (managedProperty.Value is MarkupExtensionValueViewModel markup)
                     {
-                        var children = new List<BaseObjectViewModel>() { markup.Value };
+                        var children = new List<ObjectViewModel>() { markup.Value };
                         var propertyProxy = new PropertyProxyViewModel(context, defaultNamespace, engineNamespace, property.Name, children);
                         proxyProperties.Add(propertyProxy);
                     }
@@ -175,13 +175,13 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 {
                     case ManagedSimpleProperty simple:
                         {
-                            var prop = new ManagedSimplePropertyViewModel(context, defaultNamespace, simple);
+                            var prop = new ManagedSimplePropertyViewModel(this, context, defaultNamespace, simple);
                             properties.Add(prop);
                             break;
                         }
                     case ManagedCollectionProperty collection:
                         {
-                            var prop = new ManagedCollectionPropertyViewModel(context, defaultNamespace, collection);
+                            var prop = new ManagedCollectionPropertyViewModel(this, context, defaultNamespace, collection);
                             prop.PropertyChanged += HandleCollectionPropertyChanged;
                             prop.CollectionChanged += HandleCollectionPropertyCollectionChanged;
                             properties.Add(prop);
@@ -189,7 +189,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                         }
                     case ManagedReferenceProperty reference:
                         {
-                            var prop = new ManagedReferencePropertyViewModel(context, defaultNamespace, reference);
+                            var prop = new ManagedReferencePropertyViewModel(this, context, defaultNamespace, reference);
                             prop.PropertyChanged += HandleReferencePropertyChanged;
                             prop.ReferenceValueChanged += HandleReferencePropertyReferenceChanged;
                             properties.Add(prop);
@@ -200,7 +200,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 }
             }
 
-            var keyProperty = new StringPropertyViewModel(context, engineNamespace, "Key");
+            var keyProperty = new StringPropertyViewModel(this, context, engineNamespace, "Key");
             properties.Add(keyProperty);
 
             // Content property

@@ -9,17 +9,14 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
 {
     public class ReferenceValueViewModel : ValueViewModel
     {
-        private BaseObjectViewModel value;
+        private ObjectViewModel value;
 
-        public ReferenceValueViewModel()
+        public ReferenceValueViewModel(ObjectViewModel value)
         {
-            
+            this.value = value;
+            value.Parent = this;
         }
 
-        public BaseObjectViewModel Value
-        {
-            get => value;
-            set => Set(ref this.value, value);
-        }
+        public ObjectViewModel Value => value;
     }
 }

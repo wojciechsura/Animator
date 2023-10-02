@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
-    public class PropertyProxyViewModel : BaseObjectViewModel
+    public class PropertyProxyViewModel : VirtualObjectViewModel
     {
         private readonly List<PropertyViewModel> properties = new();
 
-        public PropertyProxyViewModel(WrapperContext context, string defaultNamespace, string engineNamespace, string name, List<BaseObjectViewModel> children)
+        public PropertyProxyViewModel(WrapperContext context, string defaultNamespace, string engineNamespace, string name, List<ObjectViewModel> children)
             : base(context, defaultNamespace, engineNamespace)
         {
             Name = name;
@@ -23,6 +23,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
 
         public string Name { get; }
-        public override IEnumerable<BaseObjectViewModel> DisplayChildren { get; }
+        public override IEnumerable<ObjectViewModel> DisplayChildren { get; }
     }
 }

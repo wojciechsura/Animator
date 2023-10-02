@@ -29,7 +29,7 @@ namespace Animator.Designer.Controls
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            (DataContext as DocumentViewModel).SelectedElement = e.NewValue as BaseObjectViewModel;
+            (DataContext as DocumentViewModel).SelectedElement = e.NewValue as ObjectViewModel;
         }
     }
 }

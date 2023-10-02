@@ -16,10 +16,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
         public MarkupExtensionValueViewModel(MarkupExtensionViewModel value)
         {
             this.value = value;
+            value.Parent = this;
         }
 
         public string Name => value.Name;
 
-        public BaseObjectViewModel Value => value;       
+        public ObjectViewModel Value => value;       
     }
 }

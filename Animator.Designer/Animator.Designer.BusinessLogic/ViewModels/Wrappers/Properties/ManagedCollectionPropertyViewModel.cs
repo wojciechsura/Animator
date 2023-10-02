@@ -77,8 +77,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 throw new ArgumentException($"ManagedCollectionPropertyViewModel does not support value of type {value}!");
         }
 
-        public ManagedCollectionPropertyViewModel(WrapperContext context, string defaultNamespace, ManagedCollectionProperty collectionProperty)
-            : base(context, defaultNamespace, collectionProperty)
+        public ManagedCollectionPropertyViewModel(ObjectViewModel parent, WrapperContext context, string defaultNamespace, ManagedCollectionProperty collectionProperty)
+            : base(parent, context, defaultNamespace, collectionProperty)
         {
             this.collectionProperty = collectionProperty;
             value = new CollectionValueViewModel();

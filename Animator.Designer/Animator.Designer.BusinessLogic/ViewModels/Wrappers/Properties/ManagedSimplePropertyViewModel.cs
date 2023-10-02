@@ -1,4 +1,5 @@
-﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
+﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
 using Spooksoft.VisualStateManager.Commands;
 using Spooksoft.VisualStateManager.Conditions;
@@ -57,8 +58,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 throw new ArgumentException($"ManagedSimplePropertyViewModel does not support value of type {value}!");
         }
 
-        public ManagedSimplePropertyViewModel(WrapperContext context, string defaultNamespace, ManagedSimpleProperty property)
-            : base(context, defaultNamespace, property)
+        public ManagedSimplePropertyViewModel(ObjectViewModel parent, WrapperContext context, string defaultNamespace, ManagedSimpleProperty property)
+            : base(parent, context, defaultNamespace, property)
         {
             this.simpleProperty = property;
             SetDefault();

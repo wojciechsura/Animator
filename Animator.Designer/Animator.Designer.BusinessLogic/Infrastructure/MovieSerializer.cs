@@ -94,11 +94,11 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                             var xKey = keyAttribute.Value;
 
-                            BaseObjectViewModel macroContent = DeserializeElement(macroNode, context);
+                            ObjectViewModel macroContent = DeserializeElement(macroNode, context);
 
                             var macroItem = new MacroEntryViewModel(context.WrapperContext, context.DefaultNamespace.ToString(), ENGINE_NAMESPACE);
                             macroItem.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, "Key").Value = xKey;
-                            macroItem.Property<ReferencePropertyViewModel>(context.DefaultNamespace.ToString(), "Content").Value = new ReferenceValueViewModel { Value = macroContent };
+                            macroItem.Property<ReferencePropertyViewModel>(context.DefaultNamespace.ToString(), "Content").Value = new ReferenceValueViewModel(macroContent);
 
                             deserializedObject.Macros.Add(macroItem);
                         }
@@ -172,8 +172,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                     }
                     else if (property is ManagedReferencePropertyViewModel referenceProperty)
                     {
-                        var value = new ReferenceValueViewModel();
-                        value.Value = content;
+                        var value = new ReferenceValueViewModel(content);
 
                         referenceProperty.Value = value;
                         propertiesSet.Add(string.Format(CONTENT_DECORATION, property.Name));
@@ -240,8 +239,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                 else if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 1)
                 {
                     var content = DeserializeElement(propertyNode.ChildNodes.OfType<XmlElement>().Single(), context);
-                    var referenceValue = new ReferenceValueViewModel();
-                    referenceValue.Value = content;
+                    var referenceValue = new ReferenceValueViewModel(content);
 
                     reference.Value = referenceValue;
 
@@ -397,7 +395,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             }
         }
 
-        private BaseObjectViewModel DeserializeElement(XmlNode node, DeserializationContext context)
+        private ObjectViewModel DeserializeElement(XmlNode node, DeserializationContext context)
         {
             // 1. Check control nodes
 
@@ -517,7 +515,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             }
         }
 
-        private (BaseObjectViewModel Object, WrapperContext context) InternalDeserialize(XmlDocument document, string documentPath, Models.MovieSerialization.DeserializationOptions options)
+        private (ObjectViewModel Object, WrapperContext context) InternalDeserialize(XmlDocument document, string documentPath, Models.MovieSerialization.DeserializationOptions options)
         {
             if (options == null)
                 throw new ArgumentNullException(nameof(options));
@@ -545,7 +543,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
         // Public methods -----------------------------------------------------
 
-        public (BaseObjectViewModel Object, WrapperContext Context) Deserialize(string filename)
+        public (ObjectViewModel Object, WrapperContext Context) Deserialize(string filename)
         {
             XmlDocument document = new XmlDocument();
             document.LoadXml(filename);
@@ -557,7 +555,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             return InternalDeserialize(document, documentPath, CreateDefaultDeserializationOptions());
         }
 
-        public (BaseObjectViewModel Object, WrapperContext Context) Deserialize(XmlDocument document, string documentPath)
+        public (ObjectViewModel Object, WrapperContext Context) Deserialize(XmlDocument document, string documentPath)
         {
             return InternalDeserialize(document, documentPath, CreateDefaultDeserializationOptions());
         }

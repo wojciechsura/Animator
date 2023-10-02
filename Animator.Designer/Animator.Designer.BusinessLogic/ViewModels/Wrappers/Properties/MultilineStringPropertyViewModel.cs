@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     {
         private string value;
 
-        public MultilineStringPropertyViewModel(WrapperContext context, string ns, string name)
-            : base(context)
+        public MultilineStringPropertyViewModel(ObjectViewModel parent, WrapperContext context, string ns, string name)
+            : base(parent, context)
         {
             Name = name;
             Namespace = ns;

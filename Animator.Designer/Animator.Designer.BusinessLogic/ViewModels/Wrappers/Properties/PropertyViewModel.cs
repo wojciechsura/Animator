@@ -1,4 +1,6 @@
-﻿using Animator.Designer.BusinessLogic.ViewModels.Base;
+﻿using Animator.Designer.BusinessLogic.Infrastructure;
+using Animator.Designer.BusinessLogic.ViewModels.Base;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using System;
@@ -20,8 +22,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public abstract string Name { get; }
         public abstract string Namespace { get; }
 
-        public PropertyViewModel(WrapperContext context)
+        public PropertyViewModel(ObjectViewModel parent, WrapperContext context)
         {
+            Parent = parent;
             this.context = context;
         }
 
@@ -38,6 +41,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         }
 
         public virtual IEnumerable<TypeViewModel> AvailableTypes { get; } = null;
+
+        public ObjectViewModel Parent { get; set; }
 
         public ICommand SetDefaultCommand { get; init; }
         public ICommand SetToStringCommand { get; init; }
