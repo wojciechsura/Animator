@@ -20,6 +20,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 OnReferenceValueChanged();
         }
 
+        private void SetDefault()
+        {
+            Value = new DefaultValueViewModel(null, false);
+        }
+
         private void SetValue(ValueViewModel value)
         {
             // Clear parent
@@ -39,6 +44,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 value.PropertyChanged += HandleReferenceValueChanged;
                 value.Parent = this;
             }
+            else if (value is DefaultValueViewModel)
+            {
+                Set(ref this.value, value);
+                value.Parent = this;
+            }
             else
             {
                 throw new ArgumentException($"ManagedReferencePropertyViewModel does not support value of type {value}!");
@@ -47,6 +57,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
         protected void OnReferenceValueChanged() =>
             ReferenceValueChanged?.Invoke(this, EventArgs.Empty);
+
+        public override void RequestDelete(BaseObjectViewModel obj)
+        {
+            SetDefault();
+        }
 
         public ReferencePropertyViewModel(ObjectViewModel parent, WrapperContext context, string ns, string name)
             : base(parent, context)

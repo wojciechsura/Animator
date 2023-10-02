@@ -10,6 +10,7 @@
              xmlns:vmv="clr-namespace:Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;assembly=Animator.Designer.BusinessLogic"
              xmlns:res="clr-namespace:Animator.Designer.Resources.Controls.DocumentControl;assembly=Animator.Designer.Resources" 
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance Type=vm:DocumentViewModel}"             
              d:DesignHeight="450" d:DesignWidth="800">
@@ -17,6 +18,10 @@
         <Thickness x:Key="TreeItemMargin">2</Thickness>
         
         <!--#region Styles-->
+
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="2" />
+        </Style>
         
         <Style x:Key="ClassNameText" TargetType="TextBlock">
             <Style.Setters>
@@ -67,6 +72,8 @@
         
         <Thickness x:Key="IconMargin" Left="2" Top="2" Right="4" Bottom="2" />
 
+        <sys:Double x:Key="PropertyRowMinHeight">28.0</sys:Double>
+        
         <SolidColorBrush x:Key="StringBackground" Color="#40ffffff" />
 
         <SolidColorBrush x:Key="DefaultBackground" Color="#40808080" />
@@ -104,25 +111,28 @@
                 <ContentControl Content="{Binding Value}">
                     <ContentControl.Resources>
                         <DataTemplate DataType="{x:Type vmv:StringValueViewModel}">
-                            <DockPanel Background="{StaticResource StringBackground}">
-                                <TextBox Margin="3" Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </DockPanel>
+                            <Grid Background="{StaticResource StringBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <TextBox Margin="3" Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding AvailableOptions, Converter={StaticResource InverseNullToVisibilityConverter}}" 
+                                         HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                                <ComboBox Margin="3" SelectedValue="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding AvailableOptions}" Visibility="{Binding AvailableOptions, Converter={StaticResource NullToVisibilityConverter}}"
+                                          IsEditable="False" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                            </Grid>
                         </DataTemplate>
 
                         <DataTemplate DataType="{x:Type vmv:DefaultValueViewModel}">
-                            <DockPanel Background="{StaticResource DefaultBackground}">
+                            <DockPanel Background="{StaticResource DefaultBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
                                 <b:Interaction.Triggers>
                                     <b:EventTrigger EventName="PreviewMouseDown">
                                         <b:InvokeCommandAction Command="{Binding SwitchToStringIfPossibleCommand}" />
                                     </b:EventTrigger>
                                 </b:Interaction.Triggers>
-                                <TextBlock Margin="3" Text="{Binding Value}" />
+                                <TextBlock Margin="3" Text="{Binding Value}" VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
 
                         <DataTemplate DataType="{x:Type vmv:MarkupExtensionValueViewModel}">
-                            <DockPanel Background="{StaticResource MarkupExtensionBackground}">
-                                <TextBlock Margin="3" Text="{Binding Name}" />
+                            <DockPanel Background="{StaticResource MarkupExtensionBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <TextBlock Margin="3" Text="{Binding Name}" VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
                     </ContentControl.Resources>
@@ -140,20 +150,21 @@
                 <ContentControl Content="{Binding Value}">
                     <ContentControl.Resources>
                         <DataTemplate DataType="{x:Type vmv:StringValueViewModel}">
-                            <DockPanel Background="{StaticResource StringBackground}">
-                                <TextBox Margin="3" Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <DockPanel Background="{StaticResource StringBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <TextBox Margin="3" Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                         VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
 
                         <DataTemplate DataType="{x:Type vmv:CollectionValueViewModel}">
-                            <DockPanel Background="{StaticResource CollectionBackground}">
-                                <TextBlock Margin="3" Text="(Collection)" />
+                            <DockPanel Background="{StaticResource CollectionBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <TextBlock Margin="3" Text="(Collection)" VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
 
                         <DataTemplate DataType="{x:Type vmv:MarkupExtensionValueViewModel}">
-                            <DockPanel Background="{StaticResource MarkupExtensionBackground}">
-                                <TextBlock Margin="3" Text="{Binding Name}" />
+                            <DockPanel Background="{StaticResource MarkupExtensionBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <TextBlock Margin="3" Text="{Binding Name}" VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
 
@@ -172,26 +183,27 @@
                 <ContentControl Content="{Binding Value}">
                     <ContentControl.Resources>
                         <DataTemplate DataType="{x:Type vmv:StringValueViewModel}">
-                            <DockPanel Background="{StaticResource StringBackground}">
-                                <TextBox Margin="3" Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <DockPanel Background="{StaticResource StringBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <TextBox Margin="3" Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
 
                         <DataTemplate DataType="{x:Type vmv:ReferenceValueViewModel}">
-                            <DockPanel Background="{StaticResource ReferenceBackground}">
-                                <TextBlock Margin="3" Text="(Object)" />
+                            <DockPanel Background="{StaticResource ReferenceBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <TextBlock Margin="3" Text="(Object)" VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
 
                         <DataTemplate DataType="{x:Type vmv:MarkupExtensionValueViewModel}">
-                            <DockPanel Background="{StaticResource MarkupExtensionBackground}">
-                                <TextBlock Margin="3" Text="{Binding Name}" />
+                            <DockPanel Background="{StaticResource MarkupExtensionBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <TextBlock Margin="3" Text="{Binding Name}" VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
 
                         <DataTemplate DataType="{x:Type vmv:DefaultValueViewModel}">
-                            <DockPanel Background="{StaticResource DefaultBackground}">
-                                <TextBlock Margin="3" Text="(Empty object)" />
+                            <DockPanel Background="{StaticResource DefaultBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <TextBlock Margin="3" Text="(Empty object)" VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
                     </ContentControl.Resources>
@@ -232,7 +244,7 @@
                                 <ControlTemplate TargetType="{x:Type DataGridCell}">
                                     <Border Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True"
                                             TextBlock.Foreground="{x:Static SystemColors.ControlTextBrush}">
-                                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" />
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
@@ -302,6 +314,9 @@
                                                 </Style>
                                             </MenuItem.ItemContainerStyle>
                                         </MenuItem>
+
+                                        <MenuItem Visibility="{Binding DeleteCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                                                  Header="{x:Static res:Strings.Delete}" Command="{Binding DeleteCommand}" />
                                     </ContextMenu>
                                 </StackPanel.ContextMenu>
 

@@ -20,5 +20,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
             get => value;
             set => Set(ref this.value, value);
         }
+
+        public IList<string> AvailableOptions => Handler.AvailableOptions;
     }
 }

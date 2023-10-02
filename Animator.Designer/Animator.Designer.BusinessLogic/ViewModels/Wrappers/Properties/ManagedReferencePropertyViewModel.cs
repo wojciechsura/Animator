@@ -88,6 +88,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             SetToInstanceCommand = new AppCommand(obj => SetToInstance((Type)obj));
         }
 
+        public override void RequestDelete(BaseObjectViewModel obj)
+        {
+            SetDefault();
+        }
+
         public override void RequestSwitchToString()
         {
             throw new NotSupportedException();

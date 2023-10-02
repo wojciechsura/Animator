@@ -1,4 +1,5 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +19,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             Namespace = ns;
         }
 
+        public override void RequestDelete(BaseObjectViewModel obj)
+        {
+            throw new NotSupportedException();
+        }
+
         public override void RequestSwitchToString()
         {
             throw new NotSupportedException();
         }
+
         public override string Name { get; }
 
         public override string Namespace { get; }

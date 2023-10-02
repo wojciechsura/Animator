@@ -4,6 +4,8 @@ using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
 using Animator.Engine.Base.Persistence;
+using Spooksoft.VisualStateManager.Commands;
+using Spooksoft.VisualStateManager.Conditions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -51,7 +53,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         private readonly ManagedPropertyViewModel contentProperty;
         private readonly ManagedSimplePropertyViewModel nameProperty;
         private readonly ManagedSimplePropertyViewModel valueProperty;
-        private readonly PropertiesProxyViewModel propertiesProxy;
+        private PropertiesProxyViewModel propertiesProxy;
 
         // Private methods ----------------------------------------------------
 
@@ -74,6 +76,30 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         private void HandleValueChanged(object sender, EventArgs e)
         {
             OnPropertyChanged(nameof(Value));
+        }
+
+        private void HandleSimplePropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (sender is ManagedSimplePropertyViewModel simpleProperty && e.PropertyName == nameof(ManagedSimplePropertyViewModel.Value))
+            {
+                if (propertiesProxy == null ||
+                    (simpleProperty.Value is MarkupExtensionValueViewModel &&
+                        !propertiesProxy.DisplayChildren.OfType<PropertyProxyViewModel>().Any(proxy => proxy.Property == simpleProperty)) ||
+                    (simpleProperty.Value is not MarkupExtensionValueViewModel &&
+                        propertiesProxy.DisplayChildren.OfType<PropertyProxyViewModel>().Any(proxy => proxy.Property == simpleProperty)))
+                {
+                    // Rebuild properties proxy
+                    var isExpanded = propertiesProxy?.IsExpanded ?? false;
+                    
+                    propertiesProxy = BuildPropertiesProxy();
+                    
+                    if (propertiesProxy != null)
+                        propertiesProxy.IsExpanded = isExpanded;
+
+                    // Rebuild displayed children
+                    OnPropertyChanged(nameof(DisplayChildren));
+                }
+            }
         }
 
         private void NotifyDisplayChildrenChanged()
@@ -126,13 +152,21 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             NotifyDisplayChildrenChanged();
         }
 
+        private void DoDelete()
+        {
+            Parent.RequestDelete(this);
+        }
+
+
         // Public methods -----------------------------------------------------
 
         public ManagedObjectViewModel(WrapperContext context, string ns, string className, Type type)
             : base(context)
-        {           
+        {
             this.ClassName = className;
             this.Namespace = ns;
+
+            // Build properties
 
             foreach (var property in ManagedProperty.FindAllByType(type, true).OrderBy(prop => prop.Name))
             {
@@ -144,6 +178,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                     case ManagedSimpleProperty simple:
                         {
                             var prop = new ManagedSimplePropertyViewModel(this, context, simple);
+                            prop.PropertyChanged += HandleSimplePropertyChanged;
                             properties.Add(prop);
                             break;
                         }
@@ -164,7 +199,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 }
             }
 
-            // Key property
+            // x:Key property
 
             var keyProperty = new StringPropertyViewModel(this, context, context.EngineNamespace, "Key");
             properties.Add(keyProperty);
@@ -191,7 +226,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             if (current != typeof(ManagedObject) && current != null)
             {
                 var namePropDefinition = namePropDefinitions[current];
-                
+
                 string nameNamespace = GetNamespace(namePropDefinition.Namespace);
 
                 var property = properties.OfType<ManagedSimplePropertyViewModel>().FirstOrDefault(prop => prop.Name == namePropDefinition.Property && prop.Namespace == nameNamespace);
@@ -227,6 +262,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
             // Property proxies
 
+            propertiesProxy = BuildPropertiesProxy();
+
+            // Commands
+
+            var notRootCondition = Condition.Lambda(this, vm => vm.Parent != null, false);
+            DeleteCommand = new AppCommand(obj => DoDelete(), notRootCondition);
+        }
+
+        private PropertiesProxyViewModel BuildPropertiesProxy()
+        {
             List<PropertyProxyViewModel> proxyProperties = new();
 
             foreach (var property in properties.OrderBy(prop => prop.Name))
@@ -234,18 +279,18 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 if (property == contentProperty)
                     continue;
 
-                if (property is ManagedPropertyViewModel managedProperty)
+                if (property is ManagedReferencePropertyViewModel or ManagedCollectionPropertyViewModel ||
+                    (property is ManagedSimplePropertyViewModel simple && simple.Value is MarkupExtensionValueViewModel))
                 {
-                    if (managedProperty.Value is ReferenceValueViewModel or CollectionValueViewModel or MarkupExtensionValueViewModel)
-                    {
-                        var propertyProxy = new PropertyProxyViewModel(context, (ManagedPropertyViewModel)property);
-                        proxyProperties.Add(propertyProxy);
-                    }
+                    var propertyProxy = new PropertyProxyViewModel(context, (ManagedPropertyViewModel)property);
+                    proxyProperties.Add(propertyProxy);
                 }
             }
 
             if (proxyProperties.Any())
-                propertiesProxy = new PropertiesProxyViewModel(context, proxyProperties);
+                return new PropertiesProxyViewModel(context, proxyProperties);
+            else
+                return null;
         }
 
         // Public properties --------------------------------------------------
@@ -267,6 +312,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public string Namespace { get; }
 
         public override IEnumerable<BaseObjectViewModel> DisplayChildren => GetDisplayChildren();
+
+        public ICommand DeleteCommand { get; }
 
         // Transported from the content property
 

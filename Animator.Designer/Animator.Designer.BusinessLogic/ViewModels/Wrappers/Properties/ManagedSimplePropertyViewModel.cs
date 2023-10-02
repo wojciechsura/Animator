@@ -77,6 +77,31 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
             SetDefaultCommand = new AppCommand(obj => SetDefault(), !valueIsDefaultCondition);
             SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
+
+            if (property.Type == typeof(bool))
+            {
+                AvailableOptions = new List<string> { "True", "False" };
+            }
+            else if (property.Type.IsEnum)
+            {
+                var availableOptions = new List<string>();
+
+                foreach (var enumVal in Enum.GetValues(property.Type))
+                {
+                    availableOptions.Add(enumVal.ToString());
+                }
+
+                AvailableOptions = availableOptions;
+            }
+            else
+            {
+                AvailableOptions = null;
+            }
+        }
+
+        public override void RequestDelete(BaseObjectViewModel obj)
+        {
+            throw new NotSupportedException();
         }
 
         public override void RequestSwitchToString()
@@ -86,6 +111,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 SetToString();
             }
         }
+
         public override ManagedProperty ManagedProperty => simpleProperty;        
     }
 }

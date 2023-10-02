@@ -112,4 +112,7 @@
   <data name="SetContentInstance" xml:space="preserve">
     <value>Set content to</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
 </root>

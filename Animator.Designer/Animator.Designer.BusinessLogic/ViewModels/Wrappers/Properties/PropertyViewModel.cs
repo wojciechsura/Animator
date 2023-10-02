@@ -21,6 +21,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
         public abstract void RequestSwitchToString();
 
+        public abstract void RequestDelete(BaseObjectViewModel obj);
+
         public abstract string Name { get; }
         public abstract string Namespace { get; }
 
@@ -45,6 +47,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public virtual IEnumerable<TypeViewModel> AvailableTypes { get; } = null;
 
         public ObjectViewModel Parent { get; set; }
+
+        public IList<string> AvailableOptions { get; init; }
 
         public ICommand SetDefaultCommand { get; init; }
         public ICommand SetToStringCommand { get; init; }

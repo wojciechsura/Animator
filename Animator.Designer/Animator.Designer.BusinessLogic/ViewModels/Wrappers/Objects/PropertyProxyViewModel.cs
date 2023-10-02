@@ -75,5 +75,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public ICommand SetToInstanceCommand => property.SetToInstanceCommand;
 
         public IEnumerable<TypeViewModel> AvailableTypes => property.AvailableTypes;
+
+        public ManagedPropertyViewModel Property => property;
     }
 }

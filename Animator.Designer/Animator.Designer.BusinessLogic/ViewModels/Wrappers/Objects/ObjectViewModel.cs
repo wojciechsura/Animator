@@ -13,12 +13,18 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
     public abstract class ObjectViewModel : BaseObjectViewModel, IParentedItem<ValueViewModel>
     {
+        private ValueViewModel parent;
+
         protected ObjectViewModel(WrapperContext context) 
             : base(context)
         {
 
         }
 
-        public ValueViewModel Parent { get; set; }
+        public ValueViewModel Parent 
+        { 
+            get => parent;
+            set => Set(ref parent, value);
+        }
     }
 }

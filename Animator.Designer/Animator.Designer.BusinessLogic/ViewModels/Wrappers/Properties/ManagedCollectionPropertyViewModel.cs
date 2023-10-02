@@ -59,6 +59,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         {
             Value = new StringValueViewModel(string.Empty);
         }
+
         protected override void OnSetValue(ValueViewModel value)
         {
             // Unhook existing event handlers
@@ -106,10 +107,31 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             AddInstanceCommand = new AppCommand(obj => AddInstance((Type)obj));
         }
 
+        public override void RequestDelete(BaseObjectViewModel obj)
+        {
+            if (obj is ObjectViewModel objVm)
+            {
+                if (value is CollectionValueViewModel collection)
+                {
+                    if (collection.Items.Contains(objVm))
+                    {
+                        collection.Items.Remove(objVm);
+                    }
+                    else
+                        throw new InvalidOperationException("Cannot delete: collection doesn't contain this object!");
+                }
+                else
+                    throw new InvalidOperationException("Cannot delete: value of this property is not a collection!");
+            }
+            else
+                throw new InvalidOperationException("Cannot delete: object is of invalid type and couldn't have been kept inside collection.");
+        }
+
         public override void RequestSwitchToString()
         {
             throw new NotSupportedException();
         }
+
         public override IEnumerable<TypeViewModel> AvailableTypes
         {
             get
