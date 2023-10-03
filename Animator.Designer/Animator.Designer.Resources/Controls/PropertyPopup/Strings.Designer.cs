@@ -70,6 +70,15 @@ namespace Animator.Designer.Resources.Controls.PropertyPopup {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Insert macro.
+        /// </summary>
+        public static string InsertMacro {
+            get {
+                return ResourceManager.GetString("InsertMacro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Switch to collection.
         /// </summary>
         public static string SetToCollection {

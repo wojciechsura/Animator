@@ -28,6 +28,8 @@ namespace Animator.Designer.Controls
                 return ManagedCollectionPropertyTemplate;
             else if (item is ManagedReferencePropertyViewModel)
                 return ManagedReferencePropertyTemplate;           
+            else if (item is ReferencePropertyViewModel) 
+                return ReferencePropertyTemplate;
 
             return null;
         }
@@ -41,5 +43,7 @@ namespace Animator.Designer.Controls
         public DataTemplate ManagedCollectionPropertyTemplate { get; set; }
         
         public DataTemplate ManagedReferencePropertyTemplate { get; set; }
+
+        public DataTemplate ReferencePropertyTemplate { get; set; }
     }
 }

@@ -78,11 +78,11 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                             ObjectViewModel macroContent = DeserializeElement(macroNode, context);
 
-                            var macroItem = new MacroEntryViewModel(context.WrapperContext);
+                            var macroItem = new MacroDefinitionViewModel(context.WrapperContext);
                             macroItem.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, "Key").Value = xKey;
                             macroItem.Property<ReferencePropertyViewModel>(context.DefaultNamespace.ToString(), "Content").Value = new ReferenceValueViewModel(macroContent);
 
-                            deserializedObject.Macros.Add(macroItem);
+                            deserializedObject.AddMacro(macroItem);
                         }
 
                         // This doesn't need immediate processing
@@ -314,7 +314,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                 {
                     if (attribute.LocalName == KEY_ATTRIBUTE)
                     {
-                        deserializedObject.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, KEY_ATTRIBUTE).Value = attribute.Value;
+                        // deserializedObject.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, KEY_ATTRIBUTE).Value = attribute.Value;
                         continue;
                     }
                     else
@@ -413,7 +413,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                     if (node.ChildNodes.Count > 0)
                         throw new SerializerException("Macro may not contain any child elements!", node.FindXPath());
 
-                    var macroViewModel = new MacroViewModel(context.WrapperContext, ENGINE_NAMESPACE);
+                    var macroViewModel = new MacroViewModel(context.WrapperContext);
                     macroViewModel.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, KEY_ATTRIBUTE).Value = key;
 
                     foreach (var attribute in node.Attributes

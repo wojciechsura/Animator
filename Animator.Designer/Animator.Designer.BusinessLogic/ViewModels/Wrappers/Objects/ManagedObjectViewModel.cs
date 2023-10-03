@@ -49,7 +49,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         // Private fields -----------------------------------------------------
 
         private readonly ObservableCollection<PropertyViewModel> properties = new();
-        private readonly ObservableCollection<MacroEntryViewModel> macros = new();
+        private readonly ObservableCollection<MacroDefinitionViewModel> macros = new();
         private readonly ManagedPropertyViewModel contentProperty;
         private readonly ManagedSimplePropertyViewModel nameProperty;
         private readonly ManagedSimplePropertyViewModel valueProperty;
@@ -131,6 +131,53 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             }
         }
 
+        private PropertiesProxyViewModel BuildPropertiesProxy()
+        {
+            int CompareProxyProperties(VirtualObjectViewModel x, VirtualObjectViewModel y)
+            {
+                string GetString(VirtualObjectViewModel obj)
+                {
+                    if (obj is PropertyProxyViewModel prop)
+                        return prop.Property.Name;
+                    else if (obj is MacrosProxyViewModel)
+                        return Animator.Designer.Resources.Controls.DocumentControl.Strings.Macros;
+                    else
+                        throw new InvalidOperationException("Unsupported proxy object!");
+                }
+
+                string strX = GetString(x);
+                string strY = GetString(y);
+
+                return string.Compare(strX, strY);
+            }
+
+            List<VirtualObjectViewModel> proxyProperties = new();
+
+            proxyProperties.Add(new MacrosProxyViewModel(context, this, macros));
+
+            foreach (var property in properties.OrderBy(prop => prop.Name))
+            {
+                if (property == contentProperty)
+                    continue;
+
+                if (property is ManagedReferencePropertyViewModel or ManagedCollectionPropertyViewModel ||
+                    (property is ManagedSimplePropertyViewModel simple && simple.Value is MarkupExtensionValueViewModel))
+                {
+                    var propertyProxy = new PropertyProxyViewModel(context, (ManagedPropertyViewModel)property);
+                    proxyProperties.Add(propertyProxy);
+                }
+            }
+
+            if (proxyProperties.Any())
+            {
+                proxyProperties.Sort((x, y) => CompareProxyProperties(x, y));
+
+                return new PropertiesProxyViewModel(context, proxyProperties);
+            }
+            else
+                return null;
+        }
+
         private string GetNamespace(NamespaceType ns)
         {
             return ns switch
@@ -152,11 +199,19 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             NotifyDisplayChildrenChanged();
         }
 
+        private void DoAddMacro()
+        {
+            var macro = new MacroDefinitionViewModel(context)
+            {
+                Parent = this
+            };
+            macros.Add(macro);
+        }
+
         private void DoDelete()
         {
             Parent.RequestDelete(this);
         }
-
 
         // Public methods -----------------------------------------------------
 
@@ -198,11 +253,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                         throw new InvalidOperationException("Unsupported managed property type!");
                 }
             }
-
-            // x:Key property
-
-            var keyProperty = new StringPropertyViewModel(this, context, context.EngineNamespace, "Key");
-            properties.Add(keyProperty);
 
             // Content property
 
@@ -268,34 +318,25 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
             var notRootCondition = Condition.Lambda(this, vm => vm.Parent != null, false);
             DeleteCommand = new AppCommand(obj => DoDelete(), notRootCondition);
+
+            AddMacroCommand = new AppCommand(obj => DoAddMacro());
         }
 
-        private PropertiesProxyViewModel BuildPropertiesProxy()
+        public void AddMacro(MacroDefinitionViewModel macro)
         {
-            List<PropertyProxyViewModel> proxyProperties = new();
+            macro.Parent = this;
+            macros.Add(macro);
+        }        
 
-            foreach (var property in properties.OrderBy(prop => prop.Name))
-            {
-                if (property == contentProperty)
-                    continue;
-
-                if (property is ManagedReferencePropertyViewModel or ManagedCollectionPropertyViewModel ||
-                    (property is ManagedSimplePropertyViewModel simple && simple.Value is MarkupExtensionValueViewModel))
-                {
-                    var propertyProxy = new PropertyProxyViewModel(context, (ManagedPropertyViewModel)property);
-                    proxyProperties.Add(propertyProxy);
-                }
-            }
-
-            if (proxyProperties.Any())
-                return new PropertiesProxyViewModel(context, proxyProperties);
-            else
-                return null;
+        public void RequestDelete(MacroDefinitionViewModel macro)
+        {
+            macro.Parent = null;
+            macros.Remove(macro);
         }
 
         // Public properties --------------------------------------------------
 
-        public IList<MacroEntryViewModel> Macros => macros;
+        public IReadOnlyList<MacroDefinitionViewModel> Macros => macros;
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
 
@@ -315,11 +356,15 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public ICommand DeleteCommand { get; }
 
+        public ICommand AddMacroCommand { get; }
+
         // Transported from the content property
 
         public ICommand AddInstanceCommand => contentProperty?.AddInstanceCommand;
 
         public ICommand SetToInstanceCommand => contentProperty?.SetToInstanceCommand;
+
+        public ICommand InsertMacroCommand => contentProperty?.InsertMacroCommand;
 
         public IEnumerable<TypeViewModel> AvailableTypes => contentProperty?.AvailableTypes;
     }

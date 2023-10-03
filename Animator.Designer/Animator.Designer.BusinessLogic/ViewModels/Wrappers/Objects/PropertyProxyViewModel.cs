@@ -59,7 +59,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             property.PropertyChanged += HandlePropertyValueChanged;
             property.CollectionChanged += HandleCollectionChanged;
 
-            Icon = "Property16.png";
+            Icon = property.Name switch
+            {
+                nameof(Animator.Engine.Elements.SceneElement.Resources) => "Resources16.png",
+                nameof(Animator.Engine.Elements.SceneElement.Animations) => "Animations16.png",
+                _ => "Property16.png"
+            };
         }
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
@@ -73,6 +78,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public ICommand AddInstanceCommand => property.AddInstanceCommand;
 
         public ICommand SetToInstanceCommand => property.SetToInstanceCommand;
+
+        public ICommand InsertMacroCommand => property.InsertMacroCommand;
 
         public IEnumerable<TypeViewModel> AvailableTypes => property.AvailableTypes;
 

@@ -1,4 +1,5 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;
+using Spooksoft.VisualStateManager.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
@@ -24,15 +26,22 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             OnPropertyChanged(nameof(Key));
         }
 
-        public MacroViewModel(WrapperContext context, string ns) 
+        private void DoDelete()
+        {
+            Parent.RequestDelete(this);
+        }
+
+        public MacroViewModel(WrapperContext context) 
             : base(context)
         {
-            Namespace = ns;
-            keyProperty = new StringPropertyViewModel(this, context, ns, "Key");
+            Namespace = context.EngineNamespace;
+            keyProperty = new StringPropertyViewModel(this, context, context.EngineNamespace, "Key");
             keyProperty.PropertyChanged += HandleKeyChanged;
             properties.Add(keyProperty);
 
             Icon = "PlaceMacro16.png";
+
+            DeleteCommand = new AppCommand(obj => DoDelete());
         }
 
         public StringPropertyViewModel AddProperty(string propertyName)
@@ -60,6 +69,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
         
         public override IEnumerable<ObjectViewModel> DisplayChildren => children;
+
+        public ICommand DeleteCommand { get; }
 
         public string Key => keyProperty.Value;
 

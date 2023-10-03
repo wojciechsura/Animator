@@ -132,4 +132,7 @@
   <data name="Message_FailedToOpenDocument" xml:space="preserve">
     <value>Nie udało się otworzyć animacji. Błąd: {0}</value>
   </data>
+  <data name="New" xml:space="preserve">
+    <value>Nowy</value>
+  </data>
 </root>

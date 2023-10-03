@@ -1,0 +1,9 @@
+﻿<Movie xmlns:x="https://spooksoft.pl/animator">
+  <Movie.Config>
+    <MovieConfig FramesPerSecond="30" Width="1920" Height="1080"/>
+  </Movie.Config>
+
+  <Scene Duration="0:0:3.0" Background="White">
+
+  </Scene>
+</Movie>

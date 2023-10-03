@@ -8,6 +8,7 @@ using Spooksoft.VisualStateManager.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -25,6 +26,23 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
         private DocumentViewModel document;
 
         // Private methods ----------------------------------------------------
+
+        private void DoNew()
+        {
+            if (document != null)
+            {
+                // TODO Ask for saving, possible cancellation etc.
+            }
+
+            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Animator.Designer.BusinessLogic.Resources.EmptyDocument.xml");
+            var xmlDocument = new XmlDocument();
+            xmlDocument.Load(stream);
+
+            var serializer = new MovieSerializer();
+            (var root, var wrapperContext) = serializer.Deserialize(xmlDocument, null);
+
+            Document = new DocumentViewModel(root, wrapperContext);
+        }
 
         private void DoOpen()
         {
@@ -66,11 +84,15 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             this.dialogService = dialogService;
             this.messagingService = messagingService;
 
+            NewCommand = new AppCommand(obj => DoNew());
             OpenCommand = new AppCommand(obj => DoOpen());
+
+            DoNew();
         }
 
         // Public properties --------------------------------------------------
 
+        public ICommand NewCommand { get; }
         public ICommand OpenCommand { get; }
 
         public DocumentViewModel Document

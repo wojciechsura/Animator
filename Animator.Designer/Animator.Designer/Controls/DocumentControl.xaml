@@ -25,18 +25,18 @@
         
         <Style x:Key="ClassNameText" TargetType="TextBlock">
             <Style.Setters>
-                <Setter Property="Foreground" Value="#808080" />
+                <Setter Property="Foreground" Value="#000000" />
                 <Setter Property="FontSize" Value="12" />
             </Style.Setters>
         </Style>
 
         <Style x:Key="EngineText" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#808080" />
+            <Setter Property="Foreground" Value="#000000" />
             <Setter Property="FontSize" Value="12" />
         </Style>
 
         <Style x:Key="NameText" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#000000" />
+            <Setter Property="Foreground" Value="#808080" />
             <Setter Property="FontSize" Value="12" />
         </Style>
 
@@ -56,7 +56,7 @@
         </Style>
 
         <Style x:Key="PropertiesText" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#000000" />
+            <Setter Property="Foreground" Value="#808080" />
             <Setter Property="FontSize" Value="12" />
             <Setter Property="FontStyle" Value="Italic" />
         </Style>
@@ -103,10 +103,7 @@
 
         <DataTemplate x:Key="ManagedSimplePropertyTemplate" DataType="{x:Type vmp:ManagedSimplePropertyViewModel}">
             <DockPanel>
-                <local:PropertyPopup DockPanel.Dock="Right" Margin="3" 
-                                     ShowSetToDefault="True" EnableSetToDefault="{Binding Value, Converter={StaticResource DoesNotMatchTypeToBoolConverter}, ConverterParameter={x:Type vmv:DefaultValueViewModel}}" 
-                                     ShowSetToString="True" EnableSetToString="{Binding Value, Converter={StaticResource DoesNotMatchTypeToBoolConverter}, ConverterParameter={x:Type vmv:StringValueViewModel}}" 
-                                     ShowSetToCollection="False" />
+                <local:PropertyPopup DockPanel.Dock="Right" Margin="3" />
                 
                 <ContentControl Content="{Binding Value}">
                     <ContentControl.Resources>
@@ -142,10 +139,7 @@
 
         <DataTemplate x:Key="ManagedCollectionPropertyTemplate" DataType="{x:Type vmp:ManagedCollectionPropertyViewModel}">
             <DockPanel>
-                <local:PropertyPopup DockPanel.Dock="Right" Margin="3" 
-                                     ShowSetToDefault="False" 
-                                     ShowSetToString="True" EnableSetToString="{Binding Value, Converter={StaticResource DoesNotMatchTypeToBoolConverter}, ConverterParameter={x:Type vmv:StringValueViewModel}}" 
-                                     ShowSetToCollection="True" EnableSetToCollection="{Binding Value, Converter={StaticResource DoesNotMatchTypeToBoolConverter}, ConverterParameter={x:Type vmv:CollectionValueViewModel}}" />
+                <local:PropertyPopup DockPanel.Dock="Right" Margin="3" />
 
                 <ContentControl Content="{Binding Value}">
                     <ContentControl.Resources>
@@ -175,10 +169,7 @@
 
         <DataTemplate x:Key="ManagedReferencePropertyTemplate" DataType="{x:Type vmp:ManagedReferencePropertyViewModel}">
             <DockPanel>
-                <local:PropertyPopup DockPanel.Dock="Right" Margin="3" 
-                                     ShowSetToDefault="True" EnableSetToDefault="{Binding Value, Converter={StaticResource DoesNotMatchTypeToBoolConverter}, ConverterParameter={x:Type vmv:DefaultValueViewModel}}" 
-                                     ShowSetToString="True" EnableSetToString="{Binding Value, Converter={StaticResource DoesNotMatchTypeToBoolConverter}, ConverterParameter={x:Type vmv:StringValueViewModel}}" 
-                                     ShowSetToCollection="False" />
+                <local:PropertyPopup DockPanel.Dock="Right" Margin="3" />
 
                 <ContentControl Content="{Binding Value}">
                     <ContentControl.Resources>
@@ -211,12 +202,35 @@
             </DockPanel>
         </DataTemplate>
 
+        <DataTemplate x:Key="ReferencePropertyTemplate" DataType="{x:Type vmp:ReferencePropertyViewModel}">
+            <DockPanel>
+                <local:PropertyPopup DockPanel.Dock="Right" Margin="3" />
+
+                <ContentControl Content="{Binding Value}">
+                    <ContentControl.Resources>
+                        <DataTemplate DataType="{x:Type vmv:ReferenceValueViewModel}">
+                            <DockPanel Background="{StaticResource ReferenceBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <TextBlock Margin="3" Text="(Object)" VerticalAlignment="Center" />
+                            </DockPanel>
+                        </DataTemplate>
+
+                        <DataTemplate DataType="{x:Type vmv:DefaultValueViewModel}">
+                            <DockPanel Background="{StaticResource DefaultBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <TextBlock Margin="3" Text="(Empty object)" VerticalAlignment="Center" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ContentControl.Resources>
+                </ContentControl>
+            </DockPanel>
+        </DataTemplate>
+
         <local:PropertyEditorTemplateSelector x:Key="PropertyEditorTemplateSelector" 
                                               StringPropertyTemplate="{StaticResource StringPropertyTemplate}" 
                                               MultilineStringPropertyTemplate="{StaticResource MultilineStringPropertyTemplate}"
                                               ManagedSimplePropertyTemplate="{StaticResource ManagedSimplePropertyTemplate}" 
                                               ManagedCollectionPropertyTemplate="{StaticResource ManagedCollectionPropertyTemplate}" 
-                                              ManagedReferencePropertyTemplate="{StaticResource ManagedReferencePropertyTemplate}" />
+                                              ManagedReferencePropertyTemplate="{StaticResource ManagedReferencePropertyTemplate}" 
+                                              ReferencePropertyTemplate="{StaticResource ReferencePropertyTemplate}"/>
 
         <!--#endregion-->
         
@@ -276,7 +290,8 @@
         <!-- Hierarchy tree -->
         
         <GroupBox Header="Hierarchy" Grid.Column="4">
-            <TreeView ItemsSource="{Binding DisplayItems}" SelectedItemChanged="TreeView_SelectedItemChanged">
+            <TreeView ItemsSource="{Binding DisplayItems}" SelectedItemChanged="TreeView_SelectedItemChanged"
+                      PreviewMouseDown="TreeView_PreviewMouseDown">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="TreeViewItem">
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
@@ -314,6 +329,10 @@
                                                 </Style>
                                             </MenuItem.ItemContainerStyle>
                                         </MenuItem>
+
+                                        <MenuItem Visibility="{Binding InsertMacroCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                                                  Background="#400040ff" Header="{x:Static res:Strings.InsertMacro}"
+                                                  Command="{Binding InsertMacroCommand}" />
 
                                         <MenuItem Visibility="{Binding DeleteCommand, Converter={StaticResource NullToVisibilityConverter}}"
                                                   Header="{x:Static res:Strings.Delete}" Command="{Binding DeleteCommand}" />
@@ -388,6 +407,10 @@
                                             </Style>
                                         </MenuItem.ItemContainerStyle>
                                     </MenuItem>
+
+                                    <MenuItem Visibility="{Binding InsertMacroCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                                                  Background="#400040ff" Header="{x:Static res:Strings.InsertMacro}"
+                                                  Command="{Binding InsertMacroCommand}" />
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                             <Image Margin="{StaticResource IconMargin}" Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource ImageKeyConverter}}" />
@@ -397,6 +420,52 @@
                         <HierarchicalDataTemplate.Triggers>
                             <DataTrigger Binding="{Binding IsSelected}" Value="True">
                                 <Setter TargetName="Property" Property="Foreground" Value="#ffffff" />
+                            </DataTrigger>
+                        </HierarchicalDataTemplate.Triggers>
+                    </HierarchicalDataTemplate>
+
+                    <!-- Macro definitions -->
+
+                    <HierarchicalDataTemplate DataType="{x:Type vmw:MacrosProxyViewModel}" ItemsSource="{Binding DisplayChildren}">
+                        <StackPanel Orientation="Horizontal" Margin="{StaticResource TreeItemMargin}">
+                            <StackPanel.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="{x:Static res:Strings.AddMacro}" Command="{Binding AddMacroCommand}" />
+                                </ContextMenu>
+                            </StackPanel.ContextMenu>
+                            <Image Margin="{StaticResource IconMargin}" Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource ImageKeyConverter}}" />
+                            <TextBlock Name="Name" Style="{StaticResource PropertyText}" Text="Macros" />
+                        </StackPanel>
+
+                        <HierarchicalDataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter TargetName="Name" Property="Foreground" Value="#ffffff" />
+                            </DataTrigger>
+                        </HierarchicalDataTemplate.Triggers>
+                    </HierarchicalDataTemplate>
+                    
+                    <!-- Macro definition -->
+
+                    <HierarchicalDataTemplate DataType="{x:Type vmw:MacroDefinitionViewModel}" ItemsSource="{Binding DisplayChildren}">
+                        <StackPanel Orientation="Horizontal" Margin="{StaticResource TreeItemMargin}">
+                            <StackPanel.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Visibility="{Binding DeleteCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                                                      Header="{x:Static res:Strings.Delete}" Command="{Binding DeleteCommand}" />
+                                </ContextMenu>
+                            </StackPanel.ContextMenu>
+                            <Image Margin="{StaticResource IconMargin}" Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource ImageKeyConverter}}" />
+
+                            <TextBlock Name="Name" Style="{StaticResource EngineText}" Text="Macro definition" />
+                            <TextBlock Name="NameDash" Style="{StaticResource EngineText}" Text=" - " />
+                            <TextBlock Name="Key" Style="{StaticResource KeyText}" Text="{Binding Key}" />
+                        </StackPanel>
+
+                        <HierarchicalDataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                <Setter TargetName="Key" Property="Foreground" Value="#ffffff" />
+                                <Setter TargetName="Name" Property="Foreground" Value="#ffffff" />
+                                <Setter TargetName="NameDash" Property="Foreground" Value="#ffffff" />
                             </DataTrigger>
                         </HierarchicalDataTemplate.Triggers>
                     </HierarchicalDataTemplate>
@@ -445,6 +514,11 @@
                     <HierarchicalDataTemplate DataType="{x:Type vmw:MacroViewModel}" ItemsSource="{Binding DisplayChildren}">
                         <Grid Margin="{StaticResource TreeItemMargin}">
                             <StackPanel Orientation="Horizontal">
+                                <StackPanel.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="{x:Static res:Strings.Delete}" Command="{Binding DeleteCommand}" />
+                                    </ContextMenu>
+                                </StackPanel.ContextMenu>
                                 <Image Margin="{StaticResource IconMargin}" Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource ImageKeyConverter}}" />
                                 
                                 <TextBlock Name="Name" Style="{StaticResource EngineText}" Text="Place macro" />
@@ -457,28 +531,6 @@
                             <DataTrigger Binding="{Binding IsSelected}" Value="True">
                                 <Setter TargetName="Key" Property="Foreground" Value="#ffffff" />
                                 <Setter TargetName="Name" Property="Foreground" Value="#ffffff" />
-                            </DataTrigger>
-                        </HierarchicalDataTemplate.Triggers>
-                    </HierarchicalDataTemplate>
-
-                    <!-- Macro entry -->
-
-                    <HierarchicalDataTemplate DataType="{x:Type vmw:MacroEntryViewModel}" ItemsSource="{Binding DisplayChildren}">
-                        <Grid Margin="{StaticResource TreeItemMargin}">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Margin="{StaticResource IconMargin}" Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource ImageKeyConverter}}" />
-
-                                <TextBlock Name="Name" Style="{StaticResource EngineText}" Text="Macro definition" />
-                                <TextBlock Name="NameDash" Style="{StaticResource EngineText}" Text=" - " />
-                                <TextBlock Name="Key" Style="{StaticResource KeyText}" Text="{Binding Key}" />
-                            </StackPanel>
-                        </Grid>
-
-                        <HierarchicalDataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                <Setter TargetName="Key" Property="Foreground" Value="#ffffff" />
-                                <Setter TargetName="Name" Property="Foreground" Value="#ffffff" />
-                                <Setter TargetName="NameDash" Property="Foreground" Value="#ffffff" />
                             </DataTrigger>
                         </HierarchicalDataTemplate.Triggers>
                     </HierarchicalDataTemplate>

@@ -11,16 +11,29 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Resources\Images\Icons\Animations16.png" />
     <None Remove="Resources\Images\Icons\Generator16.png" />
     <None Remove="Resources\Images\Icons\Generic16.png" />
     <None Remove="Resources\Images\Icons\Include16.png" />
     <None Remove="Resources\Images\Icons\MacroDefinition16.png" />
+    <None Remove="Resources\Images\Icons\MacroDefinitions16.png" />
     <None Remove="Resources\Images\Icons\MarkupExtension16.png" />
     <None Remove="Resources\Images\Icons\PlaceMacro16.png" />
     <None Remove="Resources\Images\Icons\Properties16.png" />
     <None Remove="Resources\Images\Icons\Property16.png" />
+    <None Remove="Resources\Images\Icons\Resources16.png" />
+    <None Remove="Resources\Images\New16.png" />
+    <None Remove="Resources\Images\New32.png" />
     <None Remove="Resources\Images\Open16.png" />
     <None Remove="Resources\Images\Open32.png" />
+    <None Remove="Resources\Images\Save16.png" />
+    <None Remove="Resources\Images\Save32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Animations16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Resources16.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="7.1.0" />
@@ -45,11 +58,16 @@
     <Resource Include="Resources\Images\Icons\Generic16.png" />
     <Resource Include="Resources\Images\Icons\Include16.png" />
     <Resource Include="Resources\Images\Icons\MacroDefinition16.png" />
+    <Resource Include="Resources\Images\Icons\MacroDefinitions16.png" />
     <Resource Include="Resources\Images\Icons\MarkupExtension16.png" />
     <Resource Include="Resources\Images\Icons\PlaceMacro16.png" />
     <Resource Include="Resources\Images\Icons\Properties16.png" />
     <Resource Include="Resources\Images\Icons\Property16.png" />
+    <Resource Include="Resources\Images\New16.png" />
+    <Resource Include="Resources\Images\New32.png" />
     <Resource Include="Resources\Images\Open16.png" />
     <Resource Include="Resources\Images\Open32.png" />
+    <Resource Include="Resources\Images\Save16.png" />
+    <Resource Include="Resources\Images\Save32.png" />
   </ItemGroup>
 </Project>

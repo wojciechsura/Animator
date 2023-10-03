@@ -46,6 +46,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             Value = new ReferenceValueViewModel(obj);
         }
 
+        private void InsertMacro()
+        {
+            var obj = new MacroViewModel(context);
+            Value = new ReferenceValueViewModel(obj);
+        }
+
         private void SetToString()
         {
             Value = new StringValueViewModel(string.Empty);
@@ -86,6 +92,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             SetDefaultCommand = new AppCommand(obj => SetDefault(), !valueIsDefaultCondition);
             SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
             SetToInstanceCommand = new AppCommand(obj => SetToInstance((Type)obj));
+            InsertMacroCommand = new AppCommand(obj => InsertMacro());
         }
 
         public override void RequestDelete(BaseObjectViewModel obj)
@@ -97,6 +104,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         {
             throw new NotSupportedException();
         }
+
         public override IEnumerable<TypeViewModel> AvailableTypes
         {
             get

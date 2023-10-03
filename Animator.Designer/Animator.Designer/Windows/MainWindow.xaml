@@ -28,6 +28,10 @@
                     <f:Button Header="{x:Static res:Strings.Open}" Command="{Binding OpenCommand}" SizeDefinition="Large" 
                               LargeIcon="pack://application:,,,/Animator.Designer;component/Resources/Images/Open32.png"
                               Icon="pack://application:,,,/Animator.Designer;component/Resources/Images/Open16.png"/>
+                    
+                    <f:Button Header="{x:Static res:Strings.New}" Command="{Binding NewCommand}" SizeDefinition="Middle"
+                              LargeIcon="pack://application:,,,/Animator.Designer;component/Resources/Images/New32.png"
+                              Icon="pack://application:,,,/Animator.Designer;component/Resources/Images/New16.png"/>
                 </f:RibbonGroupBox>
             </f:RibbonTabItem>
         </f:Ribbon>

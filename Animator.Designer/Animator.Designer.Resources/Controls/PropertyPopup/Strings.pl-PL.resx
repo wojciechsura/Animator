@@ -132,4 +132,7 @@
   <data name="AddInstance" xml:space="preserve">
     <value>Dodaj do kolekcji</value>
   </data>
+  <data name="InsertMacro" xml:space="preserve">
+    <value>Wstaw makro</value>
+  </data>
 </root>

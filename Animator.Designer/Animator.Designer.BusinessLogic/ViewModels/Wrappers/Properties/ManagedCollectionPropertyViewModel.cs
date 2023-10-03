@@ -17,7 +17,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 {
     public class ManagedCollectionPropertyViewModel : ManagedPropertyViewModel
     {
+        // Private fields -----------------------------------------------------
+
         private readonly ManagedCollectionProperty collectionProperty;
+
+        // Private methods ----------------------------------------------------
 
         private void AddInstance(Type type)
         {
@@ -36,6 +40,15 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             var ns = type.ToNamespaceDefinition().ToString();
 
             var obj = new ManagedObjectViewModel(context, ns, type.Name, type);
+            (value as CollectionValueViewModel).Items.Add(obj);
+        }
+
+        private void InsertMacro()
+        {
+            if (value is not CollectionValueViewModel)
+                throw new InvalidOperationException("Switch to collection mode first!");
+
+            var obj = new MacroViewModel(context);
             (value as CollectionValueViewModel).Items.Add(obj);
         }
 
@@ -59,6 +72,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         {
             Value = new StringValueViewModel(string.Empty);
         }
+
+        // Protected methods --------------------------------------------------
 
         protected override void OnSetValue(ValueViewModel value)
         {
@@ -93,6 +108,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 throw new ArgumentException($"ManagedCollectionPropertyViewModel does not support value of type {value}!");
         }
 
+        // Public methods -----------------------------------------------------
+
         public ManagedCollectionPropertyViewModel(ObjectViewModel parent, WrapperContext context, ManagedCollectionProperty collectionProperty)
             : base(parent, context, collectionProperty)
         {
@@ -104,7 +121,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
             SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
             SetToCollectionCommand = new AppCommand(obj => SetToCollection(), !valueIsCollectionCondition);
-            AddInstanceCommand = new AppCommand(obj => AddInstance((Type)obj));
+            AddInstanceCommand = new AppCommand(obj => AddInstance((Type)obj), valueIsStringCondition);
+            InsertMacroCommand = new AppCommand(obj => InsertMacro(), valueIsCollectionCondition);
         }
 
         public override void RequestDelete(BaseObjectViewModel obj)
@@ -131,6 +149,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         {
             throw new NotSupportedException();
         }
+
+        // Public properties --------------------------------------------------
 
         public override IEnumerable<TypeViewModel> AvailableTypes
         {

@@ -55,5 +55,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public ICommand SetToCollectionCommand { get; init; }
         public ICommand SetToInstanceCommand { get; init; }
         public ICommand AddInstanceCommand { get; init; }
+        public ICommand InsertMacroCommand { get; init; }
     }
 }

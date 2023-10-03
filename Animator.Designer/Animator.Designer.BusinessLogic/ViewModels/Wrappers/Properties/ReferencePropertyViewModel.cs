@@ -1,6 +1,10 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
+using Animator.Engine.Base.Extensions;
+using Spooksoft.VisualStateManager.Commands;
+using Spooksoft.VisualStateManager.Conditions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,7 +16,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 {
     public class ReferencePropertyViewModel : PropertyViewModel
     {
+        // Private fields -----------------------------------------------------
+
         private ValueViewModel value;
+        private List<TypeViewModel> availableTypes;
+
+        // Private methods ----------------------------------------------------
 
         private void HandleReferenceValueChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -31,22 +40,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             if (this.value != null)
                 this.value.Parent = null;
 
-            // Unhook existing value change handlers
-            if (Value is ReferenceValueViewModel currentReference)
-            {
-                currentReference.PropertyChanged -= HandleReferenceValueChanged;
-            }
-
             // Set new value
-            if (value is ReferenceValueViewModel)
+            if (value is ReferenceValueViewModel or DefaultValueViewModel)
             {
-                Set(ref this.value, value);
-                value.PropertyChanged += HandleReferenceValueChanged;
-                value.Parent = this;
-            }
-            else if (value is DefaultValueViewModel)
-            {
-                Set(ref this.value, value);
+                Set(ref this.value, value, nameof(Value));
                 value.Parent = this;
             }
             else
@@ -55,35 +52,74 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             }
         }
 
+        private void SetToInstance(Type type)
+        {
+            // Find namespace model
+            var namespaceViewModel = context.Namespaces.FirstOrDefault(cns => cns.Assembly == type.Assembly && cns.Namespace == type.Namespace);
+
+            // Sanity check
+            if (namespaceViewModel == null)
+                throw new InvalidOperationException("Namespace for created object is missing in WrapperContext!");
+
+            var ns = type.ToNamespaceDefinition().ToString();
+
+            var obj = new ManagedObjectViewModel(context, ns, type.Name, type);
+            Value = new ReferenceValueViewModel(obj);
+        }
+
+        // Protected methods --------------------------------------------------        
+
         protected void OnReferenceValueChanged() =>
             ReferenceValueChanged?.Invoke(this, EventArgs.Empty);
+
+        // Public methods -----------------------------------------------------
+
+        public ReferencePropertyViewModel(ObjectViewModel parent, 
+            WrapperContext context, 
+            string ns, 
+            string name, 
+            List<Type> availableTypes)
+            : base(parent, context)
+        {
+            Namespace = ns;
+            Name = name;
+
+            SetDefault();
+
+            var valueIsDefaultCondition = Condition.Lambda(this, vm => vm.Value is DefaultValueViewModel, false);
+
+            SetDefaultCommand = new AppCommand(obj => SetDefault(), !valueIsDefaultCondition);
+            SetToInstanceCommand = new AppCommand(obj => SetToInstance((Type)obj));
+
+            this.availableTypes = availableTypes
+                .Select(t => new TypeViewModel(t, SetToInstanceCommand))
+                .ToList();
+        }
 
         public override void RequestDelete(BaseObjectViewModel obj)
         {
             SetDefault();
         }
 
-        public ReferencePropertyViewModel(ObjectViewModel parent, WrapperContext context, string ns, string name)
-            : base(parent, context)
-        {
-            Namespace = ns;
-            Name = name;
-        }
-
         public override void RequestSwitchToString()
         {
             throw new NotSupportedException();
         }
+
+        // Public properties --------------------------------------------------
+
         public override string Name { get; }
 
         public override string Namespace { get; }
-
-        public event EventHandler ReferenceValueChanged;
 
         public ValueViewModel Value
         {
             get => value;
             set => SetValue(value);
         }
+
+        public override IEnumerable<TypeViewModel> AvailableTypes => availableTypes;
+
+        public event EventHandler ReferenceValueChanged;
     }
 }

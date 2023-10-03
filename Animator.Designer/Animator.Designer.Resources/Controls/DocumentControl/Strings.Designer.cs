@@ -79,11 +79,38 @@ namespace Animator.Designer.Resources.Controls.DocumentControl {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Add macro definition.
+        /// </summary>
+        public static string AddMacro {
+            get {
+                return ResourceManager.GetString("AddMacro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Delete.
         /// </summary>
         public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Insert macro.
+        /// </summary>
+        public static string InsertMacro {
+            get {
+                return ResourceManager.GetString("InsertMacro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Macros.
+        /// </summary>
+        public static string Macros {
+            get {
+                return ResourceManager.GetString("Macros", resourceCulture);
             }
         }
         

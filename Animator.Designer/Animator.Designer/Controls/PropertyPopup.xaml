@@ -52,6 +52,10 @@
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>
 
+                <MenuItem Visibility="{Binding InsertMacroCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                          Background="#400040ff" Header="{x:Static res:Strings.InsertMacro}" 
+                          Command="{Binding InsertMacroCommand}" />
+
             </ContextMenu>
         </Button.ContextMenu>
     </Button>
