@@ -1,6 +1,8 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
+using Animator.Engine.Base.Extensions;
 using Newtonsoft.Json.Linq;
 using Spooksoft.VisualStateManager.Commands;
 using System;
@@ -31,6 +33,14 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             }
         }
 
+        private void SetToMarkupExtension(Type type)
+        {
+            var namespaceDefinition = type.ToNamespaceDefinition();
+            var markupExtensionViewModel = new MarkupExtensionViewModel(context, namespaceDefinition.ToString(), type.Name, type);
+            var markupExtensionValue = new MarkupExtensionValueViewModel(markupExtensionViewModel);
+            Value = markupExtensionValue;
+        }
+
         protected ValueViewModel value;
 
         protected void OnStringValueChanged() => StringValueChanged?.Invoke(this, EventArgs.Empty);
@@ -43,6 +53,18 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         {
             Name = property.Name;
             Namespace = context.DefaultNamespace;
+
+            SetToMarkupExtensionCommand = new AppCommand(obj => SetToMarkupExtension((Type)obj));
+        }
+
+        public override IEnumerable<TypeViewModel> AvailableMarkupExtensions
+        {
+            get
+            {
+                return context.Namespaces.SelectMany(ns => ns.GetAvailableTypesFor(typeof(Animator.Engine.Base.BaseMarkupExtension)))
+                    .OrderBy(mx => mx.Name)
+                    .Select(type => new TypeViewModel(type, SetToMarkupExtensionCommand));
+            }
         }
 
         public abstract ManagedProperty ManagedProperty { get; }

@@ -58,9 +58,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 value.PropertyChanged += HandleStringValueChanged;
                 Set(ref this.value, value, nameof(Value));
             }
-            else if (value is MarkupExtensionValueViewModel)
-                Set(ref this.value, value, nameof(Value));
-            else if (value is DefaultValueViewModel)
+            else if (value is DefaultValueViewModel or MarkupExtensionValueViewModel)
                 Set(ref this.value, value, nameof(Value));
             else
                 throw new ArgumentException($"ManagedSimplePropertyViewModel does not support value of type {value}!");

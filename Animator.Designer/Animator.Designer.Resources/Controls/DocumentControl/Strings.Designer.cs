@@ -140,5 +140,14 @@ namespace Animator.Designer.Resources.Controls.DocumentControl {
                 return ResourceManager.GetString("SetToInstance", resourceCulture);
             }
         }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Use markup extension.
+        /// </summary>
+        public static string SetToMarkupExtension {
+            get {
+                return ResourceManager.GetString("SetToMarkupExtension", resourceCulture);
+            }
+        }
     }
 }

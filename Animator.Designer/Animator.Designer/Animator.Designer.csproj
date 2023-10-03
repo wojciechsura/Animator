@@ -11,7 +11,9 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Resources\Images\Icons\AddInstance16.png" />
     <None Remove="Resources\Images\Icons\Animations16.png" />
+    <None Remove="Resources\Images\Icons\Delete16.png" />
     <None Remove="Resources\Images\Icons\Generator16.png" />
     <None Remove="Resources\Images\Icons\Generic16.png" />
     <None Remove="Resources\Images\Icons\Include16.png" />
@@ -22,6 +24,10 @@
     <None Remove="Resources\Images\Icons\Properties16.png" />
     <None Remove="Resources\Images\Icons\Property16.png" />
     <None Remove="Resources\Images\Icons\Resources16.png" />
+    <None Remove="Resources\Images\Icons\SetCollection16.png" />
+    <None Remove="Resources\Images\Icons\SetDefault16.png" />
+    <None Remove="Resources\Images\Icons\SetInstance16.png" />
+    <None Remove="Resources\Images\Icons\SetString16.png" />
     <None Remove="Resources\Images\New16.png" />
     <None Remove="Resources\Images\New32.png" />
     <None Remove="Resources\Images\Open16.png" />
@@ -30,7 +36,9 @@
     <None Remove="Resources\Images\Save32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\Icons\AddInstance16.png" />
     <Resource Include="Resources\Images\Icons\Animations16.png" />
+    <Resource Include="Resources\Images\Icons\Delete16.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Icons\Resources16.png" />
@@ -63,6 +71,10 @@
     <Resource Include="Resources\Images\Icons\PlaceMacro16.png" />
     <Resource Include="Resources\Images\Icons\Properties16.png" />
     <Resource Include="Resources\Images\Icons\Property16.png" />
+    <Resource Include="Resources\Images\Icons\SetCollection16.png" />
+    <Resource Include="Resources\Images\Icons\SetDefault16.png" />
+    <Resource Include="Resources\Images\Icons\SetInstance16.png" />
+    <Resource Include="Resources\Images\Icons\SetString16.png" />
     <Resource Include="Resources\Images\New16.png" />
     <Resource Include="Resources\Images\New32.png" />
     <Resource Include="Resources\Images\Open16.png" />

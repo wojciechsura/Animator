@@ -144,4 +144,7 @@
   <data name="InsertMacro" xml:space="preserve">
     <value>Wstaw makro</value>
   </data>
+  <data name="SetToMarkupExtension" xml:space="preserve">
+    <value>Użyj rozszerzenia</value>
+  </data>
 </root>

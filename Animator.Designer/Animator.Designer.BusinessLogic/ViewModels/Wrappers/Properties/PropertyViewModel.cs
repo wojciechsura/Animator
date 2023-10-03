@@ -29,7 +29,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public PropertyViewModel(ObjectViewModel parent, WrapperContext context)
         {
             Parent = parent;
-            this.context = context;
+            this.context = context;            
         }
 
         public bool IsSelected
@@ -46,6 +46,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
         public virtual IEnumerable<TypeViewModel> AvailableTypes { get; } = null;
 
+        public virtual IEnumerable<TypeViewModel> AvailableMarkupExtensions { get; } = null;
+
         public ObjectViewModel Parent { get; set; }
 
         public IList<string> AvailableOptions { get; init; }
@@ -56,5 +58,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public ICommand SetToInstanceCommand { get; init; }
         public ICommand AddInstanceCommand { get; init; }
         public ICommand InsertMacroCommand { get; init; }
+        public ICommand SetToMarkupExtensionCommand { get; init; }
     }
 }

@@ -117,7 +117,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
             if (contentProperty != null)
             {
-                if (contentProperty is ManagedReferencePropertyViewModel reference)
+                if (contentProperty.Value is MarkupExtensionValueViewModel markupExtension)
+                {
+                    yield return markupExtension.Value;
+                }
+                else if (contentProperty is ManagedReferencePropertyViewModel reference)
                 {
                     if (reference.Value is ReferenceValueViewModel refValue && refValue.Value != null)
                         yield return refValue.Value;
@@ -366,6 +370,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public ICommand InsertMacroCommand => contentProperty?.InsertMacroCommand;
 
+        public ICommand SetToMarkupExtensionCommand => contentProperty?.SetToMarkupExtensionCommand;
+
         public IEnumerable<TypeViewModel> AvailableTypes => contentProperty?.AvailableTypes;
+
+        public IEnumerable<TypeViewModel> AvailableMarkupExtensions => contentProperty?.AvailableMarkupExtensions;
     }
 }

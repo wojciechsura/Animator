@@ -121,8 +121,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
             SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
             SetToCollectionCommand = new AppCommand(obj => SetToCollection(), !valueIsCollectionCondition);
-            AddInstanceCommand = new AppCommand(obj => AddInstance((Type)obj), valueIsStringCondition);
-            InsertMacroCommand = new AppCommand(obj => InsertMacro(), valueIsCollectionCondition);
+            AddInstanceCommand = new AppCommand(obj => AddInstance((Type)obj), valueIsCollectionCondition);
+            InsertMacroCommand = new AppCommand(obj => InsertMacro(), valueIsCollectionCondition);            
         }
 
         public override void RequestDelete(BaseObjectViewModel obj)

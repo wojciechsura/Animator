@@ -106,6 +106,15 @@ namespace Animator.Designer.Resources.Controls.PropertyPopup {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Use markup extension.
+        /// </summary>
+        public static string SetToMarkupExtension {
+            get {
+                return ResourceManager.GetString("SetToMarkupExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Switch to value.
         /// </summary>
         public static string SetToString {
