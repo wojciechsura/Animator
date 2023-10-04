@@ -38,14 +38,15 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         {
             { typeof(Animator.Engine.Elements.SceneElement), (NamespaceType.Default, nameof(Animator.Engine.Elements.SceneElement.Name), "#808080") },
             { typeof(Animator.Engine.Elements.Resource), (NamespaceType.Default, nameof(Animator.Engine.Elements.Resource.Key), "#0000ff") },
-            { typeof(Animator.Engine.Elements.AnimateProperty), (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateProperty.PropertyRef), "#ff8000") }
+            { typeof(Animator.Engine.Elements.AnimateProperty), (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateProperty.PropertyRef), "#ff8000") },
+            { typeof(Animator.Engine.Elements.For), (NamespaceType.Default, nameof(Animator.Engine.Elements.For.PropertyRef), "#ff8000") }
         };
 
         private static readonly Dictionary<Type, (NamespaceType Namespace, string Property)> valuePropDefinitions = new()
         {
             { typeof(Animator.Engine.Elements.Label), (NamespaceType.Default, nameof(Animator.Engine.Elements.Label.Text)) },
             { typeof(Animator.Engine.Elements.Image), (NamespaceType.Default, nameof(Animator.Engine.Elements.Image.Source)) },
-            { typeof(Animator.Engine.Elements.SvgImage), (NamespaceType.Default, nameof(Animator.Engine.Elements.SvgImage.Source)) }
+            { typeof(Animator.Engine.Elements.SvgImage), (NamespaceType.Default, nameof(Animator.Engine.Elements.SvgImage.Source)) },
         };
 
         private static readonly Dictionary<(NamespaceType Namespace, string Name), string> icons = new()
