@@ -115,4 +115,13 @@
   <data name="New" xml:space="preserve">
     <value>New</value>
   </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Save as...</value>
+  </data>
+  <data name="Message_FailedToSaveDocument" xml:space="preserve">
+    <value>Failed to save animation. Error: {0}</value>
+  </data>
 </root>

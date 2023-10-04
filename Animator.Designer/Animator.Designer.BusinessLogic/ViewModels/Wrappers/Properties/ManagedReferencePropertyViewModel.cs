@@ -34,7 +34,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         private void SetToInstance(Type type)
         {
             // Find namespace model
-            var namespaceViewModel = context.Namespaces.FirstOrDefault(cns => cns.Assembly == type.Assembly && cns.Namespace == type.Namespace);
+            var namespaceViewModel = context.Namespaces
+                .OfType<AssemblyNamespaceViewModel>()
+                .FirstOrDefault(cns => cns.Assembly == type.Assembly && cns.Namespace == type.Namespace);
 
             // Sanity check
             if (namespaceViewModel == null)
@@ -125,6 +127,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             {
                 var refPropertyType = referenceProperty.Type;
                 return context.Namespaces
+                    .OfType<AssemblyNamespaceViewModel>()
                     .SelectMany(ns => ns.GetAvailableTypesFor(refPropertyType))
                     .OrderBy(tvm => tvm.Name)
                     .Select(t => new TypeViewModel(t, SetToInstanceCommand));

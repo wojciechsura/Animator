@@ -32,6 +32,14 @@
                     <f:Button Header="{x:Static res:Strings.New}" Command="{Binding NewCommand}" SizeDefinition="Middle"
                               LargeIcon="pack://application:,,,/Animator.Designer;component/Resources/Images/New32.png"
                               Icon="pack://application:,,,/Animator.Designer;component/Resources/Images/New16.png"/>
+
+                    <f:Button Header="{x:Static res:Strings.Save}" Command="{Binding SaveCommand}" SizeDefinition="Middle"
+                              LargeIcon="pack://application:,,,/Animator.Designer;component/Resources/Images/Save32.png"
+                              Icon="pack://application:,,,/Animator.Designer;component/Resources/Images/Save16.png"/>
+
+                    <f:Button Header="{x:Static res:Strings.SaveAs}" Command="{Binding SaveAsCommand}" SizeDefinition="Middle"
+                              LargeIcon="pack://application:,,,/Animator.Designer;component/Resources/Images/Save32.png"
+                              Icon="pack://application:,,,/Animator.Designer;component/Resources/Images/Save16.png"/>
                 </f:RibbonGroupBox>
             </f:RibbonTabItem>
         </f:Ribbon>

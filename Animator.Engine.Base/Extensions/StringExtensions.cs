@@ -143,5 +143,12 @@ namespace Animator.Engine.Base.Extensions
 
             return result.ToString();            
         }
+
+        public static string Quote(this string s)
+        {
+            s = s.Replace("\\", "\\\\");
+            s = s.Replace("'", "\\'");
+            return $"'{s}'";
+        }
     }
 }

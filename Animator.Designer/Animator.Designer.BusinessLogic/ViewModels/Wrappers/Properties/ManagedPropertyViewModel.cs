@@ -61,7 +61,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         {
             get
             {
-                return context.Namespaces.SelectMany(ns => ns.GetAvailableTypesFor(typeof(Animator.Engine.Base.BaseMarkupExtension)))
+                return context.Namespaces
+                    .OfType<AssemblyNamespaceViewModel>()
+                    .SelectMany(ns => ns.GetAvailableTypesFor(typeof(Animator.Engine.Base.BaseMarkupExtension)))
                     .OrderBy(mx => mx.Name)
                     .Select(type => new TypeViewModel(type, SetToMarkupExtensionCommand));
             }

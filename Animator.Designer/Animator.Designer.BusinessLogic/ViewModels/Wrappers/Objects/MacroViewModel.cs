@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
@@ -34,6 +35,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public MacroViewModel(WrapperContext context) 
             : base(context)
         {
+            Name = "Macro";
             Namespace = context.EngineNamespace;
             keyProperty = new StringPropertyViewModel(this, context, context.EngineNamespace, "Key");
             keyProperty.PropertyChanged += HandleKeyChanged;
@@ -42,6 +44,17 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             Icon = "PlaceMacro16.png";
 
             DeleteCommand = new AppCommand(obj => DoDelete());
+        }
+
+        public override XmlElement Serialize(XmlDocument document)
+        {
+            var result = CreateRootElement(document);
+
+            var keyProp = CreateAttributeProp(document, "Key", Namespace);
+            keyProp.Value = keyProperty.Value;
+            result.Attributes.Append(keyProp);
+
+            return result;
         }
 
         public StringPropertyViewModel AddProperty(string propertyName)
@@ -73,7 +86,5 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public ICommand DeleteCommand { get; }
 
         public string Key => keyProperty.Value;
-
-        public string Namespace { get; }
     }
 }

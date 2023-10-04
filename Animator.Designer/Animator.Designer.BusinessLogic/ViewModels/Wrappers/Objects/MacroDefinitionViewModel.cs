@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
@@ -43,6 +44,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public MacroDefinitionViewModel(WrapperContext context)
             : base(context)
         {
+            Name = "Macro";
             Namespace = context.EngineNamespace;
 
             key = new StringPropertyViewModel(this, context, context.EngineNamespace, "Key");
@@ -50,6 +52,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             properties.Add(key);
 
             var availableTypes = context.Namespaces
+                .OfType<AssemblyNamespaceViewModel>()
                 .SelectMany(n => n.GetAvailableTypesFor(typeof(Animator.Engine.Elements.Element)))
                 .OrderBy(e => e.Name)                
                 .ToList();
@@ -63,11 +66,32 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             Icon = "MacroDefinition16.png";
         }
 
+        public override XmlElement Serialize(XmlDocument document)
+        {
+            XmlElement result;
+
+            if (content.Value is DefaultValueViewModel)
+            {
+                result = document.CreateElement(nameof(Animator.Engine.Elements.Element));
+            }
+            else if (content.Value is ReferenceValueViewModel refValue)
+            {
+                result = refValue.Value.Serialize(document);
+            }
+            else
+                throw new InvalidOperationException($"Unsupported macro definition content value: {content.Value}");
+
+            var keyProp = CreateAttributeProp(document, "Key", Namespace);
+            keyProp.Value = key.Value;
+            
+            result.Attributes.Append(keyProp);
+
+            return result;
+        }
+
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
 
         public override IEnumerable<ObjectViewModel> DisplayChildren => GetChildren();
-
-        public string Namespace { get; }
 
         public string Key => key.Value;
 

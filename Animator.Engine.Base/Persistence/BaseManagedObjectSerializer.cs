@@ -55,7 +55,7 @@ namespace Animator.Engine.Base.Persistence
 
         protected static readonly Regex markupExtensionRegex = new Regex(@"\{\s*(?<Name>[^\s,=\}]+)\s*(?<Params>[^\s]|[^\s].*[^\s])?\s*\}");
 
-        // Private methods ----------------------------------------------------
+        // Protected methods --------------------------------------------------
 
         /// <summary>
         /// Parses namespace from string into instance of NamespaceDefinition
@@ -64,7 +64,7 @@ namespace Animator.Engine.Base.Persistence
         /// Namespace must be in format: <code>assembly=A.B.C;namespace=X.Y.Z</code>,
         /// whitespace- and case-sensitive.
         /// </remarks>
-        private NamespaceDefinition ParseNamespaceDefinition(string namespaceDefinition)
+        protected NamespaceDefinition ParseNamespaceDefinition(string namespaceDefinition)
         {
             string[] elements = namespaceDefinition.Split(';');
 
@@ -88,7 +88,27 @@ namespace Animator.Engine.Base.Persistence
             return new NamespaceDefinition(assembly, @namespace);
         }
 
-        // Protected methods --------------------------------------------------
+        protected Assembly EnsureAssembly(NamespaceDefinition namespaceDefinition)
+        {
+            var assembly = AppDomain.CurrentDomain.GetAssemblies().
+                            SingleOrDefault(assembly => assembly.GetName().Name == namespaceDefinition.Assembly);
+
+            if (assembly == null)
+            {
+                try
+                {
+                    assembly = Assembly.Load(namespaceDefinition.Assembly);
+                }
+                catch (FileNotFoundException)
+                {
+                    // Intentionally left empty, will leave assembly as null.
+                }
+            }
+
+            if (assembly == null)
+                throw new ActivatorException($"Cannot access assembly {namespaceDefinition.Assembly}\r\nMake sure, it is loaded or accessible to load.");
+            return assembly;
+        }
 
         protected MarkupExtensionData DeserializeMarkupExtension(string value,
             XmlNode node,
@@ -203,23 +223,7 @@ namespace Animator.Engine.Base.Persistence
 
             // 2. Get type from the specified assembly + namespace + class name
 
-            var assembly = AppDomain.CurrentDomain.GetAssemblies().
-                SingleOrDefault(assembly => assembly.GetName().Name == namespaceDefinition.Assembly);
-
-            if (assembly == null)
-            {
-                try
-                {
-                    assembly = Assembly.Load(namespaceDefinition.Assembly);
-                }
-                catch (FileNotFoundException)
-                {
-                    // Intentionally left empty, will leave assembly as null.
-                }
-            }
-
-            if (assembly == null)
-                throw new ActivatorException($"Cannot access assembly {namespaceDefinition.Assembly}\r\nMake sure, it is loaded or accessible to load.");
+            Assembly assembly = EnsureAssembly(namespaceDefinition);
 
             assembly.InitializeStaticTypes(namespaceDefinition.Namespace);
 

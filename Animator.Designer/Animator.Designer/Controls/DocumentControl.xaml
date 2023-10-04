@@ -240,6 +240,36 @@
             </DockPanel>
         </DataTemplate>
 
+        <DataTemplate x:Key="ClearableStringPropertyTemplate" DataType="{x:Type vmp:ClearableStringPropertyViewModel}">
+            <DockPanel>
+                <local:PropertyPopup DockPanel.Dock="Right" Margin="3" />
+
+                <ContentControl Content="{Binding Value}">
+                    <ContentControl.Resources>
+                        <DataTemplate DataType="{x:Type vmv:StringValueViewModel}">
+                            <Grid Background="{StaticResource StringBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <TextBox Margin="3" Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding AvailableOptions, Converter={StaticResource InverseNullToVisibilityConverter}}" 
+                                         HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                                <ComboBox Margin="3" SelectedValue="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding AvailableOptions}" Visibility="{Binding AvailableOptions, Converter={StaticResource NullToVisibilityConverter}}"
+                                          IsEditable="False" HorizontalAlignment="Stretch" VerticalAlignment="Center" />
+                            </Grid>
+                        </DataTemplate>
+
+                        <DataTemplate DataType="{x:Type vmv:DefaultValueViewModel}">
+                            <DockPanel Background="{StaticResource DefaultBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <b:Interaction.Triggers>
+                                    <b:EventTrigger EventName="PreviewMouseDown">
+                                        <b:InvokeCommandAction Command="{Binding SwitchToStringIfPossibleCommand}" />
+                                    </b:EventTrigger>
+                                </b:Interaction.Triggers>
+                                <TextBlock Margin="3" Text="{Binding Value}" VerticalAlignment="Center" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ContentControl.Resources>
+                </ContentControl>
+            </DockPanel>
+        </DataTemplate>
+        
         <local:PropertyEditorTemplateSelector x:Key="PropertyEditorTemplateSelector" 
                                               StringPropertyTemplate="{StaticResource StringPropertyTemplate}" 
                                               MultilineStringPropertyTemplate="{StaticResource MultilineStringPropertyTemplate}"
@@ -247,7 +277,8 @@
                                               ManagedCollectionPropertyTemplate="{StaticResource ManagedCollectionPropertyTemplate}" 
                                               ManagedReferencePropertyTemplate="{StaticResource ManagedReferencePropertyTemplate}" 
                                               ReferencePropertyTemplate="{StaticResource ReferencePropertyTemplate}"
-                                              MacroCollectionPropertyTemplate="{StaticResource MacroCollectionPropertyTemplate}" />
+                                              MacroCollectionPropertyTemplate="{StaticResource MacroCollectionPropertyTemplate}" 
+                                              ClearableStringPropertyTemplate="{StaticResource ClearableStringPropertyTemplate}"/>
 
         <!--#endregion-->
         
@@ -403,10 +434,10 @@
 
                                 <Image Margin="{StaticResource IconMargin}" Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource ImageKeyConverter}}" />
 
-                                <TextBlock Name="Class" Style="{StaticResource ClassNameText}" Text="{Binding ClassName}" />
+                                <TextBlock Name="Class" Style="{StaticResource ClassNameText}" Text="{Binding Name}" />
 
-                                <TextBlock Name="NameDash" Style="{StaticResource NameText}" Text=" - " Visibility="{Binding Name, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
-                                <TextBlock Name="Name" Style="{StaticResource NameText}" Text="{Binding Name}" Visibility="{Binding Name, Converter={StaticResource EmptyStringToVisibilityConverter}}" 
+                                <TextBlock Name="NameDash" Style="{StaticResource NameText}" Text=" - " Visibility="{Binding DisplayName, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
+                                <TextBlock Name="Name" Style="{StaticResource NameText}" Text="{Binding DisplayName}" Visibility="{Binding DisplayName, Converter={StaticResource EmptyStringToVisibilityConverter}}" 
                                            Foreground="{Binding NameColor, Converter={StaticResource ColorCodeToBrushConverter}}" />
 
                                 <TextBlock Name="ValueParen1" Style="{StaticResource NameText}" Text=" (" Visibility="{Binding Value, Converter={StaticResource EmptyStringToVisibilityConverter}}" />

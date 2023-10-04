@@ -97,6 +97,15 @@ namespace Animator.Designer.Resources.Windows.MainWindow {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Failed to save animation. Error: {0}.
+        /// </summary>
+        public static string Message_FailedToSaveDocument {
+            get {
+                return ResourceManager.GetString("Message_FailedToSaveDocument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu New.
         /// </summary>
         public static string New {
@@ -111,6 +120,24 @@ namespace Animator.Designer.Resources.Windows.MainWindow {
         public static string Open {
             get {
                 return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Save as....
+        /// </summary>
+        public static string SaveAs {
+            get {
+                return ResourceManager.GetString("SaveAs", resourceCulture);
             }
         }
     }

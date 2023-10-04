@@ -31,7 +31,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 throw new InvalidOperationException("Switch to collection mode first!");
 
             // Find namespace model
-            var namespaceViewModel = context.Namespaces.FirstOrDefault(cns => cns.Assembly == type.Assembly && cns.Namespace == type.Namespace);
+            var namespaceViewModel = context.Namespaces
+                .OfType<AssemblyNamespaceViewModel>()
+                .FirstOrDefault(cns => cns.Assembly == type.Assembly && cns.Namespace == type.Namespace);
 
             // Sanity check
             if (namespaceViewModel == null)
@@ -174,6 +176,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 var collectionType = collectionProperty.ItemType;
 
                 return context.Namespaces
+                    .OfType<AssemblyNamespaceViewModel>()
                     .SelectMany(ns => ns.GetAvailableTypesFor(collectionType))
                     .OrderBy(tvm => tvm.Name)
                     .Select(t => new TypeViewModel(t, AddInstanceCommand));

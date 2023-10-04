@@ -1,7 +1,6 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
-using Animator.Engine.Base;
 using Animator.Engine.Base.Extensions;
 using Spooksoft.VisualStateManager.Commands;
 using Spooksoft.VisualStateManager.Conditions;
@@ -14,11 +13,10 @@ using System.Threading.Tasks;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 {
-    public class ReferencePropertyViewModel : PropertyViewModel
+    public class ClearableStringPropertyViewModel : PropertyViewModel
     {
         // Private fields -----------------------------------------------------
 
-        private readonly List<TypeViewModel> availableTypes;
         private ValueViewModel value;
 
         // Private methods ----------------------------------------------------
@@ -28,6 +26,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             Value = new DefaultValueViewModel(null, false);
         }
 
+        private void SetToString()
+        {
+            Value = new StringValueViewModel(null);
+        }
+
         private void SetValue(ValueViewModel value)
         {
             // Clear parent
@@ -35,41 +38,23 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 this.value.Parent = null;
 
             // Set new value
-            if (value is ReferenceValueViewModel or DefaultValueViewModel)
+            if (value is StringValueViewModel or DefaultValueViewModel)
             {
                 Set(ref this.value, value, nameof(Value));
                 value.Parent = this;
             }
             else
             {
-                throw new ArgumentException($"ManagedReferencePropertyViewModel does not support value of type {value}!");
+                throw new ArgumentException($"ClearableStringPropertyViewModel does not support value of type {value}!");
             }
-        }
-
-        private void SetToInstance(Type type)
-        {
-            // Find namespace model
-            var namespaceViewModel = context.Namespaces
-                .OfType<AssemblyNamespaceViewModel>()
-                .FirstOrDefault(cns => cns.Assembly == type.Assembly && cns.Namespace == type.Namespace);
-
-            // Sanity check
-            if (namespaceViewModel == null)
-                throw new InvalidOperationException("Namespace for created object is missing in WrapperContext!");
-
-            var ns = type.ToNamespaceDefinition().ToString();
-
-            var obj = new ManagedObjectViewModel(context, ns, type.Name, type);
-            Value = new ReferenceValueViewModel(obj);
         }
 
         // Public methods -----------------------------------------------------
 
-        public ReferencePropertyViewModel(ObjectViewModel parent, 
-            WrapperContext context, 
-            string ns, 
-            string name, 
-            List<Type> availableTypes)
+        public ClearableStringPropertyViewModel(ObjectViewModel parent,
+            WrapperContext context,
+            string ns,
+            string name)
             : base(parent, context)
         {
             Namespace = ns;
@@ -78,18 +63,15 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             SetDefault();
 
             var valueIsDefaultCondition = Condition.Lambda(this, vm => vm.Value is DefaultValueViewModel, false);
+            var valueIsStringCondition = Condition.Lambda(this, vm => vm.Value is StringValueViewModel, false);
 
             SetDefaultCommand = new AppCommand(obj => SetDefault(), !valueIsDefaultCondition);
-            SetToInstanceCommand = new AppCommand(obj => SetToInstance((Type)obj));
-
-            this.availableTypes = availableTypes
-                .Select(t => new TypeViewModel(t, SetToInstanceCommand))
-                .ToList();
+            SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
         }
 
         public override void RequestDelete(ObjectViewModel obj)
         {
-            SetDefault();
+            throw new NotSupportedException();
         }
 
         public override void RequestSwitchToString()
@@ -108,7 +90,5 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             get => value;
             set => SetValue(value);
         }
-
-        public override IEnumerable<TypeViewModel> AvailableTypes => availableTypes;
     }
 }

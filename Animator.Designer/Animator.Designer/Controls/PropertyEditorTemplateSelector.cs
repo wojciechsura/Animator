@@ -27,11 +27,13 @@ namespace Animator.Designer.Controls
             else if (item is ManagedCollectionPropertyViewModel)
                 return ManagedCollectionPropertyTemplate;
             else if (item is ManagedReferencePropertyViewModel)
-                return ManagedReferencePropertyTemplate;           
-            else if (item is ReferencePropertyViewModel) 
+                return ManagedReferencePropertyTemplate;
+            else if (item is ReferencePropertyViewModel)
                 return ReferencePropertyTemplate;
             else if (item is MacroCollectionPropertyViewModel)
                 return MacroCollectionPropertyTemplate;
+            else if (item is ClearableStringPropertyViewModel)
+                return ClearableStringPropertyTemplate;
 
             return null;
         }
@@ -49,5 +51,7 @@ namespace Animator.Designer.Controls
         public DataTemplate ReferencePropertyTemplate { get; set; }
 
         public DataTemplate MacroCollectionPropertyTemplate { get; set; }
+
+        public DataTemplate ClearableStringPropertyTemplate { get; set; }
     }
 }

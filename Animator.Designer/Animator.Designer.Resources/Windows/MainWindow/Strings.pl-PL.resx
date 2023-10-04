@@ -135,4 +135,13 @@
   <data name="New" xml:space="preserve">
     <value>Nowy</value>
   </data>
+  <data name="Save" xml:space="preserve">
+    <value>Zapisz</value>
+  </data>
+  <data name="SaveAs" xml:space="preserve">
+    <value>Zapisz jako...</value>
+  </data>
+  <data name="Message_FailedToSaveDocument" xml:space="preserve">
+    <value>Nie udało się zapisać animacji. Błąd: {0}</value>
+  </data>
 </root>

@@ -12,9 +12,11 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
@@ -70,7 +72,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         private void HandleNameChanged(object sender, EventArgs e)
         {
-            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(DisplayName));
         }
 
         private void HandleValueChanged(object sender, EventArgs e)
@@ -215,7 +217,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         {
             macros = new MacroCollectionPropertyViewModel(this, context, context.EngineNamespace, "Macros");
 
-            this.ClassName = className;
+            this.Name = className;
             this.Namespace = ns;
 
             // Build properties
@@ -323,6 +325,144 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             DeleteCommand = new AppCommand(obj => DoDelete(), notRootCondition);            
         }
 
+        public override XmlElement Serialize(XmlDocument document)
+        {
+            // Prepare
+
+            var engineNsDef = context.Namespaces.First(ns => ns.NamespaceUri == context.EngineNamespace);
+            var objectNsDef = context.Namespaces.First(ns => ns.NamespaceUri == Namespace);
+
+            // Create node
+
+            XmlElement result = CreateRootElement(document);
+
+            // Macros
+
+            if (macros.Value.Items.Any())
+            {
+                var macrosNode = document.CreateElement(engineNsDef.Prefix, "Macros", engineNsDef.NamespaceUri);
+                result.AppendChild(macrosNode);
+
+                foreach (var macro in macros.Value.Items.OfType<MacroDefinitionViewModel>())
+                {
+                    XmlElement macroNode = macro.Serialize(document);
+                    macrosNode.AppendChild(macroNode);
+                }
+            }
+
+            // Non-content properties
+
+            bool contentPropertyProcessed = false;
+
+            foreach (var property in properties)
+            {
+                if (property is ManagedPropertyViewModel managedProperty)
+                {
+                    if (managedProperty == contentProperty)
+                    {
+                        if (managedProperty.Value is not DefaultValueViewModel or ReferenceValueViewModel or CollectionValueViewModel)
+                        {
+                            continue;
+                        }
+
+                        contentPropertyProcessed = true;
+                    }
+
+
+                    switch (managedProperty.Value)
+                    {
+                        case DefaultValueViewModel:
+                            continue;
+                        case StringValueViewModel stringValue:
+                            {
+                                XmlAttribute propAttr = CreateAttributeProp(document, managedProperty);
+
+                                propAttr.Value = stringValue.Value;
+                                result.Attributes.Append(propAttr);
+                                break;
+                            }
+                        case ReferenceValueViewModel refValue:
+                            {
+                                XmlElement propElement = CreateNestedProperty(document, objectNsDef, managedProperty);
+
+                                XmlElement refValueElement = refValue.Value.Serialize(document);
+                                propElement.AppendChild(refValueElement);
+
+                                result.AppendChild(propElement);
+                                break;
+                            }
+                        case CollectionValueViewModel collectionValue:
+                            {
+                                if (!collectionValue.Items.Any())
+                                    continue;
+
+                                XmlElement propElement = CreateNestedProperty(document, objectNsDef, managedProperty);
+
+                                foreach (var item in collectionValue.Items)
+                                {
+                                    XmlElement itemElement = item.Serialize(document);
+                                    propElement.AppendChild(itemElement);
+                                }
+
+                                result.AppendChild(propElement);
+                                break;
+                            }
+                        case MarkupExtensionValueViewModel markupExtension:
+                            {
+                                XmlAttribute propAttr = CreateAttributeProp(document, managedProperty);
+                                propAttr.Value = markupExtension.Value.SerializeToString();
+
+                                result.AppendChild(propAttr);
+                                break;
+                            }                        
+                        default:
+                            throw new InvalidOperationException($"Unsupported managed property value: {managedProperty.Value}");
+                    }
+                }
+                else if (property == macros)
+                {
+                    // Macros were processed before all other properties
+                    continue;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Invalid property in ManagedObjectViewModel's property list!");
+                }
+            }
+
+            // Content property
+
+            if (!contentPropertyProcessed)
+            {
+                switch (contentProperty.Value)
+                {
+                    case ReferenceValueViewModel refValue:
+                        {
+                            var refElement = refValue.Value.Serialize(document);
+                            result.AppendChild(refElement);
+
+                            break;
+                        }
+                    case CollectionValueViewModel collectionValue:
+                        {
+                            if (collectionValue.Items.Any())
+                            {
+                                foreach (var item in collectionValue.Items)
+                                {
+                                    var itemElement = item.Serialize(document);
+                                    result.AppendChild(itemElement);
+                                }
+                            }
+                            break;
+                        }
+                    default:
+                        throw new InvalidOperationException($"Unsupported content property value: {contentProperty.Value}!");
+                }
+            }
+
+            return result;
+        }
+
         // Public properties --------------------------------------------------
 
         public MacroCollectionPropertyViewModel Macros => macros;
@@ -331,15 +471,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public ManagedPropertyViewModel ContentProperty => contentProperty;
 
-        public string ClassName { get; }
-
-        public string Name => (nameProperty?.Value as StringValueViewModel)?.Value;
+        public string DisplayName => (nameProperty?.Value as StringValueViewModel)?.Value;
 
         public string Value => TruncateValue((valueProperty?.Value as StringValueViewModel)?.Value);
 
         public string NameColor { get; }
-
-        public string Namespace { get; }
 
         public override IEnumerable<BaseObjectViewModel> DisplayChildren => GetDisplayChildren();
 

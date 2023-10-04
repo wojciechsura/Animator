@@ -21,6 +21,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
 
         public string Name => value.Name;
 
-        public ObjectViewModel Value => value;       
+        public MarkupExtensionViewModel Value => value;       
     }
 }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
@@ -30,6 +31,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public IncludeViewModel(WrapperContext context) 
             : base(context)
         {
+            Name = "Include";
             Namespace = context.EngineNamespace;
             sourceProperty = new StringPropertyViewModel(this, context, context.EngineNamespace, "Source");
             sourceProperty.PropertyChanged += HandleSourceChanged;
@@ -40,14 +42,23 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             Icon = "Include16.png";
         }
 
+        public override XmlElement Serialize(XmlDocument document)
+        {
+            var result = CreateRootElement(document);
+
+            var sourceProp = CreateAttributeProp(document, "Source", Namespace);
+            sourceProp.Value = sourceProperty.Value;
+            result.Attributes.Append(sourceProp);
+
+            return result;
+        }
+
         public override IEnumerable<PropertyViewModel> Properties => properties;
 
         public override IEnumerable<ObjectViewModel> DisplayChildren => children;
 
         public ICommand DeleteCommand { get; }
 
-        public string Source => sourceProperty.Value;
-
-        public string Namespace { get; }        
+        public string Source => sourceProperty.Value;      
     }
 }

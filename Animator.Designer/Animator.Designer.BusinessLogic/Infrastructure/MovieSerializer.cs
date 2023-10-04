@@ -42,6 +42,12 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             public NamespaceDefinition DefaultNamespace => Namespaces[string.Empty];
         }
 
+        private sealed class NamespaceContext
+        {
+            public HashSet<string> FreeNamespaces { get; } = new();
+            public HashSet<(string prefix, string @namespace)> PrefixedNamespaces { get; } = new();
+        } 
+
         // Private types ------------------------------------------------------
 
         private static readonly HashSet<Type> staticallyInitializedTypes = new();
@@ -477,22 +483,93 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             }
         }
 
-        private void BuildNamespaces(XmlDocument document, Dictionary<string, NamespaceDefinition> namespaces, WrapperContext wrapperContext)
+        private void CollectNamespacesRecursively(XmlElement xmlNode, NamespaceContext context)
         {
-            foreach (var kvp in namespaces)
+            if (!string.IsNullOrEmpty(xmlNode.NamespaceURI))
             {
-                string prefix = "";
-
-                // Determine prefix
-                if (!string.IsNullOrEmpty(kvp.Key))
-                    prefix = document.GetPrefixOfNamespace(kvp.Key);
-
-                Assembly assembly = AppDomain.CurrentDomain.GetAssemblies()
-                    .FirstOrDefault(a => a.GetName().Name == kvp.Value.Assembly);
-
-                var info = new NamespaceViewModel(prefix, assembly, kvp.Value.Namespace);
-                wrapperContext.AddNamespace(info);
+                context.FreeNamespaces.Add(xmlNode.NamespaceURI);
             }
+
+            foreach (XmlAttribute attribute in xmlNode.Attributes)
+            {
+                if (attribute.Name.StartsWith("xmlns:"))
+                {
+                    string prefix = attribute.Name[6..];
+                    string @namespace = attribute.Value;
+
+                    context.PrefixedNamespaces.Add((prefix, @namespace));
+                }
+            }
+
+            foreach (XmlElement child in xmlNode.ChildNodes.OfType<XmlElement>())
+                CollectNamespacesRecursively(child, context);
+        }
+
+        private void BuildNamespaces(XmlDocument document, WrapperContext wrapperContext)
+        {
+            var namespaceContext = new NamespaceContext();
+            CollectNamespacesRecursively(document.ChildNodes[0] as XmlElement, namespaceContext);
+
+            // First, add all prefixed namespaces
+
+            foreach (var ns in namespaceContext.PrefixedNamespaces)
+            {
+                if (ns.@namespace == ENGINE_NAMESPACE)
+                {
+                    // Special case only for engine namespace
+
+                    if (!wrapperContext.Namespaces.Any(n => n.NamespaceUri == ns.@namespace))
+                        wrapperContext.AddNamespace(new NamespaceViewModel(ns.prefix, ns.@namespace));
+                }
+                else if (ns.@namespace == wrapperContext.DefaultNamespace)
+                {
+                    // We will add default namespace later
+                    continue;
+                }
+                else
+                {
+                    var definition = ParseNamespaceDefinition(ns.@namespace);
+                    Assembly assembly = EnsureAssembly(definition);
+
+                    wrapperContext.AddNamespace(new AssemblyNamespaceViewModel(ns.prefix, ns.@namespace, assembly, definition.Namespace));
+                }
+            }
+
+            // Next, add artificial prefixes for all namespaces defined explicitly (if any)
+
+            foreach (var ns in namespaceContext.FreeNamespaces)
+            {
+                // We will add default namespace later
+                if (ns == wrapperContext.DefaultNamespace)
+                    continue;
+
+                if (!wrapperContext.Namespaces.Any(n => n.NamespaceUri == ns))
+                {
+                    var definition = ParseNamespaceDefinition(ns);
+                    Assembly assembly = EnsureAssembly(definition);
+
+                    int i = 1;
+
+                    while (wrapperContext.Namespaces.Any(n => n.Prefix == $"n{i}"))
+                        i++;
+
+                    wrapperContext.AddNamespace(new AssemblyNamespaceViewModel($"n{i}", ns, assembly, definition.Namespace));
+                }
+            }
+
+            // Add default namespace
+
+            var defaultDefinition = typeof(Animator.Engine.Elements.Movie).ToNamespaceDefinition();
+            var defaultAssembly = typeof(Animator.Engine.Elements.Movie).Assembly;
+
+            wrapperContext.AddNamespace(new AssemblyNamespaceViewModel(null, defaultDefinition.ToString(), defaultAssembly, defaultDefinition.Namespace));
+
+            // Make sure that engine namespace is defined
+
+            if (!wrapperContext.Namespaces.Any(ns => ns.NamespaceUri == ENGINE_NAMESPACE))
+            {
+                wrapperContext.AddNamespace(new NamespaceViewModel("x", ENGINE_NAMESPACE));
+            }            
         }
 
         private (ObjectViewModel Object, WrapperContext context) InternalDeserialize(XmlDocument document, string documentPath, Models.MovieSerialization.DeserializationOptions options)
@@ -508,7 +585,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             var context = new DeserializationContext(options, options.DefaultNamespace, wrapperContext);
             
             var resultObject = DeserializeElement(document.ChildNodes.OfType<XmlElement>().Single(), context);
-            BuildNamespaces(document, context.Namespaces, wrapperContext);
+            BuildNamespaces(document, wrapperContext);
 
             return (resultObject, wrapperContext);
         }
