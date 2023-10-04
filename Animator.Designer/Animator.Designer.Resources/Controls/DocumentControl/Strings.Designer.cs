@@ -97,6 +97,24 @@ namespace Animator.Designer.Resources.Controls.DocumentControl {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Insert generator.
+        /// </summary>
+        public static string InsertGenerator {
+            get {
+                return ResourceManager.GetString("InsertGenerator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Include file.
+        /// </summary>
+        public static string InsertInclude {
+            get {
+                return ResourceManager.GetString("InsertInclude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Insert macro.
         /// </summary>
         public static string InsertMacro {

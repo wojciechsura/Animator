@@ -58,6 +58,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public ICommand SetToInstanceCommand { get; init; }
         public ICommand AddInstanceCommand { get; init; }
         public ICommand InsertMacroCommand { get; init; }
+        public ICommand InsertIncludeCommand { get; init; }
+        public ICommand InsertGeneratorCommand { get; init; }
         public ICommand AddMacroDefinitionCommand { get; init; }
         public ICommand SetToMarkupExtensionCommand { get; init; }
     }

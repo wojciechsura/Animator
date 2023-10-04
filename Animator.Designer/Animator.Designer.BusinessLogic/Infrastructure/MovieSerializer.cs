@@ -394,7 +394,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                     string filename = sourceAttribute.Value;
 
-                    var includeViewModel = new IncludeViewModel(context.WrapperContext, ENGINE_NAMESPACE);
+                    var includeViewModel = new IncludeViewModel(context.WrapperContext);
                     includeViewModel.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, SOURCE_ATTRIBUTE).Value = filename;
 
                     return includeViewModel;
@@ -436,7 +436,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                     var child = (XmlElement)node.ChildNodes[0];
 
-                    var generateViewModel = new GenerateViewModel(context.WrapperContext, ENGINE_NAMESPACE);
+                    var generateViewModel = new GenerateViewModel(context.WrapperContext);
                     generateViewModel.Property<MultilineStringPropertyViewModel>("Generator").Value = child.OuterXml;
 
                     return generateViewModel;

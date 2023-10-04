@@ -52,6 +52,18 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             Value = new ReferenceValueViewModel(obj);
         }
 
+        private void InsertInclude()
+        {
+            var obj = new IncludeViewModel(context);
+            Value = new ReferenceValueViewModel(obj);
+        }
+
+        private void InsertGenerator()
+        {
+            var obj = new GenerateViewModel(context);
+            Value = new ReferenceValueViewModel(obj);
+        }
+
         private void SetToString()
         {
             Value = new StringValueViewModel(string.Empty);
@@ -93,6 +105,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
             SetToInstanceCommand = new AppCommand(obj => SetToInstance((Type)obj));
             InsertMacroCommand = new AppCommand(obj => InsertMacro());
+            InsertIncludeCommand = new AppCommand(obj => InsertInclude());
+            InsertGeneratorCommand = new AppCommand(obj => InsertGenerator());
         }
 
         public override void RequestDelete(ObjectViewModel obj)

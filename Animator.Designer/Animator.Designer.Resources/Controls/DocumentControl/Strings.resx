@@ -127,4 +127,10 @@
   <data name="SetToMarkupExtension" xml:space="preserve">
     <value>Use markup extension</value>
   </data>
+  <data name="InsertInclude" xml:space="preserve">
+    <value>Include file</value>
+  </data>
+  <data name="InsertGenerator" xml:space="preserve">
+    <value>Insert generator</value>
+  </data>
 </root>

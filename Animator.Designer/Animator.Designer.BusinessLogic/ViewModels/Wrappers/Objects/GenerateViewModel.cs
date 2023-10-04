@@ -20,10 +20,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             Parent.RequestDelete(this);
         }
 
-        public GenerateViewModel(WrapperContext context, string ns)
+        public GenerateViewModel(WrapperContext context)
             : base(context)
         {
-            Namespace = ns;
+            Namespace = context.EngineNamespace;
             properties.Add(new MultilineStringPropertyViewModel(this, context, context.DefaultNamespace, "Generator"));
 
             DeleteCommand = new AppCommand(obj => DoDelete());

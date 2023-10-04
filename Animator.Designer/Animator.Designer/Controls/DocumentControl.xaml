@@ -361,6 +361,22 @@
                                             </MenuItem.Icon>
                                         </MenuItem>
 
+                                        <MenuItem Visibility="{Binding InsertIncludeCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                                                  Header="{x:Static res:Strings.InsertInclude}"
+                                                  Command="{Binding InsertIncludeCommand}">
+                                            <MenuItem.Icon>
+                                                <Image Source="/Resources/Images/Icons/Include16.png" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+
+                                        <MenuItem Visibility="{Binding InsertGeneratorCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                                                  Header="{x:Static res:Strings.InsertGenerator}"
+                                                  Command="{Binding InsertGeneratorCommand}">
+                                            <MenuItem.Icon>
+                                                <Image Source="/Resources/Images/Icons/Generator16.png" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        
                                         <MenuItem Visibility="{Binding SetToMarkupExtensionCommand, Converter={StaticResource NullToVisibilityConverter}}"
                                                   Header="{x:Static res:Strings.SetToMarkupExtension}" ItemsSource="{Binding AvailableMarkupExtensions}">
                                             <MenuItem.ItemContainerStyle>

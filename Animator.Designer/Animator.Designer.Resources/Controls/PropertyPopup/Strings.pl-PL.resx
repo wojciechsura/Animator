@@ -141,4 +141,10 @@
   <data name="AddMacroDefinition" xml:space="preserve">
     <value>Dodaj definicję makra</value>
   </data>
+  <data name="InsertInclude" xml:space="preserve">
+    <value>Dołącz plik</value>
+  </data>
+  <data name="InsertGenerator" xml:space="preserve">
+    <value>Wstaw generator</value>
+  </data>
 </root>

@@ -52,6 +52,24 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             (value as CollectionValueViewModel).Items.Add(obj);
         }
 
+        private void InsertInclude()
+        {
+            if (value is not CollectionValueViewModel)
+                throw new InvalidOperationException("Switch to collection mode first!");
+
+            var obj = new IncludeViewModel(context);
+            (value as CollectionValueViewModel).Items.Add(obj);
+        }
+
+        private void InsertGenerator()
+        {
+            if (value is not CollectionValueViewModel)
+                throw new InvalidOperationException("Switch to collection mode first!");
+
+            var obj = new GenerateViewModel(context);
+            (value as CollectionValueViewModel).Items.Add(obj);
+        }
+
         private void HandleCollectionChanged(object sender, EventArgs e)
         {
             OnCollectionChanged();
@@ -122,7 +140,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
             SetToCollectionCommand = new AppCommand(obj => SetToCollection(), !valueIsCollectionCondition);
             AddInstanceCommand = new AppCommand(obj => AddInstance((Type)obj), valueIsCollectionCondition);
-            InsertMacroCommand = new AppCommand(obj => InsertMacro(), valueIsCollectionCondition);            
+            InsertMacroCommand = new AppCommand(obj => InsertMacro(), valueIsCollectionCondition);
+            InsertIncludeCommand = new AppCommand(obj => InsertInclude(), valueIsCollectionCondition);
+            InsertGeneratorCommand = new AppCommand(obj => InsertGenerator(), valueIsCollectionCondition);            
         }
 
         public override void RequestDelete(ObjectViewModel obj)

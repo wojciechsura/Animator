@@ -85,6 +85,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public ICommand InsertMacroCommand => property.InsertMacroCommand;
 
+        public ICommand InsertIncludeCommand => property.InsertIncludeCommand;
+
+        public ICommand InsertGeneratorCommand => property.InsertGeneratorCommand;
+
         public ICommand SetToMarkupExtensionCommand => property.SetToMarkupExtensionCommand;
 
         public IEnumerable<TypeViewModel> AvailableTypes => property.AvailableTypes;

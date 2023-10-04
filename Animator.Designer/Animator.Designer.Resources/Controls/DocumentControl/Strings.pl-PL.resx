@@ -147,4 +147,10 @@
   <data name="SetToMarkupExtension" xml:space="preserve">
     <value>Użyj rozszerzenia</value>
   </data>
+  <data name="InsertInclude" xml:space="preserve">
+    <value>Dołącz plik</value>
+  </data>
+  <data name="InsertGenerator" xml:space="preserve">
+    <value>Wstaw generator</value>
+  </data>
 </root>
