@@ -138,4 +138,7 @@
   <data name="SetToMarkupExtension" xml:space="preserve">
     <value>Use markup extension</value>
   </data>
+  <data name="AddMacroDefinition" xml:space="preserve">
+    <value>Add macro definition</value>
+  </data>
 </root>

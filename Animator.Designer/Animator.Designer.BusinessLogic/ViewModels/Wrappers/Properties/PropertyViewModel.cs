@@ -21,7 +21,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
         public abstract void RequestSwitchToString();
 
-        public abstract void RequestDelete(BaseObjectViewModel obj);
+        public abstract void RequestDelete(ObjectViewModel obj);
 
         public abstract string Name { get; }
         public abstract string Namespace { get; }
@@ -58,6 +58,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public ICommand SetToInstanceCommand { get; init; }
         public ICommand AddInstanceCommand { get; init; }
         public ICommand InsertMacroCommand { get; init; }
+        public ICommand AddMacroDefinitionCommand { get; init; }
         public ICommand SetToMarkupExtensionCommand { get; init; }
     }
 }

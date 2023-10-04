@@ -125,24 +125,19 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             InsertMacroCommand = new AppCommand(obj => InsertMacro(), valueIsCollectionCondition);            
         }
 
-        public override void RequestDelete(BaseObjectViewModel obj)
+        public override void RequestDelete(ObjectViewModel obj)
         {
-            if (obj is ObjectViewModel objVm)
+            if (value is CollectionValueViewModel collection)
             {
-                if (value is CollectionValueViewModel collection)
+                if (collection.Items.Contains(obj))
                 {
-                    if (collection.Items.Contains(objVm))
-                    {
-                        collection.Items.Remove(objVm);
-                    }
-                    else
-                        throw new InvalidOperationException("Cannot delete: collection doesn't contain this object!");
+                    collection.Items.Remove(obj);
                 }
                 else
-                    throw new InvalidOperationException("Cannot delete: value of this property is not a collection!");
+                    throw new InvalidOperationException("Cannot delete: collection doesn't contain this object!");
             }
             else
-                throw new InvalidOperationException("Cannot delete: object is of invalid type and couldn't have been kept inside collection.");
+                throw new InvalidOperationException("Cannot delete: value of this property is not a collection!");
         }
 
         public override void RequestSwitchToString()

@@ -49,7 +49,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         // Private fields -----------------------------------------------------
 
         private readonly ObservableCollection<PropertyViewModel> properties = new();
-        private readonly ObservableCollection<MacroDefinitionViewModel> macros = new();
+        private readonly MacroCollectionPropertyViewModel macros;
         private readonly ManagedPropertyViewModel contentProperty;
         private readonly ManagedSimplePropertyViewModel nameProperty;
         private readonly ManagedSimplePropertyViewModel valueProperty;
@@ -203,15 +203,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             NotifyDisplayChildrenChanged();
         }
 
-        private void DoAddMacro()
-        {
-            var macro = new MacroDefinitionViewModel(context)
-            {
-                Parent = this
-            };
-            macros.Add(macro);
-        }
-
         private void DoDelete()
         {
             Parent.RequestDelete(this);
@@ -222,6 +213,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public ManagedObjectViewModel(WrapperContext context, string ns, string className, Type type)
             : base(context)
         {
+            macros = new MacroCollectionPropertyViewModel(this, context, context.EngineNamespace, "Macros");
+
             this.ClassName = className;
             this.Namespace = ns;
 
@@ -257,6 +250,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                         throw new InvalidOperationException("Unsupported managed property type!");
                 }
             }
+
+            int i = 0;
+            while (i < properties.Count && string.Compare(properties[i].Name, Animator.Designer.Resources.Controls.DocumentControl.Strings.Macros) < 0)
+                i++;
+
+            properties.Insert(i, macros);
 
             // Content property
 
@@ -321,26 +320,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             // Commands
 
             var notRootCondition = Condition.Lambda(this, vm => vm.Parent != null, false);
-            DeleteCommand = new AppCommand(obj => DoDelete(), notRootCondition);
-
-            AddMacroCommand = new AppCommand(obj => DoAddMacro());
-        }
-
-        public void AddMacro(MacroDefinitionViewModel macro)
-        {
-            macro.Parent = this;
-            macros.Add(macro);
-        }        
-
-        public void RequestDelete(MacroDefinitionViewModel macro)
-        {
-            macro.Parent = null;
-            macros.Remove(macro);
+            DeleteCommand = new AppCommand(obj => DoDelete(), notRootCondition);            
         }
 
         // Public properties --------------------------------------------------
 
-        public IReadOnlyList<MacroDefinitionViewModel> Macros => macros;
+        public MacroCollectionPropertyViewModel Macros => macros;
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
 
@@ -359,8 +344,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public override IEnumerable<BaseObjectViewModel> DisplayChildren => GetDisplayChildren();
 
         public ICommand DeleteCommand { get; }
-
-        public ICommand AddMacroCommand { get; }
 
         // Transported from the content property
 

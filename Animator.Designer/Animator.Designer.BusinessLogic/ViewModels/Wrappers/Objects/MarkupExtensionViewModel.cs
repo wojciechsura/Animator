@@ -1,10 +1,12 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;
+using Spooksoft.VisualStateManager.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
@@ -13,6 +15,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         private readonly List<ObjectViewModel> children = new();
         private readonly List<StringPropertyViewModel> properties = new();
         private readonly Type type;
+
+        private void DoDelete()
+        {
+            Parent.RequestDelete(this);
+        }
 
         public MarkupExtensionViewModel(WrapperContext context, string ns, string name, Type type)
             : base(context)
@@ -28,12 +35,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 properties.Add(property);
             }
 
+            DeleteCommand = new AppCommand(obj => DoDelete());
+
             Icon = "MarkupExtension16.png";
         }
 
         public override IEnumerable<PropertyViewModel> Properties => properties;
 
         public override IEnumerable<ObjectViewModel> DisplayChildren => children;
+
+        public ICommand DeleteCommand { get; }
 
         public string Name { get; }
 

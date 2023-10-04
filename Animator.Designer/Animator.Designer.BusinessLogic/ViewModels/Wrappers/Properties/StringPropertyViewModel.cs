@@ -18,7 +18,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             Namespace = ns;
         }
 
-        public override void RequestDelete(BaseObjectViewModel obj)
+        public override void RequestDelete(ObjectViewModel obj)
         {
             throw new NotSupportedException();
         }

@@ -67,8 +67,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public override IEnumerable<ObjectViewModel> DisplayChildren => GetChildren();
 
-        public ManagedObjectViewModel Parent { get; set; }
-
         public string Namespace { get; }
 
         public string Key => key.Value;

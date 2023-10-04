@@ -14,8 +14,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
     public class PropertyProxyViewModel : VirtualObjectViewModel
     {
+        // Private fields -----------------------------------------------------
+
         private readonly List<PropertyViewModel> properties = new();
         private readonly ManagedPropertyViewModel property;
+
+        // Private methods ----------------------------------------------------
 
         private IEnumerable<BaseObjectViewModel> GetDisplayChildren()
         {
@@ -84,6 +88,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public ICommand SetToMarkupExtensionCommand => property.SetToMarkupExtensionCommand;
 
         public IEnumerable<TypeViewModel> AvailableTypes => property.AvailableTypes;
+
+        public IEnumerable<TypeViewModel> AvailableMarkupExtensions => property.AvailableMarkupExtensions;
 
         public ManagedPropertyViewModel Property => property;
     }

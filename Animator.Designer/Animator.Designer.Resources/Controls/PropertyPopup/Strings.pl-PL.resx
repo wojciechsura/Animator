@@ -138,4 +138,7 @@
   <data name="SetToMarkupExtension" xml:space="preserve">
     <value>Użyj rozszerzenia</value>
   </data>
+  <data name="AddMacroDefinition" xml:space="preserve">
+    <value>Dodaj definicję makra</value>
+  </data>
 </root>

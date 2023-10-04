@@ -82,7 +82,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                             macroItem.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, "Key").Value = xKey;
                             macroItem.Property<ReferencePropertyViewModel>(context.DefaultNamespace.ToString(), "Content").Value = new ReferenceValueViewModel(macroContent);
 
-                            deserializedObject.AddMacro(macroItem);
+                            deserializedObject.Macros.Value.Items.Add(macroItem);
                         }
 
                         // This doesn't need immediate processing

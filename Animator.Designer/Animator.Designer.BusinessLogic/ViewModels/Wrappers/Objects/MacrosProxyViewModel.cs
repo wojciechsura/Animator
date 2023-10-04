@@ -14,21 +14,21 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
     public class MacrosProxyViewModel : VirtualObjectViewModel
     {
         private readonly List<PropertyViewModel> properties = new List<PropertyViewModel>();
-        private readonly ObservableCollection<MacroDefinitionViewModel> macros;
+        private readonly MacroCollectionPropertyViewModel macros;
         private readonly ManagedObjectViewModel parent;
 
         private IEnumerable<BaseObjectViewModel> GetDisplayChildren()
         {
-            foreach (var macro in macros)
+            foreach (var macro in macros.Value.Items)
                 yield return macro;
         }
 
-        private void HandleMacrosChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void HandleMacrosChanged(object sender, EventArgs e)
         {
             OnPropertyChanged(nameof(DisplayChildren));
         }
 
-        public MacrosProxyViewModel(WrapperContext context, ManagedObjectViewModel parent, ObservableCollection<MacroDefinitionViewModel> macros) 
+        public MacrosProxyViewModel(WrapperContext context, ManagedObjectViewModel parent, MacroCollectionPropertyViewModel macros) 
             : base(context)
         {
             this.parent = parent;
@@ -42,6 +42,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public override IEnumerable<BaseObjectViewModel> DisplayChildren => GetDisplayChildren();
 
-        public ICommand AddMacroCommand => parent.AddMacroCommand;
+        public ICommand AddMacroDefinitionCommand => macros.AddMacroDefinitionCommand;
     }
 }

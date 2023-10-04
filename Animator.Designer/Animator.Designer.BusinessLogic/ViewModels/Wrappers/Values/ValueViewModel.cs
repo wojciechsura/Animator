@@ -16,7 +16,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
 
         public PropertyViewModel Parent { get; set; }
 
-        public void RequestDelete(BaseObjectViewModel obj)
+        public void RequestDelete(ObjectViewModel obj)
         {
             Parent.RequestDelete(obj);
         }

@@ -224,13 +224,30 @@
             </DockPanel>
         </DataTemplate>
 
+        <DataTemplate x:Key="MacroCollectionPropertyTemplate" DataType="{x:Type vmp:MacroCollectionPropertyViewModel}">
+            <DockPanel>
+                <local:PropertyPopup DockPanel.Dock="Right" Margin="3" />
+
+                <ContentControl Content="{Binding Value}">
+                    <ContentControl.Resources>
+                        <DataTemplate DataType="{x:Type vmv:CollectionValueViewModel}">
+                            <DockPanel Background="{StaticResource CollectionBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <TextBlock Margin="3" Text="(Collection)" VerticalAlignment="Center" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ContentControl.Resources>
+                </ContentControl>
+            </DockPanel>
+        </DataTemplate>
+
         <local:PropertyEditorTemplateSelector x:Key="PropertyEditorTemplateSelector" 
                                               StringPropertyTemplate="{StaticResource StringPropertyTemplate}" 
                                               MultilineStringPropertyTemplate="{StaticResource MultilineStringPropertyTemplate}"
                                               ManagedSimplePropertyTemplate="{StaticResource ManagedSimplePropertyTemplate}" 
                                               ManagedCollectionPropertyTemplate="{StaticResource ManagedCollectionPropertyTemplate}" 
                                               ManagedReferencePropertyTemplate="{StaticResource ManagedReferencePropertyTemplate}" 
-                                              ReferencePropertyTemplate="{StaticResource ReferencePropertyTemplate}"/>
+                                              ReferencePropertyTemplate="{StaticResource ReferencePropertyTemplate}"
+                                              MacroCollectionPropertyTemplate="{StaticResource MacroCollectionPropertyTemplate}" />
 
         <!--#endregion-->
         
@@ -484,7 +501,7 @@
                         <StackPanel Orientation="Horizontal" Margin="{StaticResource TreeItemMargin}">
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="{x:Static res:Strings.AddMacro}" Command="{Binding AddMacroCommand}" />
+                                    <MenuItem Header="{x:Static res:Strings.AddMacroDefinition}" Command="{Binding AddMacroDefinitionCommand}" />
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                             <Image Margin="{StaticResource IconMargin}" Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource ImageKeyConverter}}" />
@@ -533,6 +550,15 @@
                     <HierarchicalDataTemplate DataType="{x:Type vmw:MarkupExtensionViewModel}" ItemsSource="{Binding DisplayChildren}">
                         <Grid Margin="{StaticResource TreeItemMargin}">
                             <StackPanel Orientation="Horizontal">
+                                <StackPanel.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="{x:Static res:Strings.Delete}" Command="{Binding DeleteCommand}">
+                                            <MenuItem.Icon>
+                                                <Image Source="/Resources/Images/Icons/Delete16.png" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </StackPanel.ContextMenu>
                                 <Image Margin="{StaticResource IconMargin}" Width="16" Height="16" Source="{Binding Icon, Converter={StaticResource ImageKeyConverter}}" />
 
                                 <TextBlock Name="Name" Style="{StaticResource NameText}" Text="{Binding Name}" />

@@ -115,7 +115,7 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
-  <data name="AddMacro" xml:space="preserve">
+  <data name="AddMacroDefinition" xml:space="preserve">
     <value>Add macro definition</value>
   </data>
   <data name="Macros" xml:space="preserve">

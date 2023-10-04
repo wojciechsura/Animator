@@ -95,7 +95,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             InsertMacroCommand = new AppCommand(obj => InsertMacro());
         }
 
-        public override void RequestDelete(BaseObjectViewModel obj)
+        public override void RequestDelete(ObjectViewModel obj)
         {
             SetDefault();
         }

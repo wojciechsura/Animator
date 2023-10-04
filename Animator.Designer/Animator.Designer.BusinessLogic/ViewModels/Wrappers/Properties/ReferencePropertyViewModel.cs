@@ -96,7 +96,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 .ToList();
         }
 
-        public override void RequestDelete(BaseObjectViewModel obj)
+        public override void RequestDelete(ObjectViewModel obj)
         {
             SetDefault();
         }
