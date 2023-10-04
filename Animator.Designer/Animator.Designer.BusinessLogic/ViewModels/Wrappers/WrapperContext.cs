@@ -31,9 +31,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
             }
         }
 
+        public void NotifyMovieChanged()
+        {
+            MovieChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         public IReadOnlyList<NamespaceViewModel> Namespaces => namespaces;
 
         public string DefaultNamespace { get; }
         public string EngineNamespace { get; }
+
+        public event EventHandler MovieChanged;
     }
 }

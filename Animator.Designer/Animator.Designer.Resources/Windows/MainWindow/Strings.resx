@@ -124,4 +124,28 @@
   <data name="Message_FailedToSaveDocument" xml:space="preserve">
     <value>Failed to save animation. Error: {0}</value>
   </data>
+  <data name="Error_At" xml:space="preserve">
+    <value>at</value>
+  </data>
+  <data name="Error_ParsingFailed" xml:space="preserve">
+    <value>Parsing failed!</value>
+  </data>
+  <data name="Error_Reason" xml:space="preserve">
+    <value>Reason:</value>
+  </data>
+  <data name="Error_RenderingFailed" xml:space="preserve">
+    <value>Rendering failed!</value>
+  </data>
+  <data name="Error_SerializationFailed" xml:space="preserve">
+    <value>Serialization failed!</value>
+  </data>
+  <data name="Message_FrameRendered" xml:space="preserve">
+    <value>Frame rendered in {0}</value>
+  </data>
+  <data name="Message_FrameFailedToRender" xml:space="preserve">
+    <value>Failed to render frame.</value>
+  </data>
+  <data name="Message_RenderingFrame" xml:space="preserve">
+    <value>Rendering frame...</value>
+  </data>
 </root>

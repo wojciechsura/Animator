@@ -31,18 +31,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 
         private void InternalSaveDocument(string path)
         {
-            XmlDocument xmlDocument = new XmlDocument();
-
-            XmlElement rootNode = document.RootNode.Serialize(xmlDocument);
-            document.WrapperContext.ApplyNamespaces(xmlDocument, rootNode);
-            xmlDocument.AppendChild(rootNode);
-
-
-            using FileStream mStream = new FileStream(path, FileMode.Create, FileAccess.Write);
-            using XmlTextWriter writer = new XmlTextWriter(mStream, Encoding.Unicode);
-            writer.Formatting = Formatting.Indented;
-
-            xmlDocument.Save(writer);
+            var fs = document.Save(() => new FileStream(path, FileMode.Create, FileAccess.Write));
+            fs.Dispose();
         }
 
         private void DoNew()

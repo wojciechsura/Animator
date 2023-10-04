@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Animator.Designer.Controls
 {
@@ -23,14 +24,47 @@ namespace Animator.Designer.Controls
     /// </summary>
     public partial class DocumentControl : UserControl
     {
-        public DocumentControl()
+        // Private fields -----------------------------------------------------
+
+        private DispatcherTimer movieTimer;
+        private DocumentViewModel viewModel;
+
+        // Private methods ----------------------------------------------------
+
+        private void DeinitializeViewModel(DocumentViewModel viewModel)
         {
-            InitializeComponent();
+            movieTimer?.Stop();
+            movieTimer = null;
+
+            viewModel.WrapperContext.MovieChanged -= HandleMovieChanged;
         }
 
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void HandleDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            (DataContext as DocumentViewModel).SelectedElement = e.NewValue as ObjectViewModel;
+            if (viewModel != null)
+            {
+                DeinitializeViewModel(viewModel);
+                viewModel = null;
+            }
+
+            if (e.NewValue != null)
+            {
+                viewModel = e.NewValue as DocumentViewModel;
+                InitializeViewModel(viewModel);
+            }
+        }
+
+        private void HandleMovieChanged(object sender, EventArgs e)
+        {
+            movieTimer?.Stop();
+            movieTimer?.Start();
+        }
+
+        private void InitializeViewModel(DocumentViewModel viewModel)
+        {
+            movieTimer = new DispatcherTimer(TimeSpan.FromSeconds(2), DispatcherPriority.Background, UpdateMovie, Dispatcher);
+
+            viewModel.WrapperContext.MovieChanged += HandleMovieChanged;
         }
 
         private void TreeView_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -49,6 +83,24 @@ namespace Animator.Designer.Controls
                     selected.IsSelected = true;
                 }
             }
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            (DataContext as DocumentViewModel).SelectedElement = e.NewValue as ObjectViewModel;
+        }
+
+        private void UpdateMovie(object sender, EventArgs args)
+        {
+            movieTimer.Stop();
+            viewModel.UpdateMovie();
+        }
+
+        // Public methods -----------------------------------------------------
+
+        public DocumentControl()
+        {
+            InitializeComponent();
         }
     }
 }

@@ -12,6 +12,7 @@
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
+             DataContextChanged="HandleDataContextChanged"
              d:DataContext="{d:DesignInstance Type=vm:DocumentViewModel}"             
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -331,8 +332,77 @@
             </DataGrid>
         </GroupBox>
         
+        <!-- Splitter -->
+        
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
+        <!-- Frame preview -->
+
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                <Grid.Background>
+                    <DrawingBrush Stretch="None" TileMode="Tile" Viewport="0,0,16,16" ViewportUnits="Absolute">
+
+                        <!-- a drawing of 4 checkerboard tiles -->
+                        <DrawingBrush.Drawing>
+                            <DrawingGroup>
+
+                                <!-- checkerboard background -->
+                                <GeometryDrawing Brush="#e0e0e0">
+                                    <GeometryDrawing.Geometry>
+                                        <RectangleGeometry Rect="0,0,16,16" />
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+
+                                <!-- two checkerboard foreground tiles -->
+                                <GeometryDrawing Brush="#f0f0f0">
+                                    <GeometryDrawing.Geometry>
+                                        <GeometryGroup>
+                                            <RectangleGeometry Rect="0,0,8,8" />
+                                            <RectangleGeometry Rect="8,8,8,8" />
+                                        </GeometryGroup>
+                                    </GeometryDrawing.Geometry>
+                                </GeometryDrawing>
+
+                            </DrawingGroup>
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Grid.Background>
+
+                <Image Source="{Binding Frame}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" StretchDirection="DownOnly"/>
+
+                <TextBox HorizontalAlignment="Stretch" VerticalContentAlignment="Top" Background="#a0ffffff" Visibility="{Binding ShowError, Converter={StaticResource BoolToVisibilityConverter}}"
+                       VerticalAlignment="Stretch" Margin="0" Text="{Binding Error, Mode=OneWay}" IsReadOnly="True" Foreground="#ff0060" FontFamily="Consolas"/>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="{Binding FrameIndex}"/>
+
+                <Slider Grid.Row="0" Grid.Column="1" Minimum="{Binding MinFrame}" Maximum="{Binding MaxFrame}" Value="{Binding FrameIndex, Mode=TwoWay, Delay=100}" 
+                        Margin="{StaticResource DefaultMargin}" SmallChange="1" TickPlacement="BottomRight" TickFrequency="10" LargeChange="10"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding RenderingStatus}" Margin="{StaticResource DefaultMargin}" />
+            </Grid>
+        </Grid>
+
+
+        <!-- Splitter -->
+        
         <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
 
         <!-- Hierarchy tree -->

@@ -12,6 +12,26 @@
                 <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <Thickness x:Key="DialogWindowPadding" Top="10" Left="10" Right="10" Bottom="10" />
+
+            <Thickness x:Key="DialogItemsBottomMargin" Bottom="4" />
+            <Thickness x:Key="DialogItemsTopMargin" Top="4" />
+            <Thickness x:Key="DialogItemsLeftMargin" Left="4" />
+            <Thickness x:Key="DialogItemsRightMargin" Right="4" />
+
+            <Thickness x:Key="DialogItemsExceptBottomMargin" Left="4" Top="4" Right="4" Bottom="0" />
+            <Thickness x:Key="DialogItemsExceptTopMargin" Left="4" Top="0" Right="4" Bottom="4" />
+            <Thickness x:Key="DialogItemsExceptLeftMargin" Left="0" Top="4" Right="4" Bottom="4" />
+            <Thickness x:Key="DialogItemsExceptRightMargin" Left="4" Top="4" Right="0" Bottom="4" />
+
+            <Thickness x:Key="DialogItemsVerticalOnlyMargin" Left="0" Top="4" Right="0" Bottom="4" />
+            <Thickness x:Key="DialogItemsHorizontalOnlyMargin" Left="4" Top="0" Right="4" Bottom="0" />
+
+            <Thickness x:Key="DialogItemsMargin" Left="4" Top="4" Right="4" Bottom="4" />
+            <Thickness x:Key="DialogItemsVMargin" Left="0" Top="0" Right="0" Bottom="4" />
+
+            <Thickness x:Key="DefaultMargin">4</Thickness>
+
             <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <conv:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
             <conv:InverseEmptyStringToVisibilityConverter x:Key="InverseEmptyStringToVisibilityConverter" />

@@ -61,6 +61,51 @@ namespace Animator.Designer.Resources.Windows.MainWindow {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu at.
+        /// </summary>
+        public static string Error_At {
+            get {
+                return ResourceManager.GetString("Error_At", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Parsing failed!.
+        /// </summary>
+        public static string Error_ParsingFailed {
+            get {
+                return ResourceManager.GetString("Error_ParsingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Reason:.
+        /// </summary>
+        public static string Error_Reason {
+            get {
+                return ResourceManager.GetString("Error_Reason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Rendering failed!.
+        /// </summary>
+        public static string Error_RenderingFailed {
+            get {
+                return ResourceManager.GetString("Error_RenderingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Serialization failed!.
+        /// </summary>
+        public static string Error_SerializationFailed {
+            get {
+                return ResourceManager.GetString("Error_SerializationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu File.
         /// </summary>
         public static string File {
@@ -102,6 +147,33 @@ namespace Animator.Designer.Resources.Windows.MainWindow {
         public static string Message_FailedToSaveDocument {
             get {
                 return ResourceManager.GetString("Message_FailedToSaveDocument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Failed to render frame..
+        /// </summary>
+        public static string Message_FrameFailedToRender {
+            get {
+                return ResourceManager.GetString("Message_FrameFailedToRender", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Frame rendered in {0}.
+        /// </summary>
+        public static string Message_FrameRendered {
+            get {
+                return ResourceManager.GetString("Message_FrameRendered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Rendering frame....
+        /// </summary>
+        public static string Message_RenderingFrame {
+            get {
+                return ResourceManager.GetString("Message_RenderingFrame", resourceCulture);
             }
         }
         

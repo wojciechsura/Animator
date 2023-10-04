@@ -144,4 +144,28 @@
   <data name="Message_FailedToSaveDocument" xml:space="preserve">
     <value>Nie udało się zapisać animacji. Błąd: {0}</value>
   </data>
+  <data name="Error_At" xml:space="preserve">
+    <value>w</value>
+  </data>
+  <data name="Error_ParsingFailed" xml:space="preserve">
+    <value>Parsowanie nieudane!</value>
+  </data>
+  <data name="Error_Reason" xml:space="preserve">
+    <value>Powód:</value>
+  </data>
+  <data name="Error_RenderingFailed" xml:space="preserve">
+    <value>Renderowanie nieudane!</value>
+  </data>
+  <data name="Error_SerializationFailed" xml:space="preserve">
+    <value>Serializacja nieudana!</value>
+  </data>
+  <data name="Message_FrameRendered" xml:space="preserve">
+    <value>Klatka wyrenderowana w {0}</value>
+  </data>
+  <data name="Message_FrameFailedToRender" xml:space="preserve">
+    <value>Wystąpił błąd podczas renderowania klatki.</value>
+  </data>
+  <data name="Message_RenderingFrame" xml:space="preserve">
+    <value>Trwa renderowanie klatki...</value>
+  </data>
 </root>
