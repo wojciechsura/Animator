@@ -34,7 +34,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             XmlDocument xmlDocument = new XmlDocument();
 
             XmlElement rootNode = document.RootNode.Serialize(xmlDocument);
+            document.WrapperContext.ApplyNamespaces(xmlDocument, rootNode);
             xmlDocument.AppendChild(rootNode);
+
 
             using FileStream mStream = new FileStream(path, FileMode.Create, FileAccess.Write);
             using XmlTextWriter writer = new XmlTextWriter(mStream, Encoding.Unicode);

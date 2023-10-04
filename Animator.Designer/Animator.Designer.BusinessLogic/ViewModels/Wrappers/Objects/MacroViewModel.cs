@@ -54,6 +54,22 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             keyProp.Value = keyProperty.Value;
             result.Attributes.Append(keyProp);
 
+            foreach (var property in properties)
+            {
+                if (property == keyProperty)
+                    continue;
+
+                if (property is StringPropertyViewModel stringProp)
+                {
+                    var propAttr = CreateAttributeProp(document, property.Name, property.Namespace);
+                    propAttr.Value = stringProp.Value;
+
+                    result.Attributes.Append(propAttr);
+                }
+                else
+                    throw new InvalidOperationException("Unsupported property type for macro!");
+            }
+
             return result;
         }
 

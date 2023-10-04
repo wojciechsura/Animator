@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
 {
@@ -19,6 +20,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
 
         public void AddNamespace(NamespaceViewModel ns)
             => namespaces.Add(ns);
+
+        public void ApplyNamespaces(XmlDocument document, XmlElement rootNode)
+        {
+            foreach (var @namespace in Namespaces.Where(ns => !string.IsNullOrEmpty(ns.Prefix)))
+            {
+                var attr = document.CreateAttribute($"xmlns:{@namespace.Prefix}");
+                attr.Value = @namespace.NamespaceUri;
+                rootNode.Attributes.Append(attr);
+            }
+        }
 
         public IReadOnlyList<NamespaceViewModel> Namespaces => namespaces;
 

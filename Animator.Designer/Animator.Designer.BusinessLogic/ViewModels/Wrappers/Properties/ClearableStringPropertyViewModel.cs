@@ -35,13 +35,17 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         {
             // Clear parent
             if (this.value != null)
+            {
                 this.value.Parent = null;
+                this.value.Handler = null;
+            }
 
             // Set new value
             if (value is StringValueViewModel or DefaultValueViewModel)
             {
                 Set(ref this.value, value, nameof(Value));
                 value.Parent = this;
+                value.Handler = this;
             }
             else
             {

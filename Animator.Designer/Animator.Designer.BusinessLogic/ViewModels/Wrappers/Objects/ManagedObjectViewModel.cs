@@ -360,7 +360,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 {
                     if (managedProperty == contentProperty)
                     {
-                        if (managedProperty.Value is not DefaultValueViewModel or ReferenceValueViewModel or CollectionValueViewModel)
+                        if (managedProperty.Value is DefaultValueViewModel or ReferenceValueViewModel or CollectionValueViewModel)
                         {
                             continue;
                         }
@@ -412,7 +412,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                                 XmlAttribute propAttr = CreateAttributeProp(document, managedProperty);
                                 propAttr.Value = markupExtension.Value.SerializeToString();
 
-                                result.AppendChild(propAttr);
+                                result.Attributes.Append(propAttr);
                                 break;
                             }                        
                         default:
@@ -432,10 +432,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
             // Content property
 
-            if (!contentPropertyProcessed)
+            if (contentProperty != null && !contentPropertyProcessed)
             {
                 switch (contentProperty.Value)
                 {
+                    case DefaultValueViewModel:
+                        break;
                     case ReferenceValueViewModel refValue:
                         {
                             var refElement = refValue.Value.Serialize(document);

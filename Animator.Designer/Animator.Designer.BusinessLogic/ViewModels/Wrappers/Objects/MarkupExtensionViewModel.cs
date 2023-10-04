@@ -64,10 +64,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 if (firstProp)
                 {
                     firstProp = false;
-                    return ", ";
+                    return " ";
                 }
 
-                return " ";
+                return ", ";
             }
 
             string QuoteIfNeeded(string str)

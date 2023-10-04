@@ -282,7 +282,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
             foreach (var param in markupData.Params)
             {
-                markupExt.Property<StringPropertyViewModel>(defaultNamespace, param.property).Value = param.value;
+                markupExt.Property<ClearableStringPropertyViewModel>(defaultNamespace, param.property).Value = new StringValueViewModel(param.value);
             }
 
             if (managedProperty is ManagedSimplePropertyViewModel simple)

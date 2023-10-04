@@ -54,6 +54,8 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Animator.Extensions.Nonconformist\Animator.Extensions.Nonconformist.csproj" />
+    <ProjectReference Include="..\..\Animator.Extensions.Utils\Animator.Extensions.Utils.csproj" />
     <ProjectReference Include="..\Animator.Designer.BusinessLogic\Animator.Designer.BusinessLogic.csproj" />
     <ProjectReference Include="..\Animator.Designer.Common.Wpf\Animator.Designer.Common.Wpf.csproj" />
     <ProjectReference Include="..\Animator.Designer.Common\Animator.Designer.Common.csproj" />
