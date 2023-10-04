@@ -12,22 +12,39 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Resources\Images\Icons\AddInstance16.png" />
+    <None Remove="Resources\Images\Icons\AnimateBool16.png" />
+    <None Remove="Resources\Images\Icons\AnimateColor16.png" />
+    <None Remove="Resources\Images\Icons\AnimateFloat16.png" />
+    <None Remove="Resources\Images\Icons\AnimateInt16.png" />
+    <None Remove="Resources\Images\Icons\AnimatePoint16.png" />
+    <None Remove="Resources\Images\Icons\AnimateStopwatch16.png" />
+    <None Remove="Resources\Images\Icons\AnimateWithExpression16.png" />
     <None Remove="Resources\Images\Icons\Animations16.png" />
+    <None Remove="Resources\Images\Icons\Circle16.png" />
     <None Remove="Resources\Images\Icons\Delete16.png" />
+    <None Remove="Resources\Images\Icons\Ellipse16.png" />
     <None Remove="Resources\Images\Icons\Generator16.png" />
     <None Remove="Resources\Images\Icons\Generic16.png" />
+    <None Remove="Resources\Images\Icons\Image16.png" />
     <None Remove="Resources\Images\Icons\Include16.png" />
+    <None Remove="Resources\Images\Icons\Label16.png" />
+    <None Remove="Resources\Images\Icons\Layer16.png" />
+    <None Remove="Resources\Images\Icons\Line16.png" />
     <None Remove="Resources\Images\Icons\MacroDefinition16.png" />
     <None Remove="Resources\Images\Icons\MacroDefinitions16.png" />
     <None Remove="Resources\Images\Icons\MarkupExtension16.png" />
+    <None Remove="Resources\Images\Icons\Path16.png" />
     <None Remove="Resources\Images\Icons\PlaceMacro16.png" />
     <None Remove="Resources\Images\Icons\Properties16.png" />
     <None Remove="Resources\Images\Icons\Property16.png" />
+    <None Remove="Resources\Images\Icons\Rectangle16.png" />
     <None Remove="Resources\Images\Icons\Resources16.png" />
     <None Remove="Resources\Images\Icons\SetCollection16.png" />
     <None Remove="Resources\Images\Icons\SetDefault16.png" />
     <None Remove="Resources\Images\Icons\SetInstance16.png" />
     <None Remove="Resources\Images\Icons\SetString16.png" />
+    <None Remove="Resources\Images\Icons\Storyboard16.png" />
+    <None Remove="Resources\Images\Icons\SvgImage16.png" />
     <None Remove="Resources\Images\New16.png" />
     <None Remove="Resources\Images\New32.png" />
     <None Remove="Resources\Images\Open16.png" />
@@ -36,9 +53,26 @@
     <None Remove="Resources\Images\Save32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\Icons\AnimateBool16.png" />
+    <Resource Include="Resources\Images\Icons\AnimateColor16.png" />
+    <Resource Include="Resources\Images\Icons\AnimateFloat16.png" />
+    <Resource Include="Resources\Images\Icons\AnimateInt16.png" />
+    <Resource Include="Resources\Images\Icons\AnimatePoint16.png" />
+    <Resource Include="Resources\Images\Icons\AnimateStopwatch16.png" />
+    <Resource Include="Resources\Images\Icons\AnimateWithExpression16.png" />
+    <Resource Include="Resources\Images\Icons\Circle16.png" />
+    <Resource Include="Resources\Images\Icons\Ellipse16.png" />
+    <Resource Include="Resources\Images\Icons\Label16.png" />
+    <Resource Include="Resources\Images\Icons\Layer16.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\Images\Icons\AddInstance16.png" />
     <Resource Include="Resources\Images\Icons\Animations16.png" />
     <Resource Include="Resources\Images\Icons\Delete16.png" />
+    <Resource Include="Resources\Images\Icons\Image16.png" />
+    <Resource Include="Resources\Images\Icons\Line16.png" />
+    <Resource Include="Resources\Images\Icons\Path16.png" />
+    <Resource Include="Resources\Images\Icons\Rectangle16.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Icons\Resources16.png" />
@@ -77,6 +111,8 @@
     <Resource Include="Resources\Images\Icons\SetDefault16.png" />
     <Resource Include="Resources\Images\Icons\SetInstance16.png" />
     <Resource Include="Resources\Images\Icons\SetString16.png" />
+    <Resource Include="Resources\Images\Icons\Storyboard16.png" />
+    <Resource Include="Resources\Images\Icons\SvgImage16.png" />
     <Resource Include="Resources\Images\New16.png" />
     <Resource Include="Resources\Images\New32.png" />
     <Resource Include="Resources\Images\Open16.png" />

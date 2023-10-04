@@ -26,7 +26,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         private enum NamespaceType
         {
-            Default,
+            Default = 1,
             Engine
         }
 
@@ -36,7 +36,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         private static readonly Dictionary<Type, (NamespaceType Namespace, string Property, string Color)> namePropDefinitions = new()
         {
-            { typeof(Animator.Engine.Elements.SceneElement), (NamespaceType.Default, nameof(Animator.Engine.Elements.SceneElement.Name), "#000000") },
+            { typeof(Animator.Engine.Elements.SceneElement), (NamespaceType.Default, nameof(Animator.Engine.Elements.SceneElement.Name), "#808080") },
             { typeof(Animator.Engine.Elements.Resource), (NamespaceType.Default, nameof(Animator.Engine.Elements.Resource.Key), "#0000ff") },
             { typeof(Animator.Engine.Elements.AnimateProperty), (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateProperty.PropertyRef), "#ff8000") }
         };
@@ -46,6 +46,29 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             { typeof(Animator.Engine.Elements.Label), (NamespaceType.Default, nameof(Animator.Engine.Elements.Label.Text)) },
             { typeof(Animator.Engine.Elements.Image), (NamespaceType.Default, nameof(Animator.Engine.Elements.Image.Source)) },
             { typeof(Animator.Engine.Elements.SvgImage), (NamespaceType.Default, nameof(Animator.Engine.Elements.SvgImage.Source)) }
+        };
+
+        private static readonly Dictionary<(NamespaceType Namespace, string Name), string> icons = new()
+        {
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Image)), "Image16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Layer)), "Layer16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Rectangle)), "Rectangle16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Circle)), "Circle16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Ellipse)), "Ellipse16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Line)), "Line16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.SvgImage)), "SvgImage16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Label)), "Label16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Path)), "Path16.png" },
+
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateInt)), "AnimateInt16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateBool)), "AnimateBool16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateFloat)), "AnimateFloat16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimatePoint)), "AnimatePoint16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateColor)), "AnimateColor16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateStopwatch)), "AnimateStopwatch16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateWithExpression)), "AnimateWithExpression16.png" },
+            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Storyboard)), "Storyboard16.png" },
+
         };
 
         // Private fields -----------------------------------------------------
@@ -322,7 +345,18 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             // Commands
 
             var notRootCondition = Condition.Lambda(this, vm => vm.Parent != null, false);
-            DeleteCommand = new AppCommand(obj => DoDelete(), notRootCondition);            
+            DeleteCommand = new AppCommand(obj => DoDelete(), notRootCondition);
+
+            // Icon
+
+            NamespaceType namespaceType = (NamespaceType)0;
+            if (Namespace == context.DefaultNamespace)
+                namespaceType = NamespaceType.Default;
+            else if (Namespace == context.EngineNamespace)
+                namespaceType = NamespaceType.Engine;
+
+            if (icons.TryGetValue((namespaceType, Name), out string icon))
+                Icon = icon;
         }
 
         public override XmlElement Serialize(XmlDocument document)

@@ -436,13 +436,13 @@
 
                                 <TextBlock Name="Class" Style="{StaticResource ClassNameText}" Text="{Binding Name}" />
 
-                                <TextBlock Name="NameDash" Style="{StaticResource NameText}" Text=" - " Visibility="{Binding DisplayName, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
+                                <TextBlock Name="NameDash" Style="{StaticResource ClassNameText}" Text=" - " Visibility="{Binding DisplayName, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
                                 <TextBlock Name="Name" Style="{StaticResource NameText}" Text="{Binding DisplayName}" Visibility="{Binding DisplayName, Converter={StaticResource EmptyStringToVisibilityConverter}}" 
                                            Foreground="{Binding NameColor, Converter={StaticResource ColorCodeToBrushConverter}}" />
 
-                                <TextBlock Name="ValueParen1" Style="{StaticResource NameText}" Text=" (" Visibility="{Binding Value, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
+                                <TextBlock Name="ValueParen1" Style="{StaticResource ClassNameText}" Text=" (" Visibility="{Binding Value, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
                                 <TextBlock Name="Value" Style="{StaticResource ValueText}" Text="{Binding Value}" Visibility="{Binding Value, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
-                                <TextBlock Name="ValueParen2" Style="{StaticResource NameText}" Text=")" Visibility="{Binding Value, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
+                                <TextBlock Name="ValueParen2" Style="{StaticResource ClassNameText}" Text=")" Visibility="{Binding Value, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
                             </StackPanel>
                         </Grid>
 
