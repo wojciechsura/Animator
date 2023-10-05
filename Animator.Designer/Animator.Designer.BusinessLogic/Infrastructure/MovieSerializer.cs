@@ -508,7 +508,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
         private void BuildNamespaces(XmlDocument document, WrapperContext wrapperContext)
         {
             var namespaceContext = new NamespaceContext();
-            CollectNamespacesRecursively(document.ChildNodes[0] as XmlElement, namespaceContext);
+            CollectNamespacesRecursively(document.ChildNodes.OfType<XmlElement>().First() as XmlElement, namespaceContext);
 
             // First, add all prefixed namespaces
 

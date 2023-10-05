@@ -35,7 +35,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             fs.Dispose();
         }
 
-        private void DoNew()
+        private bool DoNew()
         {
             if (document != null)
             {
@@ -59,7 +59,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             var serializer = new MovieSerializer();
             (var root, var wrapperContext) = serializer.Deserialize(xmlDocument, null);
 
-            Document = new DocumentViewModel(root, wrapperContext);
+            Document = new DocumentViewModel(dialogService, root, wrapperContext);
+
+            return true;
         }
 
         private bool DoOpen()
@@ -91,7 +93,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
                     var serializer = new MovieSerializer();
                     (var root, var wrapperContext) = serializer.Deserialize(xmlDocument, path);
 
-                    Document = new DocumentViewModel(root, wrapperContext, path, false);
+                    Document = new DocumentViewModel(dialogService, root, wrapperContext, path, false);
                     return true;
                 }
                 catch (Exception e)

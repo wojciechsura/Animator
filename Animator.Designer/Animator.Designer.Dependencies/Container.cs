@@ -17,6 +17,7 @@ namespace Animator.Designer.Dependencies
                 throw new InvalidOperationException("Container can be built only once!");
 
             var builder = new ContainerBuilder();
+            builder.RegisterSource(new Autofac.Features.ResolveAnything.AnyConcreteTypeNotAlreadyRegisteredSource());
             buildActions(builder);
             Instance = builder.Build();
         }

@@ -88,7 +88,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public void DeleteProperty(string propertyName)
         {
-            var property = properties.FirstOrDefault(prop => prop.Name == propertyName);
+            var property = properties.FirstOrDefault(prop => prop.Name == propertyName && prop.Namespace == context.DefaultNamespace);
             if (property == null)
                 throw new ArgumentException($"Macro doesn't contain property {propertyName}!");
 

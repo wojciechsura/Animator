@@ -1,9 +1,12 @@
-﻿using Animator.Designer.BusinessLogic.ViewModels.Base;
+﻿using Animator.Designer.BusinessLogic.Services.Dialogs;
+using Animator.Designer.BusinessLogic.ViewModels.Base;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using Animator.Engine.Base.Exceptions;
 using Animator.Engine.Elements;
 using Animator.Engine.Exceptions;
+using Spooksoft.VisualStateManager.Commands;
+using Spooksoft.VisualStateManager.Conditions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,7 +18,7 @@ using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using System.Xml.Linq;
@@ -26,80 +29,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
     {
         // Private classes ----------------------------------------------------
 
-        private sealed class UpdateMovieInput
-        {
-            public UpdateMovieInput(string movieXml, string path)
-            {
-                MovieXml = movieXml;
-                Path = path;
-            }
-
-            public string MovieXml { get; }
-            public string Path { get; }
-        }
-
-        private sealed class MovieUpdatedResult
-        {
-            public MovieUpdatedResult(Movie animation)
-            {
-                Movie = animation;
-            }
-
-            public Movie Movie { get; }
-        }
-
-        private sealed class MovieUpdateFailed
-        {
-            public Exception Exception { get; }
-
-            public MovieUpdateFailed(Exception exception)
-            {
-                Exception = exception;
-            }
-        }
-
-        private sealed class UpdateMovieWorker : BackgroundWorker
-        {
-            private static readonly Animator.Engine.Elements.Persistence.MovieSerializer movieSerializer = new();
-
-            protected override void OnDoWork(DoWorkEventArgs e)
-            {
-                var input = e.Argument as UpdateMovieInput;
-
-                Movie movie = null;
-                try
-                {
-                    XmlDocument document = new XmlDocument();
-                    document.LoadXml(input.MovieXml);
-
-                    movie = movieSerializer.Deserialize(document, System.IO.Path.GetDirectoryName(input.Path));
-                    movie.Path = input.Path;
-                    e.Result = new MovieUpdatedResult(movie);
-                }
-                catch (Exception ex)
-                {
-                    e.Result = new MovieUpdateFailed(ex);
-                }
-            }
-
-            public UpdateMovieWorker()
-            {
-                WorkerSupportsCancellation = true;
-            }
-        }
-
-        private sealed class FrameRenderInput
-        {
-            public FrameRenderInput(Movie movie, int frameIndex)
-            {
-                Movie = movie;
-                FrameIndex = frameIndex;
-            }
-
-            public Movie Movie { get; }
-            public int FrameIndex { get; }
-        }
-
         private sealed class FrameRenderedResult
         {
             public FrameRenderedResult(Bitmap frame, TimeSpan time)
@@ -108,18 +37,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
                 Duration = time;
             }
 
-            public Bitmap Frame { get; }
             public TimeSpan Duration { get; }
-        }
-
-        private sealed class FrameRenderingFailure
-        {
-            public FrameRenderingFailure(Exception exception)
-            {
-                Exception = exception;
-            }
-
-            public Exception Exception { get; }
+            public Bitmap Frame { get; }
         }
 
         private sealed class FrameRendererWorker : BackgroundWorker
@@ -180,22 +99,105 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             }
         }
 
+        private sealed class FrameRenderingFailure
+        {
+            public FrameRenderingFailure(Exception exception)
+            {
+                Exception = exception;
+            }
+
+            public Exception Exception { get; }
+        }
+
+        private sealed class FrameRenderInput
+        {
+            public FrameRenderInput(Movie movie, int frameIndex)
+            {
+                Movie = movie;
+                FrameIndex = frameIndex;
+            }
+
+            public int FrameIndex { get; }
+            public Movie Movie { get; }
+        }
+
+        private sealed class MovieUpdatedResult
+        {
+            public MovieUpdatedResult(Movie animation)
+            {
+                Movie = animation;
+            }
+
+            public Movie Movie { get; }
+        }
+
+        private sealed class MovieUpdateFailed
+        {
+            public MovieUpdateFailed(Exception exception)
+            {
+                Exception = exception;
+            }
+
+            public Exception Exception { get; }
+        }
+
+        private sealed class UpdateMovieInput
+        {
+            public UpdateMovieInput(string movieXml, string path)
+            {
+                MovieXml = movieXml;
+                Path = path;
+            }
+
+            public string MovieXml { get; }
+            public string Path { get; }
+        }
+
+        private sealed class UpdateMovieWorker : BackgroundWorker
+        {
+            private static readonly Animator.Engine.Elements.Persistence.MovieSerializer movieSerializer = new();
+
+            protected override void OnDoWork(DoWorkEventArgs e)
+            {
+                var input = e.Argument as UpdateMovieInput;
+
+                Movie movie = null;
+                try
+                {
+                    XmlDocument document = new XmlDocument();
+                    document.LoadXml(input.MovieXml);
+
+                    movie = movieSerializer.Deserialize(document, System.IO.Path.GetDirectoryName(input.Path));
+                    movie.Path = input.Path;
+                    e.Result = new MovieUpdatedResult(movie);
+                }
+                catch (Exception ex)
+                {
+                    e.Result = new MovieUpdateFailed(ex);
+                }
+            }
+
+            public UpdateMovieWorker()
+            {
+                WorkerSupportsCancellation = true;
+            }
+        }
 
         // Private fields -----------------------------------------------------
 
         private readonly ObjectViewModel[] displayItems;
-        private ObjectViewModel selectedElement;
-
-        private Movie movie;
-        private UpdateMovieWorker updateMovieWorker;
+        private readonly IDialogService dialogService;
         private BitmapSource frame;
-        private FrameRendererWorker frameRendererWorker;
-        private int minFrame;
         private int frameIndex;
+        private FrameRendererWorker frameRendererWorker;
         private int maxFrame;
+        private int minFrame;
+        private Movie movie;
         private string parsingError;
         private string renderingError;
         private string renderingStatus;
+        private ObjectViewModel selectedElement;
+        private UpdateMovieWorker updateMovieWorker;
 
         // Private methods ----------------------------------------------------
 
@@ -245,6 +247,71 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             return sb.ToString();
         }
 
+        private void DoEditMacroProperties()
+        {
+            dialogService.ShowMacroPropertyEditor(selectedElement as MacroViewModel);
+        }
+
+        private void FrameRendered(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+                return;
+
+            RenderingError = null;
+
+            if (e.Result is FrameRenderedResult frameRenderedResult)
+            {
+                IntPtr ip = frameRenderedResult.Frame.GetHbitmap();
+                BitmapSource bs = null;
+                try
+                {
+                    bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(ip,
+                        IntPtr.Zero,
+                        System.Windows.Int32Rect.Empty,
+                        BitmapSizeOptions.FromEmptyOptions());
+                }
+                finally
+                {
+                    DeleteObject(ip);
+                }
+
+                Frame = bs;
+
+                RenderingStatus = String.Format(Resources.Windows.MainWindow.Strings.Message_FrameRendered, frameRenderedResult.Duration);
+            }
+            else if (e.Result is FrameRenderingFailure frameRenderingFailure)
+            {
+                RenderingError = BuildError(Resources.Windows.MainWindow.Strings.Error_RenderingFailed, frameRenderingFailure.Exception);
+                RenderingStatus = Resources.Windows.MainWindow.Strings.Message_FrameFailedToRender;
+            }
+        }
+
+        private void HandleErrorChanged()
+        {
+            OnPropertyChanged(nameof(Error));
+            OnPropertyChanged(nameof(ShowError));
+        }
+
+        private void HandleFrameIndexChanged()
+        {
+            UpdateFrame();
+        }
+
+        private void UpdateFrame()
+        {
+            if (frameRendererWorker != null && frameRendererWorker.IsBusy)
+            {
+                frameRendererWorker.CancelAsync();
+                frameRendererWorker = null;
+            }
+
+            RenderingStatus = Resources.Windows.MainWindow.Strings.Message_RenderingFrame;
+
+            frameRendererWorker = new FrameRendererWorker();
+            frameRendererWorker.RunWorkerCompleted += FrameRendered;
+            frameRendererWorker.RunWorkerAsync(new FrameRenderInput(movie, frameIndex));
+        }
+
         private void UpdateMovieFinished(object sender, RunWorkerCompletedEventArgs e)
         {
             ParsingError = null;
@@ -276,70 +343,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             }
         }
 
-        private void HandleFrameIndexChanged()
-        {
-            UpdateFrame();
-        }
-
-        private void HandleErrorChanged()
-        {
-            OnPropertyChanged(nameof(Error));
-            OnPropertyChanged(nameof(ShowError));
-        }
-
-        private void FrameRendered(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Cancelled)
-                return;
-
-            RenderingError = null;
-
-            if (e.Result is FrameRenderedResult frameRenderedResult)
-            {
-                IntPtr ip = frameRenderedResult.Frame.GetHbitmap();
-                BitmapSource bs = null;
-                try
-                {
-                    bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(ip,
-                        IntPtr.Zero,
-                        Int32Rect.Empty,
-                        BitmapSizeOptions.FromEmptyOptions());
-                }
-                finally
-                {
-                    DeleteObject(ip);
-                }
-
-                Frame = bs;
-
-                RenderingStatus = String.Format(Resources.Windows.MainWindow.Strings.Message_FrameRendered, frameRenderedResult.Duration);
-            }
-            else if (e.Result is FrameRenderingFailure frameRenderingFailure)
-            {
-                RenderingError = BuildError(Resources.Windows.MainWindow.Strings.Error_RenderingFailed, frameRenderingFailure.Exception);
-                RenderingStatus = Resources.Windows.MainWindow.Strings.Message_FrameFailedToRender;
-            }
-        }
-
-        private void UpdateFrame()
-        {
-            if (frameRendererWorker != null && frameRendererWorker.IsBusy)
-            {
-                frameRendererWorker.CancelAsync();
-                frameRendererWorker = null;
-            }
-
-            RenderingStatus = Resources.Windows.MainWindow.Strings.Message_RenderingFrame;
-
-            frameRendererWorker = new FrameRendererWorker();
-            frameRendererWorker.RunWorkerCompleted += FrameRendered;
-            frameRendererWorker.RunWorkerAsync(new FrameRenderInput(movie, frameIndex));
-        }
-
         // Public methods -----------------------------------------------------
 
-        public DocumentViewModel(ObjectViewModel rootNode, WrapperContext wrapperContext, string filename = "Animation.xml", bool filenameVirtual = true)
+        public DocumentViewModel(IDialogService dialogService,
+            ObjectViewModel rootNode, 
+            WrapperContext wrapperContext, 
+            string filename = "Animation.xml", 
+            bool filenameVirtual = true)
         {
+            this.dialogService = dialogService;
+
             RootNode = rootNode;
             WrapperContext = wrapperContext;
 
@@ -347,6 +360,27 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 
             Filename = filename;
             FilenameVirtual = filenameVirtual;
+            var macroSelectedCondition = Condition.Lambda(this, vm => vm.SelectedElement is MacroViewModel, false);
+
+            EditMacroProperties = new AppCommand(obj => DoEditMacroProperties(), macroSelectedCondition);
+        }
+
+        public TStream Save<TStream>(Func<TStream> streamFactory)
+            where TStream : Stream
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+
+            XmlElement rootNode = RootNode.Serialize(xmlDocument);
+            WrapperContext.ApplyNamespaces(xmlDocument, rootNode);
+            xmlDocument.AppendChild(rootNode);
+
+            TStream stream = streamFactory();
+            XmlTextWriter writer = new XmlTextWriter(stream, Encoding.Unicode);
+            writer.Formatting = Formatting.Indented;
+
+            xmlDocument.Save(writer);
+
+            return stream;
         }
 
         public void UpdateMovie()
@@ -375,44 +409,22 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             }            
         }
 
-        public TStream Save<TStream>(Func<TStream> streamFactory)
-            where TStream : Stream
-        {
-            XmlDocument xmlDocument = new XmlDocument();
-
-            XmlElement rootNode = RootNode.Serialize(xmlDocument);
-            WrapperContext.ApplyNamespaces(xmlDocument, rootNode);
-            xmlDocument.AppendChild(rootNode);
-
-            TStream stream = streamFactory();
-            XmlTextWriter writer = new XmlTextWriter(stream, Encoding.Unicode);
-            writer.Formatting = Formatting.Indented;
-
-            xmlDocument.Save(writer);
-
-            return stream;
-        }
-
-        public string Filename { get; set; }
-        public bool FilenameVirtual { get; set; }
-        public ObjectViewModel RootNode { get; }
-        public WrapperContext WrapperContext { get; }
+        // Public properties --------------------------------------------------
 
         public IEnumerable<ObjectViewModel> DisplayItems => displayItems;
-        
-        public ObjectViewModel SelectedElement 
-        {
-            get => selectedElement;
-            set
-            {
-                Set(ref selectedElement, value);
-            }
-        }
 
-        public int MinFrame
+        public ICommand EditMacroProperties { get; }
+
+        public string Error => BuildErrors(ParsingError, RenderingError);
+
+        public string Filename { get; set; }
+
+        public bool FilenameVirtual { get; set; }
+
+        public BitmapSource Frame
         {
-            get => minFrame;
-            set => Set(ref minFrame, value);
+            get => frame;
+            set => Set(ref frame, value);
         }
 
         public int FrameIndex
@@ -427,10 +439,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             set => Set(ref maxFrame, value);
         }
 
-        public BitmapSource Frame
+        public int MinFrame
         {
-            get => frame;
-            set => Set(ref frame, value);
+            get => minFrame;
+            set => Set(ref minFrame, value);
         }
 
         public string ParsingError
@@ -451,11 +463,22 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             set => Set(ref renderingStatus, value);
         }
 
-        public string Error => BuildErrors(ParsingError, RenderingError);
+        public ObjectViewModel RootNode { get; }
+
+        public ObjectViewModel SelectedElement
+        {
+            get => selectedElement;
+            set
+            {
+                Set(ref selectedElement, value);
+            }
+        }
 
         public bool ShowError
         {
             get => !String.IsNullOrEmpty(ParsingError) || !String.IsNullOrEmpty(RenderingError);
         }
+
+        public WrapperContext WrapperContext { get; }
     }
 }

@@ -296,40 +296,49 @@
         <!-- Properties table -->
         
         <GroupBox Header="Properties" Grid.Column="0">
-            <DataGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding SelectedElement.Properties}"
-                      AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" GridLinesVisibility="None" 
-                      CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" 
-                      HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" HeadersVisibility="Column">
-                <DataGrid.CellStyle>
-                    <Style TargetType="DataGridCell">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type DataGridCell}">
-                                    <Border Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True"
-                                            TextBlock.Foreground="{x:Static SystemColors.ControlTextBrush}">
-                                        <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" />
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="TextBlock.Foreground" Value="{x:Static SystemColors.ControlTextBrush}" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </DataGrid.CellStyle>
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Name">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate DataType="{x:Type vmp:PropertyViewModel}">
-                                <TextBlock Margin="3" Text="{Binding Name}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Value" Width="1*" CellTemplateSelector="{StaticResource PropertyEditorTemplateSelector}" />
-                </DataGrid.Columns>
-            </DataGrid>
+
+            <DockPanel>
+
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                    <Button Margin="{StaticResource DialogItemsMargin}" Command="{Binding EditMacroProperties}" Content="#Edit properties..." />
+                </StackPanel>
+                
+                <DataGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding SelectedElement.Properties}"
+                          AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" GridLinesVisibility="None" 
+                          CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False" 
+                          HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" HeadersVisibility="Column">
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                        <Border Padding="{TemplateBinding Padding}" SnapsToDevicePixels="True"
+                                                TextBlock.Foreground="{x:Static SystemColors.ControlTextBrush}">
+                                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="TextBlock.Foreground" Value="{x:Static SystemColors.ControlTextBrush}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.CellStyle>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Name">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate DataType="{x:Type vmp:PropertyViewModel}">
+                                    <TextBlock Margin="3" Text="{Binding Name}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Value" Width="1*" CellTemplateSelector="{StaticResource PropertyEditorTemplateSelector}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </DockPanel>
         </GroupBox>
         
         <!-- Splitter -->
