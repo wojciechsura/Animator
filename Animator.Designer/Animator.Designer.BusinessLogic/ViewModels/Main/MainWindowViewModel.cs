@@ -39,7 +39,17 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
         {
             if (document != null)
             {
-                // TODO Ask for saving, possible cancellation etc.
+                var answer = messagingService.AskYesNoCancel(Animator.Designer.Resources.Windows.MainWindow.Strings.Message_SaveBeforeClose);
+
+                if (answer == true)
+                {
+                    if (!DoSave())
+                        return false;
+                }
+                else if (answer == null)
+                {
+                    return false;
+                }
             }
 
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Animator.Designer.BusinessLogic.Resources.EmptyDocument.xml");
@@ -52,7 +62,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             Document = new DocumentViewModel(root, wrapperContext);
         }
 
-        private void DoOpen()
+        private bool DoOpen()
         {
             (bool result, string path) = dialogService.ShowOpenDialog(Strings.FileFilter);
             
@@ -60,7 +70,17 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             {
                 if (document != null)
                 {
-                    // TODO Ask for saving, possible cancellation etc.
+                    var answer = messagingService.AskYesNoCancel(Animator.Designer.Resources.Windows.MainWindow.Strings.Message_SaveBeforeClose);
+
+                    if (answer == true)
+                    {
+                        if (!DoSave())
+                            return false;
+                    }
+                    else if (answer == null)
+                    {
+                        return false;
+                    }
                 }
 
                 try
@@ -71,29 +91,43 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
                     var serializer = new MovieSerializer();
                     (var root, var wrapperContext) = serializer.Deserialize(xmlDocument, path);
 
-                    Document = new DocumentViewModel(root, wrapperContext, path, false);                    
+                    Document = new DocumentViewModel(root, wrapperContext, path, false);
+                    return true;
                 }
                 catch (Exception e)
                 {
                     Document = null;
 
                     messagingService.Warn(String.Format(Strings.Message_FailedToOpenDocument, e.Message));
+                    return false;
                 }
+            }
+            else
+            {
+                return false;
             }
         }
 
-        private void DoSave()
+        private bool DoSave()
         {
             if (document.FilenameVirtual)
             {
-                DoSaveAs();
-                return;
+                return DoSaveAs();                
             }
 
-            InternalSaveDocument(document.Filename);
+            try
+            {
+                InternalSaveDocument(document.Filename);
+                return true;
+            }
+            catch (Exception e)
+            {
+                messagingService.ShowError(string.Format(Strings.Message_FailedToSaveDocument, e.Message));
+                return false;
+            }
         }
 
-        private void DoSaveAs()
+        private bool DoSaveAs()
         {
             (bool result, string path) = dialogService.ShowSaveDialog(Strings.FileFilter);
 
@@ -105,12 +139,17 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 
                     document.Filename = path;
                     document.FilenameVirtual = false;
+
+                    return true;
                 }
                 catch (Exception e)
                 {
                     messagingService.ShowError(string.Format(Strings.Message_FailedToSaveDocument, e.Message));
+                    return false;
                 }
-            }            
+            }
+
+            return false;
         }
 
         // Public methods -----------------------------------------------------

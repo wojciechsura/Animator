@@ -21,6 +21,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
         // Private methods ----------------------------------------------------
 
+        private void HandleStringChanged(object sender, PropertyChangedEventArgs e)
+        {
+            context.NotifyPropertyChanged();
+        }
+
         private void SetDefault()
         {
             Value = new DefaultValueViewModel(null, false);
@@ -34,6 +39,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         private void SetValue(ValueViewModel value)
         {
             // Clear parent
+            if (this.value is StringValueViewModel)
+            {
+                this.value.PropertyChanged -= HandleStringChanged;
+            }
             if (this.value != null)
             {
                 this.value.Parent = null;
@@ -41,7 +50,14 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             }
 
             // Set new value
-            if (value is StringValueViewModel or DefaultValueViewModel)
+            if (value is StringValueViewModel)
+            {
+                Set(ref this.value, value, nameof(Value));
+                value.Parent = this;
+                value.Handler = this;
+                value.PropertyChanged += HandleStringChanged;
+            }
+            if (value is DefaultValueViewModel)
             {
                 Set(ref this.value, value, nameof(Value));
                 value.Parent = this;
@@ -51,6 +67,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             {
                 throw new ArgumentException($"ClearableStringPropertyViewModel does not support value of type {value}!");
             }
+
+            context.NotifyPropertyChanged();
         }
 
         // Public methods -----------------------------------------------------

@@ -24,6 +24,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         private void HandleCollectionChanged(object sender, EventArgs args)
         {
             OnCollectionChanged();
+            context.NotifyPropertyChanged();
         }
 
         private void DoAddMacroDefinition()

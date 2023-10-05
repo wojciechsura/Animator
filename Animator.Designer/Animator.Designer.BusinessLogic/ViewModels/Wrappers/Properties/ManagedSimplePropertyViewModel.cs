@@ -21,7 +21,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         private void HandleStringValueChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(StringValueViewModel.Value))
+            {
                 OnStringValueChanged();
+                context.NotifyPropertyChanged();
+            }
         }
 
         private void SetDefault()
@@ -62,6 +65,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 Set(ref this.value, value, nameof(Value));
             else
                 throw new ArgumentException($"ManagedSimplePropertyViewModel does not support value of type {value}!");
+
+            context.NotifyPropertyChanged();
         }
 
         public ManagedSimplePropertyViewModel(ObjectViewModel parent, WrapperContext context, ManagedSimpleProperty property)

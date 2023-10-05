@@ -22,7 +22,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         private void HandleStringValueChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(StringValueViewModel.Value))
+            {
                 OnStringValueChanged();
+                context.NotifyPropertyChanged();
+            }
         }
 
         private void SetDefault()
@@ -92,6 +95,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             }
             else
                 throw new ArgumentException($"ManagedReferencePropertyViewModel does not support value of type {value}!");
+
+            context.NotifyPropertyChanged();
         }
 
         public ManagedReferencePropertyViewModel(ObjectViewModel parent, WrapperContext context, ManagedReferenceProperty referenceProperty)

@@ -75,12 +75,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         private void HandleCollectionChanged(object sender, EventArgs e)
         {
             OnCollectionChanged();
+            context.NotifyPropertyChanged();
         }
 
         private void HandleStringValueChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(StringValueViewModel.Value))
+            {
                 OnStringValueChanged();
+                context.NotifyPropertyChanged();
+            }
         }
 
         private void SetToCollection()
@@ -126,6 +130,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             }
             else
                 throw new ArgumentException($"ManagedCollectionPropertyViewModel does not support value of type {value}!");
+
+            context.NotifyPropertyChanged();
         }
 
         // Public methods -----------------------------------------------------

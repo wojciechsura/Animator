@@ -87,7 +87,8 @@ namespace Animator.Designer.Controls
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            (DataContext as DocumentViewModel).SelectedElement = e.NewValue as ObjectViewModel;
+            if (viewModel != null)
+                viewModel.SelectedElement = e.NewValue as ObjectViewModel;
         }
 
         private void UpdateMovie(object sender, EventArgs args)

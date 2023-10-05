@@ -148,4 +148,7 @@
   <data name="Message_RenderingFrame" xml:space="preserve">
     <value>Rendering frame...</value>
   </data>
+  <data name="Message_SaveBeforeClose" xml:space="preserve">
+    <value>Do you want to save document {0} before closing?</value>
+  </data>
 </root>

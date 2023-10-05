@@ -412,6 +412,9 @@
                       PreviewMouseDown="TreeView_PreviewMouseDown">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="TreeViewItem">
+                        <Style.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="{x:Static SystemColors.HighlightColor}" />
+                        </Style.Resources>
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                     </Style>

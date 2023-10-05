@@ -31,7 +31,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
             }
         }
 
-        public void NotifyMovieChanged()
+        public void NotifyPropertyChanged()
         {
             MovieChanged?.Invoke(this, EventArgs.Empty);
         }

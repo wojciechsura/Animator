@@ -11,6 +11,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     {
         private string value;
 
+        private void HandleStringChanged()
+        {
+            context.NotifyPropertyChanged();
+        }
+
         public StringPropertyViewModel(ObjectViewModel parent, WrapperContext context, string ns, string name)
             : base(parent, context)
         {
@@ -34,7 +39,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public string Value
         {
             get => value;
-            set => Set(ref this.value, value);
+            set => Set(ref this.value, value, changeHandler: HandleStringChanged);
         }
     }
 }

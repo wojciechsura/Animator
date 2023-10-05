@@ -44,6 +44,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             {
                 throw new ArgumentException($"ManagedReferencePropertyViewModel does not support value of type {value}!");
             }
+
+            context.NotifyPropertyChanged();
         }
 
         private void SetToInstance(Type type)

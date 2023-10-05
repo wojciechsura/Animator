@@ -88,6 +88,8 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Animator.Engine.Base\Animator.Engine.Base.csproj" />
+    <ProjectReference Include="..\..\Animator.Engine.Native\Animator.Engine.Native.vcxproj" />
     <ProjectReference Include="..\..\Animator.Extensions.Nonconformist\Animator.Extensions.Nonconformist.csproj" />
     <ProjectReference Include="..\..\Animator.Extensions.Utils\Animator.Extensions.Utils.csproj" />
     <ProjectReference Include="..\Animator.Designer.BusinessLogic\Animator.Designer.BusinessLogic.csproj" />
@@ -120,4 +122,7 @@
     <Resource Include="Resources\Images\Save16.png" />
     <Resource Include="Resources\Images\Save32.png" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(SolutionDir)x64\$(ConfigurationName)\Animator.Engine.Native.dll&quot; &quot;$(TargetDir)Animator.Engine.Native.dll&quot;&#xD;&#xA;copy &quot;$(SolutionDir)x64\$(ConfigurationName)\Animator.Engine.Native.pdb&quot; &quot;$(TargetDir)Animator.Engine.Native.pdb&quot;" />
+  </Target>
 </Project>

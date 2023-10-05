@@ -26,7 +26,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
     {
         // Private classes ----------------------------------------------------
 
-        private class UpdateMovieInput
+        private sealed class UpdateMovieInput
         {
             public UpdateMovieInput(string movieXml, string path)
             {
@@ -38,7 +38,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             public string Path { get; }
         }
 
-        private class MovieUpdatedResult
+        private sealed class MovieUpdatedResult
         {
             public MovieUpdatedResult(Movie animation)
             {
@@ -48,7 +48,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             public Movie Movie { get; }
         }
 
-        private class MovieUpdateFailed
+        private sealed class MovieUpdateFailed
         {
             public Exception Exception { get; }
 
@@ -58,7 +58,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             }
         }
 
-        private class UpdateMovieWorker : BackgroundWorker
+        private sealed class UpdateMovieWorker : BackgroundWorker
         {
             private static readonly Animator.Engine.Elements.Persistence.MovieSerializer movieSerializer = new();
 
@@ -88,7 +88,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             }
         }
 
-        private class FrameRenderInput
+        private sealed class FrameRenderInput
         {
             public FrameRenderInput(Movie movie, int frameIndex)
             {
@@ -100,7 +100,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             public int FrameIndex { get; }
         }
 
-        private class FrameRenderedResult
+        private sealed class FrameRenderedResult
         {
             public FrameRenderedResult(Bitmap frame, TimeSpan time)
             {
@@ -112,7 +112,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             public TimeSpan Duration { get; }
         }
 
-        private class FrameRenderingFailure
+        private sealed class FrameRenderingFailure
         {
             public FrameRenderingFailure(Exception exception)
             {
@@ -122,7 +122,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             public Exception Exception { get; }
         }
 
-        private class FrameRendererWorker : BackgroundWorker
+        private sealed class FrameRendererWorker : BackgroundWorker
         {
             private Bitmap RenderFrameAt(Movie movie, TimeSpan time)
             {
@@ -336,11 +336,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             frameRendererWorker.RunWorkerAsync(new FrameRenderInput(movie, frameIndex));
         }
 
-        private void HandleMovieChanged(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         // Public methods -----------------------------------------------------
 
         public DocumentViewModel(ObjectViewModel rootNode, WrapperContext wrapperContext, string filename = "Animation.xml", bool filenameVirtual = true)
@@ -352,8 +347,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 
             Filename = filename;
             FilenameVirtual = filenameVirtual;
-
-            WrapperContext.MovieChanged += HandleMovieChanged;
         }
 
         public void UpdateMovie()
@@ -425,7 +418,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
         public int FrameIndex
         {
             get => frameIndex;
-            set => Set(ref frameIndex, value, nameof(FrameIndex), HandleFrameIndexChanged, true);
+            set => Set(ref frameIndex, value, changeHandler: HandleFrameIndexChanged, force: true);
         }
 
         public int MaxFrame
@@ -443,13 +436,13 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
         public string ParsingError
         {
             get => parsingError;
-            set => Set(ref parsingError, value, nameof(ParsingError), HandleErrorChanged);
+            set => Set(ref parsingError, value, changeHandler: HandleErrorChanged);
         }
 
         public string RenderingError
         {
             get => renderingError;
-            set => Set(ref renderingError, value, nameof(RenderingError), HandleErrorChanged);
+            set => Set(ref renderingError, value, changeHandler: HandleErrorChanged);
         }
 
         public string RenderingStatus

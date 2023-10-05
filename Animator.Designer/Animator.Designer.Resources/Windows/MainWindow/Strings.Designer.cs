@@ -178,6 +178,15 @@ namespace Animator.Designer.Resources.Windows.MainWindow {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Do you want to save document {0} before closing?.
+        /// </summary>
+        public static string Message_SaveBeforeClose {
+            get {
+                return ResourceManager.GetString("Message_SaveBeforeClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu New.
         /// </summary>
         public static string New {
