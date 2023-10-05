@@ -117,6 +117,20 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <MenuItem Visibility="{Binding SetToFromResourceCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                          Header="{x:Static res:Strings.FromResource}" ItemsSource="{Binding AvailableResources}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="{x:Type MenuItem}">
+                            <Setter Property="Header" Value="{Binding Key}" />
+                            <Setter Property="Command" Value="{Binding Command}" />
+                            <Setter Property="CommandParameter" Value="{Binding Key}" />
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Images/Icons/Resources16.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
             </ContextMenu>
         </Button.ContextMenu>
     </Button>

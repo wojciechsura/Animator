@@ -79,6 +79,15 @@ namespace Animator.Designer.Resources.Controls.PropertyPopup {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu From resource.
+        /// </summary>
+        public static string FromResource {
+            get {
+                return ResourceManager.GetString("FromResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Insert generator.
         /// </summary>
         public static string InsertGenerator {

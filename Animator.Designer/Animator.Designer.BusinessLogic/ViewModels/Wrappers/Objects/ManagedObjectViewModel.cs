@@ -243,6 +243,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
             this.Name = className;
             this.Namespace = ns;
+            this.Type = type;
 
             // Build properties
 
@@ -535,5 +536,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public IEnumerable<TypeViewModel> AvailableTypes => contentProperty?.AvailableTypes;
 
         public IEnumerable<TypeViewModel> AvailableMarkupExtensions => contentProperty?.AvailableMarkupExtensions;
+
+        public Type Type { get; }
     }
 }

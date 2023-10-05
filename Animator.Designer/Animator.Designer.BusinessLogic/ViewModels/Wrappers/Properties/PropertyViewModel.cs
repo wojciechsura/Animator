@@ -48,6 +48,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
         public virtual IEnumerable<TypeViewModel> AvailableMarkupExtensions { get; } = null;
 
+        public virtual IEnumerable<ResourceKeyViewModel> AvailableResources { get; } = null;
+
         public ObjectViewModel Parent { get; set; }
 
         public IList<string> AvailableOptions { get; init; }
@@ -62,5 +64,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public ICommand InsertGeneratorCommand { get; init; }
         public ICommand AddMacroDefinitionCommand { get; init; }
         public ICommand SetToMarkupExtensionCommand { get; init; }
+        public ICommand SetToFromResourceCommand { get; init; }
     }
 }

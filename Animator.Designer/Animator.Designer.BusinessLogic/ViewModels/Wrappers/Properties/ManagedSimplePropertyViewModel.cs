@@ -1,12 +1,15 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
+using Animator.Engine.Base.Extensions;
 using Animator.Engine.Base.Persistence.Types;
 using Spooksoft.VisualStateManager.Commands;
 using Spooksoft.VisualStateManager.Conditions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +28,26 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 OnStringValueChanged();
                 context.NotifyPropertyChanged();
             }
+        }
+
+        private IEnumerable<ResourceKeyViewModel> GetAvailableResources()
+        {
+            Func<ManagedObjectViewModel, bool> matchesCurrentType;
+
+            if (simpleProperty.Type == typeof(int))
+                matchesCurrentType = managedObj => managedObj.Type == typeof(Animator.Engine.Elements.IntResource);
+            else if (simpleProperty.Type == typeof(float))
+                matchesCurrentType = managedObj => managedObj.Type == typeof(Animator.Engine.Elements.FloatResource);
+            else if (simpleProperty.Type == typeof(PointF))
+                matchesCurrentType = managedObj => managedObj.Type == typeof(Animator.Engine.Elements.PointResource);
+            else if (simpleProperty.Type == typeof(TimeSpan))
+                matchesCurrentType = managedObj => managedObj.Type == typeof(Animator.Engine.Elements.TimeResource);
+            else if (simpleProperty.Type == typeof(string))
+                matchesCurrentType = managedObj => managedObj.Type == typeof(Animator.Engine.Elements.StringResource);
+            else
+                matchesCurrentType = managedObj => false;
+            
+            return InternalGetAvailableResources(matchesCurrentType);
         }
 
         private void SetDefault()
@@ -80,6 +103,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
             SetDefaultCommand = new AppCommand(obj => SetDefault(), !valueIsDefaultCondition);
             SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
+            SetToFromResourceCommand = new AppCommand(obj => SetToFromResource((string)obj));
 
             if (property.Type == typeof(bool))
             {
@@ -114,6 +138,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 SetToString();
             }
         }
+
+        public override IEnumerable<ResourceKeyViewModel> AvailableResources => GetAvailableResources();
 
         public override ManagedProperty ManagedProperty => simpleProperty;        
     }

@@ -8,6 +8,7 @@ using Spooksoft.VisualStateManager.Conditions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,20 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     public class ManagedReferencePropertyViewModel : ManagedPropertyViewModel
     {
         private readonly ManagedReferenceProperty referenceProperty;
+
+        private IEnumerable<ResourceKeyViewModel> GetAvailableResources()
+        {
+            Func<ManagedObjectViewModel, bool> matchesCurrentType;
+
+            if (referenceProperty.Type == typeof(Animator.Engine.Elements.Brush))
+                matchesCurrentType = managedObj => managedObj.Type == typeof(Animator.Engine.Elements.BrushResource);
+            else if (referenceProperty.Type == typeof(Animator.Engine.Elements.Pen))
+                matchesCurrentType = managedObj => managedObj.Type == typeof(Animator.Engine.Elements.PenResource);
+            else
+                matchesCurrentType = managedObj => false;
+
+            return InternalGetAvailableResources(matchesCurrentType);
+        }
 
         private void HandleStringValueChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -114,6 +129,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             InsertMacroCommand = new AppCommand(obj => InsertMacro());
             InsertIncludeCommand = new AppCommand(obj => InsertInclude());
             InsertGeneratorCommand = new AppCommand(obj => InsertGenerator());
+            SetToFromResourceCommand = new AppCommand(obj => SetToFromResource((string)obj));
         }
 
         public override void RequestDelete(ObjectViewModel obj)
@@ -138,6 +154,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                     .Select(t => new TypeViewModel(t, SetToInstanceCommand));
             }
         }
+
+        public override IEnumerable<ResourceKeyViewModel> AvailableResources => GetAvailableResources();
 
         public override ManagedProperty ManagedProperty => referenceProperty;
     }

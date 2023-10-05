@@ -16,6 +16,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 {
     public abstract class ManagedPropertyViewModel : PropertyViewModel
     {
+        // Private methods ----------------------------------------------------
+
+        private void SetToMarkupExtension(Type type)
+        {
+            var namespaceDefinition = type.ToNamespaceDefinition();
+            var markupExtensionViewModel = new MarkupExtensionViewModel(context, namespaceDefinition.ToString(), type.Name, type);
+            var markupExtensionValue = new MarkupExtensionValueViewModel(markupExtensionViewModel);
+            Value = markupExtensionValue;
+        }
+
         private void SetValue(ValueViewModel value)
         {
             if (this.value != null) 
@@ -32,21 +42,67 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 value.Handler = this;
             }
         }
-
-        private void SetToMarkupExtension(Type type)
-        {
-            var namespaceDefinition = type.ToNamespaceDefinition();
-            var markupExtensionViewModel = new MarkupExtensionViewModel(context, namespaceDefinition.ToString(), type.Name, type);
-            var markupExtensionValue = new MarkupExtensionValueViewModel(markupExtensionViewModel);
-            Value = markupExtensionValue;
-        }
+        
+        // Protected fields ---------------------------------------------------
 
         protected ValueViewModel value;
 
-        protected void OnStringValueChanged() => StringValueChanged?.Invoke(this, EventArgs.Empty);
+        // Protected methods --------------------------------------------------
+
+        protected IEnumerable<ResourceKeyViewModel> InternalGetAvailableResources(Func<ManagedObjectViewModel, bool> matchesCurrentType)
+        {
+            var currentObject = Parent;
+
+            var result = new List<ResourceKeyViewModel>();
+
+            while (currentObject != null)
+            {
+                var resourcesProperty = currentObject.Property<ManagedCollectionPropertyViewModel>(context.DefaultNamespace, "Resources");
+                if (resourcesProperty != null)
+                {
+                    var resourcesValue = resourcesProperty.Value as CollectionValueViewModel;
+                    if (resourcesValue != null)
+                    {
+                        foreach (var resource in resourcesValue.Items
+                            .OfType<ManagedObjectViewModel>()
+                            .Where(resource => matchesCurrentType(resource)))
+                        {
+                            var keyProp = resource.Property<ManagedSimplePropertyViewModel>(context.DefaultNamespace, "Key");
+                            if (keyProp != null && keyProp.Value is StringValueViewModel strValue)
+                                result.Add(new ResourceKeyViewModel(strValue.Value, SetToFromResourceCommand));
+                        }
+                    }
+                }
+
+                // Object -> Value -> Property -> Object
+                currentObject = currentObject.Parent?.Parent?.Parent;
+            }
+
+            result.Sort((x, y) => string.Compare(x.Key, y.Key));
+            return result;
+        }
+
         protected void OnCollectionChanged() => CollectionChanged?.Invoke(this, EventArgs.Empty);
 
         protected abstract void OnSetValue(ValueViewModel value);
+
+        protected void OnStringValueChanged() => StringValueChanged?.Invoke(this, EventArgs.Empty);
+
+        protected void SetToFromResource(string key)
+        {
+            var type = typeof(Animator.Engine.Elements.FromResource);
+
+            var namespaceDefinition = type.ToNamespaceDefinition();
+            var markupExtensionViewModel = new MarkupExtensionViewModel(context, namespaceDefinition.ToString(), type.Name, type);
+            var markupExtensionValue = new MarkupExtensionValueViewModel(markupExtensionViewModel);
+
+            var keyProperty = markupExtensionViewModel.Property<ClearableStringPropertyViewModel>(context.DefaultNamespace, nameof(Animator.Engine.Elements.FromResource.Key));
+            keyProperty.Value = new StringValueViewModel(key);
+
+            Value = markupExtensionValue;
+        }
+
+        // Public methods -----------------------------------------------------
 
         public ManagedPropertyViewModel(ObjectViewModel parent, WrapperContext context, ManagedProperty property)
             : base(parent, context)
@@ -69,19 +125,22 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             }
         }
 
+        // Public properties --------------------------------------------------
+
+        public event EventHandler CollectionChanged;
+
         public abstract ManagedProperty ManagedProperty { get; }
 
         public override string Name { get; }
 
         public override string Namespace { get; }
 
+        public event EventHandler StringValueChanged;
+
         public ValueViewModel Value
         {
             get => value;
             set => SetValue(value);
         }
-
-        public event EventHandler StringValueChanged;
-        public event EventHandler CollectionChanged;
     }
 }

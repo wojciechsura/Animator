@@ -379,7 +379,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             xmlDocument.AppendChild(rootNode);
 
             TStream stream = streamFactory();
-            XmlTextWriter writer = new XmlTextWriter(stream, Encoding.Unicode);
+            XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8);
             writer.Formatting = Formatting.Indented;
 
             xmlDocument.Save(writer);

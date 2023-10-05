@@ -147,4 +147,7 @@
   <data name="InsertGenerator" xml:space="preserve">
     <value>Wstaw generator</value>
   </data>
+  <data name="FromResource" xml:space="preserve">
+    <value>Użyj zasobu</value>
+  </data>
 </root>
