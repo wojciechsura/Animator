@@ -19,30 +19,6 @@
             e:ContextMenuOnLeftClick.PlacementTarget="{Binding RelativeSource={RelativeSource Self}}">
         <Button.ContextMenu>
             <ContextMenu>
-                <MenuItem Visibility="{Binding SetDefaultCommand, Converter={StaticResource NullToVisibilityConverter}}" 
-                            Header="{x:Static res:Strings.SetToDefault}"
-                            Command="{Binding SetDefaultCommand}">
-                    <MenuItem.Icon>
-                        <Image Source="/Resources/Images/Icons/SetDefault16.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem Visibility="{Binding SetToStringCommand, Converter={StaticResource NullToVisibilityConverter}}" 
-                            Header="{x:Static res:Strings.SetToString}" 
-                            Command="{Binding SetToStringCommand}">
-                    <MenuItem.Icon>
-                        <Image Source="/Resources/Images/Icons/SetString16.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem Visibility="{Binding SetToCollectionCommand, Converter={StaticResource NullToVisibilityConverter}}" 
-                            Header="{x:Static res:Strings.SetToCollection}"
-                            Command="{Binding SetToCollectionCommand}">
-                    <MenuItem.Icon>
-                        <Image Source="/Resources/Images/Icons/SetCollection16.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
                 <MenuItem Visibility="{Binding SetToInstanceCommand, Converter={StaticResource NullToVisibilityConverter}}"
                           Header="{x:Static res:Strings.SetToInstance}" ItemsSource="{Binding AvailableTypes}">
                     <MenuItem.ItemContainerStyle>
@@ -68,6 +44,44 @@
                     </MenuItem.ItemContainerStyle>
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/Icons/AddInstance16.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem Visibility="{Binding SetToFromResourceCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                          Header="{x:Static res:Strings.FromResource}" ItemsSource="{Binding AvailableResources}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="{x:Type MenuItem}">
+                            <Setter Property="Header" Value="{Binding Key}" />
+                            <Setter Property="Command" Value="{Binding Command}" />
+                            <Setter Property="CommandParameter" Value="{Binding Key}" />
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Images/Icons/Resources16.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem Visibility="{Binding SetToStringCommand, Converter={StaticResource NullToVisibilityConverter}}" 
+                            Header="{x:Static res:Strings.SetToString}" 
+                            Command="{Binding SetToStringCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Images/Icons/SetString16.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem Visibility="{Binding SetDefaultCommand, Converter={StaticResource NullToVisibilityConverter}}" 
+                            Header="{x:Static res:Strings.SetToDefault}"
+                            Command="{Binding SetDefaultCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Images/Icons/SetDefault16.png" />
+                    </MenuItem.Icon>
+                </MenuItem>
+
+                <MenuItem Visibility="{Binding SetToCollectionCommand, Converter={StaticResource NullToVisibilityConverter}}" 
+                            Header="{x:Static res:Strings.SetToCollection}"
+                            Command="{Binding SetToCollectionCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Images/Icons/SetCollection16.png" />
                     </MenuItem.Icon>
                 </MenuItem>
 
@@ -114,20 +128,6 @@
                     </MenuItem.ItemContainerStyle>
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/Icons/MarkupExtension16.png" />
-                    </MenuItem.Icon>
-                </MenuItem>
-
-                <MenuItem Visibility="{Binding SetToFromResourceCommand, Converter={StaticResource NullToVisibilityConverter}}"
-                          Header="{x:Static res:Strings.FromResource}" ItemsSource="{Binding AvailableResources}">
-                    <MenuItem.ItemContainerStyle>
-                        <Style TargetType="{x:Type MenuItem}">
-                            <Setter Property="Header" Value="{Binding Key}" />
-                            <Setter Property="Command" Value="{Binding Command}" />
-                            <Setter Property="CommandParameter" Value="{Binding Key}" />
-                        </Style>
-                    </MenuItem.ItemContainerStyle>
-                    <MenuItem.Icon>
-                        <Image Source="/Resources/Images/Icons/Resources16.png" />
                     </MenuItem.Icon>
                 </MenuItem>
 

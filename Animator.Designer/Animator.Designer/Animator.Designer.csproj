@@ -11,6 +11,7 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="icon.ico" />
     <None Remove="Resources\Images\Icons\AddInstance16.png" />
     <None Remove="Resources\Images\Icons\AnimateBool16.png" />
     <None Remove="Resources\Images\Icons\AnimateColor16.png" />
@@ -53,6 +54,7 @@
     <None Remove="Resources\Images\Save32.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="icon.ico" />
     <Resource Include="Resources\Images\Icons\AnimateBool16.png" />
     <Resource Include="Resources\Images\Icons\AnimateColor16.png" />
     <Resource Include="Resources\Images\Icons\AnimateFloat16.png" />
@@ -100,7 +102,6 @@
     <ProjectReference Include="..\Animator.Designer.Resources\Animator.Designer.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icon.ico" />
     <Resource Include="Resources\Images\Icons\Generator16.png" />
     <Resource Include="Resources\Images\Icons\Generic16.png" />
     <Resource Include="Resources\Images\Icons\Include16.png" />
