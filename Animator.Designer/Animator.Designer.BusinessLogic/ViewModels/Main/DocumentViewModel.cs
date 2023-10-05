@@ -198,6 +198,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
         private string renderingStatus;
         private ObjectViewModel selectedElement;
         private UpdateMovieWorker updateMovieWorker;
+        
+        private bool changed;
 
         // Private methods ----------------------------------------------------
 
@@ -352,9 +354,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             bool filenameVirtual = true)
         {
             this.dialogService = dialogService;
+            this.changed = false;
 
             RootNode = rootNode;
             WrapperContext = wrapperContext;
+            wrapperContext.MovieChanged += (s, e) => Changed = true;
 
             displayItems = new[] { rootNode };
 
@@ -410,6 +414,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
         }
 
         // Public properties --------------------------------------------------
+        
+        public bool Changed
+        {
+            get => changed;
+            set => Set(ref changed, value);
+        }
 
         public IEnumerable<ObjectViewModel> DisplayItems => displayItems;
 

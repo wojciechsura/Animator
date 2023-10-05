@@ -300,7 +300,7 @@
             <DockPanel>
 
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
-                    <Button Margin="{StaticResource DialogItemsMargin}" Command="{Binding EditMacroProperties}" Content="#Edit properties..." />
+                    <Button Margin="{StaticResource DialogItemsMargin}" Command="{Binding EditMacroProperties}" Content="{x:Static res:Strings.EditProperties}" />
                 </StackPanel>
                 
                 <DataGrid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding SelectedElement.Properties}"

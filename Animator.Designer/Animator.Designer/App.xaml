@@ -24,11 +24,6 @@
             <conv:InverseNullToVisibilityConverter x:Key="InverseNullToVisibilityConverter" />
 
             <lconv:ImageKeyConverter x:Key="ImageKeyConverter" />
-
-            <Style x:Key="DialogButton" TargetType="Button">
-                <Setter Property="Margin" Value="4" />
-                <Setter Property="MinWidth" Value="150" />
-            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

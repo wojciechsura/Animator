@@ -57,7 +57,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 value.Handler = this;
                 value.PropertyChanged += HandleStringChanged;
             }
-            if (value is DefaultValueViewModel)
+            else if (value is DefaultValueViewModel)
             {
                 Set(ref this.value, value, nameof(Value));
                 value.Parent = this;

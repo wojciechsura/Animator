@@ -33,13 +33,14 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
         {
             var fs = document.Save(() => new FileStream(path, FileMode.Create, FileAccess.Write));
             fs.Dispose();
+            document.Changed = false;
         }
 
         private bool DoNew()
         {
-            if (document != null)
+            if (document != null && document.Changed)
             {
-                var answer = messagingService.AskYesNoCancel(Animator.Designer.Resources.Windows.MainWindow.Strings.Message_SaveBeforeClose);
+                var answer = messagingService.AskYesNoCancel(string.Format(Strings.Message_SaveBeforeClose, document.Filename));
 
                 if (answer == true)
                 {
@@ -70,9 +71,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             
             if (result)
             {
-                if (document != null)
+                if (document != null && document.Changed)
                 {
-                    var answer = messagingService.AskYesNoCancel(Animator.Designer.Resources.Windows.MainWindow.Strings.Message_SaveBeforeClose);
+                    var answer = messagingService.AskYesNoCancel(string.Format(Strings.Message_SaveBeforeClose, document.Filename));
 
                     if (answer == true)
                     {

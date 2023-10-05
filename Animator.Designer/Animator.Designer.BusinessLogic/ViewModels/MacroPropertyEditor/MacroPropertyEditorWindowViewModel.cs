@@ -47,7 +47,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.MacroPropertyEditor
             this.editedMacro = editedMacro;
             this.access = access;
 
-            foreach (var property in editedMacro.Properties.OfType<StringPropertyViewModel>())
+            foreach (var property in editedMacro.AdditionalProperties.OfType<StringPropertyViewModel>())
                 macroProperties.Add(property);
 
             var selectedPropertyNotNullCondition = Condition.Lambda(this, vm => vm.SelectedProperty != null, false);

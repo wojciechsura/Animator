@@ -133,4 +133,7 @@
   <data name="InsertGenerator" xml:space="preserve">
     <value>Insert generator</value>
   </data>
+  <data name="EditProperties" xml:space="preserve">
+    <value>Edit properties...</value>
+  </data>
 </root>

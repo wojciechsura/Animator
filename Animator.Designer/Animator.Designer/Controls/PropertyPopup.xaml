@@ -15,7 +15,7 @@
         <Thickness x:Key="PopupItemMargin">4</Thickness>
     </Grid.Resources>
     <Button x:Name="PopupOpen" Content="..." e:ContextMenuOnLeftClick.Enabled="True" e:ContextMenuOnLeftClick.Placement="Right"
-            Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+            Padding="0" Margin="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
             e:ContextMenuOnLeftClick.PlacementTarget="{Binding RelativeSource={RelativeSource Self}}">
         <Button.ContextMenu>
             <ContextMenu>

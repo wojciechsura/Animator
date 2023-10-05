@@ -97,6 +97,15 @@ namespace Animator.Designer.Resources.Controls.DocumentControl {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Edit properties....
+        /// </summary>
+        public static string EditProperties {
+            get {
+                return ResourceManager.GetString("EditProperties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Insert generator.
         /// </summary>
         public static string InsertGenerator {

@@ -96,7 +96,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         }
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
-        
+
+        public IReadOnlyList<PropertyViewModel> AdditionalProperties => properties
+            .OfType<StringPropertyViewModel>()
+            .Except(new[] { keyProperty })
+            .ToList();
+
         public override IEnumerable<ObjectViewModel> DisplayChildren => children;
 
         public ICommand DeleteCommand { get; }
