@@ -136,4 +136,10 @@
   <data name="EditProperties" xml:space="preserve">
     <value>Edit properties...</value>
   </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Move up</value>
+  </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Move down</value>
+  </data>
 </root>

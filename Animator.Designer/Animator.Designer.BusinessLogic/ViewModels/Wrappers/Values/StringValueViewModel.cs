@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
         public StringValueViewModel(string initialValue)
         {
             value = initialValue;
+        }
+
+        public override void RequestMoveUp(ObjectViewModel obj)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override void RequestMoveDown(ObjectViewModel obj)
+        {
+            throw new NotSupportedException();
         }
 
         public string Value

@@ -76,6 +76,18 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         {
             OnCollectionChanged();
             context.NotifyPropertyChanged();
+
+            var collection = (CollectionValueViewModel)value;
+
+            for (int i = 0; i < collection.Items.Count; i++)
+            {
+                var item = collection.Items[i] as ManagedObjectViewModel;
+                if (item != null)
+                {
+                    item.CanMoveUp = i > 0;
+                    item.CanMoveDown = i < collection.Items.Count - 1;
+                }
+            }
         }
 
         private void HandleStringValueChanged(object sender, PropertyChangedEventArgs e)

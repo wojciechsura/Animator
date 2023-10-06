@@ -20,5 +20,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
         {
             Parent.RequestDelete(obj);
         }
+
+        public abstract void RequestMoveDown(ObjectViewModel obj);
+
+        public abstract void RequestMoveUp(ObjectViewModel obj);
     }
 }

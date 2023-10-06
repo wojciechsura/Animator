@@ -17,6 +17,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
             value.Parent = this;
         }
 
+        public override void RequestMoveUp(ObjectViewModel obj)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override void RequestMoveDown(ObjectViewModel obj)
+        {
+            throw new NotSupportedException();
+        }
+
         public ObjectViewModel Value => value;
     }
 }

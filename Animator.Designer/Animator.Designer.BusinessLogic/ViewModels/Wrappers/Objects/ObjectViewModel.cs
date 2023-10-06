@@ -3,6 +3,8 @@ using Animator.Designer.BusinessLogic.ViewModels.Base;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
+using Spooksoft.VisualStateManager.Commands;
+using Spooksoft.VisualStateManager.Conditions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

@@ -153,4 +153,13 @@
   <data name="InsertGenerator" xml:space="preserve">
     <value>Wstaw generator</value>
   </data>
+  <data name="EditProperties" xml:space="preserve">
+    <value>Edytuj właściwości...</value>
+  </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Przenieś w dół</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Przenieś w górę</value>
+  </data>
 </root>

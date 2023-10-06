@@ -1,4 +1,5 @@
-﻿using Animator.Engine.Base.Persistence.Types;
+﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using Animator.Engine.Base.Persistence.Types;
 using Spooksoft.VisualStateManager.Commands;
 using Spooksoft.VisualStateManager.Conditions;
 using System;
@@ -27,6 +28,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
                 Value = defaultValue.ToString();
 
             SwitchToStringIfPossibleCommand = new AppCommand(obj => DoSwitchToStringIfPossible(), Condition.Simple(canSwitchToString));
+        }
+
+        public override void RequestMoveUp(ObjectViewModel obj)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override void RequestMoveDown(ObjectViewModel obj)
+        {
+            throw new NotSupportedException();
         }
 
         public string Value { get; }

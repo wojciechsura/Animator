@@ -34,21 +34,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         private const int MAX_VALUE_LENGTH = 64;
 
-        private static readonly Dictionary<Type, (NamespaceType Namespace, string Property, string Color)> namePropDefinitions = new()
-        {
-            { typeof(Animator.Engine.Elements.SceneElement), (NamespaceType.Default, nameof(Animator.Engine.Elements.SceneElement.Name), "#808080") },
-            { typeof(Animator.Engine.Elements.Resource), (NamespaceType.Default, nameof(Animator.Engine.Elements.Resource.Key), "#0000ff") },
-            { typeof(Animator.Engine.Elements.AnimateProperty), (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateProperty.PropertyRef), "#ff8000") },
-            { typeof(Animator.Engine.Elements.For), (NamespaceType.Default, nameof(Animator.Engine.Elements.For.PropertyRef), "#ff8000") }
-        };
-
-        private static readonly Dictionary<Type, (NamespaceType Namespace, string Property)> valuePropDefinitions = new()
-        {
-            { typeof(Animator.Engine.Elements.Label), (NamespaceType.Default, nameof(Animator.Engine.Elements.Label.Text)) },
-            { typeof(Animator.Engine.Elements.Image), (NamespaceType.Default, nameof(Animator.Engine.Elements.Image.Source)) },
-            { typeof(Animator.Engine.Elements.SvgImage), (NamespaceType.Default, nameof(Animator.Engine.Elements.SvgImage.Source)) },
-        };
-
         private static readonly Dictionary<(NamespaceType Namespace, string Name), string> icons = new()
         {
             { (NamespaceType.Default, nameof(Animator.Engine.Elements.Image)), "Image16.png" },
@@ -72,94 +57,33 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         };
 
+        private static readonly Dictionary<Type, (NamespaceType Namespace, string Property, string Color)> namePropDefinitions = new()
+        {
+            { typeof(Animator.Engine.Elements.SceneElement), (NamespaceType.Default, nameof(Animator.Engine.Elements.SceneElement.Name), "#808080") },
+            { typeof(Animator.Engine.Elements.Resource), (NamespaceType.Default, nameof(Animator.Engine.Elements.Resource.Key), "#0000ff") },
+            { typeof(Animator.Engine.Elements.AnimateProperty), (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateProperty.PropertyRef), "#ff8000") },
+            { typeof(Animator.Engine.Elements.For), (NamespaceType.Default, nameof(Animator.Engine.Elements.For.PropertyRef), "#ff8000") }
+        };
+
+        private static readonly Dictionary<Type, (NamespaceType Namespace, string Property)> valuePropDefinitions = new()
+        {
+            { typeof(Animator.Engine.Elements.Label), (NamespaceType.Default, nameof(Animator.Engine.Elements.Label.Text)) },
+            { typeof(Animator.Engine.Elements.Image), (NamespaceType.Default, nameof(Animator.Engine.Elements.Image.Source)) },
+            { typeof(Animator.Engine.Elements.SvgImage), (NamespaceType.Default, nameof(Animator.Engine.Elements.SvgImage.Source)) },
+        };
+
         // Private fields -----------------------------------------------------
 
-        private readonly ObservableCollection<PropertyViewModel> properties = new();
-        private readonly MacroCollectionPropertyViewModel macros;
         private readonly ManagedPropertyViewModel contentProperty;
+        private readonly MacroCollectionPropertyViewModel macros;
         private readonly ManagedSimplePropertyViewModel nameProperty;
+        private readonly ObservableCollection<PropertyViewModel> properties = new();
         private readonly ManagedSimplePropertyViewModel valueProperty;
+        private bool canMoveDown = false;
+        private bool canMoveUp = false;
         private PropertiesProxyViewModel propertiesProxy;
 
         // Private methods ----------------------------------------------------
-
-        private string TruncateValue(string value)
-        {
-            if (value == null)
-                return null;
-
-            if (value.Length > MAX_VALUE_LENGTH)
-                value = $"{value[..61]}...";
-
-            return value;
-        }
-
-        private void HandleNameChanged(object sender, EventArgs e)
-        {
-            OnPropertyChanged(nameof(DisplayName));
-        }
-
-        private void HandleValueChanged(object sender, EventArgs e)
-        {
-            OnPropertyChanged(nameof(Value));
-        }
-
-        private void HandleSimplePropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (sender is ManagedSimplePropertyViewModel simpleProperty && e.PropertyName == nameof(ManagedSimplePropertyViewModel.Value))
-            {
-                if (propertiesProxy == null ||
-                    (simpleProperty.Value is MarkupExtensionValueViewModel &&
-                        !propertiesProxy.DisplayChildren.OfType<PropertyProxyViewModel>().Any(proxy => proxy.Property == simpleProperty)) ||
-                    (simpleProperty.Value is not MarkupExtensionValueViewModel &&
-                        propertiesProxy.DisplayChildren.OfType<PropertyProxyViewModel>().Any(proxy => proxy.Property == simpleProperty)))
-                {
-                    // Rebuild properties proxy
-                    var isExpanded = propertiesProxy?.IsExpanded ?? false;
-                    
-                    propertiesProxy = BuildPropertiesProxy();
-                    
-                    if (propertiesProxy != null)
-                        propertiesProxy.IsExpanded = isExpanded;
-
-                    // Rebuild displayed children
-                    OnPropertyChanged(nameof(DisplayChildren));
-                }
-            }
-        }
-
-        private void NotifyDisplayChildrenChanged()
-        {
-            OnPropertyChanged(nameof(DisplayChildren));
-        }
-
-        private IEnumerable<BaseObjectViewModel> GetDisplayChildren()
-        {
-            // Collect all reference or collection properies,
-            // which currently have reference or collection value
-
-            if (propertiesProxy != null)
-                yield return propertiesProxy;
-
-            if (contentProperty != null)
-            {
-                if (contentProperty.Value is MarkupExtensionValueViewModel markupExtension)
-                {
-                    yield return markupExtension.Value;
-                }
-                else if (contentProperty is ManagedReferencePropertyViewModel reference)
-                {
-                    if (reference.Value is ReferenceValueViewModel refValue && refValue.Value != null)
-                        yield return refValue.Value;
-                }
-                else if (contentProperty is ManagedCollectionPropertyViewModel collection)
-                {
-                    if (collection.Value is CollectionValueViewModel collectionValue)
-                        foreach (var item in collectionValue.Items)
-                            yield return item;
-                }
-            }
-        }
 
         private PropertiesProxyViewModel BuildPropertiesProxy()
         {
@@ -208,6 +132,49 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 return null;
         }
 
+        private void DoDelete()
+        {
+            Parent.RequestDelete(this);
+        }
+
+        private void DoMoveDown()
+        {
+            Parent.RequestMoveDown(this);
+        }
+
+        private void DoMoveUp()
+        {
+            Parent.RequestMoveUp(this);
+        }
+
+        private IEnumerable<BaseObjectViewModel> GetDisplayChildren()
+        {
+            // Collect all reference or collection properies,
+            // which currently have reference or collection value
+
+            if (propertiesProxy != null)
+                yield return propertiesProxy;
+
+            if (contentProperty != null)
+            {
+                if (contentProperty.Value is MarkupExtensionValueViewModel markupExtension)
+                {
+                    yield return markupExtension.Value;
+                }
+                else if (contentProperty is ManagedReferencePropertyViewModel reference)
+                {
+                    if (reference.Value is ReferenceValueViewModel refValue && refValue.Value != null)
+                        yield return refValue.Value;
+                }
+                else if (contentProperty is ManagedCollectionPropertyViewModel collection)
+                {
+                    if (collection.Value is CollectionValueViewModel collectionValue)
+                        foreach (var item in collectionValue.Items)
+                            yield return item;
+                }
+            }
+        }
+
         private string GetNamespace(NamespaceType ns)
         {
             return ns switch
@@ -218,20 +185,65 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             };
         }
 
+        private void HandleContentPropertyCollectionChanged(object sender, EventArgs e)
+        {
+            NotifyDisplayChildrenChanged();
+        }
+
         private void HandleContentPropertyValueChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ManagedPropertyViewModel.Value))
                 NotifyDisplayChildrenChanged();
         }
 
-        private void HandleContentPropertyCollectionChanged(object sender, EventArgs e)
+        private void HandleNameChanged(object sender, EventArgs e)
         {
-            NotifyDisplayChildrenChanged();
+            OnPropertyChanged(nameof(DisplayName));
         }
 
-        private void DoDelete()
+        private void HandleSimplePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            Parent.RequestDelete(this);
+            if (sender is ManagedSimplePropertyViewModel simpleProperty && e.PropertyName == nameof(ManagedSimplePropertyViewModel.Value))
+            {
+                if (propertiesProxy == null ||
+                    (simpleProperty.Value is MarkupExtensionValueViewModel &&
+                        !propertiesProxy.DisplayChildren.OfType<PropertyProxyViewModel>().Any(proxy => proxy.Property == simpleProperty)) ||
+                    (simpleProperty.Value is not MarkupExtensionValueViewModel &&
+                        propertiesProxy.DisplayChildren.OfType<PropertyProxyViewModel>().Any(proxy => proxy.Property == simpleProperty)))
+                {
+                    // Rebuild properties proxy
+                    var isExpanded = propertiesProxy?.IsExpanded ?? false;
+
+                    propertiesProxy = BuildPropertiesProxy();
+
+                    if (propertiesProxy != null)
+                        propertiesProxy.IsExpanded = isExpanded;
+
+                    // Rebuild displayed children
+                    OnPropertyChanged(nameof(DisplayChildren));
+                }
+            }
+        }
+
+        private void HandleValueChanged(object sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(Value));
+        }
+
+        private void NotifyDisplayChildrenChanged()
+        {
+            OnPropertyChanged(nameof(DisplayChildren));
+        }
+
+        private string TruncateValue(string value)
+        {
+            if (value == null)
+                return null;
+
+            if (value.Length > MAX_VALUE_LENGTH)
+                value = $"{value[..61]}...";
+
+            return value;
         }
 
         // Public methods -----------------------------------------------------
@@ -347,7 +359,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             // Commands
 
             var notRootCondition = Condition.Lambda(this, vm => vm.Parent != null, false);
+            var canMoveUpCondition = Condition.PropertyWatch(this, vm => vm.CanMoveUp, false);
+            var canMoveDownCondition = Condition.PropertyWatch(this, vm => vm.CanMoveDown, false);
+           
             DeleteCommand = new AppCommand(obj => DoDelete(), notRootCondition);
+            MoveUpCommand = new AppCommand(obj => DoMoveUp(), canMoveUpCondition);
+            MoveDownCommand = new AppCommand(obj => DoMoveDown(), canMoveDownCondition);
 
             // Icon
 
@@ -503,40 +520,51 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         // Public properties --------------------------------------------------
 
-        public MacroCollectionPropertyViewModel Macros => macros;
-
-        public override IReadOnlyList<PropertyViewModel> Properties => properties;
-
-        public ManagedPropertyViewModel ContentProperty => contentProperty;
-
-        public string DisplayName => (nameProperty?.Value as StringValueViewModel)?.Value;
-
-        public string Value => TruncateValue((valueProperty?.Value as StringValueViewModel)?.Value);
-
-        public string NameColor { get; }
-
-        public override IEnumerable<BaseObjectViewModel> DisplayChildren => GetDisplayChildren();
-
-        public ICommand DeleteCommand { get; }
-
-        // Transported from the content property
-
         public ICommand AddInstanceCommand => contentProperty?.AddInstanceCommand;
-
-        public ICommand SetToInstanceCommand => contentProperty?.SetToInstanceCommand;
-
-        public ICommand InsertMacroCommand => contentProperty?.InsertMacroCommand;
-
-        public ICommand InsertIncludeCommand => contentProperty?.InsertIncludeCommand;
-
-        public ICommand InsertGeneratorCommand => contentProperty?.InsertGeneratorCommand;
-
-        public ICommand SetToMarkupExtensionCommand => contentProperty?.SetToMarkupExtensionCommand;
-
-        public IEnumerable<TypeViewModel> AvailableTypes => contentProperty?.AvailableTypes;
 
         public IEnumerable<TypeViewModel> AvailableMarkupExtensions => contentProperty?.AvailableMarkupExtensions;
 
+        public IEnumerable<TypeViewModel> AvailableTypes => contentProperty?.AvailableTypes;
+
+        public bool CanMoveDown
+        {
+            get => canMoveDown;
+            set => Set(ref canMoveDown, value);
+        }
+
+        public bool CanMoveUp
+        {
+            get => canMoveUp;
+            set => Set(ref canMoveUp, value);
+        }
+
+        public ManagedPropertyViewModel ContentProperty => contentProperty;
+
+        public ICommand DeleteCommand { get; }
+
+        public override IEnumerable<BaseObjectViewModel> DisplayChildren => GetDisplayChildren();
+
+        public string DisplayName => (nameProperty?.Value as StringValueViewModel)?.Value;
+
+        public ICommand InsertGeneratorCommand => contentProperty?.InsertGeneratorCommand;
+
+        public ICommand InsertIncludeCommand => contentProperty?.InsertIncludeCommand;
+
+        public ICommand InsertMacroCommand => contentProperty?.InsertMacroCommand;
+
+        public MacroCollectionPropertyViewModel Macros => macros;
+
+        public string NameColor { get; }
+
+        public override IReadOnlyList<PropertyViewModel> Properties => properties;
+
+        // Transported from the content property
+        public ICommand SetToInstanceCommand => contentProperty?.SetToInstanceCommand;
+
+        public ICommand SetToMarkupExtensionCommand => contentProperty?.SetToMarkupExtensionCommand;
+
         public Type Type { get; }
+
+        public string Value => TruncateValue((valueProperty?.Value as StringValueViewModel)?.Value);
     }
 }

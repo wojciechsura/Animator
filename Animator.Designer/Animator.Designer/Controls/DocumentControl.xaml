@@ -438,8 +438,16 @@
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel.ContextMenu>
                                     <ContextMenu>
+                                        <MenuItem Header="{Binding Name}" IsEnabled="False">
+                                            <MenuItem.Template>
+                                                <ControlTemplate TargetType="MenuItem">
+                                                    <Label FontWeight="Bold" HorizontalAlignment="Center" Content="{TemplateBinding Header}" />
+                                                </ControlTemplate>
+                                            </MenuItem.Template>
+                                        </MenuItem>
+                                        
                                         <MenuItem Visibility="{Binding SetToInstanceCommand, Converter={StaticResource NullToVisibilityConverter}}"
-                                              Header="{x:Static res:Strings.SetContentInstance}" ItemsSource="{Binding AvailableTypes}">
+                                                Header="{x:Static res:Strings.SetContentInstance}" ItemsSource="{Binding AvailableTypes}">
                                             <MenuItem.ItemContainerStyle>
                                                 <Style TargetType="{x:Type MenuItem}">
                                                     <Setter Property="Header" Value="{Binding Name}" />
@@ -453,7 +461,7 @@
                                         </MenuItem>
 
                                         <MenuItem Visibility="{Binding AddInstanceCommand, Converter={StaticResource NullToVisibilityConverter}}"
-                                              Header="{x:Static res:Strings.AddInstanceToContent}" ItemsSource="{Binding AvailableTypes}">
+                                                Header="{x:Static res:Strings.AddInstanceToContent}" ItemsSource="{Binding AvailableTypes}">
                                             <MenuItem.ItemContainerStyle>
                                                 <Style TargetType="{x:Type MenuItem}">
                                                     <Setter Property="Header" Value="{Binding Name}" />
@@ -467,31 +475,31 @@
                                         </MenuItem>
 
                                         <MenuItem Visibility="{Binding InsertMacroCommand, Converter={StaticResource NullToVisibilityConverter}}"
-                                                  Header="{x:Static res:Strings.InsertMacro}"
-                                                  Command="{Binding InsertMacroCommand}">
+                                                    Header="{x:Static res:Strings.InsertMacro}"
+                                                    Command="{Binding InsertMacroCommand}">
                                             <MenuItem.Icon>
                                                 <Image Source="/Resources/Images/Icons/PlaceMacro16.png" />
                                             </MenuItem.Icon>
                                         </MenuItem>
 
                                         <MenuItem Visibility="{Binding InsertIncludeCommand, Converter={StaticResource NullToVisibilityConverter}}"
-                                                  Header="{x:Static res:Strings.InsertInclude}"
-                                                  Command="{Binding InsertIncludeCommand}">
+                                                    Header="{x:Static res:Strings.InsertInclude}"
+                                                    Command="{Binding InsertIncludeCommand}">
                                             <MenuItem.Icon>
                                                 <Image Source="/Resources/Images/Icons/Include16.png" />
                                             </MenuItem.Icon>
                                         </MenuItem>
 
                                         <MenuItem Visibility="{Binding InsertGeneratorCommand, Converter={StaticResource NullToVisibilityConverter}}"
-                                                  Header="{x:Static res:Strings.InsertGenerator}"
-                                                  Command="{Binding InsertGeneratorCommand}">
+                                                    Header="{x:Static res:Strings.InsertGenerator}"
+                                                    Command="{Binding InsertGeneratorCommand}">
                                             <MenuItem.Icon>
                                                 <Image Source="/Resources/Images/Icons/Generator16.png" />
                                             </MenuItem.Icon>
                                         </MenuItem>
                                         
                                         <MenuItem Visibility="{Binding SetToMarkupExtensionCommand, Converter={StaticResource NullToVisibilityConverter}}"
-                                                  Header="{x:Static res:Strings.SetToMarkupExtension}" ItemsSource="{Binding AvailableMarkupExtensions}">
+                                                    Header="{x:Static res:Strings.SetToMarkupExtension}" ItemsSource="{Binding AvailableMarkupExtensions}">
                                             <MenuItem.ItemContainerStyle>
                                                 <Style TargetType="{x:Type MenuItem}">
                                                     <Setter Property="Header" Value="{Binding Name}" />
@@ -504,13 +512,25 @@
                                             </MenuItem.Icon>
                                         </MenuItem>
 
-                                        <MenuItem Visibility="{Binding DeleteCommand, Converter={StaticResource NullToVisibilityConverter}}"
-                                                  Header="{x:Static res:Strings.Delete}" Command="{Binding DeleteCommand}">
+                                        <Separator />
+
+                                        <MenuItem Header="{x:Static res:Strings.Delete}" Command="{Binding DeleteCommand}" Visibility="{Binding DeleteCommand, Converter={StaticResource NullToVisibilityConverter}}">
                                             <MenuItem.Icon>
                                                 <Image Source="/Resources/Images/Icons/Delete16.png" />
                                             </MenuItem.Icon>
                                         </MenuItem>
 
+                                        <MenuItem Header="{x:Static res:Strings.MoveUp}" Command="{Binding MoveUpCommand}" Visibility="{Binding CanMoveUp, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <MenuItem.Icon>
+                                                <Image Source="/Resources/Images/Icons/Up16.png" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+
+                                        <MenuItem Header="{x:Static res:Strings.MoveDown}" Command="{Binding MoveDownCommand}" Visibility="{Binding CanMoveDown, Converter={StaticResource BoolToVisibilityConverter}}">
+                                            <MenuItem.Icon>
+                                                <Image Source="/Resources/Images/Icons/Down16.png" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
                                     </ContextMenu>
                                 </StackPanel.ContextMenu>
 
@@ -520,7 +540,7 @@
 
                                 <TextBlock Name="NameDash" Style="{StaticResource ClassNameText}" Text=" - " Visibility="{Binding DisplayName, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
                                 <TextBlock Name="Name" Style="{StaticResource NameText}" Text="{Binding DisplayName}" Visibility="{Binding DisplayName, Converter={StaticResource EmptyStringToVisibilityConverter}}" 
-                                           Foreground="{Binding NameColor, Converter={StaticResource ColorCodeToBrushConverter}}" />
+                                            Foreground="{Binding NameColor, Converter={StaticResource ColorCodeToBrushConverter}}" />
 
                                 <TextBlock Name="ValueParen1" Style="{StaticResource ClassNameText}" Text=" (" Visibility="{Binding Value, Converter={StaticResource EmptyStringToVisibilityConverter}}" />
                                 <TextBlock Name="Value" Style="{StaticResource ValueText}" Text="{Binding Value}" Visibility="{Binding Value, Converter={StaticResource EmptyStringToVisibilityConverter}}" />

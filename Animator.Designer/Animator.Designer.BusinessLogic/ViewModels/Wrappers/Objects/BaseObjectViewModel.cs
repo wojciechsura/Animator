@@ -1,10 +1,13 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Base;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;
+using Spooksoft.VisualStateManager.Commands;
+using Spooksoft.VisualStateManager.Conditions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
@@ -63,6 +66,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         {
             get => Properties.SingleOrDefault(prop => prop.Namespace == ns && prop.Name == name);
         }
+
+        public ICommand MoveUpCommand { get; init; }
+
+        public ICommand MoveDownCommand { get; init; }
 
         public string Icon { get; init; } = "Generic16.png";
     }
