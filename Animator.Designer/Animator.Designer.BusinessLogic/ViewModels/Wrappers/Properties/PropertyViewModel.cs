@@ -32,6 +32,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             this.context = context;            
         }
 
+        public virtual void NotifyAvailableTypesChanged()
+        {
+            OnPropertyChanged(nameof(AvailableTypes));
+            OnPropertyChanged(nameof(AvailableMarkupExtensions));
+        }
+
         public bool IsSelected
         {
             get => isSelected;

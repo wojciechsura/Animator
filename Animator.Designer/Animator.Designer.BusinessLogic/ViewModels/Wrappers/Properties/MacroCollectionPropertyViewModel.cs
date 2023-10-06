@@ -55,6 +55,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             AddMacroDefinitionCommand = new AppCommand(obj => DoAddMacroDefinition());
         }
 
+        public override void NotifyAvailableTypesChanged()
+        {
+            base.NotifyAvailableTypesChanged();
+
+            foreach (var item in value.Items)
+            {
+                item.NotifyAvailableTypesChanged();
+            }
+        }
+
         public override void RequestDelete(ObjectViewModel obj)
         {
             if (!value.Items.Contains(obj))

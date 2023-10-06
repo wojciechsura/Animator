@@ -48,10 +48,6 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             public HashSet<(string prefix, string @namespace)> PrefixedNamespaces { get; } = new();
         } 
 
-        // Private types ------------------------------------------------------
-
-        private static readonly HashSet<Type> staticallyInitializedTypes = new();
-
         // Private methods ----------------------------------------------------
 
         private void DeserializeChildren(XmlNode node, 

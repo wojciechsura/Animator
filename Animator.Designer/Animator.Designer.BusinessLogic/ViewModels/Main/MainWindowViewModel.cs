@@ -1,9 +1,12 @@
 ﻿using Animator.Designer.BusinessLogic.Infrastructure;
+using Animator.Designer.BusinessLogic.Models.AddNamespace;
 using Animator.Designer.BusinessLogic.Services.Dialogs;
 using Animator.Designer.BusinessLogic.Services.Messaging;
 using Animator.Designer.BusinessLogic.ViewModels.Base;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers;
 using Animator.Designer.Resources.Windows.MainWindow;
+using Animator.Engine.Base.Extensions;
+using Animator.Engine.Base.Persistence;
 using Irony.Parsing.Construction;
 using Spooksoft.VisualStateManager.Commands;
 using System;
@@ -51,6 +54,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
                 {
                     return false;
                 }
+
+                document.Dispose();
+                Document = null;
             }
 
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Animator.Designer.BusinessLogic.Resources.EmptyDocument.xml");
@@ -84,6 +90,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
                     {
                         return false;
                     }
+
+                    document.Dispose();
+                    Document = null;
                 }
 
                 try
@@ -155,6 +164,21 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             return false;
         }
 
+        private void DoAddNamespace()
+        {
+            (bool result, AddNamespaceResultModel model) = dialogService.ShowAddNamespaceDialog(document.WrapperContext);
+            if (result)
+            {
+                var uri = new NamespaceDefinition(model.Assembly.GetName().Name, model.Namespace).ToString();
+                var nvm = new AssemblyNamespaceViewModel(model.Prefix, uri, model.Assembly, model.Namespace);
+                document.WrapperContext.AddNamespace(nvm);
+
+                model.Assembly.InitializeStaticTypes(model.Namespace);
+
+                // TODO propagate adding namespace to objects to update available types
+            }
+        }
+
         // Public methods -----------------------------------------------------
 
         public MainWindowViewModel(IMainWindowAccess access, 
@@ -169,8 +193,15 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             OpenCommand = new AppCommand(obj => DoOpen());
             SaveCommand = new AppCommand(obj => DoSave());
             SaveAsCommand = new AppCommand(obj => DoSaveAs());
+            AddNamespaceCommand = new AppCommand(obj => DoAddNamespace());
 
             DoNew();
+        }
+
+        public void Close()
+        {
+            if (document != null)
+                document.Dispose();            
         }
 
         // Public properties --------------------------------------------------
@@ -179,6 +210,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
         public ICommand OpenCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand SaveAsCommand { get; }
+        public ICommand AddNamespaceCommand { get; }
 
         public DocumentViewModel Document
         {

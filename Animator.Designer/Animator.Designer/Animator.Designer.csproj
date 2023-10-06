@@ -46,6 +46,8 @@
     <None Remove="Resources\Images\Icons\SetString16.png" />
     <None Remove="Resources\Images\Icons\Storyboard16.png" />
     <None Remove="Resources\Images\Icons\SvgImage16.png" />
+    <None Remove="Resources\Images\Namespace16.png" />
+    <None Remove="Resources\Images\Namespace32.png" />
     <None Remove="Resources\Images\New16.png" />
     <None Remove="Resources\Images\New32.png" />
     <None Remove="Resources\Images\Open16.png" />
@@ -117,6 +119,8 @@
     <Resource Include="Resources\Images\Icons\SetString16.png" />
     <Resource Include="Resources\Images\Icons\Storyboard16.png" />
     <Resource Include="Resources\Images\Icons\SvgImage16.png" />
+    <Resource Include="Resources\Images\Namespace16.png" />
+    <Resource Include="Resources\Images\Namespace32.png" />
     <Resource Include="Resources\Images\New16.png" />
     <Resource Include="Resources\Images\New32.png" />
     <Resource Include="Resources\Images\Open16.png" />

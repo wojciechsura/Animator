@@ -1,4 +1,6 @@
-﻿using Animator.Designer.BusinessLogic.Services.Dialogs;
+﻿using Animator.Designer.BusinessLogic.Models.AddNamespace;
+using Animator.Designer.BusinessLogic.Services.Dialogs;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using Animator.Designer.Resources;
 using Animator.Designer.Windows;
@@ -142,6 +144,26 @@ namespace Animator.Designer.Services.DialogService
             try
             {
                 dialog.ShowDialog();
+            }
+            finally
+            {
+                PopDialog(dialog);
+                ActivateLastDialog();
+            }
+        }
+
+        public (bool result, AddNamespaceResultModel model) ShowAddNamespaceDialog(WrapperContext context)
+        {
+            var dialog = new AddNamespaceWindow(context);
+            dialog.Owner = GetOwnerWindow();
+            dialogWindows.Push(dialog);
+            try
+            {
+                var result = dialog.ShowDialog();
+                if (result == true)
+                    return (true, dialog.Result);
+                else
+                    return (false, null);
             }
             finally
             {

@@ -153,6 +153,17 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             InsertGeneratorCommand = new AppCommand(obj => InsertGenerator(), valueIsCollectionCondition);            
         }
 
+        public override void NotifyAvailableTypesChanged()
+        {
+            base.NotifyAvailableTypesChanged();
+
+            if (value is CollectionValueViewModel collectionValue)
+            {
+                foreach (var item in collectionValue.Items)
+                    item.NotifyAvailableTypesChanged();
+            }
+        }
+
         public override void RequestDelete(ObjectViewModel obj)
         {
             if (value is CollectionValueViewModel collection)

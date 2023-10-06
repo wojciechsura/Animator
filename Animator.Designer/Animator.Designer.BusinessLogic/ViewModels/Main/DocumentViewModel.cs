@@ -25,7 +25,7 @@ using System.Xml.Linq;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Main
 {
-    public class DocumentViewModel : BaseViewModel
+    public class DocumentViewModel : BaseViewModel, IDisposable
     {
         // Private classes ----------------------------------------------------
 
@@ -367,6 +367,17 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             var macroSelectedCondition = Condition.Lambda(this, vm => vm.SelectedElement is MacroViewModel, false);
 
             EditMacroProperties = new AppCommand(obj => DoEditMacroProperties(), macroSelectedCondition);
+        }
+
+        public void Dispose()
+        {
+            if (frameRendererWorker != null && frameRendererWorker.IsBusy)
+                frameRendererWorker.CancelAsync();
+            frameRendererWorker = null;
+
+            if (updateMovieWorker != null && updateMovieWorker.IsBusy)
+                updateMovieWorker.CancelAsync();
+            updateMovieWorker = null;            
         }
 
         public TStream Save<TStream>(Func<TStream> streamFactory)

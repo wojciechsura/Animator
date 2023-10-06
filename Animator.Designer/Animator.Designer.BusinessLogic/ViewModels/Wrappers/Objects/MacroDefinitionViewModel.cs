@@ -51,13 +51,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             key.PropertyChanged += HandleKeyChanged;
             properties.Add(key);
 
-            var availableTypes = context.Namespaces
-                .OfType<AssemblyNamespaceViewModel>()
-                .SelectMany(n => n.GetAvailableTypesFor(typeof(Animator.Engine.Elements.Element)))
-                .OrderBy(e => e.Name)                
-                .ToList();
-
-            content = new ReferencePropertyViewModel(this, context, context.DefaultNamespace, "Content", availableTypes);
+            content = new ReferencePropertyViewModel(this, context, context.DefaultNamespace, "Content", typeof(Animator.Engine.Elements.Element));
             content.PropertyChanged += HandleContentChanged;
             properties.Add(content);
 

@@ -61,6 +61,15 @@ namespace Animator.Designer.Resources.Windows.MainWindow {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Add namespace....
+        /// </summary>
+        public static string AddNamespace {
+            get {
+                return ResourceManager.GetString("AddNamespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu at.
         /// </summary>
         public static string Error_At {
@@ -183,6 +192,15 @@ namespace Animator.Designer.Resources.Windows.MainWindow {
         public static string Message_SaveBeforeClose {
             get {
                 return ResourceManager.GetString("Message_SaveBeforeClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Namespaces.
+        /// </summary>
+        public static string Namespaces {
+            get {
+                return ResourceManager.GetString("Namespaces", resourceCulture);
             }
         }
         

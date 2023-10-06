@@ -88,6 +88,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         {
             Value = new StringValueViewModel(string.Empty);
         }
+
         protected override void OnSetValue(ValueViewModel value)
         {
             // Unhook existing value change handlers
@@ -130,6 +131,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             InsertIncludeCommand = new AppCommand(obj => InsertInclude());
             InsertGeneratorCommand = new AppCommand(obj => InsertGenerator());
             SetToFromResourceCommand = new AppCommand(obj => SetToFromResource((string)obj));
+        }
+
+        public override void NotifyAvailableTypesChanged()
+        {
+            base.NotifyAvailableTypesChanged();
+
+            if (value is ReferenceValueViewModel refValue)
+            {
+                refValue.Value.NotifyAvailableTypesChanged();
+            }
         }
 
         public override void RequestDelete(ObjectViewModel obj)

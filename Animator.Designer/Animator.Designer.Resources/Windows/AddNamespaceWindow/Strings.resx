@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,64 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Home" xml:space="preserve">
-    <value>Narzędzia główne</value>
+  <data name="Message_CannotLoadAssembly" xml:space="preserve">
+    <value>Cannot load assembly. Error: {0}</value>
   </data>
-  <data name="File" xml:space="preserve">
-    <value>Plik</value>
-  </data>
-  <data name="Open" xml:space="preserve">
-    <value>Otwórz</value>
-  </data>
-  <data name="FileFilter" xml:space="preserve">
-    <value>Animacje (*.xml)|*.xml</value>
-  </data>
-  <data name="Message_FailedToOpenDocument" xml:space="preserve">
-    <value>Nie udało się otworzyć animacji. Błąd: {0}</value>
-  </data>
-  <data name="New" xml:space="preserve">
-    <value>Nowy</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Zapisz</value>
-  </data>
-  <data name="SaveAs" xml:space="preserve">
-    <value>Zapisz jako...</value>
-  </data>
-  <data name="Message_FailedToSaveDocument" xml:space="preserve">
-    <value>Nie udało się zapisać animacji. Błąd: {0}</value>
-  </data>
-  <data name="Error_At" xml:space="preserve">
-    <value>w</value>
-  </data>
-  <data name="Error_ParsingFailed" xml:space="preserve">
-    <value>Parsowanie nieudane!</value>
-  </data>
-  <data name="Error_Reason" xml:space="preserve">
-    <value>Powód:</value>
-  </data>
-  <data name="Error_RenderingFailed" xml:space="preserve">
-    <value>Renderowanie nieudane!</value>
-  </data>
-  <data name="Error_SerializationFailed" xml:space="preserve">
-    <value>Serializacja nieudana!</value>
-  </data>
-  <data name="Message_FrameRendered" xml:space="preserve">
-    <value>Klatka wyrenderowana w {0}</value>
-  </data>
-  <data name="Message_FrameFailedToRender" xml:space="preserve">
-    <value>Wystąpił błąd podczas renderowania klatki.</value>
-  </data>
-  <data name="Message_RenderingFrame" xml:space="preserve">
-    <value>Trwa renderowanie klatki...</value>
-  </data>
-  <data name="Message_SaveBeforeClose" xml:space="preserve">
-    <value>Czy chcesz zapisać dokument {0} przed zamknięciem?</value>
+  <data name="Title" xml:space="preserve">
+    <value>Add namespace</value>
   </data>
   <data name="AddNamespace" xml:space="preserve">
-    <value>Dodaj namespace...</value>
-  </data>
-  <data name="Namespaces" xml:space="preserve">
-    <value>Namespace</value>
+    <value>Add namespace</value>
   </data>
 </root>

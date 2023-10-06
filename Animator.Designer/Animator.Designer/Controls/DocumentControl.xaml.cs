@@ -19,10 +19,7 @@ using System.Windows.Threading;
 
 namespace Animator.Designer.Controls
 {
-    /// <summary>
-    /// Logika interakcji dla klasy DocumentControl.xaml
-    /// </summary>
-    public partial class DocumentControl : UserControl
+    public partial class DocumentControl : UserControl, IDisposable
     {
         // Private fields -----------------------------------------------------
 
@@ -102,6 +99,12 @@ namespace Animator.Designer.Controls
         public DocumentControl()
         {
             InitializeComponent();
+        }
+
+        public void Dispose()
+        {
+            movieTimer.Stop();
+            movieTimer = null;
         }
     }
 }

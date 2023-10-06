@@ -41,6 +41,12 @@
                               LargeIcon="pack://application:,,,/Animator.Designer;component/Resources/Images/Save32.png"
                               Icon="pack://application:,,,/Animator.Designer;component/Resources/Images/Save16.png"/>
                 </f:RibbonGroupBox>
+
+                <f:RibbonGroupBox Header="{x:Static res:Strings.Namespaces}">
+                    <f:Button Header="{x:Static res:Strings.AddNamespace}" Command="{Binding AddNamespaceCommand}" SizeDefinition="Large"
+                              LargeIcon="pack://application:,,,/Animator.Designer;component/Resources/Images/Namespace32.png"
+                              Icon="pack://application:,,,/Animator.Designer;component/Resources/Images/Namespace16.png"/>
+                </f:RibbonGroupBox>
             </f:RibbonTabItem>
         </f:Ribbon>
 

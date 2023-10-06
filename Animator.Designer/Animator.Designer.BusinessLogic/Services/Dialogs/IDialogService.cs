@@ -1,4 +1,6 @@
-﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+﻿using Animator.Designer.BusinessLogic.Models.AddNamespace;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +16,6 @@ namespace Animator.Designer.BusinessLogic.Services.Dialogs
         (bool result, string path) ShowOpenDialog(string filter = null, string title = null, string filename = null);
         (bool result, string path) ShowSaveDialog(string filter = null, string title = null, string filename = null);
         void ShowMacroPropertyEditor(MacroViewModel macro);
+        (bool result, AddNamespaceResultModel model) ShowAddNamespaceDialog(WrapperContext context);
     }
 }

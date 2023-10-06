@@ -32,6 +32,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             this.context = context;
         }
 
+        public virtual void NotifyAvailableTypesChanged()
+        {
+            foreach (var prop in Properties)
+                prop.NotifyAvailableTypesChanged();
+        }
+
         public TProperty Property<TProperty>(string name)
             where TProperty : PropertyViewModel =>
             Properties

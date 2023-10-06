@@ -18,7 +18,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     {
         // Private fields -----------------------------------------------------
 
-        private readonly List<TypeViewModel> availableTypes;
+        private readonly Type baseType;
         private ValueViewModel value;
 
         // Private methods ----------------------------------------------------
@@ -71,11 +71,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             WrapperContext context, 
             string ns, 
             string name, 
-            List<Type> availableTypes)
+            Type baseType)
             : base(parent, context)
         {
             Namespace = ns;
             Name = name;
+            this.baseType = baseType;
 
             SetDefault();
 
@@ -83,10 +84,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
             SetDefaultCommand = new AppCommand(obj => SetDefault(), !valueIsDefaultCondition);
             SetToInstanceCommand = new AppCommand(obj => SetToInstance((Type)obj));
+        }
 
-            this.availableTypes = availableTypes
-                .Select(t => new TypeViewModel(t, SetToInstanceCommand))
-                .ToList();
+        public override void NotifyAvailableTypesChanged()
+        {
+            base.NotifyAvailableTypesChanged();
+
+            if (value is ReferenceValueViewModel refValue)
+            {
+                refValue.Value.NotifyAvailableTypesChanged();
+            }
         }
 
         public override void RequestDelete(ObjectViewModel obj)
@@ -111,6 +118,13 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             set => SetValue(value);
         }
 
-        public override IEnumerable<TypeViewModel> AvailableTypes => availableTypes;
+        public override IEnumerable<TypeViewModel> AvailableTypes
+        {
+            get => context.Namespaces
+                .OfType<AssemblyNamespaceViewModel>()
+                .SelectMany(n => n.GetAvailableTypesFor(baseType))
+                .OrderBy(e => e.Name)
+                .Select(t => new TypeViewModel(t, SetToInstanceCommand));
+        }
     }
 }
