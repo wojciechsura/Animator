@@ -150,4 +150,10 @@
   <data name="FromResource" xml:space="preserve">
     <value>From resource</value>
   </data>
+  <data name="SetToSpecificMacro" xml:space="preserve">
+    <value>Set to existing macro</value>
+  </data>
+  <data name="AddSpecificMacro" xml:space="preserve">
+    <value>Add existing macro</value>
+  </data>
 </root>

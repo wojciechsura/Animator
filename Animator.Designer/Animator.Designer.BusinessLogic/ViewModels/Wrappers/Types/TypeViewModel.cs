@@ -7,18 +7,8 @@ using System.Windows.Input;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types
 {
-    public class TypeViewModel
+    public record TypeViewModel(Type Type, ICommand Command)
     {
-        public TypeViewModel(Type type, ICommand command)
-        {
-            Type = type;
-            Command = command;
-        }
-
         public string Name => Type.Name;
-
-        public Type Type { get; }
-
-        public ICommand Command { get; }
     }
 }

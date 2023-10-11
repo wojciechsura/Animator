@@ -79,6 +79,15 @@ namespace Animator.Designer.Resources.Controls.PropertyPopup {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Add existing macro.
+        /// </summary>
+        public static string AddSpecificMacro {
+            get {
+                return ResourceManager.GetString("AddSpecificMacro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu From resource.
         /// </summary>
         public static string FromResource {
@@ -147,6 +156,15 @@ namespace Animator.Designer.Resources.Controls.PropertyPopup {
         public static string SetToMarkupExtension {
             get {
                 return ResourceManager.GetString("SetToMarkupExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Set to existing macro.
+        /// </summary>
+        public static string SetToSpecificMacro {
+            get {
+                return ResourceManager.GetString("SetToSpecificMacro", resourceCulture);
             }
         }
         

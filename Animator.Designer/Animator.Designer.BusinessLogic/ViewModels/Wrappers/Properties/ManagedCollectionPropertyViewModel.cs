@@ -45,12 +45,28 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             (value as CollectionValueViewModel).Items.Add(obj);
         }
 
+        private IEnumerable<MacroKeyViewModel> GetAvailableMacros() 
+        {
+            return InternalGetAvailableMacros(collectionProperty.ItemType, AddSpecificMacroCommand);
+        }
+
         private void InsertMacro()
         {
             if (value is not CollectionValueViewModel)
                 throw new InvalidOperationException("Switch to collection mode first!");
 
             var obj = new MacroViewModel(context);
+            (value as CollectionValueViewModel).Items.Add(obj);
+        }
+
+        private void AddSpecificMacro(string key)
+        {
+            if (value is not CollectionValueViewModel)
+                throw new InvalidOperationException("Switch to collection mode first!");
+
+            var obj = new MacroViewModel(context);
+            var keyProp = obj.Property<StringPropertyViewModel>(context.EngineNamespace, "Key");
+            keyProp.Value = key;
             (value as CollectionValueViewModel).Items.Add(obj);
         }
 
@@ -162,7 +178,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             AddInstanceCommand = new AppCommand(obj => AddInstance((Type)obj), valueIsCollectionCondition);
             InsertMacroCommand = new AppCommand(obj => InsertMacro(), valueIsCollectionCondition);
             InsertIncludeCommand = new AppCommand(obj => InsertInclude(), valueIsCollectionCondition);
-            InsertGeneratorCommand = new AppCommand(obj => InsertGenerator(), valueIsCollectionCondition);            
+            InsertGeneratorCommand = new AppCommand(obj => InsertGenerator(), valueIsCollectionCondition);
+            AddSpecificMacroCommand = new AppCommand(obj => AddSpecificMacro((string)obj), valueIsCollectionCondition);
         }
 
         public override void NotifyAvailableTypesChanged()
@@ -211,6 +228,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                     .Select(t => new TypeViewModel(t, AddInstanceCommand));
             }
         }
+
+        public override IEnumerable<MacroKeyViewModel> AvailableMacros => GetAvailableMacros();        
 
         public override ManagedProperty ManagedProperty => collectionProperty;
     }

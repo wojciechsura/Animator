@@ -79,6 +79,50 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             }
 
             result.Sort((x, y) => string.Compare(x.Key, y.Key));
+
+            if (result.Count == 0)
+                result.Add(new ResourceKeyViewModel(Resources.ViewModels.Properties.Strings.None, null, false));
+
+            return result;
+        }
+
+        protected IEnumerable<MacroKeyViewModel> InternalGetAvailableMacros(Type requiredType, ICommand command)
+        {
+            var currentObject = Parent;
+
+            var result = new List<MacroKeyViewModel>();
+
+            while (currentObject != null)
+            {
+                var macrosProperty = currentObject.Property<MacroCollectionPropertyViewModel>(context.EngineNamespace, "Macros");
+                if (macrosProperty != null)
+                {
+                    var macrosValue = macrosProperty.Value;
+                    if (macrosValue != null)
+                    {
+                        foreach (var macro in macrosValue.Items
+                            .OfType<MacroDefinitionViewModel>())
+                        { 
+                            var property = macro.Property<ReferencePropertyViewModel>("Content");
+                            if (property.Value is ReferenceValueViewModel value && 
+                                value.Value is ManagedObjectViewModel managedObj &&                                 
+                                managedObj.Type.IsAssignableTo(requiredType))
+                            {
+                                result.Add(new MacroKeyViewModel(macro.Key, command));
+                            }
+                        }
+                    }
+                }
+
+                // Object -> Value -> Property -> Object
+                currentObject = currentObject.Parent?.Parent?.Parent;
+            }
+
+            result.Sort((x, y) => string.Compare(x.Key, y.Key));
+
+            if (result.Count == 0)
+                result.Add(new MacroKeyViewModel(Resources.ViewModels.Properties.Strings.None, null, false));
+
             return result;
         }
 

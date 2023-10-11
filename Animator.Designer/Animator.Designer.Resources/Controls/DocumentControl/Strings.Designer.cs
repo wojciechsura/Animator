@@ -70,7 +70,7 @@ namespace Animator.Designer.Resources.Controls.DocumentControl {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Add to content.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Add.
         /// </summary>
         public static string AddInstanceToContent {
             get {
@@ -84,6 +84,15 @@ namespace Animator.Designer.Resources.Controls.DocumentControl {
         public static string AddMacroDefinition {
             get {
                 return ResourceManager.GetString("AddMacroDefinition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Insert existing macro.
+        /// </summary>
+        public static string AddSpecificMacro {
+            get {
+                return ResourceManager.GetString("AddSpecificMacro", resourceCulture);
             }
         }
         
@@ -169,7 +178,7 @@ namespace Animator.Designer.Resources.Controls.DocumentControl {
         }
         
         /// <summary>
-        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Set content to.
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Set to.
         /// </summary>
         public static string SetContentInstance {
             get {
@@ -192,6 +201,15 @@ namespace Animator.Designer.Resources.Controls.DocumentControl {
         public static string SetToMarkupExtension {
             get {
                 return ResourceManager.GetString("SetToMarkupExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Set to existing macro.
+        /// </summary>
+        public static string SetToSpecificMacro {
+            get {
+                return ResourceManager.GetString("SetToSpecificMacro", resourceCulture);
             }
         }
     }

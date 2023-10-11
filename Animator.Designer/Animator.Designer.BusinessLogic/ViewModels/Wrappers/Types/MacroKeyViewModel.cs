@@ -7,5 +7,5 @@ using System.Windows.Input;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types
 {
-    public record ResourceKeyViewModel(string Key, ICommand Command, bool Enabled = true);
+    public record class MacroKeyViewModel(string Key, ICommand Command, bool Enabled = true);
 }

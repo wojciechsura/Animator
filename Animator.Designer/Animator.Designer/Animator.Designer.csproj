@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
+    <Resource Include="Resources\Images\Icons\AddInstance16.png" />
     <Resource Include="Resources\Images\Icons\Down16.png" />
     <Resource Include="Resources\Images\Icons\AnimateBool16.png" />
     <Resource Include="Resources\Images\Icons\AnimateColor16.png" />
@@ -73,7 +74,6 @@
     <Resource Include="Resources\Images\Icons\Layer16.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Icons\AddInstance16.png" />
     <Resource Include="Resources\Images\Icons\Animations16.png" />
     <Resource Include="Resources\Images\Icons\Delete16.png" />
     <Resource Include="Resources\Images\Icons\Image16.png" />

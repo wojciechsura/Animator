@@ -107,10 +107,10 @@
     <value>Set to</value>
   </data>
   <data name="AddInstanceToContent" xml:space="preserve">
-    <value>Add to content</value>
+    <value>Add</value>
   </data>
   <data name="SetContentInstance" xml:space="preserve">
-    <value>Set content to</value>
+    <value>Set to</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -141,5 +141,11 @@
   </data>
   <data name="MoveDown" xml:space="preserve">
     <value>Move down</value>
+  </data>
+  <data name="SetToSpecificMacro" xml:space="preserve">
+    <value>Set to existing macro</value>
+  </data>
+  <data name="AddSpecificMacro" xml:space="preserve">
+    <value>Insert existing macro</value>
   </data>
 </root>

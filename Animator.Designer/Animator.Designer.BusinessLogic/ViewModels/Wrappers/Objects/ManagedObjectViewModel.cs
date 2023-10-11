@@ -563,6 +563,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public ICommand SetToMarkupExtensionCommand => contentProperty?.SetToMarkupExtensionCommand;
 
+        public ICommand SetToSpecificMacroCommand => contentProperty?.SetToSpecificMacroCommand;
+
+        public ICommand AddSpecificMacroCommand => contentProperty?.AddSpecificMacroCommand;
+
+        public IEnumerable<MacroKeyViewModel> AvailableMacros => contentProperty?.AvailableMacros;
+
         public Type Type { get; }
 
         public string Value => TruncateValue((valueProperty?.Value as StringValueViewModel)?.Value);

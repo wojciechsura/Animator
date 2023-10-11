@@ -34,6 +34,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             return InternalGetAvailableResources(matchesCurrentType);
         }
 
+        private IEnumerable<MacroKeyViewModel> GetAvailableMacros()
+        {
+            return InternalGetAvailableMacros(referenceProperty.Type, SetToSpecificMacroCommand);
+        }
+
         private void HandleStringValueChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(StringValueViewModel.Value))
@@ -69,6 +74,14 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         private void InsertMacro()
         {
             var obj = new MacroViewModel(context);
+            Value = new ReferenceValueViewModel(obj);
+        }
+
+        private void SetToSpecificMacro(string key)
+        {
+            var obj = new MacroViewModel(context);
+            var keyProp = obj.Property<StringPropertyViewModel>(context.EngineNamespace, "Key");
+            keyProp.Value = key;
             Value = new ReferenceValueViewModel(obj);
         }
 
@@ -131,6 +144,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             InsertIncludeCommand = new AppCommand(obj => InsertInclude());
             InsertGeneratorCommand = new AppCommand(obj => InsertGenerator());
             SetToFromResourceCommand = new AppCommand(obj => SetToFromResource((string)obj));
+            SetToSpecificMacroCommand = new AppCommand(obj => SetToSpecificMacro((string)obj));
         }
 
         public override void NotifyAvailableTypesChanged()
@@ -167,6 +181,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         }
 
         public override IEnumerable<ResourceKeyViewModel> AvailableResources => GetAvailableResources();
+
+        public override IEnumerable<MacroKeyViewModel> AvailableMacros => GetAvailableMacros();
 
         public override ManagedProperty ManagedProperty => referenceProperty;
     }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,55 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Properties" xml:space="preserve">
-    <value>Właściwości</value>
-  </data>
-  <data name="AddInstance" xml:space="preserve">
-    <value>Dodaj</value>
-  </data>
-  <data name="SetToInstance" xml:space="preserve">
-    <value>Ustaw na</value>
-  </data>
-  <data name="AddInstanceToContent" xml:space="preserve">
-    <value>Dodaj</value>
-  </data>
-  <data name="SetContentInstance" xml:space="preserve">
-    <value>Ustaw na</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Usuń</value>
-  </data>
-  <data name="AddMacroDefinition" xml:space="preserve">
-    <value>Dodaj definicję makra</value>
-  </data>
-  <data name="Macros" xml:space="preserve">
-    <value>Makra</value>
-  </data>
-  <data name="InsertMacro" xml:space="preserve">
-    <value>Wstaw makro</value>
-  </data>
-  <data name="SetToMarkupExtension" xml:space="preserve">
-    <value>Użyj rozszerzenia</value>
-  </data>
-  <data name="InsertInclude" xml:space="preserve">
-    <value>Dołącz plik</value>
-  </data>
-  <data name="InsertGenerator" xml:space="preserve">
-    <value>Wstaw generator</value>
-  </data>
-  <data name="EditProperties" xml:space="preserve">
-    <value>Edytuj właściwości...</value>
-  </data>
-  <data name="MoveDown" xml:space="preserve">
-    <value>Przenieś w dół</value>
-  </data>
-  <data name="MoveUp" xml:space="preserve">
-    <value>Przenieś w górę</value>
-  </data>
-  <data name="AddSpecificMacro" xml:space="preserve">
-    <value>Wstaw istniejące makro</value>
-  </data>
-  <data name="SetToSpecificMacro" xml:space="preserve">
-    <value>Ustaw na istniejące makro</value>
+  <data name="None" xml:space="preserve">
+    <value>None</value>
   </data>
 </root>

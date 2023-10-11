@@ -474,6 +474,36 @@
                                             </MenuItem.Icon>
                                         </MenuItem>
 
+                                        <MenuItem Visibility="{Binding SetToSpecificMacroCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                                                Header="{x:Static res:Strings.SetToSpecificMacro}" ItemsSource="{Binding AvailableMacros}">
+                                            <MenuItem.ItemContainerStyle>
+                                                <Style TargetType="{x:Type MenuItem}">
+                                                    <Setter Property="Header" Value="{Binding Key}" />
+                                                    <Setter Property="Command" Value="{Binding Command}" />
+                                                    <Setter Property="CommandParameter" Value="{Binding Key}" />
+                                                    <Setter Property="IsEnabled" Value="{Binding Enabled}" />
+                                                </Style>
+                                            </MenuItem.ItemContainerStyle>
+                                            <MenuItem.Icon>
+                                                <Image Source="/Resources/Images/Icons/PlaceMacro16.png" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+
+                                        <MenuItem Visibility="{Binding AddSpecificMacroCommand, Converter={StaticResource NullToVisibilityConverter}}"
+                                                Header="{x:Static res:Strings.AddSpecificMacro}" ItemsSource="{Binding AvailableMacros}">
+                                            <MenuItem.ItemContainerStyle>
+                                                <Style TargetType="{x:Type MenuItem}">
+                                                    <Setter Property="Header" Value="{Binding Key}" />
+                                                    <Setter Property="Command" Value="{Binding Command}" />
+                                                    <Setter Property="CommandParameter" Value="{Binding Key}" />
+                                                    <Setter Property="IsEnabled" Value="{Binding Enabled}" />
+                                                </Style>
+                                            </MenuItem.ItemContainerStyle>
+                                            <MenuItem.Icon>
+                                                <Image Source="/Resources/Images/Icons/PlaceMacro16.png" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        
                                         <MenuItem Visibility="{Binding InsertMacroCommand, Converter={StaticResource NullToVisibilityConverter}}"
                                                     Header="{x:Static res:Strings.InsertMacro}"
                                                     Command="{Binding InsertMacroCommand}">
