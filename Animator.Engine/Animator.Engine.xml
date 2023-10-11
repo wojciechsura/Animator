@@ -528,6 +528,21 @@
             the end point's of the previous path element.
             </summary>
         </member>
+        <member name="P:Animator.Engine.Elements.Image.Source">
+            <summary>
+            Path of the image
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Image.HorizontalAlignment">
+            <summary>
+            Horizontal aligment of the image
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Image.VerticalAlignment">
+            <summary>
+            Vertical alignment of the image
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.IntKeyframe">
             <summary>
             A keyframe for a property of type int.
@@ -1102,7 +1117,7 @@
         </member>
         <member name="P:Animator.Engine.Elements.Scene.AlwaysRender">
             <summary>
-            See <see cref="!:Visual.AlwaysRender" />
+            See <see cref="P:Animator.Engine.Elements.SceneElement.AlwaysRender" />
             </summary>
         </member>
         <member name="P:Animator.Engine.Elements.Scene.Duration">
@@ -1298,6 +1313,11 @@
         </member>
         <member name="P:Animator.Engine.Elements.StringResource.Value">
             <summary>Value of this resource</summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.SvgImage.Source">
+            <summary>
+            Source of the SVG image
+            </summary>
         </member>
         <member name="P:Animator.Engine.Elements.TimeResource.Value">
             <summary>Value of this resource</summary>

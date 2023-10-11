@@ -16,6 +16,8 @@ namespace Animator.Engine.Base
 
         private readonly int propertyIndex;
 
+        private bool wasSet = false;
+
         private object baseValue = null;
 
         private bool isAnimated = false;
@@ -55,38 +57,53 @@ namespace Animator.Engine.Base
             ClearCoercedValue();
         }
 
+        internal void SetBaseValue(object value, PropertyValueSource source)
+        {
+            baseValue = value;
+            valueSource = source;
+
+            if (source == PropertyValueSource.Direct)
+                wasSet = true;
+        }
+
+        internal void SetAnimatedValue(object value)
+        {
+            isAnimated = true;
+            animatedValue = value;
+        }
+
+        internal void SetCoercedValue(object value)
+        {
+            isCoerced = true;
+            coercedValue = value;
+        }
+
+        internal void SetSource(PropertyValueSource source)
+        {
+            if (source == PropertyValueSource.Direct)
+                wasSet = true;
+        }
+
         // Internal properties ------------------------------------------------
 
         internal PropertyValueSource ValueSource
         {
             get => valueSource;
-            set => valueSource = value;
         }
 
         internal object BaseValue
         {
             get => baseValue;
-            set => baseValue = value;
         }
 
         internal object AnimatedValue
         {
             get => animatedValue;
-            set 
-            {
-                isAnimated = true;
-                animatedValue = value;
-            }
         }
 
         internal object CoercedValue
         {
             get => coercedValue;
-            set
-            {
-                isCoerced = true;
-                coercedValue = value;
-            }
         }
 
         internal object FinalBaseValue
@@ -114,5 +131,7 @@ namespace Animator.Engine.Base
         public bool IsAnimated => isAnimated;
 
         public bool IsPureDefault => valueSource == PropertyValueSource.Default && !isAnimated;
+
+        public bool WasSet => wasSet;
     }
 }

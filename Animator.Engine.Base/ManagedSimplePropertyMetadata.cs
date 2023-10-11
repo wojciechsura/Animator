@@ -54,5 +54,11 @@ namespace Animator.Engine.Base
         public bool InheritedFromParent { get; init; } = false;
         
         public bool Inheritable { get; init; } = false;
+
+        /// <summary>If set, the non-null value can be set only once.</summary>
+        public bool ValueIsPermanent { get; init; } = false;
+
+        /// <summary>Allows verifying, if new value is valid</summary>
+        public ValueValidationDelegate ValueValidationHandler { get; init; }
     }
 }

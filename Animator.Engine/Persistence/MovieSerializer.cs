@@ -34,10 +34,10 @@ namespace Animator.Engine.Elements.Persistence
             return (Movie)serializer.Deserialize(filename, deserializationOptions);
         }
 
-        public Movie Deserialize(XmlDocument document)
+        public Movie Deserialize(XmlDocument document, string documentPath)
         {
             var serializer = new ManagedObjectSerializer();
-            return (Movie)serializer.Deserialize(document, deserializationOptions);
+            return (Movie)serializer.Deserialize(document, deserializationOptions, documentPath);
         }
     }
 }

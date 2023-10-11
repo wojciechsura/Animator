@@ -28,17 +28,20 @@ namespace Animator.Engine.Elements
         {
             if (String.IsNullOrEmpty(Source))
                 throw new AnimationException("Source property of Image is empty!", GetPath());
-            if (!File.Exists(Source))
-                throw new AnimationException($"Image {Source} does not exist!", GetPath());
 
-            if (cachedImagePath != Source)
+            string resolvedPath = ResolvePath(Source);
+
+            if (!File.Exists(resolvedPath))
+                throw new AnimationException($"Image {resolvedPath} does not exist!", GetPath());
+
+            if (cachedImagePath != resolvedPath)
             {
                 lock (bitmapLockObject)
                 {
-                    var bytes = File.ReadAllBytes(Source);
+                    var bytes = File.ReadAllBytes(resolvedPath);
                     var ms = new MemoryStream(bytes);
                     cachedImage = (Bitmap)System.Drawing.Image.FromStream(ms);
-                    cachedImagePath = Source;
+                    cachedImagePath = resolvedPath;
                 }
             }
         }
@@ -72,6 +75,9 @@ namespace Animator.Engine.Elements
 
         #region Source managed property
 
+        /// <summary>
+        /// Path of the image
+        /// </summary>
         public string Source
         {
             get => (string)GetValue(SourceProperty);
@@ -85,6 +91,9 @@ namespace Animator.Engine.Elements
 
         #endregion
 
+        /// <summary>
+        /// Horizontal aligment of the image
+        /// </summary>
         #region HorizontalAlignment
 
         public HorizontalAlignment HorizontalAlignment
@@ -102,6 +111,9 @@ namespace Animator.Engine.Elements
 
         #region VerticalAlignment
 
+        /// <summary>
+        /// Vertical alignment of the image
+        /// </summary>
         public VerticalAlignment VerticalAlignment
         {
             get => (VerticalAlignment)GetValue(VerticalAlignmentProperty);

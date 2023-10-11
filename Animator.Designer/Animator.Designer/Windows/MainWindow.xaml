@@ -1,0 +1,55 @@
+﻿<f:RibbonWindow x:Class="Animator.Designer.Windows.MainWindow"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:f="urn:fluent-ribbon"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:res="clr-namespace:Animator.Designer.Resources.Windows.MainWindow;assembly=Animator.Designer.Resources"
+                xmlns:c="clr-namespace:Animator.Designer.Controls"
+                xmlns:local="clr-namespace:Animator.Designer" 
+                xmlns:main="clr-namespace:Animator.Designer.BusinessLogic.ViewModels.Main;assembly=Animator.Designer.BusinessLogic" 
+                d:DataContext="{d:DesignInstance Type=main:MainWindowViewModel}"
+                mc:Ignorable="d"
+                Title="MainWindow" Height="450" Width="800" Icon="/icon.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <f:Ribbon Grid.Row="0" Focusable="False" FocusManager.IsFocusScope="True">
+            <f:Ribbon.Menu>
+                <f:ApplicationMenu>
+                </f:ApplicationMenu>
+            </f:Ribbon.Menu>
+
+            <f:RibbonTabItem Header="{x:Static res:Strings.Home}">
+                <f:RibbonGroupBox x:Name="grHomeFile" Header="{x:Static res:Strings.File}">
+                    <f:Button Header="{x:Static res:Strings.Open}" Command="{Binding OpenCommand}" SizeDefinition="Large" 
+                              LargeIcon="pack://application:,,,/Animator.Designer;component/Resources/Images/Open32.png"
+                              Icon="pack://application:,,,/Animator.Designer;component/Resources/Images/Open16.png"/>
+                    
+                    <f:Button Header="{x:Static res:Strings.New}" Command="{Binding NewCommand}" SizeDefinition="Middle"
+                              LargeIcon="pack://application:,,,/Animator.Designer;component/Resources/Images/New32.png"
+                              Icon="pack://application:,,,/Animator.Designer;component/Resources/Images/New16.png"/>
+
+                    <f:Button Header="{x:Static res:Strings.Save}" Command="{Binding SaveCommand}" SizeDefinition="Middle"
+                              LargeIcon="pack://application:,,,/Animator.Designer;component/Resources/Images/Save32.png"
+                              Icon="pack://application:,,,/Animator.Designer;component/Resources/Images/Save16.png"/>
+
+                    <f:Button Header="{x:Static res:Strings.SaveAs}" Command="{Binding SaveAsCommand}" SizeDefinition="Middle"
+                              LargeIcon="pack://application:,,,/Animator.Designer;component/Resources/Images/Save32.png"
+                              Icon="pack://application:,,,/Animator.Designer;component/Resources/Images/Save16.png"/>
+                </f:RibbonGroupBox>
+
+                <f:RibbonGroupBox Header="{x:Static res:Strings.Namespaces}">
+                    <f:Button Header="{x:Static res:Strings.AddNamespace}" Command="{Binding AddNamespaceCommand}" SizeDefinition="Large"
+                              LargeIcon="pack://application:,,,/Animator.Designer;component/Resources/Images/Namespace32.png"
+                              Icon="pack://application:,,,/Animator.Designer;component/Resources/Images/Namespace16.png"/>
+                </f:RibbonGroupBox>
+            </f:RibbonTabItem>
+        </f:Ribbon>
+
+        <c:DocumentControl Grid.Row="1" DataContext="{Binding Document}" />
+    </Grid>
+</f:RibbonWindow>

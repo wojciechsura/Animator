@@ -9,8 +9,6 @@ const int G_OFFSET = 1;
 const int R_OFFSET = 2;
 const int ALPHA_OFFSET = 3;
 
-static std::vector<std::shared_ptr<float[]>> gaussKernels;
-
 struct FloatColor 
 {
 public:
@@ -52,6 +50,108 @@ inline float getFloatAlpha(unsigned char* bitmap, int stride, int x, int y)
 inline unsigned char getIntAlpha(unsigned char* bitmap, int stride, int x, int y)
 {
     return bitmap[y * stride + x * BYTES_PER_PIXEL + ALPHA_OFFSET];
+}
+
+inline void findRoiByAlpha(unsigned char* bitmap, int stride, int width, int height, int& left, int& top, int& right, int& bottom)
+{
+    // Top
+
+    int y = 0;
+    while (y < height)
+    {
+        int x = 0;
+        while (x < width && getIntAlpha(bitmap, stride, x, y) == 0)
+            x++;
+
+        if (x < width)
+        {
+            top = y;
+            break;
+        }
+
+        y++;
+    }
+
+    if (y == height)
+    {
+        // Effectively the image is fully transparent
+        // No ROI found.
+
+        left = top = 0;
+        right = bottom = -1;
+        return;
+    }
+
+    // Here we know that there is at least one
+    // non-transparent pixel, so we always fill find
+    // other boundaries.
+
+    // Bottom
+
+    y = height - 1;
+    while (y >= top)
+    {
+        int x = 0;
+        while (x < width && getIntAlpha(bitmap, stride, x, y) == 0)
+            x++;
+
+        if (x < width)
+        {
+            bottom = y;
+            break;
+        }
+
+        y--;
+    }
+
+#ifdef DEBUG
+    if (y < top)
+        throw std::exception("Error in findRoiByAlpha (bottom)!");
+#endif
+
+    // Left
+
+    int x = 0;
+    while (x < width)
+    {
+        int y = 0;
+        while (y < height && getIntAlpha(bitmap, stride, x, y) == 0)
+            y++;
+
+        if (y < height)
+        {
+            left = x;
+            break;
+        }
+
+        x++;
+    }
+
+#ifdef DEBUG
+    if (x >= width)
+        throw std::exception("Error in findRoiByAlpha (left)!");
+#endif
+
+    x = width - 1;
+    while (x >= left)
+    {
+        int y = 0;
+        while (y < height && getIntAlpha(bitmap, stride, x, y) == 0)
+            y++;
+
+        if (y < height)
+        {
+            right = x;
+            break;
+        }
+
+        x--;
+    }
+
+#ifdef DEBUG
+    if (x < left)
+        throw std::exception("Error in findRoiByAlpha (right)!");
+#endif
 }
 
 inline FloatColor getFloatColor(unsigned char* bitmap, int stride, int x, int y)

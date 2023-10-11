@@ -51,17 +51,32 @@ extern "C" void __cdecl Blur(unsigned char* bitmapData,
 	int height,
 	int radius)
 {
+	int left = 0;
+	int top = 0;
+	int right = 0;
+	int bottom = 0;
+	findRoiByAlpha(bitmapData, stride, width, height, left, top, right, bottom);
+
+	if (right < left || bottom < top)
+		return;
+
 	// TODO optimize
 
 	int diameter = 2 * radius + 1;
 
 	auto copy = std::shared_ptr<unsigned char[]>(new unsigned char[height * stride]);
 
+	int minX = std::min(width - 1, std::max(0, left - radius));
+	int maxX = std::min(width - 1, std::max(0, right + radius));
+	int minY = std::min(height - 1, std::max(0, top - radius));
+	int maxY = std::min(height - 1, std::max(0, bottom + radius));
+
+	// Can be optimized further
 	for (int y = 0; y < height; y++)
 		memcpy(copy.get() + y * stride, bitmapData + y * stride, width * BYTES_PER_PIXEL);
 
-	for (int y = 0; y < height; y++)
-		for (int x = 0; x < width; x++)
+	for (int y = minY; y <= maxY; y++)
+		for (int x = minX; x <= maxX; x++)
 		{
 			int count = 0;
 			FloatColor sum;
@@ -193,6 +208,15 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 	int dy,
 	int radius)
 {
+	int left = 0;
+	int top = 0;
+	int right = 0;
+	int bottom = 0;
+	findRoiByAlpha(frameData, frameStride, width, height, left, top, right, bottom);
+
+	if (right < left || bottom < top)
+		return;
+
 	// Gaussian kernel
 
 	int diameter = 2 * radius + 1;
@@ -202,9 +226,17 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 
 	FloatColor shadow(colorArgb);
 
-	for (int y = 0; y < height; y++)
-		for (int x = 0; x < width; x++)
+	int minX = std::min(width - 1, std::max(0, left + dx - radius));
+	int maxX = std::min(width - 1, std::max(0, right + dx + radius));
+	int minY = std::min(height - 1, std::max(0, top + dy - radius));
+	int maxY = std::min(height - 1, std::max(0, bottom + dy + radius));
+
+	for (int y = minY; y <= maxY; y++)
+		for (int x = minX; x <= maxX; x++)
 		{
+			if (getIntAlpha(frameData, frameStride, x, y) == 255)
+				continue;
+
 			float aSum = 0;
 
 			float weight = 0.0f;
@@ -212,8 +244,8 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 
 			int xStart = x - radius - dx;
 			int yStart = y - radius - dy;
-			int xEnd = xStart + 2 * radius;
-			int yEnd = yStart + 2 * radius;
+			int xEnd = x + radius - dx;
+			int yEnd = y + radius - dy;
 
 			for (int x1 = xStart; x1 <= xEnd; x1++)
 				for (int y1 = yStart; y1 <= yEnd; y1++)
@@ -264,6 +296,15 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 	int height,
 	int radius)
 {
+	int left = 0;
+	int top = 0;
+	int right = 0;
+	int bottom = 0;
+	findRoiByAlpha(bitmapData, stride, width, height, left, top, right, bottom);
+
+	if (right < left || bottom < top)
+		return;
+
 	// Gaussian kernel
 
 	int diameter = 2 * radius + 1;
@@ -273,11 +314,17 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 
 	auto copy = std::shared_ptr<unsigned char[]>(new unsigned char[height * stride]);
 
+	int minX = std::min(width - 1, std::max(0, left - radius));
+	int maxX = std::min(width - 1, std::max(0, right + radius));
+	int minY = std::min(height - 1, std::max(0, top - radius));
+	int maxY = std::min(height - 1, std::max(0, bottom + radius));
+
+	// Can be optimized further
 	for (int y = 0; y < height; y++)
 		memcpy(copy.get() + y * stride, bitmapData + y * stride, width * BYTES_PER_PIXEL);
 
-	for (int y = 0; y < height; y++)
-		for (int x = 0; x < width; x++)
+	for (int y = minY; y <= maxY; y++)
+		for (int x = minX; x <= maxX; x++)
 		{
 			FloatColor sum;
 			float weight = 0.0f;

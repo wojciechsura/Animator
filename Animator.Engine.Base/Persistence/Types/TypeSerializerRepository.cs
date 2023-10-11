@@ -242,7 +242,7 @@ namespace Animator.Engine.Base.Persistence.Types
 			{
 				var point = (Point)obj;
 
-				return $"{point.X.ToString(CultureInfo.InvariantCulture)};{point.Y.ToString(CultureInfo.InvariantCulture)}";
+				return $"{point.X.ToString(CultureInfo.InvariantCulture)},{point.Y.ToString(CultureInfo.InvariantCulture)}";
 			}
 		}
 

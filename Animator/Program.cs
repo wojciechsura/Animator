@@ -68,7 +68,8 @@ namespace Animator
             document.Load(path);
 
             MovieSerializer animationSerializer = new MovieSerializer();
-            Movie animation = animationSerializer.Deserialize(document);
+            Movie animation = animationSerializer.Deserialize(document, System.IO.Path.GetDirectoryName(path));
+            animation.Path = path;
 
             return animation;
         }
@@ -251,9 +252,9 @@ namespace Animator
             }
             else
             {
-                frameRanges = Enumerable.Range(0, options.Threads - 1)
-                    .Select(i => ( Start: Math.Min(totalFrames - 1, i * totalFrames / (options.Threads - 1)), 
-                        End: Math.Min(totalFrames, (i + 1) * totalFrames / (options.Threads - 1))))
+                frameRanges = Enumerable.Range(0, options.Threads)
+                    .Select(i => ( Start: Math.Min(totalFrames - 1, i * totalFrames / options.Threads), 
+                        End: Math.Min(totalFrames, (i + 1) * totalFrames / options.Threads - 1)))
                     .ToList();
             }
 

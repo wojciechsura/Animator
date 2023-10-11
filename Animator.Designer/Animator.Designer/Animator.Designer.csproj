@@ -1,0 +1,138 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="icon.ico" />
+    <None Remove="Resources\Images\Down16.png" />
+    <None Remove="Resources\Images\Icons\AddInstance16.png" />
+    <None Remove="Resources\Images\Icons\AnimateBool16.png" />
+    <None Remove="Resources\Images\Icons\AnimateColor16.png" />
+    <None Remove="Resources\Images\Icons\AnimateFloat16.png" />
+    <None Remove="Resources\Images\Icons\AnimateInt16.png" />
+    <None Remove="Resources\Images\Icons\AnimatePoint16.png" />
+    <None Remove="Resources\Images\Icons\AnimateStopwatch16.png" />
+    <None Remove="Resources\Images\Icons\AnimateWithExpression16.png" />
+    <None Remove="Resources\Images\Icons\Animations16.png" />
+    <None Remove="Resources\Images\Icons\Circle16.png" />
+    <None Remove="Resources\Images\Icons\Delete16.png" />
+    <None Remove="Resources\Images\Icons\Ellipse16.png" />
+    <None Remove="Resources\Images\Icons\Generator16.png" />
+    <None Remove="Resources\Images\Icons\Generic16.png" />
+    <None Remove="Resources\Images\Icons\Image16.png" />
+    <None Remove="Resources\Images\Icons\Include16.png" />
+    <None Remove="Resources\Images\Icons\Label16.png" />
+    <None Remove="Resources\Images\Icons\Layer16.png" />
+    <None Remove="Resources\Images\Icons\Line16.png" />
+    <None Remove="Resources\Images\Icons\MacroDefinition16.png" />
+    <None Remove="Resources\Images\Icons\MacroDefinitions16.png" />
+    <None Remove="Resources\Images\Icons\MarkupExtension16.png" />
+    <None Remove="Resources\Images\Icons\Path16.png" />
+    <None Remove="Resources\Images\Icons\PlaceMacro16.png" />
+    <None Remove="Resources\Images\Icons\Properties16.png" />
+    <None Remove="Resources\Images\Icons\Property16.png" />
+    <None Remove="Resources\Images\Icons\Rectangle16.png" />
+    <None Remove="Resources\Images\Icons\Resources16.png" />
+    <None Remove="Resources\Images\Icons\SetCollection16.png" />
+    <None Remove="Resources\Images\Icons\SetDefault16.png" />
+    <None Remove="Resources\Images\Icons\SetInstance16.png" />
+    <None Remove="Resources\Images\Icons\SetString16.png" />
+    <None Remove="Resources\Images\Icons\Storyboard16.png" />
+    <None Remove="Resources\Images\Icons\SvgImage16.png" />
+    <None Remove="Resources\Images\Namespace16.png" />
+    <None Remove="Resources\Images\Namespace32.png" />
+    <None Remove="Resources\Images\New16.png" />
+    <None Remove="Resources\Images\New32.png" />
+    <None Remove="Resources\Images\Open16.png" />
+    <None Remove="Resources\Images\Open32.png" />
+    <None Remove="Resources\Images\Save16.png" />
+    <None Remove="Resources\Images\Save32.png" />
+    <None Remove="Resources\Images\Up16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+    <Resource Include="Resources\Images\Icons\Down16.png" />
+    <Resource Include="Resources\Images\Icons\AnimateBool16.png" />
+    <Resource Include="Resources\Images\Icons\AnimateColor16.png" />
+    <Resource Include="Resources\Images\Icons\AnimateFloat16.png" />
+    <Resource Include="Resources\Images\Icons\AnimateInt16.png" />
+    <Resource Include="Resources\Images\Icons\AnimatePoint16.png" />
+    <Resource Include="Resources\Images\Icons\AnimateStopwatch16.png" />
+    <Resource Include="Resources\Images\Icons\AnimateWithExpression16.png" />
+    <Resource Include="Resources\Images\Icons\Circle16.png" />
+    <Resource Include="Resources\Images\Icons\Ellipse16.png" />
+    <Resource Include="Resources\Images\Icons\Label16.png" />
+    <Resource Include="Resources\Images\Icons\Layer16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\AddInstance16.png" />
+    <Resource Include="Resources\Images\Icons\Animations16.png" />
+    <Resource Include="Resources\Images\Icons\Delete16.png" />
+    <Resource Include="Resources\Images\Icons\Image16.png" />
+    <Resource Include="Resources\Images\Icons\Line16.png" />
+    <Resource Include="Resources\Images\Icons\Path16.png" />
+    <Resource Include="Resources\Images\Icons\Rectangle16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Resources16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="7.1.0" />
+    <PackageReference Include="Fluent.Ribbon" Version="10.0.4" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="Spooksoft.Wpf.Controls" Version="1.0.6" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.4.421302">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Animator.Engine.Base\Animator.Engine.Base.csproj" />
+    <ProjectReference Include="..\..\Animator.Engine.Native\Animator.Engine.Native.vcxproj" />
+    <ProjectReference Include="..\..\Animator.Extensions.Nonconformist\Animator.Extensions.Nonconformist.csproj" />
+    <ProjectReference Include="..\..\Animator.Extensions.Utils\Animator.Extensions.Utils.csproj" />
+    <ProjectReference Include="..\Animator.Designer.BusinessLogic\Animator.Designer.BusinessLogic.csproj" />
+    <ProjectReference Include="..\Animator.Designer.Common.Wpf\Animator.Designer.Common.Wpf.csproj" />
+    <ProjectReference Include="..\Animator.Designer.Common\Animator.Designer.Common.csproj" />
+    <ProjectReference Include="..\Animator.Designer.Dependencies\Animator.Designer.Dependencies.csproj" />
+    <ProjectReference Include="..\Animator.Designer.Resources\Animator.Designer.Resources.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Generator16.png" />
+    <Resource Include="Resources\Images\Icons\Generic16.png" />
+    <Resource Include="Resources\Images\Icons\Include16.png" />
+    <Resource Include="Resources\Images\Icons\MacroDefinition16.png" />
+    <Resource Include="Resources\Images\Icons\MacroDefinitions16.png" />
+    <Resource Include="Resources\Images\Icons\MarkupExtension16.png" />
+    <Resource Include="Resources\Images\Icons\PlaceMacro16.png" />
+    <Resource Include="Resources\Images\Icons\Properties16.png" />
+    <Resource Include="Resources\Images\Icons\Property16.png" />
+    <Resource Include="Resources\Images\Icons\SetCollection16.png" />
+    <Resource Include="Resources\Images\Icons\SetDefault16.png" />
+    <Resource Include="Resources\Images\Icons\SetInstance16.png" />
+    <Resource Include="Resources\Images\Icons\SetString16.png" />
+    <Resource Include="Resources\Images\Icons\Storyboard16.png" />
+    <Resource Include="Resources\Images\Icons\SvgImage16.png" />
+    <Resource Include="Resources\Images\Namespace16.png" />
+    <Resource Include="Resources\Images\Namespace32.png" />
+    <Resource Include="Resources\Images\New16.png" />
+    <Resource Include="Resources\Images\New32.png" />
+    <Resource Include="Resources\Images\Open16.png" />
+    <Resource Include="Resources\Images\Open32.png" />
+    <Resource Include="Resources\Images\Save16.png" />
+    <Resource Include="Resources\Images\Save32.png" />
+    <Resource Include="Resources\Images\Icons\Up16.png" />
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(SolutionDir)x64\$(ConfigurationName)\Animator.Engine.Native.dll&quot; &quot;$(TargetDir)Animator.Engine.Native.dll&quot;&#xD;&#xA;copy &quot;$(SolutionDir)x64\$(ConfigurationName)\Animator.Engine.Native.pdb&quot; &quot;$(TargetDir)Animator.Engine.Native.pdb&quot;" />
+  </Target>
+</Project>

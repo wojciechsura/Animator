@@ -14,6 +14,11 @@ namespace Animator.Engine.Base
 
         protected override BasePropertyMetadata ProvideBaseMetadata() => metadata;
 
+        private Type GetItemType()
+        {
+            return Type.GenericTypeArguments[0];
+        }
+
         public ManagedCollectionProperty(Type ownerClassType, string name, Type propertyType, ManagedCollectionMetadata metadata)
             : base(ownerClassType, name, propertyType)
         {
@@ -21,5 +26,7 @@ namespace Animator.Engine.Base
         }
 
         public new ManagedCollectionMetadata Metadata => metadata;
+
+        public Type ItemType => GetItemType();
     }
 }

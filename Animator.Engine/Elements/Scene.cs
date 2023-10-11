@@ -72,7 +72,7 @@ namespace Animator.Engine.Elements
         // Public properties --------------------------------------------------
 
         /// <summary>
-        /// See <see cref="Visual.AlwaysRender" />
+        /// See <see cref="SceneElement.AlwaysRender" />
         /// </summary>
         public override bool AlwaysRender => Items
             .Any(se => se.AlwaysRender);

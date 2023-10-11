@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Animator.Engine.Base.Extensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -41,26 +42,6 @@ namespace Animator.Engine.Base
 
         private ManagedObject parent;
 
-        // Private static methods ---------------------------------------------
-
-        private static void StaticInitializeRecursively(Type type)
-        {
-            do
-            {
-                // If type is initialized, its base types must have been initialized too,
-                // don't waste time on them
-                if (staticallyInitializedTypes.Contains(type))
-                    return;
-
-                System.Runtime.CompilerServices.RuntimeHelpers.RunClassConstructor(type.TypeHandle);
-
-                staticallyInitializedTypes.Add(type);
-
-                type = type.BaseType;
-            }
-            while (type != typeof(ManagedObject) && type != typeof(object));
-        }
-
         // Private methods ----------------------------------------------------
 
         private void SetBaseValue(ManagedSimpleProperty simpleProperty, object value, PropertyValueSource source = PropertyValueSource.Direct)
@@ -68,13 +49,12 @@ namespace Animator.Engine.Base
             ValidateSimpleValue(simpleProperty, value);
 
             var propertyValue = EnsurePropertyValue(simpleProperty);
-            propertyValue.ValueSource = source;
 
             if (propertyValue.BaseValue != value)
             {
                 var oldEffectiveValue = propertyValue.EffectiveValue;
 
-                propertyValue.BaseValue = value;
+                propertyValue.SetBaseValue(value, source);
                 propertyValue.ResetModifiers();
 
                 if (source != PropertyValueSource.Default)
@@ -92,6 +72,10 @@ namespace Animator.Engine.Base
 
                 InternalPropertyBaseValueChanged(simpleProperty, value);
             }
+            else
+            {
+                propertyValue.SetSource(source);
+            }
         }
 
         private void ValidateSimpleValue(ManagedSimpleProperty simpleProperty, object value)
@@ -102,6 +86,9 @@ namespace Animator.Engine.Base
             if ((value != null && !value.GetType().IsAssignableTo(simpleProperty.Type)) ||
                 (value == null && simpleProperty.Type != typeof(string)))
                 throw new ArgumentException($"Value of type {value.GetType().Name} cannot be assigned to property {simpleProperty.OwnerClassType.Name}.{simpleProperty.Name} of type {simpleProperty.Type.Name}.");
+
+            if (simpleProperty.Metadata.ValueValidationHandler != null && !simpleProperty.Metadata.ValueValidationHandler.Invoke(this, new ValueValidationEventArgs(value)))
+                throw new ArgumentException($"Value {value} failed validation for property {simpleProperty.OwnerClassType.Name}{simpleProperty.Name}");
         }
 
         private void ValidateReferenceValue(ManagedReferenceProperty refProperty, object value)
@@ -140,10 +127,11 @@ namespace Animator.Engine.Base
             propertyValue = new PropertyValue(simpleProperty.GlobalIndex);
             propertyValues[simpleProperty.GlobalIndex] = propertyValue;
 
-            return InitializeBaseValue(simpleProperty, propertyValue);
+            InitializeBaseValue(simpleProperty, propertyValue);
+            return propertyValue;
         }
 
-        private PropertyValue InitializeBaseValue(ManagedSimpleProperty simpleProperty, PropertyValue propertyValue)
+        private void InitializeBaseValue(ManagedSimpleProperty simpleProperty, PropertyValue propertyValue)
         {
             // Check, if inherited value exists
 
@@ -151,24 +139,17 @@ namespace Animator.Engine.Base
                 parent != null)
             {
                 var parentProperty = parent.GetProperty(simpleProperty.Name);
-                if (parentProperty != null && 
-                    parentProperty is ManagedSimpleProperty parentSimpleProperty &&
+                if (parentProperty is ManagedSimpleProperty parentSimpleProperty &&
                     parentSimpleProperty.Metadata.Inheritable &&
                     parentProperty.Type == simpleProperty.Type)
                 {
-                    propertyValue.BaseValue = parent.GetValue(parentProperty);
-                    propertyValue.ValueSource = PropertyValueSource.Inherited;
-
-                    return propertyValue;
+                    propertyValue.SetBaseValue(parent.GetValue(parentProperty), PropertyValueSource.Inherited);
+                    return;
                 }
             }
 
             // Use default value otherwise
-
-            propertyValue.BaseValue = simpleProperty.Metadata.DefaultValue;
-            propertyValue.ValueSource = PropertyValueSource.Default;
-
-            return propertyValue;
+            propertyValue.SetBaseValue(simpleProperty.Metadata.DefaultValue, PropertyValueSource.Default);
         }
 
         private ManagedCollection EnsureCollection(ManagedCollectionProperty property)
@@ -200,7 +181,7 @@ namespace Animator.Engine.Base
             (object coercedValue, bool coerced) = InternalCoerceValue(property);
 
             if (coerced && !object.Equals(coercedValue, propertyValue.FinalBaseValue))
-                propertyValue.CoercedValue = coercedValue;
+                propertyValue.SetCoercedValue(coercedValue);
             else
                 propertyValue.ClearCoercedValue();
 
@@ -318,8 +299,7 @@ namespace Animator.Engine.Base
                     .Where(sp => sp.Metadata.InheritedFromParent))
                 {
                     var parentProperty = parent.GetProperty(simpleProperty.Name);
-                    if (parentProperty != null && 
-                        parentProperty is ManagedSimpleProperty parentSimpleProperty && 
+                    if (parentProperty is ManagedSimpleProperty parentSimpleProperty && 
                         parentSimpleProperty.Metadata.Inheritable &&
                         parentProperty.Type == simpleProperty.Type)
                     {
@@ -412,7 +392,7 @@ namespace Animator.Engine.Base
 
         public ManagedObject()
         {
-            StaticInitializeRecursively(GetType());    
+            GetType().StaticInitializeRecursively();
         }
 
         public void CoerceValue(ManagedProperty property)
@@ -444,7 +424,7 @@ namespace Animator.Engine.Base
             {
                 var oldEffectiveValue = propertyValue.EffectiveValue;
 
-                propertyValue.AnimatedValue = value;
+                propertyValue.SetAnimatedValue(value);
 
                 CoerceAfterFinalBaseValueChanged(simpleProperty, propertyValue, oldEffectiveValue);
             }
@@ -548,6 +528,9 @@ namespace Animator.Engine.Base
         {
             if (property is ManagedSimpleProperty simpleProperty)
             {
+                if (simpleProperty.Metadata.ValueIsPermanent && propertyValues.TryGetValue(simpleProperty.GlobalIndex, out var propertyValue) && propertyValue.WasSet)
+                    throw new InvalidOperationException($"Property {property.Name} of type {GetType().Name} has permanent value flag set in metadata. This allows setting its value only once.");
+
                 SetBaseValue(simpleProperty, value);
             }
             else if (property is ManagedReferenceProperty referenceProperty)

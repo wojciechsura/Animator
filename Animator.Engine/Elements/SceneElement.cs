@@ -232,10 +232,10 @@ namespace Animator.Engine.Elements
             set => SetValue(NameProperty, value);
         }
 
-        public static readonly ManagedProperty NameProperty = ManagedProperty.RegisterReference(typeof(SceneElement),
+        public static readonly ManagedProperty NameProperty = ManagedProperty.Register(typeof(SceneElement),
             nameof(Name),
             typeof(string),
-            new ManagedReferencePropertyMetadata { ValueIsPermanent = true, ValueChangedHandler = HandleNameChanged, ValueValidationHandler = ValidateName });
+            new ManagedSimplePropertyMetadata { ValueIsPermanent = true, ValueChangedHandler = HandleNameChanged, ValueValidationHandler = ValidateName });
 
         private static bool ValidateName(ManagedObject sender, ValueValidationEventArgs args)
         {

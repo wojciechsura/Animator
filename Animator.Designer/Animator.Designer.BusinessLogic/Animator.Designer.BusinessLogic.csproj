@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <Platforms>x64</Platforms>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Resources\EmptyDocument.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\EmptyDocument.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="7.1.0" />
+    <PackageReference Include="Microsoft.DotNet.UpgradeAssistant.Extensions.Default.Analyzers" Version="0.3.310801">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Spooksoft.VisualStateManager" Version="1.2.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Animator.Engine.Base\Animator.Engine.Base.csproj" />
+    <ProjectReference Include="..\..\Animator.Engine\Animator.Engine.csproj" />
+    <ProjectReference Include="..\Animator.Designer.Common\Animator.Designer.Common.csproj" />
+    <ProjectReference Include="..\Animator.Designer.Dependencies\Animator.Designer.Dependencies.csproj" />
+    <ProjectReference Include="..\Animator.Designer.Resources\Animator.Designer.Resources.csproj" />
+  </ItemGroup>
+</Project>

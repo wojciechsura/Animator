@@ -1,0 +1,29 @@
+﻿<Application x:Class="Animator.Designer.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Animator.Designer" 
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:conv="clr-namespace:Animator.Designer.Common.Wpf.Converters;assembly=Animator.Designer.Common.Wpf"
+             xmlns:lconv="clr-namespace:Animator.Designer.Converters"
+             StartupUri="Windows\MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Theme/Styles.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <conv:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
+            <conv:InverseEmptyStringToVisibilityConverter x:Key="InverseEmptyStringToVisibilityConverter" />
+            <conv:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
+            <conv:ColorCodeToBrushConverter x:Key="ColorCodeToBrushConverter" />
+            <conv:MatchesTypeToVisibilityConverter x:Key="MatchesTypeToVisibilityConverter" />
+            <conv:DoesNotMatchTypeToBoolConverter x:Key="DoesNotMatchTypeToBoolConverter" />
+            <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <conv:InverseNullToVisibilityConverter x:Key="InverseNullToVisibilityConverter" />
+
+            <lconv:ImageKeyConverter x:Key="ImageKeyConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

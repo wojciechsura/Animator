@@ -36,8 +36,26 @@ namespace Animator.Engine.Base.Persistence.Types
             throw new InvalidCastException($"Unsupported serialization from value: {value} to type {type.Name}");
         }
 
+        public static bool CanSerialize(object obj, Type type)
+        {
+            if (type.IsEnum)
+            {
+                return true;
+            }
+            if (TypeSerializerRepository.Supports(type))
+            {
+                var serializer = TypeSerializerRepository.GetSerializerFor(type);
+                return serializer.CanSerialize(obj);
+            }
+
+            return false;
+        }
+
         public static string Serialize(object value)
         {
+            if (value == null)
+                return null;
+
             if (value.GetType().IsEnum)
                 return value.ToString();
 

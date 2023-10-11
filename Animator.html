@@ -891,6 +891,87 @@ Default value is .
 </table>
 <hr />
 
+<h1><a name="AnimateStopwatch"></a>AnimateStopwatch</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » Animation » AnimateProperty » AnimatePropertyInTime » <a href="#AnimateStopwatch">AnimateStopwatch</a></pre></code>
+<h2>Description</h2>
+Allows applying an animation to a string property of some
+            object. The value will be set to a stopwatch started
+            at StartTime and stopped on EndTime.
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Format</strong></code></pre>
+</td>
+<td>
+
+            Specifies format of the stopwatch. Compatible
+            with TimeSpan formatting strings.
+            
+<p>Not inheritable by child elements. 
+Default value is hh\:mm\:ss\.ff.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimatePropertyInTime:</strong></td></tr>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>StartTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should be started.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>TimeSpan</code></pre>
+</td>
+<td>
+<pre><code><strong>EndTime</strong></code></pre>
+</td>
+<td>
+
+            Time, when animation should finish.
+            
+<p>Not inheritable by child elements. 
+Value is inherited from parent element if none provided explicitly. 
+Default value is 00:00:00.
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>AnimateProperty:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>PropertyRef</strong></code></pre>
+</td>
+<td>
+
+            Reference to a property, relative to object owning this animator.
+            Subsequent elements must be separated by dots. You may call elements
+            from collections as well, as long as they have their Name property
+            set and it is unique in this collection.
+            
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+<p><strong>Example:</strong></p><code>PropertyRef="MyRectangle.Pen.Color"</code>
+</td>
+</table>
+<hr />
+
 <h1><a name="AnimateWithExpression"></a>AnimateWithExpression</h1>
 <h2>Inheritance</h2>
 <pre><code>Element » Animation » AnimateProperty » AnimatePropertyInTime » AnimateNumericPropertyInTime » <a href="#AnimateWithExpression">AnimateWithExpression</a></pre></code>
@@ -1256,6 +1337,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -1318,6 +1408,15 @@ Default value is 3.
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -1404,6 +1503,38 @@ Value is inherited from parent element if none provided explicitly.
 Default value is .
 </p>
 <p><strong>Example:</strong></p><code>PropertyRef="MyRectangle.Pen.Color"</code>
+</td>
+</table>
+<hr />
+
+<h1><a name="BrushResource"></a>BrushResource</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » Resource » <a href="#BrushResource">BrushResource</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Brush</code></pre>
+</td>
+<td>
+<pre><code><strong>Value</strong></code></pre>
+</td>
+<td>
+Value of this resource
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Resource:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Key</strong></code></pre>
+</td>
+<td>
+Key of this resource
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
 </td>
 </table>
 <hr />
@@ -1673,6 +1804,15 @@ Default value is Local.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -1722,6 +1862,15 @@ Informs, that the shape defined by a series of path elements
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -1901,6 +2050,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -2008,6 +2166,15 @@ Default value is 5.
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -2281,6 +2448,32 @@ Default value is Local.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="Eval"></a>Eval</h1>
+<h2>Inheritance</h2>
+<pre><code><a href="#Eval">Eval</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Formula</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -2396,6 +2589,37 @@ Default value is 0.
 </td>
 <td>
 Key of this resource
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+</td>
+</table>
+<hr />
+
+<h1><a name="FloatVariable"></a>FloatVariable</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » Variable » <a href="#FloatVariable">FloatVariable</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>Value</strong></code></pre>
+</td>
+<td>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Variable:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+Name of this variable
 <p>Not inheritable by child elements. 
 Default value is .
 </p>
@@ -2537,6 +2761,15 @@ Default value is 5.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -2604,6 +2837,15 @@ Default value is 0.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -2620,6 +2862,42 @@ Default value is 0.
 <pre><code><strong>Source</strong></code></pre>
 </td>
 <td>
+
+            Path of the image
+            
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+</td>
+<tr>
+<td>
+<pre><code>HorizontalAlignment</code></pre>
+</td>
+<td>
+<pre><code><strong>HorizontalAlignment</strong></code></pre>
+</td>
+<td>
+
+            Horizontal aligment of the image
+            
+<p>Not inheritable by child elements. 
+Default value is Left.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>VerticalAlignment</code></pre>
+</td>
+<td>
+<pre><code><strong>VerticalAlignment</strong></code></pre>
+</td>
+<td>
+
+            Vertical alignment of the image
+            
+<p>Not inheritable by child elements. 
+Default value is Top.
+</p>
 </td>
 <tr><td colspan="3" class="table-separator">Properties derived from <strong>Visual:</strong></td></tr>
 <tr>
@@ -2821,6 +3099,15 @@ Default value is Local.
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -2946,6 +3233,37 @@ Default value is .
 </table>
 <hr />
 
+<h1><a name="IntVariable"></a>IntVariable</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » Variable » <a href="#IntVariable">IntVariable</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Int32</code></pre>
+</td>
+<td>
+<pre><code><strong>Value</strong></code></pre>
+</td>
+<td>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Variable:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+Name of this variable
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+</td>
+</table>
+<hr />
+
 <h1><a name="Label"></a>Label</h1>
 <h2>Inheritance</h2>
 <pre><code>Element » SceneElement » Visual » <a href="#Label">Label</a></pre></code>
@@ -3057,19 +3375,21 @@ Default value is False.
 </td>
 <tr>
 <td>
-<pre><code>FontSizeUnit</code></pre>
+<pre><code>HorizontalAlignment</code></pre>
 </td>
 <td>
-<pre><code><strong>SizeUnit</strong></code></pre>
+<pre><code><strong>HorizontalAlignment</strong></code></pre>
 </td>
 <td>
-
-            Defines unit in which size of font is expressed.
-            Possible values:
-            <ul><li>Points</li><li>Pixels</li></ul>
-<p>Not inheritable by child elements. 
-Default value is Points.
-</p>
+</td>
+<tr>
+<td>
+<pre><code>VerticalAlignment</code></pre>
+</td>
+<td>
+<pre><code><strong>VerticalAlignment</strong></code></pre>
+</td>
+<td>
 </td>
 <tr><td colspan="3" class="table-separator">Properties derived from <strong>Visual:</strong></td></tr>
 <tr>
@@ -3274,6 +3594,15 @@ Default value is Local.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -3286,6 +3615,15 @@ Allows grouping visuals. You can use it to apply
             add a common effect to all of them at once.
 <h2>Properties</h2>
 <table class="properties">
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>AlwaysRender</strong></code></pre>
+</td>
+<td>
+</td>
 <tr>
 <td>
 <pre><code>ManagedCollection&lt;Visual&gt;</code></pre>
@@ -3513,6 +3851,15 @@ Default value is Local.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -3600,6 +3947,15 @@ Default value is False.
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -3858,6 +4214,15 @@ Default value is Local.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -3981,6 +4346,15 @@ Default value is Color [White].
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -4063,6 +4437,15 @@ Default value is Color [White].
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -4129,6 +4512,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -4191,6 +4583,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -4569,6 +4970,15 @@ Default value is Local.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -4648,6 +5058,47 @@ Default value is 1.
 <pre><code><strong>Resources</strong></code></pre>
 </td>
 <td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="PenResource"></a>PenResource</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » Resource » <a href="#PenResource">PenResource</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Pen</code></pre>
+</td>
+<td>
+<pre><code><strong>Value</strong></code></pre>
+</td>
+<td>
+Value of this resource
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Resource:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Key</strong></code></pre>
+</td>
+<td>
+Key of this resource
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
 </td>
 </table>
 <hr />
@@ -4771,6 +5222,37 @@ Default value is .
 </table>
 <hr />
 
+<h1><a name="PointVariable"></a>PointVariable</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » Variable » <a href="#PointVariable">PointVariable</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>Value</strong></code></pre>
+</td>
+<td>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Variable:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+Name of this variable
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+</td>
+</table>
+<hr />
+
 <h1><a name="QuadraticBezierSegment"></a>QuadraticBezierSegment</h1>
 <h2>Inheritance</h2>
 <pre><code>Element » SceneElement » Segment » BaseCubicBezierBasedSegment » BaseQuadraticBezierSegment » <a href="#QuadraticBezierSegment">QuadraticBezierSegment</a></pre></code>
@@ -4848,6 +5330,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -5119,6 +5610,15 @@ Default value is Local.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -5262,6 +5762,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -5362,6 +5871,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -5427,6 +5945,15 @@ Default value is 0.
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -5497,6 +6024,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -5560,6 +6096,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -5645,6 +6190,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -5734,6 +6288,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -5805,6 +6368,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -5870,6 +6442,15 @@ Default value is 0.
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -5966,6 +6547,15 @@ Default value is True.
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -6074,6 +6664,98 @@ Default value is True.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
+</table>
+<hr />
+
+<h1><a name="ScanlinesEffect"></a>ScanlinesEffect</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Effect » <a href="#ScanlinesEffect">ScanlinesEffect</a></pre></code>
+<h2>Description</h2>
+Add a scanline effect to an image
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>Int32</code></pre>
+</td>
+<td>
+<pre><code><strong>LineHeight</strong></code></pre>
+</td>
+<td>
+
+            Height of a single scanline
+            
+<p>Not inheritable by child elements. 
+Default value is 2.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Int32</code></pre>
+</td>
+<td>
+<pre><code><strong>DarkenLevel</strong></code></pre>
+</td>
+<td>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -6084,6 +6766,17 @@ Default value is True.
 Contains description of a single scene in animation.
 <h2>Properties</h2>
 <table class="properties">
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>AlwaysRender</strong></code></pre>
+</td>
+<td>
+
+            See <see cref="!:Visual.AlwaysRender" />
+</td>
 <tr>
 <td>
 <pre><code>TimeSpan</code></pre>
@@ -6160,6 +6853,15 @@ Default value is 00:00:10.
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -6248,6 +6950,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -6318,6 +7029,15 @@ Default value is {X=0, Y=0}.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -6380,6 +7100,15 @@ Default value is Color [Transparent].
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
@@ -6484,6 +7213,241 @@ Key of this resource
 <p>Not inheritable by child elements. 
 Default value is .
 </p>
+</td>
+</table>
+<hr />
+
+<h1><a name="SvgImage"></a>SvgImage</h1>
+<h2>Inheritance</h2>
+<pre><code>Element » SceneElement » Visual » <a href="#SvgImage">SvgImage</a></pre></code>
+<h2>Properties</h2>
+<table class="properties">
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Source</strong></code></pre>
+</td>
+<td>
+
+            Source of the SVG image
+            
+<p>Not inheritable by child elements. 
+Default value is .
+</p>
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>Visual:</strong></td></tr>
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>Visible</strong></code></pre>
+</td>
+<td>
+
+            Defines, whether element is visible or not.
+            
+<p>Not inheritable by child elements. 
+Default value is True.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>Position</strong></code></pre>
+</td>
+<td>
+
+            Position of this visual on the scene.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>Origin</strong></code></pre>
+</td>
+<td>
+
+            An anchor point of this visual. It affects numerous transforms, 
+            such as Position, Rotation and Scale. In general, it defines a
+            point of the visual, which will be placed on the scene in place
+            defined by Position property. Also, it defines center point
+            for rotation and scaling.
+            
+<p>Not inheritable by child elements. 
+Default value is {X=0, Y=0}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>Rotation</strong></code></pre>
+</td>
+<td>
+
+            Rotates visual by specific angle.
+            
+<p>Not inheritable by child elements. 
+Default value is 0.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>PointF</code></pre>
+</td>
+<td>
+<pre><code><strong>Scale</strong></code></pre>
+</td>
+<td>
+
+            Scales the visual by specified factor (separately
+            in X and Y axis).
+            
+<p>Not inheritable by child elements. 
+Default value is {X=1, Y=1}.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>Single</code></pre>
+</td>
+<td>
+<pre><code><strong>Alpha</strong></code></pre>
+</td>
+<td>
+
+            Applies transparency to a visual.
+            
+<p>Not inheritable by child elements. 
+Default value is 1.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Effect&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Effects</strong></code></pre>
+</td>
+<td>
+
+            List of effects, which will be applied to
+            a visual after rendering.
+            
+</td>
+<tr>
+<td>
+<pre><code>Boolean</code></pre>
+</td>
+<td>
+<pre><code><strong>InvertMask</strong></code></pre>
+</td>
+<td>
+
+            Defines, if mask expresses areas, which should or should not
+            be drawn. Useful, if you want to e.g. draw everything
+            <em>except</em> some specific area.
+            
+<p>Not inheritable by child elements. 
+Default value is False.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>MaskCoordinateSystem</code></pre>
+</td>
+<td>
+<pre><code><strong>MaskCoordinateSystem</strong></code></pre>
+</td>
+<td>
+
+            Defines, in which coordinates the Visual's mask is defined. If you set this property to Local,
+            mask will follow all transforms applied to the Visual. If you set to Global, it will be immune
+            to those transforms.
+            
+<p>Not inheritable by child elements. 
+Default value is Local.
+</p>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Visual&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Mask</strong></code></pre>
+</td>
+<td>
+
+            Allows masking a visual, e.g. drawing only parts of it on
+            a screen. Use other visuals to describe the mask, although
+            only alpha-value of the final mask is used (colors does
+            not matter). If mask is not inverted (InvertMask property),
+            areas of the visual, where its mask has value of 1 are drawn
+            completely and areas, where the mask has value of 0 are not
+            drawn at all (with all values in between allowing partial 
+            drawing). If mask is inverted, this behavior works the other
+            way around.
+            
+</td>
+<tr><td colspan="3" class="table-separator">Properties derived from <strong>SceneElement:</strong></td></tr>
+<tr>
+<td>
+<pre><code>String</code></pre>
+</td>
+<td>
+<pre><code><strong>Name</strong></code></pre>
+</td>
+<td>
+
+            Defines name of this object, which may be then used to
+            reference it from various objects via their PropertyRef
+            properties. This value should be unique among the whole
+            scene, though this is not enforced. However, elements
+            are reachable through PropertyRef properties only if
+            their names are unique.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Animation&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Animations</strong></code></pre>
+</td>
+<td>
+
+            Contains list of all animators, which animate properties
+            of elements placed inside this element.
+            
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Resource&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
 </td>
 </table>
 <hr />
@@ -6618,6 +7582,15 @@ Default value is True.
 </td>
 <td>
 </td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
+</td>
+<td>
+</td>
 </table>
 <hr />
 
@@ -6682,6 +7655,15 @@ Default value is 0.
 </td>
 <td>
 <pre><code><strong>Resources</strong></code></pre>
+</td>
+<td>
+</td>
+<tr>
+<td>
+<pre><code>ManagedCollection&lt;Variable&gt;</code></pre>
+</td>
+<td>
+<pre><code><strong>Variables</strong></code></pre>
 </td>
 <td>
 </td>
