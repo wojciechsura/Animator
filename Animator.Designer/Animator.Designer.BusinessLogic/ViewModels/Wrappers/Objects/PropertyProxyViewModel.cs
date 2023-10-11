@@ -91,6 +91,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public ICommand SetToMarkupExtensionCommand => property.SetToMarkupExtensionCommand;
 
+        public ICommand SetToSpecificMacroCommand => property.SetToSpecificMacroCommand;
+
+        public ICommand AddSpecificMacroCommand => property.AddSpecificMacroCommand;
+
+        public IEnumerable<MacroKeyViewModel> AvailableMacros => property.AvailableMacros;
+
         public IEnumerable<TypeViewModel> AvailableTypes => property.AvailableTypes;
 
         public IEnumerable<TypeViewModel> AvailableMarkupExtensions => property.AvailableMarkupExtensions;
