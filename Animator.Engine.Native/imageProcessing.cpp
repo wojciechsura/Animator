@@ -378,6 +378,70 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 		}
 }
 
+extern "C" void __cdecl Outline(unsigned char* frameData,
+	int frameStride,
+	unsigned char* backData,
+	int backStride,
+	int width,
+	int height,
+	int colorArgb,
+	int radius)
+{
+	int left = 0;
+	int top = 0;
+	int right = 0;
+	int bottom = 0;
+
+	radius = std::max(1, radius);
+	findRoiByAlpha(frameData, frameStride, width, height, left, top, right, bottom);
+
+	if (right < left || bottom < top)
+		return;
+
+	// Drop shadow
+
+	FloatColor outline(colorArgb);
+
+	int minX = std::min(width - 1, std::max(0, left - radius));
+	int maxX = std::min(width - 1, std::max(0, right + radius));
+	int minY = std::min(height - 1, std::max(0, top - radius));
+	int maxY = std::min(height - 1, std::max(0, bottom + radius));
+
+	for (int y = minY; y <= maxY; y++)
+		for (int x = minX; x <= maxX; x++)
+		{
+			if (getIntAlpha(frameData, frameStride, x, y) == 255)
+				continue;
+
+			int count = 0;
+
+			int xStart = x - radius;
+			int yStart = y - radius;
+			int xEnd = x + radius;
+			int yEnd = y + radius;
+
+			for (int x1 = xStart; x1 <= xEnd; x1++)
+				for (int y1 = yStart; y1 <= yEnd; y1++)
+				{
+					unsigned char alpha = 0;
+
+					// Find weight
+					if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height)
+						alpha = getIntAlpha(frameData, frameStride, x1, y1);
+
+					if (alpha > 0)
+						count++;
+				}
+
+			if (count > 0)
+			{
+				FloatColor org = getFloatColor(backData, backStride, x, y);
+				alphaBlend(org, outline);
+				setFloatColor(backData, backStride, x, y, org);
+			}
+		}
+}
+
 extern "C" void __cdecl Scanlines(unsigned char* bitmapData,
 	int stride,
 	int width,

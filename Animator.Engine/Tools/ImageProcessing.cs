@@ -88,6 +88,16 @@ namespace Animator.Engine.Tools
             int radius);
 
         [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void Outline(IntPtr frameData,
+            int frameStride,
+            IntPtr backData,
+            int backStride,
+            int width,
+            int height,
+            int colorArgb,
+            int radius);
+
+        [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Scanlines(IntPtr bitmapData,
             int stride,
             int width,

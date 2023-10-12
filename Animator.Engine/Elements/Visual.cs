@@ -90,6 +90,14 @@ namespace Animator.Engine.Elements
 
             var transform = originalTransform.Clone();
             transform.Multiply(BuildTransformMatrix(), MatrixOrder.Prepend);
+
+            // Scale eqaual to 0 equals to invisible object
+            if (Math.Abs(transform.MatrixElements.M11).IsZero() &&
+                Math.Abs(transform.MatrixElements.M12).IsZero() &&
+                Math.Abs(transform.MatrixElements.M21).IsZero() &&
+                Math.Abs(transform.MatrixElements.M22).IsZero())
+                return;
+
             buffer.Graphics.Transform = transform;
 
             InternalRender(buffer, buffers);

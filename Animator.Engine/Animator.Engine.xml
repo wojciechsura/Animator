@@ -814,6 +814,21 @@
             </ul>
             </summary>
         </member>
+        <member name="T:Animator.Engine.Elements.OutlineEffect">
+            <summary>
+            An effect, which adds a shadow to a visual.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.OutlineEffect.Color">
+            <summary>
+            Color of the outline.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.OutlineEffect.Radius">
+            <summary>
+            Radius of the outline
+            </summary>
+        </member>
         <member name="T:Animator.Engine.Elements.Path">
             <summary>
             Draws a path on a scene.
