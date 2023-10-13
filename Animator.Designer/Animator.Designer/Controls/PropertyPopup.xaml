@@ -26,6 +26,7 @@
                             <Setter Property="Header" Value="{Binding Name}" />
                             <Setter Property="Command" Value="{Binding Command}" />
                             <Setter Property="CommandParameter" Value="{Binding Type}" />
+                            <Setter Property="Icon" Value="{Binding Icon, Converter={StaticResource ImageInstanceKeyConverter}}" />
                         </Style>
                     </MenuItem.ItemContainerStyle>
                     <MenuItem.Icon>
@@ -40,12 +41,15 @@
                             <Setter Property="Header" Value="{Binding Name}" />
                             <Setter Property="Command" Value="{Binding Command}" />
                             <Setter Property="CommandParameter" Value="{Binding Type}" />
+                            <Setter Property="Icon" Value="{Binding Icon, Converter={StaticResource ImageInstanceKeyConverter}}" />
                         </Style>
                     </MenuItem.ItemContainerStyle>
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/Icons/AddInstance16.png" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <local:AutoSeparator />
 
                 <MenuItem Visibility="{Binding SetToFromResourceCommand, Converter={StaticResource NullToVisibilityConverter}}"
                           Header="{x:Static res:Strings.FromResource}" ItemsSource="{Binding AvailableResources}">
@@ -92,6 +96,8 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <local:AutoSeparator />
+
                 <MenuItem Visibility="{Binding SetToStringCommand, Converter={StaticResource NullToVisibilityConverter}}" 
                             Header="{x:Static res:Strings.SetToString}" 
                             Command="{Binding SetToStringCommand}">
@@ -116,6 +122,8 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
+                <local:AutoSeparator />
+
                 <MenuItem Visibility="{Binding AddMacroDefinitionCommand, Converter={StaticResource NullToVisibilityConverter}}"
                           Header="{x:Static res:Strings.AddMacroDefinition}" 
                           Command="{Binding AddMacroDefinitionCommand}">
@@ -123,6 +131,8 @@
                         <Image Source="/Resources/Images/Icons/MacroDefinition16.png" />
                     </MenuItem.Icon>
                 </MenuItem>
+
+                <local:AutoSeparator />
 
                 <MenuItem Visibility="{Binding InsertMacroCommand, Converter={StaticResource NullToVisibilityConverter}}"
                           Header="{x:Static res:Strings.InsertMacro}" 

@@ -12,6 +12,10 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="icon.ico" />
+    <None Remove="Resources\Images\Copy16.png" />
+    <None Remove="Resources\Images\Copy32.png" />
+    <None Remove="Resources\Images\Cut16.png" />
+    <None Remove="Resources\Images\Cut32.png" />
     <None Remove="Resources\Images\Down16.png" />
     <None Remove="Resources\Images\Icons\AddInstance16.png" />
     <None Remove="Resources\Images\Icons\AnimateBool16.png" />
@@ -53,12 +57,18 @@
     <None Remove="Resources\Images\New32.png" />
     <None Remove="Resources\Images\Open16.png" />
     <None Remove="Resources\Images\Open32.png" />
+    <None Remove="Resources\Images\Paste16.png" />
+    <None Remove="Resources\Images\Paste32.png" />
     <None Remove="Resources\Images\Save16.png" />
     <None Remove="Resources\Images\Save32.png" />
     <None Remove="Resources\Images\Up16.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
+    <Resource Include="Resources\Images\Copy16.png" />
+    <Resource Include="Resources\Images\Copy32.png" />
+    <Resource Include="Resources\Images\Cut16.png" />
+    <Resource Include="Resources\Images\Cut32.png" />
     <Resource Include="Resources\Images\Icons\AddInstance16.png" />
     <Resource Include="Resources\Images\Icons\Down16.png" />
     <Resource Include="Resources\Images\Icons\AnimateBool16.png" />
@@ -128,6 +138,8 @@
     <Resource Include="Resources\Images\New32.png" />
     <Resource Include="Resources\Images\Open16.png" />
     <Resource Include="Resources\Images\Open32.png" />
+    <Resource Include="Resources\Images\Paste16.png" />
+    <Resource Include="Resources\Images\Paste32.png" />
     <Resource Include="Resources\Images\Save16.png" />
     <Resource Include="Resources\Images\Save32.png" />
     <Resource Include="Resources\Images\Icons\Up16.png" />

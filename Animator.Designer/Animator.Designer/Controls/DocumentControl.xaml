@@ -10,7 +10,7 @@
              xmlns:vmv="clr-namespace:Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;assembly=Animator.Designer.BusinessLogic"
              xmlns:res="clr-namespace:Animator.Designer.Resources.Controls.DocumentControl;assembly=Animator.Designer.Resources" 
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"             
              mc:Ignorable="d" 
              DataContextChanged="HandleDataContextChanged"
              d:DataContext="{d:DesignInstance Type=vm:DocumentViewModel}"             
@@ -453,6 +453,7 @@
                                                     <Setter Property="Header" Value="{Binding Name}" />
                                                     <Setter Property="Command" Value="{Binding Command}" />
                                                     <Setter Property="CommandParameter" Value="{Binding Type}" />
+                                                    <Setter Property="Icon" Value="{Binding Icon, Converter={StaticResource ImageInstanceKeyConverter}}" />
                                                 </Style>
                                             </MenuItem.ItemContainerStyle>
                                             <MenuItem.Icon>
@@ -467,12 +468,15 @@
                                                     <Setter Property="Header" Value="{Binding Name}" />
                                                     <Setter Property="Command" Value="{Binding Command}" />
                                                     <Setter Property="CommandParameter" Value="{Binding Type}" />
+                                                    <Setter Property="Icon" Value="{Binding Icon, Converter={StaticResource ImageInstanceKeyConverter}}" />
                                                 </Style>
                                             </MenuItem.ItemContainerStyle>
                                             <MenuItem.Icon>
                                                 <Image Source="/Resources/Images/Icons/AddInstance16.png" />
                                             </MenuItem.Icon>
                                         </MenuItem>
+
+                                        <local:AutoSeparator />
 
                                         <MenuItem Visibility="{Binding SetToSpecificMacroCommand, Converter={StaticResource NullToVisibilityConverter}}"
                                                 Header="{x:Static res:Strings.SetToSpecificMacro}" ItemsSource="{Binding AvailableMacros}">
@@ -503,7 +507,9 @@
                                                 <Image Source="/Resources/Images/Icons/PlaceMacro16.png" />
                                             </MenuItem.Icon>
                                         </MenuItem>
-                                        
+
+                                        <local:AutoSeparator />
+
                                         <MenuItem Visibility="{Binding InsertMacroCommand, Converter={StaticResource NullToVisibilityConverter}}"
                                                     Header="{x:Static res:Strings.InsertMacro}"
                                                     Command="{Binding InsertMacroCommand}">
@@ -542,13 +548,33 @@
                                             </MenuItem.Icon>
                                         </MenuItem>
 
-                                        <Separator />
+                                        <local:AutoSeparator />
 
+                                        <MenuItem Header="{x:Static res:Strings.Cut}" Command="{Binding CutCommand}" Visibility="{Binding CutCommand, Converter={StaticResource NullToVisibilityConverter}}">
+                                            <MenuItem.Icon>
+                                                <Image Source="/Resources/Images/Cut16.png" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+
+                                        <MenuItem Header="{x:Static res:Strings.Copy}" Command="{Binding CopyCommand}" Visibility="{Binding CopyCommand, Converter={StaticResource NullToVisibilityConverter}}">
+                                            <MenuItem.Icon>
+                                                <Image Source="/Resources/Images/Copy16.png" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+
+                                        <MenuItem Header="{x:Static res:Strings.Paste}" Command="{Binding PasteCommand}" Visibility="{Binding PasteCommand, Converter={StaticResource NullToVisibilityConverter}}">
+                                            <MenuItem.Icon>
+                                                <Image Source="/Resources/Images/Paste16.png" />
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        
                                         <MenuItem Header="{x:Static res:Strings.Delete}" Command="{Binding DeleteCommand}" Visibility="{Binding DeleteCommand, Converter={StaticResource NullToVisibilityConverter}}">
                                             <MenuItem.Icon>
                                                 <Image Source="/Resources/Images/Icons/Delete16.png" />
                                             </MenuItem.Icon>
                                         </MenuItem>
+
+                                        <local:AutoSeparator />
 
                                         <MenuItem Header="{x:Static res:Strings.MoveUp}" Command="{Binding MoveUpCommand}" Visibility="{Binding CanMoveUp, Converter={StaticResource BoolToVisibilityConverter}}">
                                             <MenuItem.Icon>
@@ -639,6 +665,8 @@
                                         </MenuItem.Icon>
                                     </MenuItem>
 
+                                    <local:AutoSeparator />
+
                                     <MenuItem Visibility="{Binding SetToSpecificMacroCommand, Converter={StaticResource NullToVisibilityConverter}}"
                                                 Header="{x:Static res:Strings.SetToSpecificMacro}" ItemsSource="{Binding AvailableMacros}">
                                         <MenuItem.ItemContainerStyle>
@@ -669,6 +697,7 @@
                                         </MenuItem.Icon>
                                     </MenuItem>
 
+                                    <local:AutoSeparator />
 
                                     <MenuItem Visibility="{Binding InsertMacroCommand, Converter={StaticResource NullToVisibilityConverter}}"
                                                   Header="{x:Static res:Strings.InsertMacro}"
@@ -689,6 +718,14 @@
                                         </MenuItem.ItemContainerStyle>
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/Icons/MarkupExtension16.png" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+
+                                    <local:AutoSeparator />
+
+                                    <MenuItem Header="{x:Static res:Strings.Paste}" Command="{Binding PasteCommand}" Visibility="{Binding PasteCommand, Converter={StaticResource NullToVisibilityConverter}}">
+                                        <MenuItem.Icon>
+                                            <Image Source="/Resources/Images/Paste16.png" />
                                         </MenuItem.Icon>
                                     </MenuItem>
 

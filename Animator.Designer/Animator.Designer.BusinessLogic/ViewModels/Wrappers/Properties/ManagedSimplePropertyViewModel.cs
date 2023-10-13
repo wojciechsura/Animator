@@ -100,7 +100,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
             var valueIsStringCondition = Condition.Lambda(this, vm => vm.Value is StringValueViewModel, false);
             var valueIsDefaultCondition = Condition.Lambda(this, vm => vm.Value is DefaultValueViewModel, false);
-
+            
             SetDefaultCommand = new AppCommand(obj => SetDefault(), !valueIsDefaultCondition);
             SetToStringCommand = new AppCommand(obj => SetToString(), !valueIsStringCondition);
             SetToFromResourceCommand = new AppCommand(obj => SetToFromResource((string)obj));

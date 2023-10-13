@@ -1,5 +1,4 @@
-﻿using Animator.Designer.BusinessLogic.Models.MovieSerialization;
-using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using Animator.Engine.Base.Exceptions;
 using Animator.Engine.Base;
 using Animator.Engine.Base.Persistence;
@@ -26,17 +25,14 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
         private sealed class DeserializationContext
         {
-            public DeserializationContext(Models.MovieSerialization.DeserializationOptions options,
-                NamespaceDefinition defaultNamespace,
+            public DeserializationContext(NamespaceDefinition defaultNamespace,
                 WrapperContext wrapperContext)
             {
-                Options = options;
                 WrapperContext = wrapperContext;
                 Namespaces[string.Empty] = defaultNamespace;
             }
 
             public Dictionary<string, NamespaceDefinition> Namespaces { get; } = new();
-            public Models.MovieSerialization.DeserializationOptions Options { get; }
             public WrapperContext WrapperContext { get; }
 
             public NamespaceDefinition DefaultNamespace => Namespaces[string.Empty];
@@ -568,31 +564,25 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             }            
         }
 
-        private (ObjectViewModel Object, WrapperContext context) InternalDeserialize(XmlDocument document, string documentPath, Models.MovieSerialization.DeserializationOptions options)
+        private ObjectViewModel InternalDeserialize(XmlDocument document, WrapperContext wrapperContext)
         {
-            if (options == null)
-                throw new ArgumentNullException(nameof(options));
+            var context = new DeserializationContext(typeof(Animator.Engine.Elements.Movie).ToNamespaceDefinition(), wrapperContext);
 
-            if (options.DefaultNamespace == null)
-                throw new ArgumentException("Default namespace is null!", nameof(options));
-
-            var wrapperContext = new WrapperContext(ENGINE_NAMESPACE, options.DefaultNamespace.ToString());
-
-            var context = new DeserializationContext(options, options.DefaultNamespace, wrapperContext);
-            
             var resultObject = DeserializeElement(document.ChildNodes.OfType<XmlElement>().Single(), context);
             BuildNamespaces(document, wrapperContext);
 
-            return (resultObject, wrapperContext);
+            return resultObject;
         }
 
-        private Models.MovieSerialization.DeserializationOptions CreateDefaultDeserializationOptions()
+        private (ObjectViewModel Object, WrapperContext context) InternalDeserialize(XmlDocument document)
         {
-            return new Models.MovieSerialization.DeserializationOptions
-            {
-                DefaultNamespace = typeof(Animator.Engine.Elements.Movie).ToNamespaceDefinition()
-            };
+            var defaultNamespace = typeof(Animator.Engine.Elements.Movie).ToNamespaceDefinition();
+
+            var wrapperContext = new WrapperContext(ENGINE_NAMESPACE, defaultNamespace.ToString());
+            
+            return (InternalDeserialize(document, wrapperContext), wrapperContext);
         }
+
 
         // Public methods -----------------------------------------------------
 
@@ -601,16 +591,17 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             XmlDocument document = new XmlDocument();
             document.LoadXml(filename);
 
-            string documentPath = Path.GetDirectoryName(filename);
-            if (string.IsNullOrEmpty(documentPath))
-                documentPath = Directory.GetCurrentDirectory();
-
-            return InternalDeserialize(document, documentPath, CreateDefaultDeserializationOptions());
+            return InternalDeserialize(document);
         }
 
-        public (ObjectViewModel Object, WrapperContext Context) Deserialize(XmlDocument document, string documentPath)
+        public (ObjectViewModel Object, WrapperContext Context) Deserialize(XmlDocument document)
         {
-            return InternalDeserialize(document, documentPath, CreateDefaultDeserializationOptions());
+            return InternalDeserialize(document);
+        }
+
+        public ObjectViewModel Deserialize(XmlDocument document, WrapperContext wrapperContext)
+        {
+            return InternalDeserialize(document, wrapperContext);
         }
     }
 }

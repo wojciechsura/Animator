@@ -1,4 +1,5 @@
-﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+﻿using Animator.Designer.BusinessLogic.Helpers;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
@@ -65,6 +66,18 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             Value = new ReferenceValueViewModel(obj);
         }
 
+        private void DoPaste()
+        {
+            (bool result, ManagedObjectViewModel pasted) = DeserializeObjectFromClipboard();
+            if (!result)
+            {
+                return;
+            }
+
+            if (pasted.Type.IsAssignableTo(baseType))
+                Value = new ReferenceValueViewModel(pasted);
+        }
+
         // Public methods -----------------------------------------------------
 
         public ReferencePropertyViewModel(ObjectViewModel parent, 
@@ -84,6 +97,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
             SetDefaultCommand = new AppCommand(obj => SetDefault(), !valueIsDefaultCondition);
             SetToInstanceCommand = new AppCommand(obj => SetToInstance((Type)obj));
+            PasteCommand = new AppCommand(obj => DoPaste());
         }
 
         public override void NotifyAvailableTypesChanged()
@@ -124,7 +138,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 .OfType<AssemblyNamespaceViewModel>()
                 .SelectMany(n => n.GetAvailableTypesFor(baseType))
                 .OrderBy(e => e.Name)
-                .Select(t => new TypeViewModel(t, SetToInstanceCommand));
+                .Select(t => new TypeViewModel(t, SetToInstanceCommand, TypeIconHelper.GetIcon(GetNamespaceType(t), t.Name)));
         }
     }
 }

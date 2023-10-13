@@ -1,4 +1,5 @@
-﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+﻿using Animator.Designer.BusinessLogic.Helpers;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
@@ -165,7 +166,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                     .OfType<AssemblyNamespaceViewModel>()
                     .SelectMany(ns => ns.GetAvailableTypesFor(typeof(Animator.Engine.Base.BaseMarkupExtension)))
                     .OrderBy(mx => mx.Name)
-                    .Select(type => new TypeViewModel(type, SetToMarkupExtensionCommand));
+                    .Select(type => new TypeViewModel(type, SetToMarkupExtensionCommand, TypeIconHelper.GetIcon(GetNamespaceType(type), type.Name)));
             }
         }
 

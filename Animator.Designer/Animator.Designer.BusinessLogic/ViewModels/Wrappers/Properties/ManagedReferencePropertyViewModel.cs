@@ -1,4 +1,5 @@
-﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+﻿using Animator.Designer.BusinessLogic.Helpers;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
@@ -102,6 +103,18 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             Value = new StringValueViewModel(string.Empty);
         }
 
+        private void DoPaste()
+        {
+            (bool result, ManagedObjectViewModel pasted) = DeserializeObjectFromClipboard();
+            if (!result)
+            {
+                return;
+            }
+
+            if (pasted.Type.IsAssignableTo(referenceProperty.Type))
+                Value = new ReferenceValueViewModel(pasted);
+        }
+
         protected override void OnSetValue(ValueViewModel value)
         {
             // Unhook existing value change handlers
@@ -145,6 +158,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             InsertGeneratorCommand = new AppCommand(obj => InsertGenerator());
             SetToFromResourceCommand = new AppCommand(obj => SetToFromResource((string)obj));
             SetToSpecificMacroCommand = new AppCommand(obj => SetToSpecificMacro((string)obj));
+            PasteCommand = new AppCommand(obj => DoPaste());
         }
 
         public override void NotifyAvailableTypesChanged()
@@ -176,7 +190,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                     .OfType<AssemblyNamespaceViewModel>()
                     .SelectMany(ns => ns.GetAvailableTypesFor(refPropertyType))
                     .OrderBy(tvm => tvm.Name)
-                    .Select(t => new TypeViewModel(t, SetToInstanceCommand));
+                    .Select(t => new TypeViewModel(t, SetToInstanceCommand, TypeIconHelper.GetIcon(GetNamespaceType(t), t.Name)));
             }
         }
 

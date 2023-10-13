@@ -1,4 +1,6 @@
-﻿using Animator.Designer.BusinessLogic.ViewModels.Base;
+﻿using Animator.Designer.BusinessLogic.Helpers;
+using Animator.Designer.BusinessLogic.Types;
+using Animator.Designer.BusinessLogic.ViewModels.Base;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
@@ -10,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
@@ -22,47 +25,16 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
     public class ManagedObjectViewModel : ObjectViewModel
     {
-        // Private types ------------------------------------------------------
-
-        private enum NamespaceType
-        {
-            Default = 1,
-            Engine
-        }
-
         // Private constants --------------------------------------------------
 
         private const int MAX_VALUE_LENGTH = 64;
-
-        private static readonly Dictionary<(NamespaceType Namespace, string Name), string> icons = new()
-        {
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Image)), "Image16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Layer)), "Layer16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Rectangle)), "Rectangle16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Circle)), "Circle16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Ellipse)), "Ellipse16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Line)), "Line16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.SvgImage)), "SvgImage16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Label)), "Label16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Path)), "Path16.png" },
-
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateInt)), "AnimateInt16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateBool)), "AnimateBool16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateFloat)), "AnimateFloat16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimatePoint)), "AnimatePoint16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateColor)), "AnimateColor16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateStopwatch)), "AnimateStopwatch16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateWithExpression)), "AnimateWithExpression16.png" },
-            { (NamespaceType.Default, nameof(Animator.Engine.Elements.Storyboard)), "Storyboard16.png" },
-
-        };
 
         private static readonly Dictionary<Type, (NamespaceType Namespace, string Property, string Color)> namePropDefinitions = new()
         {
             { typeof(Animator.Engine.Elements.SceneElement), (NamespaceType.Default, nameof(Animator.Engine.Elements.SceneElement.Name), "#808080") },
             { typeof(Animator.Engine.Elements.Resource), (NamespaceType.Default, nameof(Animator.Engine.Elements.Resource.Key), "#0000ff") },
             { typeof(Animator.Engine.Elements.AnimateProperty), (NamespaceType.Default, nameof(Animator.Engine.Elements.AnimateProperty.PropertyRef), "#ff8000") },
-            { typeof(Animator.Engine.Elements.For), (NamespaceType.Default, nameof(Animator.Engine.Elements.For.PropertyRef), "#ff8000") }
+            { typeof(Animator.Engine.Elements.For), (NamespaceType.Default, nameof(Animator.Engine.Elements.For.PropertyRef), "#ff8000") },
         };
 
         private static readonly Dictionary<Type, (NamespaceType Namespace, string Property)> valuePropDefinitions = new()
@@ -130,6 +102,22 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             }
             else
                 return null;
+        }
+
+        private void DoCopy()
+        {
+            XmlDocument document = new XmlDocument();
+            var node = this.Serialize(document);
+            context.ApplyNamespaces(document, node);
+            document.AppendChild(node);
+
+            System.Windows.Clipboard.SetText(document.OuterXml);
+        }
+
+        private void DoCut()
+        {
+            DoCopy();
+            DoDelete();
         }
 
         private void DoDelete()
@@ -361,7 +349,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             var notRootCondition = Condition.Lambda(this, vm => vm.Parent != null, false);
             var canMoveUpCondition = Condition.PropertyWatch(this, vm => vm.CanMoveUp, false);
             var canMoveDownCondition = Condition.PropertyWatch(this, vm => vm.CanMoveDown, false);
-           
+
+            CopyCommand = new AppCommand(obj => DoCopy());
+            CutCommand = new AppCommand(obj => DoCut(), notRootCondition);
             DeleteCommand = new AppCommand(obj => DoDelete(), notRootCondition);
             MoveUpCommand = new AppCommand(obj => DoMoveUp(), canMoveUpCondition);
             MoveDownCommand = new AppCommand(obj => DoMoveDown(), canMoveDownCondition);
@@ -373,9 +363,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 namespaceType = NamespaceType.Default;
             else if (Namespace == context.EngineNamespace)
                 namespaceType = NamespaceType.Engine;
+            else
+                namespaceType = NamespaceType.Other;
 
-            if (icons.TryGetValue((namespaceType, Name), out string icon))
-                Icon = icon;
+            Icon = TypeIconHelper.GetIcon(namespaceType, Name);
         }
 
         public override XmlElement Serialize(XmlDocument document)
@@ -558,7 +549,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public override IReadOnlyList<PropertyViewModel> Properties => properties;
 
+        public ICommand CopyCommand { get; }
+
+        public ICommand CutCommand { get; }
+
         // Transported from the content property
+
         public ICommand SetToInstanceCommand => contentProperty?.SetToInstanceCommand;
 
         public ICommand SetToMarkupExtensionCommand => contentProperty?.SetToMarkupExtensionCommand;
@@ -566,6 +562,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public ICommand SetToSpecificMacroCommand => contentProperty?.SetToSpecificMacroCommand;
 
         public ICommand AddSpecificMacroCommand => contentProperty?.AddSpecificMacroCommand;
+
+        public ICommand PasteCommand => contentProperty?.PasteCommand;
 
         public IEnumerable<MacroKeyViewModel> AvailableMacros => contentProperty?.AvailableMacros;
 

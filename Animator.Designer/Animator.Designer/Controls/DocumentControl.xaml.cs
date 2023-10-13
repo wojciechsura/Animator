@@ -77,7 +77,8 @@ namespace Animator.Designer.Controls
                 else
                 {
                     BaseObjectViewModel selected = (sender as TreeView).SelectedItem as BaseObjectViewModel;
-                    selected.IsSelected = true;
+                    if (selected != null)
+                        selected.IsSelected = true;
                 }
             }
         }

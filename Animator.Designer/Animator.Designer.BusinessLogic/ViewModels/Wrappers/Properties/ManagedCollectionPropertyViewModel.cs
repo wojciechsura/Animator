@@ -1,4 +1,5 @@
-﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+﻿using Animator.Designer.BusinessLogic.Types;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
 using Animator.Engine.Base;
@@ -125,6 +126,21 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             Value = new StringValueViewModel(string.Empty);
         }
 
+        private void DoPaste()
+        {
+            (bool result, ManagedObjectViewModel pasted) = DeserializeObjectFromClipboard();
+            if (!result)
+            {
+                return;
+            }
+
+            if (pasted.Type.IsAssignableTo(collectionProperty.ItemType))
+            {
+                var collection = (CollectionValueViewModel)Value;
+                collection.Items.Add(pasted);
+            }
+        }
+
         // Protected methods --------------------------------------------------
 
         protected override void OnSetValue(ValueViewModel value)
@@ -180,6 +196,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             InsertIncludeCommand = new AppCommand(obj => InsertInclude(), valueIsCollectionCondition);
             InsertGeneratorCommand = new AppCommand(obj => InsertGenerator(), valueIsCollectionCondition);
             AddSpecificMacroCommand = new AppCommand(obj => AddSpecificMacro((string)obj), valueIsCollectionCondition);
+            PasteCommand = new AppCommand(obj => DoPaste(), valueIsCollectionCondition);
         }
 
         public override void NotifyAvailableTypesChanged()
@@ -225,7 +242,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                     .OfType<AssemblyNamespaceViewModel>()
                     .SelectMany(ns => ns.GetAvailableTypesFor(collectionType))
                     .OrderBy(tvm => tvm.Name)
-                    .Select(t => new TypeViewModel(t, AddInstanceCommand));
+                    .Select(t => new TypeViewModel(t, AddInstanceCommand, Helpers.TypeIconHelper.GetIcon(GetNamespaceType(t), t.Name)));
             }
         }
 

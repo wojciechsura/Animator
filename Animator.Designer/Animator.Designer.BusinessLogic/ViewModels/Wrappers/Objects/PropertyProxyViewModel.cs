@@ -95,6 +95,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public ICommand AddSpecificMacroCommand => property.AddSpecificMacroCommand;
 
+        public ICommand PasteCommand => property.PasteCommand;
+
         public IEnumerable<MacroKeyViewModel> AvailableMacros => property.AvailableMacros;
 
         public IEnumerable<TypeViewModel> AvailableTypes => property.AvailableTypes;

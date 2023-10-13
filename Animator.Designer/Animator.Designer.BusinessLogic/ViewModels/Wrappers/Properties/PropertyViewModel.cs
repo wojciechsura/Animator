@@ -1,14 +1,18 @@
 ﻿using Animator.Designer.BusinessLogic.Infrastructure;
+using Animator.Designer.BusinessLogic.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Base;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
+using Animator.Engine.Base.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Xml;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 {
@@ -18,6 +22,59 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         private bool isExpanded;
 
         protected readonly WrapperContext context;
+
+        protected (bool result, ManagedObjectViewModel obj) DeserializeObjectFromClipboard()
+        {
+            // Clipboard must contain text
+
+            if (!System.Windows.Clipboard.ContainsText())
+                return (false, null);
+
+            // The text must be XML
+
+            XmlDocument document = new XmlDocument();
+            try
+            {
+                document.LoadXml(Clipboard.GetText());
+            }
+            catch
+            {
+                return (false, null);
+            }
+
+            // The XML must be a valid serialized ManagedObject
+
+            var serialier = new MovieSerializer();
+
+            ObjectViewModel result;
+            try
+            {
+                result = serialier.Deserialize(document, context);
+            }
+            catch
+            {
+                return (false, null);
+            }
+
+            // Object must be a ManagedObjectViewModel
+
+            if (result is not ManagedObjectViewModel managedResult)
+                return (false, null);
+
+            return (true, managedResult);
+        }
+
+        protected NamespaceType GetNamespaceType(Type type)
+        {
+            var ns = type.ToNamespaceDefinition().ToString();
+
+            if (ns == context.DefaultNamespace)
+                return NamespaceType.Default;
+            else if (ns == context.EngineNamespace)
+                return NamespaceType.Engine;
+            else
+                return NamespaceType.Other;
+        }
 
         public abstract void RequestSwitchToString();
 
@@ -75,5 +132,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         public ICommand SetToFromResourceCommand { get; init; }
         public ICommand SetToSpecificMacroCommand { get; init; }
         public ICommand AddSpecificMacroCommand { get; init; }
+
+        public ICommand PasteCommand { get; init; }
     }
 }

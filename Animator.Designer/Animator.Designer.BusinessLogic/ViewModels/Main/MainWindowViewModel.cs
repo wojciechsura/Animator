@@ -64,7 +64,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             xmlDocument.Load(stream);
 
             var serializer = new MovieSerializer();
-            (var root, var wrapperContext) = serializer.Deserialize(xmlDocument, null);
+            (var root, var wrapperContext) = serializer.Deserialize(xmlDocument);
 
             Document = new DocumentViewModel(dialogService, root, wrapperContext);
 
@@ -101,7 +101,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
                     xmlDocument.Load(path);
 
                     var serializer = new MovieSerializer();
-                    (var root, var wrapperContext) = serializer.Deserialize(xmlDocument, path);
+                    (var root, var wrapperContext) = serializer.Deserialize(xmlDocument);
 
                     Document = new DocumentViewModel(dialogService, root, wrapperContext, path, false);
                     return true;
