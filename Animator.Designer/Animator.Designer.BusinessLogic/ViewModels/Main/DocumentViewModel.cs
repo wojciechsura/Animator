@@ -29,44 +29,17 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
     {
         // Private classes ----------------------------------------------------
 
-        private sealed class FrameRenderedResult
-        {
-            public FrameRenderedResult(Bitmap frame, TimeSpan time)
-            {
-                Frame = frame;
-                Duration = time;
-            }
-
-            public TimeSpan Duration { get; }
-            public Bitmap Frame { get; }
-        }
-
+        private sealed record class FrameRenderedResult(Bitmap Frame, TimeSpan Duration);
+        
         private sealed class FrameRendererWorker : BackgroundWorker
         {
-            private Bitmap RenderFrameAt(Movie movie, TimeSpan time)
+            private Bitmap RenderFrameAt(Movie movie, int scene, TimeSpan sceneTimeOffset)
             {
-                if (movie.Scenes.Count == 0)
-                    throw new InvalidOperationException("No scenes to render!");
-
-                TimeSpan summedTime = TimeSpan.FromSeconds(0);
-
-                int i = 0;
-                while (i < movie.Scenes.Count && summedTime + movie.Scenes[i].Duration < time)
-                {
-                    summedTime += movie.Scenes[i].Duration;
-                    i++;
-                }
-
-                if (i >= movie.Scenes.Count)
-                    throw new InvalidOperationException("Given time exceedes whole movie time!");
-
-                TimeSpan sceneTimeOffset = time - summedTime;
-
-                movie.Scenes[i].ApplyAnimation((float)sceneTimeOffset.TotalMilliseconds);
+                movie.Scenes[scene].ApplyAnimation((float)sceneTimeOffset.TotalMilliseconds);
 
                 var result = new Bitmap(movie.Config.Width, movie.Config.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-                movie.Scenes[i].Render(result);
+                movie.Scenes[scene].Render(result);
 
                 return result;
             }
@@ -79,9 +52,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
                 {
                     Stopwatch stopwatch = Stopwatch.StartNew();
 
-                    var framesPerSecond = input.Movie.Config.FramesPerSecond;
-                    TimeSpan time = TimeSpan.FromSeconds(1 / framesPerSecond * input.FrameIndex);
-                    Bitmap result = RenderFrameAt(input.Movie, time);
+                    Bitmap result = RenderFrameAt(input.Movie, input.SceneIndex, input.SceneTimeOffset);
 
                     stopwatch.Stop();
 
@@ -109,17 +80,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             public Exception Exception { get; }
         }
 
-        private sealed class FrameRenderInput
-        {
-            public FrameRenderInput(Movie movie, int frameIndex)
-            {
-                Movie = movie;
-                FrameIndex = frameIndex;
-            }
-
-            public int FrameIndex { get; }
-            public Movie Movie { get; }
-        }
+        private sealed record class FrameRenderInput(Movie Movie, int SceneIndex, TimeSpan SceneTimeOffset);        
 
         private sealed class MovieUpdatedResult
         {
@@ -198,7 +159,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
         private string renderingStatus;
         private ObjectViewModel selectedElement;
         private UpdateMovieWorker updateMovieWorker;
-        
+        private string movieTime;
+        private string sceneTime;
+        private string sceneIndex;
+
         private bool changed;
 
         // Private methods ----------------------------------------------------
@@ -263,6 +227,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 
             if (e.Result is FrameRenderedResult frameRenderedResult)
             {
+                // Render frame
+
                 IntPtr ip = frameRenderedResult.Frame.GetHbitmap();
                 BitmapSource bs = null;
                 try
@@ -309,9 +275,37 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 
             RenderingStatus = Resources.Windows.MainWindow.Strings.Message_RenderingFrame;
 
+            // Calculate times
+
+            var framesPerSecond = movie.Config.FramesPerSecond;
+            TimeSpan movieTime = TimeSpan.FromSeconds(1 / framesPerSecond * frameIndex);
+
+            if (movie.Scenes.Count == 0)
+                throw new InvalidOperationException("No scenes to render!");
+
+            TimeSpan summedTime = TimeSpan.FromSeconds(0);
+
+            int scene = 0;
+            while (scene < movie.Scenes.Count && summedTime + movie.Scenes[scene].Duration < movieTime)
+            {
+                summedTime += movie.Scenes[scene].Duration;
+                scene++;
+            }
+
+            if (scene >= movie.Scenes.Count)
+                throw new InvalidOperationException("Given time exceedes whole movie time!");
+
+            TimeSpan sceneTime = movieTime - summedTime;
+
+            MovieTime = movieTime.ToString("hh\\:mm\\:ss\\.ff");
+            SceneTime = sceneTime.ToString("hh\\:mm\\:ss\\.ff");
+            SceneIndex = scene.ToString();
+
+            // Run worker
+
             frameRendererWorker = new FrameRendererWorker();
             frameRendererWorker.RunWorkerCompleted += FrameRendered;
-            frameRendererWorker.RunWorkerAsync(new FrameRenderInput(movie, frameIndex));
+            frameRendererWorker.RunWorkerAsync(new FrameRenderInput(movie, scene, sceneTime));
         }
 
         private void UpdateMovieFinished(object sender, RunWorkerCompletedEventArgs e)
@@ -406,6 +400,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
                 updateMovieWorker = null;
             }
 
+            MovieTime = string.Empty;
+            SceneTime = string.Empty;
+            SceneIndex = string.Empty;
+
             try
             {
                 MemoryStream ms = Save(() => new MemoryStream());
@@ -446,6 +444,24 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
         {
             get => frame;
             set => Set(ref frame, value);
+        }
+
+        public string MovieTime
+        {
+            get => movieTime;
+            set => Set(ref movieTime, value);
+        }
+
+        public string SceneTime
+        {
+            get => sceneTime;
+            set => Set(ref sceneTime, value);
+        }
+
+        public string SceneIndex
+        {
+            get => sceneIndex;
+            set => Set(ref sceneIndex, value);
         }
 
         public int FrameIndex

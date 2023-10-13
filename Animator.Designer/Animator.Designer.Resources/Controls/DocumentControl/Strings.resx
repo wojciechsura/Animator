@@ -157,4 +157,10 @@
   <data name="Paste" xml:space="preserve">
     <value>Paste</value>
   </data>
+  <data name="MovieTime" xml:space="preserve">
+    <value>Movie time: {0}</value>
+  </data>
+  <data name="SceneTime" xml:space="preserve">
+    <value>Scene {0}, time: {1}</value>
+  </data>
 </root>

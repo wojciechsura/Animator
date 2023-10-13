@@ -14,7 +14,7 @@
              mc:Ignorable="d" 
              DataContextChanged="HandleDataContextChanged"
              d:DataContext="{d:DesignInstance Type=vm:DocumentViewModel}"             
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="1000">
     <UserControl.Resources>
         <Thickness x:Key="TreeItemMargin">2</Thickness>
         
@@ -390,22 +390,47 @@
             </Grid>
 
             <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" />
-                    <ColumnDefinition Width="1*" />
-                </Grid.ColumnDefinitions>
-
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="0" Content="{Binding FrameIndex}"/>
-
-                <Slider Grid.Row="0" Grid.Column="1" Minimum="{Binding MinFrame}" Maximum="{Binding MaxFrame}" Value="{Binding FrameIndex, Mode=TwoWay, Delay=100}" 
+                <Slider Grid.Row="0" Minimum="{Binding MinFrame}" Maximum="{Binding MaxFrame}" Value="{Binding FrameIndex, Mode=TwoWay, Delay=100}" 
                         Margin="{StaticResource DefaultMargin}" SmallChange="1" TickPlacement="BottomRight" TickFrequency="10" LargeChange="10"/>
 
-                <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding RenderingStatus}" Margin="{StaticResource DefaultMargin}" />
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80" />
+                        <ColumnDefinition Width="80" />
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="150" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <Label Content="Frame:" />
+                        <Label FontWeight="Bold" Grid.Row="0" Grid.Column="0" Content="{Binding FrameIndex}" d:Content="123"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Label Content="Scene:" />
+                        <Label FontWeight="Bold" Grid.Row="0" Grid.Column="0" Content="{Binding SceneIndex}" d:Content="4"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                        <Label Content="Scene time:" />
+                        <Label FontWeight="Bold" Grid.Row="0" Grid.Column="0" Content="{Binding SceneTime}" d:Content="12:34:56.78"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="3" Orientation="Horizontal">
+                        <Label Content="Movie time:" />
+                        <Label FontWeight="Bold" Grid.Row="0" Grid.Column="0" Content="{Binding MovieTime}" d:Content="12:34:56.78"/>
+                    </StackPanel>
+
+
+                </Grid>
+                
+                <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding RenderingStatus}" Margin="{StaticResource DefaultMargin}" />
             </Grid>
         </Grid>
 

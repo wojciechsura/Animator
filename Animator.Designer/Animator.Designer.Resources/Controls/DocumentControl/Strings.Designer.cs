@@ -187,6 +187,15 @@ namespace Animator.Designer.Resources.Controls.DocumentControl {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Movie time: {0}.
+        /// </summary>
+        public static string MovieTime {
+            get {
+                return ResourceManager.GetString("MovieTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Paste.
         /// </summary>
         public static string Paste {
@@ -201,6 +210,15 @@ namespace Animator.Designer.Resources.Controls.DocumentControl {
         public static string Properties {
             get {
                 return ResourceManager.GetString("Properties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Scene {0}, time: {1}.
+        /// </summary>
+        public static string SceneTime {
+            get {
+                return ResourceManager.GetString("SceneTime", resourceCulture);
             }
         }
         
