@@ -138,7 +138,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 .OfType<AssemblyNamespaceViewModel>()
                 .SelectMany(n => n.GetAvailableTypesFor(baseType))
                 .OrderBy(e => e.Name)
-                .Select(t => new TypeViewModel(t, SetToInstanceCommand, TypeIconHelper.GetIcon(GetNamespaceType(t), t.Name)));
+                .Select(t => BuildTypeViewModel(t, SetToInstanceCommand));
         }
     }
 }

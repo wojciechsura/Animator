@@ -166,7 +166,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                     .OfType<AssemblyNamespaceViewModel>()
                     .SelectMany(ns => ns.GetAvailableTypesFor(typeof(Animator.Engine.Base.BaseMarkupExtension)))
                     .OrderBy(mx => mx.Name)
-                    .Select(type => new TypeViewModel(type, SetToMarkupExtensionCommand, TypeIconHelper.GetIcon(GetNamespaceType(type), type.Name)));
+                    .Select(type => BuildTypeViewModel(type, SetToMarkupExtensionCommand));
             }
         }
 

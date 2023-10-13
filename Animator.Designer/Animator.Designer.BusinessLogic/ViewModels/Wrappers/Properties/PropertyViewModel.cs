@@ -1,4 +1,5 @@
-﻿using Animator.Designer.BusinessLogic.Infrastructure;
+﻿using Animator.Designer.BusinessLogic.Helpers;
+using Animator.Designer.BusinessLogic.Infrastructure;
 using Animator.Designer.BusinessLogic.Types;
 using Animator.Designer.BusinessLogic.ViewModels.Base;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
@@ -20,6 +21,18 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
     {
         private bool isSelected;
         private bool isExpanded;
+
+        private NamespaceType GetNamespaceType(Type type)
+        {
+            var ns = type.ToNamespaceDefinition().ToString();
+
+            if (ns == context.DefaultNamespace)
+                return NamespaceType.Default;
+            else if (ns == context.EngineNamespace)
+                return NamespaceType.Engine;
+            else
+                return NamespaceType.Other;
+        }
 
         protected readonly WrapperContext context;
 
@@ -64,16 +77,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             return (true, managedResult);
         }
 
-        protected NamespaceType GetNamespaceType(Type type)
+        protected TypeViewModel BuildTypeViewModel(Type type, ICommand command)
         {
-            var ns = type.ToNamespaceDefinition().ToString();
-
-            if (ns == context.DefaultNamespace)
-                return NamespaceType.Default;
-            else if (ns == context.EngineNamespace)
-                return NamespaceType.Engine;
-            else
-                return NamespaceType.Other;
+            return new TypeViewModel(type, command, TypeIconHelper.GetIcon(GetNamespaceType(type), type.Name));
         }
 
         public abstract void RequestSwitchToString();
