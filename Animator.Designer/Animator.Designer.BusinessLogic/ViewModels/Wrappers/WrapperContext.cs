@@ -36,6 +36,31 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
             MovieChanged?.Invoke(this, EventArgs.Empty);
         }
 
+        public void Merge(WrapperContext newContext)
+        {
+            foreach (var newNamespace in newContext.Namespaces) 
+            { 
+                // If the new namespace's URI doesn't exist in the current namespace list
+                if (!namespaces.Exists(ns => ns.NamespaceUri == newNamespace.NamespaceUri))
+                {
+                    // Check if the prefix can be used
+                    if (!namespaces.Exists(ns => ns.Prefix == newNamespace.Prefix))
+                    {
+                        namespaces.Add(newNamespace);
+                    }
+                    else
+                    {
+                        // Generate an unique prefix
+                        int i = 1;
+                        while (namespaces.Exists(ns => ns.Prefix == $"n{i}"))
+                            i++;
+
+                        namespaces.Add(newNamespace.CloneWithPrefix($"n{i}"));
+                    }
+                }
+            }
+        }
+
         public IReadOnlyList<NamespaceViewModel> Namespaces => namespaces;
 
         public string DefaultNamespace { get; }

@@ -598,10 +598,5 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
         {
             return InternalDeserialize(document);
         }
-
-        public ObjectViewModel Deserialize(XmlDocument document, WrapperContext wrapperContext)
-        {
-            return InternalDeserialize(document, wrapperContext);
-        }
     }
 }

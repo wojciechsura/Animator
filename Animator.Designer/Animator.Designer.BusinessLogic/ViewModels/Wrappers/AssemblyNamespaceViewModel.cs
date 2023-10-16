@@ -9,13 +9,22 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
 {
     public class AssemblyNamespaceViewModel : NamespaceViewModel
     {
-        private readonly Dictionary<Type, HashSet<Type>> availableTypes = new();
+        private readonly Dictionary<Type, HashSet<Type>> availableTypes;
+
+        private AssemblyNamespaceViewModel(string prefix, string namespaceUri, Assembly assembly, string @namespace, Dictionary<Type, HashSet<Type>> availableTypes)
+            : base(prefix, namespaceUri)
+        {
+            Assembly = assembly;
+            Namespace = @namespace;
+            this.availableTypes = availableTypes;
+        }
 
         public AssemblyNamespaceViewModel(string prefix, string namespaceUri, Assembly assembly, string @namespace)
             : base(prefix, namespaceUri)
         {
             Assembly = assembly;
             Namespace = @namespace;
+            availableTypes = new();
 
             foreach (var type in Assembly.GetTypes()
                 .Where(t => !t.IsAbstract))
@@ -38,6 +47,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
                     }
                 }
             }
+        }
+
+        public override NamespaceViewModel CloneWithPrefix(string newPrefix)
+        {
+            return new AssemblyNamespaceViewModel(newPrefix, NamespaceUri, Assembly, Namespace, availableTypes);
         }
 
         public IEnumerable<Type> GetAvailableTypesFor(Type type)

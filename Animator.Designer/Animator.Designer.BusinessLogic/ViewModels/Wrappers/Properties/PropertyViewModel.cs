@@ -60,9 +60,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             var serialier = new MovieSerializer();
 
             ObjectViewModel result;
+            WrapperContext newContext;
             try
             {
-                result = serialier.Deserialize(document, context);
+                (result, newContext) = serialier.Deserialize(document);
             }
             catch
             {
@@ -73,6 +74,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
             if (result is not ManagedObjectViewModel managedResult)
                 return (false, null);
+
+            // Merge deserialized context with current one
+
+            context.Merge(newContext);
 
             return (true, managedResult);
         }

@@ -16,6 +16,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
             NamespaceUri = namespaceUri;            
         }
 
+        public virtual NamespaceViewModel CloneWithPrefix(string newPrefix)
+            => new NamespaceViewModel(newPrefix, NamespaceUri);
+
         public string Prefix { get; }
         public string NamespaceUri { get; }
     }
