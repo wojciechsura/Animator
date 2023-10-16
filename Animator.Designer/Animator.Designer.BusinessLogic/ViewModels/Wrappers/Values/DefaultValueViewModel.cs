@@ -18,7 +18,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
             Handler.RequestSwitchToString();
         }
 
-        public DefaultValueViewModel(object defaultValue, bool canSwitchToString) 
+        public DefaultValueViewModel(WrapperContext context, object defaultValue, bool canSwitchToString) 
+            : base(context)
         {
             if (defaultValue == null)
                 Value = null;

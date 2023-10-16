@@ -53,7 +53,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         private void SetDefault()
         {
             string defaultValue = TypeSerialization.Serialize(simpleProperty.Metadata.DefaultValue);
-            Value = new DefaultValueViewModel(defaultValue, true);
+            Value = new DefaultValueViewModel(context, defaultValue, true);
         }
 
         private void SetToString()
@@ -65,7 +65,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 newValue = defaultValue.Value;
             }
 
-            Value = new StringValueViewModel(newValue);
+            Value = new StringValueViewModel(context, newValue);
         }
 
         protected override void OnSetValue(ValueViewModel value)

@@ -125,10 +125,17 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             return sb.ToString();
         }
 
+        public override BaseObjectViewModel GetTreeParent(PropertyViewModel propertyViewModel)
+        {
+            throw new InvalidOperationException("Markup extension object is not visual parent for any other object!");
+        }
+
         public override IEnumerable<PropertyViewModel> Properties => properties;
 
         public override IEnumerable<ObjectViewModel> DisplayChildren => children;
 
         public ICommand DeleteCommand { get; }
+
+        public Type Type => type;
     }
 }

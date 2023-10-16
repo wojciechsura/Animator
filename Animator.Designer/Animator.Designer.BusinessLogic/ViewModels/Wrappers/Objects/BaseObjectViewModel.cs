@@ -67,6 +67,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             get => Properties.SingleOrDefault(prop => prop.Namespace == ns && prop.Name == name);
         }
 
+        public abstract BaseObjectViewModel VisualParent { get; }
+
         public ICommand MoveUpCommand { get; init; }
 
         public ICommand MoveDownCommand { get; init; }

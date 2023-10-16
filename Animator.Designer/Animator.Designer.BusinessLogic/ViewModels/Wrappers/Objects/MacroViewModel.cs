@@ -46,6 +46,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             DeleteCommand = new AppCommand(obj => DoDelete());
         }
 
+        public override BaseObjectViewModel GetTreeParent(PropertyViewModel propertyViewModel)
+        {
+            throw new InvalidOperationException("Macro object is not visual parent for any other object!");
+        }
+
         public override XmlElement Serialize(XmlDocument document)
         {
             var result = CreateRootElement(document);

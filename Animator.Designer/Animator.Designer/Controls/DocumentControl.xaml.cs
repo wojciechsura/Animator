@@ -1,4 +1,5 @@
 ﻿using Animator.Designer.BusinessLogic.ViewModels.Main;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
 using Animator.Designer.Helpers;
 using System;
@@ -28,12 +29,76 @@ namespace Animator.Designer.Controls
 
         // Private methods ----------------------------------------------------
 
+        private List<BaseObjectViewModel> GetVisualHierarchy(BaseObjectViewModel item)
+        {
+            if (item == null)
+                return null;
+
+            // Build hierarchy
+            List<BaseObjectViewModel> hierarchy = new List<BaseObjectViewModel>();
+            var current = item;
+            while (current != null)
+            {
+                hierarchy.Add(current);
+                current = current.VisualParent;
+            }
+
+            return hierarchy;
+        }
+
+        private TreeViewItem TreeViewItemFromVisualHierarchy(List<BaseObjectViewModel> hierarchy)
+        {
+            TreeViewItem item = (TreeViewItem)tvHierarchy.ItemContainerGenerator.ContainerFromItem(hierarchy[hierarchy.Count - 1]);
+
+            if (item == null)
+                return null;
+
+            for (int i = hierarchy.Count - 2; i >= 0; i--)
+            {
+                item = (TreeViewItem)item.ItemContainerGenerator.ContainerFromItem(hierarchy[i]);
+            }
+
+            return item;
+        }
+
+        public void ScrollToItem(List<BaseObjectViewModel> hierarchy)
+        {
+            Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle,
+                new Action(() =>
+                {                    
+                    var item = TreeViewItemFromVisualHierarchy(hierarchy);
+                    item?.BringIntoView();
+                }));
+        }
+
+        private void HandleGoToRequest(object sender, GoToRequestEventArgs e)
+        {
+            if (viewModel.SelectedElement != null)
+            {
+                viewModel.SelectedElement.IsSelected = false;
+                viewModel.SelectedElement = null;
+            }
+
+            var parents = GetVisualHierarchy(e.Object);
+
+            // Expand all parents
+
+            for (int i = parents.Count - 1; i >= 1; i--)
+            {
+                parents[i].IsExpanded = true;
+            }
+
+            parents[0].IsSelected = true;
+            ScrollToItem(parents);
+        }
+
         private void DeinitializeViewModel(DocumentViewModel viewModel)
         {
             movieTimer?.Stop();
             movieTimer = null;
 
             viewModel.WrapperContext.MovieChanged -= HandleMovieChanged;
+            viewModel.WrapperContext.GoToRequest -= HandleGoToRequest;
         }
 
         private void HandleDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -62,6 +127,7 @@ namespace Animator.Designer.Controls
             movieTimer = new DispatcherTimer(TimeSpan.FromSeconds(2), DispatcherPriority.Background, UpdateMovie, Dispatcher);
 
             viewModel.WrapperContext.MovieChanged += HandleMovieChanged;
+            viewModel.WrapperContext.GoToRequest += HandleGoToRequest;
         }
 
         private void TreeView_PreviewMouseDown(object sender, MouseButtonEventArgs e)

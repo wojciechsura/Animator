@@ -60,10 +60,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             var serialier = new MovieSerializer();
 
             ObjectViewModel result;
-            WrapperContext newContext;
             try
             {
-                (result, newContext) = serialier.Deserialize(document);
+                result = serialier.Deserialize(document, context);
             }
             catch
             {
@@ -74,10 +73,6 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
             if (result is not ManagedObjectViewModel managedResult)
                 return (false, null);
-
-            // Merge deserialized context with current one
-
-            context.Merge(newContext);
 
             return (true, managedResult);
         }
@@ -104,6 +99,18 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         {
             OnPropertyChanged(nameof(AvailableTypes));
             OnPropertyChanged(nameof(AvailableMarkupExtensions));
+        }
+
+        public BaseObjectViewModel GetTreeParent()
+        {
+            // Property doesn't have representation in the tree directly
+            // Requesting parent to return visual proxy for this property
+            return Parent.GetTreeParent(this);
+        }
+
+        public void RequestGoToResource(string key)
+        {
+            Parent.RequestGoToResource(key);
         }
 
         public bool IsSelected

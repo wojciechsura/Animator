@@ -51,7 +51,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
         private void SetDefault()
         {
-            var value = new DefaultValueViewModel(null, false);
+            var value = new DefaultValueViewModel(context, null, false);
             Value = value;
         }
 
@@ -69,13 +69,13 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             var ns = type.ToNamespaceDefinition().ToString();
 
             var obj = new ManagedObjectViewModel(context, ns, type.Name, type);
-            Value = new ReferenceValueViewModel(obj);
+            Value = new ReferenceValueViewModel(context, obj);
         }
 
         private void InsertMacro()
         {
             var obj = new MacroViewModel(context);
-            Value = new ReferenceValueViewModel(obj);
+            Value = new ReferenceValueViewModel(context, obj);
         }
 
         private void SetToSpecificMacro(string key)
@@ -83,24 +83,24 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             var obj = new MacroViewModel(context);
             var keyProp = obj.Property<StringPropertyViewModel>(context.EngineNamespace, "Key");
             keyProp.Value = key;
-            Value = new ReferenceValueViewModel(obj);
+            Value = new ReferenceValueViewModel(context, obj);
         }
 
         private void InsertInclude()
         {
             var obj = new IncludeViewModel(context);
-            Value = new ReferenceValueViewModel(obj);
+            Value = new ReferenceValueViewModel(context, obj);
         }
 
         private void InsertGenerator()
         {
             var obj = new GenerateViewModel(context);
-            Value = new ReferenceValueViewModel(obj);
+            Value = new ReferenceValueViewModel(context, obj);
         }
 
         private void SetToString()
         {
-            Value = new StringValueViewModel(string.Empty);
+            Value = new StringValueViewModel(context, string.Empty);
         }
 
         private void DoPaste()
@@ -112,7 +112,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             }
 
             if (pasted.Type.IsAssignableTo(referenceProperty.Type))
-                Value = new ReferenceValueViewModel(pasted);
+                Value = new ReferenceValueViewModel(context, pasted);
         }
 
         protected override void OnSetValue(ValueViewModel value)

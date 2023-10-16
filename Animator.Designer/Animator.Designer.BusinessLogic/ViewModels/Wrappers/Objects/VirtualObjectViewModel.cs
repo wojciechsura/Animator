@@ -9,10 +9,14 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 {
     public abstract class VirtualObjectViewModel : BaseObjectViewModel
     {
-        protected VirtualObjectViewModel(WrapperContext context) 
+        private readonly BaseObjectViewModel visualParent;
+
+        protected VirtualObjectViewModel(BaseObjectViewModel visualParent, WrapperContext context) 
             : base(context)
         {
-
+            this.visualParent = visualParent;
         }
+
+        public override BaseObjectViewModel VisualParent => visualParent;
     }
 }

@@ -118,12 +118,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
         private void SetToCollection()
         {
-            Value = new CollectionValueViewModel();
+            Value = new CollectionValueViewModel(context);
         }
 
         private void SetToString()
         {
-            Value = new StringValueViewModel(string.Empty);
+            Value = new StringValueViewModel(context, string.Empty);
         }
 
         private void DoPaste()

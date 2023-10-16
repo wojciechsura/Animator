@@ -28,12 +28,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
         private void SetDefault()
         {
-            Value = new DefaultValueViewModel(null, false);
+            Value = new DefaultValueViewModel(context, null, false);
         }
 
         private void SetToString()
         {
-            Value = new StringValueViewModel(null);
+            Value = new StringValueViewModel(context, null);
         }
 
         private void SetValue(ValueViewModel value)

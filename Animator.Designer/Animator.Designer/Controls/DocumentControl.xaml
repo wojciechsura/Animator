@@ -23,6 +23,10 @@
         <Style TargetType="TextBox">
             <Setter Property="Padding" Value="2" />
         </Style>
+
+        <Style x:Key="SmallButton" TargetType="Button" BasedOn="{StaticResource FlatButton}">
+            <Setter Property="Padding" Value="1" />
+        </Style>
         
         <Style x:Key="ClassNameText" TargetType="TextBlock">
             <Style.Setters>
@@ -130,6 +134,10 @@
 
                         <DataTemplate DataType="{x:Type vmv:MarkupExtensionValueViewModel}">
                             <DockPanel Background="{StaticResource MarkupExtensionBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <Button DockPanel.Dock="Right" VerticalAlignment="Center" Style="{StaticResource SmallButton}" Command="{Binding GoToCommand}"
+                                        Visibility="{Binding GoToCommand, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <Image Width="16" Height="16" Source="/Resources/Images/GoTo16.png" />
+                                </Button>
                                 <TextBlock Margin="3" Text="{Binding Name}" VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
@@ -159,6 +167,10 @@
 
                         <DataTemplate DataType="{x:Type vmv:MarkupExtensionValueViewModel}">
                             <DockPanel Background="{StaticResource MarkupExtensionBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <Button DockPanel.Dock="Right" VerticalAlignment="Center" Style="{StaticResource SmallButton}" Command="{Binding GoToCommand}"
+                                        Visibility="{Binding GoToCommand, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <Image Width="16" Height="16" Source="/Resources/Images/GoTo16.png" />
+                                </Button>
                                 <TextBlock Margin="3" Text="{Binding Name}" VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
@@ -183,12 +195,19 @@
 
                         <DataTemplate DataType="{x:Type vmv:ReferenceValueViewModel}">
                             <DockPanel Background="{StaticResource ReferenceBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <Button DockPanel.Dock="Right" VerticalAlignment="Center" Style="{StaticResource SmallButton}" Command="{Binding GoToCommand}">
+                                    <Image Width="16" Height="16" Source="/Resources/Images/GoTo16.png" />
+                                </Button>
                                 <TextBlock Margin="3" Text="(Object)" VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
 
                         <DataTemplate DataType="{x:Type vmv:MarkupExtensionValueViewModel}">
                             <DockPanel Background="{StaticResource MarkupExtensionBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <Button DockPanel.Dock="Right" VerticalAlignment="Center" Style="{StaticResource SmallButton}" Command="{Binding GoToCommand}"
+                                        Visibility="{Binding GoToCommand, Converter={StaticResource NullToVisibilityConverter}}">
+                                    <Image Width="16" Height="16" Source="/Resources/Images/GoTo16.png" />
+                                </Button>
                                 <TextBlock Margin="3" Text="{Binding Name}" VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
@@ -211,6 +230,9 @@
                     <ContentControl.Resources>
                         <DataTemplate DataType="{x:Type vmv:ReferenceValueViewModel}">
                             <DockPanel Background="{StaticResource ReferenceBackground}" MinHeight="{StaticResource PropertyRowMinHeight}">
+                                <Button DockPanel.Dock="Right" VerticalAlignment="Center" Style="{StaticResource FlatButton}" Command="{Binding GoToCommand}">
+                                    <Image Width="16" Height="16" Source="/Resources/Images/GoTo16.png" />
+                                </Button>
                                 <TextBlock Margin="3" Text="(Object)" VerticalAlignment="Center" />
                             </DockPanel>
                         </DataTemplate>
@@ -442,7 +464,7 @@
         <!-- Hierarchy tree -->
         
         <GroupBox Header="Hierarchy" Grid.Column="4">
-            <TreeView ItemsSource="{Binding DisplayItems}" SelectedItemChanged="TreeView_SelectedItemChanged"
+            <TreeView x:Name="tvHierarchy" ItemsSource="{Binding DisplayItems}" SelectedItemChanged="TreeView_SelectedItemChanged"
                       PreviewMouseDown="TreeView_PreviewMouseDown">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="TreeViewItem">

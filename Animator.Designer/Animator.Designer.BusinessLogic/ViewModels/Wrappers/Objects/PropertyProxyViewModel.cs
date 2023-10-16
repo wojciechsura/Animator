@@ -55,8 +55,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             OnDisplayChildrenChanged();
         }
 
-        public PropertyProxyViewModel(WrapperContext context, ManagedPropertyViewModel property)
-            : base(context)
+        public PropertyProxyViewModel(BaseObjectViewModel visualParent, WrapperContext context, ManagedPropertyViewModel property)
+            : base(visualParent, context)
         {
             this.property = property;
 

@@ -10,17 +10,22 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
     public class PropertiesProxyViewModel : VirtualObjectViewModel
     {        
         private static readonly List<PropertyViewModel> emptyProperties = new();
+        private IReadOnlyList<BaseObjectViewModel> children;
 
-        public PropertiesProxyViewModel(WrapperContext context, IEnumerable<VirtualObjectViewModel> properties) 
-            : base(context)
+        public PropertiesProxyViewModel(ManagedObjectViewModel visualParent, WrapperContext context) 
+            : base(visualParent, context)
         {
-            this.DisplayChildren = properties;
-
             Icon = "Properties16.png";
+        }
+
+        public void SetChildren(IReadOnlyList<BaseObjectViewModel> children)
+        {
+            this.children = children;
+            OnPropertyChanged(nameof(DisplayChildren));
         }
 
         public override IReadOnlyList<PropertyViewModel> Properties => emptyProperties;
 
-        public override IEnumerable<BaseObjectViewModel> DisplayChildren { get; }
+        public override IEnumerable<BaseObjectViewModel> DisplayChildren => children;
     }
 }

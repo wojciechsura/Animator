@@ -45,7 +45,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             string name)
             : base(parent, context)
         {
-            value = new CollectionValueViewModel();
+            value = new CollectionValueViewModel(context);
             value.Parent = this;
             value.CollectionChanged += HandleCollectionChanged;
 

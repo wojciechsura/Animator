@@ -60,6 +60,15 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             Icon = "MacroDefinition16.png";
         }
 
+        public override BaseObjectViewModel GetTreeParent(PropertyViewModel propertyViewModel)
+        {
+            // Possible from content property only
+            if (propertyViewModel == content)
+                return this;
+
+            throw new InvalidOperationException("Failed to find visual parent for given property!");
+        }
+
         public override XmlElement Serialize(XmlDocument document)
         {
             XmlElement result;

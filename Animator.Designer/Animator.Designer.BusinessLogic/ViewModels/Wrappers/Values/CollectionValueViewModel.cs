@@ -17,7 +17,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
         private void HandleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) => 
             this.CollectionChanged?.Invoke(this, EventArgs.Empty);
 
-        public CollectionValueViewModel()
+        public CollectionValueViewModel(WrapperContext context)
+            : base(context)
         {
             items = new(this);
             items.CollectionChanged += HandleCollectionChanged;

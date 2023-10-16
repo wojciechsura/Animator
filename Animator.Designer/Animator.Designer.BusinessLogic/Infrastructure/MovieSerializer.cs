@@ -78,7 +78,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                             var macroItem = new MacroDefinitionViewModel(context.WrapperContext);
                             macroItem.Property<StringPropertyViewModel>(ENGINE_NAMESPACE, "Key").Value = xKey;
-                            macroItem.Property<ReferencePropertyViewModel>(context.DefaultNamespace.ToString(), "Content").Value = new ReferenceValueViewModel(macroContent);
+                            macroItem.Property<ReferencePropertyViewModel>(context.DefaultNamespace.ToString(), "Content").Value = new ReferenceValueViewModel(context.WrapperContext, macroContent);
 
                             deserializedObject.Macros.Value.Items.Add(macroItem);
                         }
@@ -152,7 +152,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                     }
                     else if (property is ManagedReferencePropertyViewModel referenceProperty)
                     {
-                        var value = new ReferenceValueViewModel(content);
+                        var value = new ReferenceValueViewModel(context.WrapperContext, content);
 
                         referenceProperty.Value = value;
                         propertiesSet.Add(string.Format(CONTENT_DECORATION, property.Name));
@@ -162,7 +162,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                         var collectionValue = collectionProperty.Value as CollectionValueViewModel;
                         if (collectionValue == null)
                         {
-                            collectionValue = new CollectionValueViewModel();
+                            collectionValue = new CollectionValueViewModel(context.WrapperContext);
                             collectionProperty.Value = collectionValue;
                         }
 
@@ -193,7 +193,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             {
                 if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 0)
                 {
-                    var stringValue = new StringValueViewModel(propertyNode.InnerText);
+                    var stringValue = new StringValueViewModel(context.WrapperContext, propertyNode.InnerText);
                     simple.Value = stringValue;
 
                     propertiesSet.Add(property.Name);
@@ -211,7 +211,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             {
                 if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 0)
                 {
-                    var stringValue = new StringValueViewModel(propertyNode.InnerText);
+                    var stringValue = new StringValueViewModel(context.WrapperContext, propertyNode.InnerText);
                     reference.Value = stringValue;
                     
                     propertiesSet.Add(property.Name);
@@ -219,7 +219,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                 else if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 1)
                 {
                     var content = DeserializeElement(propertyNode.ChildNodes.OfType<XmlElement>().Single(), context);
-                    var referenceValue = new ReferenceValueViewModel(content);
+                    var referenceValue = new ReferenceValueViewModel(context.WrapperContext, content);
 
                     reference.Value = referenceValue;
 
@@ -233,7 +233,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
             {
                 if (propertyNode.ChildNodes.OfType<XmlElement>().Count() == 0)
                 {
-                    var value = new StringValueViewModel(propertyNode.InnerText);
+                    var value = new StringValueViewModel(context.WrapperContext, propertyNode.InnerText);
                     collectionProperty.Value = value;
                 }
                 else
@@ -241,7 +241,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                     var collectionValue = collectionProperty.Value as CollectionValueViewModel;
                     if (collectionValue == null)
                     {
-                        collectionValue = new CollectionValueViewModel();
+                        collectionValue = new CollectionValueViewModel(context.WrapperContext);
                         collectionProperty.Value = collectionValue;
                     }
 
@@ -274,20 +274,20 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
             foreach (var param in markupData.Params)
             {
-                markupExt.Property<ClearableStringPropertyViewModel>(defaultNamespace, param.property).Value = new StringValueViewModel(param.value);
+                markupExt.Property<ClearableStringPropertyViewModel>(defaultNamespace, param.property).Value = new StringValueViewModel(context.WrapperContext, param.value);
             }
 
             if (managedProperty is ManagedSimplePropertyViewModel simple)
             {
-                simple.Value = new MarkupExtensionValueViewModel(markupExt);
+                simple.Value = new MarkupExtensionValueViewModel(context.WrapperContext, markupExt);
             }
             else if (managedProperty is ManagedReferencePropertyViewModel reference)
             {
-                reference.Value = new MarkupExtensionValueViewModel(markupExt);
+                reference.Value = new MarkupExtensionValueViewModel(context.WrapperContext, markupExt);
             }
             else if (managedProperty is ManagedCollectionPropertyViewModel collection)
             {
-                collection.Value = new MarkupExtensionValueViewModel(markupExt);
+                collection.Value = new MarkupExtensionValueViewModel(context.WrapperContext, markupExt);
             }
             else
                 throw new InvalidOperationException("Unsupported property type!");
@@ -348,7 +348,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                 {
                     if (managedProperty is ManagedSimplePropertyViewModel simpleProperty)
                     {
-                        simpleProperty.Value = new StringValueViewModel(attribute.Value);
+                        simpleProperty.Value = new StringValueViewModel(context.WrapperContext, attribute.Value);
                         propertiesSet.Add(attribute.LocalName);
                     }
                     else if (managedProperty is ManagedCollectionPropertyViewModel collectionProperty)
@@ -357,7 +357,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                         // In case of Designer this doesn't matter much - we simply
                         // set the StringValue to the property
                         
-                        collectionProperty.Value = new StringValueViewModel(attribute.Value);
+                        collectionProperty.Value = new StringValueViewModel(context.WrapperContext, attribute.Value);
                         propertiesSet.Add(attribute.LocalName);
                     }
                     else if (managedProperty is ManagedReferencePropertyViewModel referenceProperty)
@@ -366,7 +366,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
                         // In case of Designer this doesn't matter much - we simply
                         // set the StringValue to the property
 
-                        referenceProperty.Value = new StringValueViewModel(attribute.Value);
+                        referenceProperty.Value = new StringValueViewModel(context.WrapperContext, attribute.Value);
                         propertiesSet.Add(attribute.LocalName);
                     }
                     else
@@ -597,6 +597,11 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
         public (ObjectViewModel Object, WrapperContext Context) Deserialize(XmlDocument document)
         {
             return InternalDeserialize(document);
+        }
+
+        public ObjectViewModel Deserialize(XmlDocument document, WrapperContext wrapperContext)
+        {
+            return InternalDeserialize(document, wrapperContext);
         }
     }
 }

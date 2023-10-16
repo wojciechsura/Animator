@@ -14,12 +14,11 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
     public class MacrosProxyViewModel : VirtualObjectViewModel
     {
         private readonly List<PropertyViewModel> properties = new List<PropertyViewModel>();
-        private readonly MacroCollectionPropertyViewModel macros;
-        private readonly ManagedObjectViewModel parent;
+        private readonly MacroCollectionPropertyViewModel property;
 
         private IEnumerable<BaseObjectViewModel> GetDisplayChildren()
         {
-            foreach (var macro in macros.Value.Items)
+            foreach (var macro in property.Value.Items)
                 yield return macro;
         }
 
@@ -28,20 +27,21 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             OnPropertyChanged(nameof(DisplayChildren));
         }
 
-        public MacrosProxyViewModel(WrapperContext context, ManagedObjectViewModel parent, MacroCollectionPropertyViewModel macros) 
-            : base(context)
+        public MacrosProxyViewModel(BaseObjectViewModel visualParent, WrapperContext context, MacroCollectionPropertyViewModel property) 
+            : base(visualParent, context)
         {
-            this.parent = parent;
-            this.macros = macros;
-            macros.CollectionChanged += HandleMacrosChanged;
+            this.property = property;
+            property.CollectionChanged += HandleMacrosChanged;
 
             Icon = "MacroDefinitions16.png";
         }
+
+        public MacroCollectionPropertyViewModel Property => property;
 
         public override IEnumerable<PropertyViewModel> Properties => properties;
 
         public override IEnumerable<BaseObjectViewModel> DisplayChildren => GetDisplayChildren();
 
-        public ICommand AddMacroDefinitionCommand => macros.AddMacroDefinitionCommand;
+        public ICommand AddMacroDefinitionCommand => property.AddMacroDefinitionCommand;
     }
 }

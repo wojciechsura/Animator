@@ -73,11 +73,25 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
 
         public abstract XmlElement Serialize(XmlDocument document);
 
+        public abstract BaseObjectViewModel GetTreeParent(PropertyViewModel propertyViewModel);
+
+        public virtual void RequestGoToResource(string key)
+        {
+            parent?.RequestGoToResource(key);
+        }
+
+        public void GoTo()
+        {
+            context.RequestGoTo(this);
+        }
+
         public ValueViewModel Parent 
         { 
             get => parent;
             set => Set(ref parent, value);
         }
+
+        public override BaseObjectViewModel VisualParent => Parent.GetTreeParent();
 
         public string Name { get; init; }
 

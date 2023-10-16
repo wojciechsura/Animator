@@ -11,7 +11,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values
     {
         private string value;
 
-        public StringValueViewModel(string initialValue)
+        public StringValueViewModel(WrapperContext context, string initialValue)
+            : base(context)
         {
             value = initialValue;
         }

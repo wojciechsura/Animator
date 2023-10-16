@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,18 @@ using System.Xml;
 
 namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
 {
+    public class GoToRequestEventArgs : EventArgs
+    {
+        public GoToRequestEventArgs(BaseObjectViewModel @object)
+        {
+            Object = @object;
+        }
+
+        public BaseObjectViewModel Object { get; }
+    }
+
+    public delegate void GoToRequestEventHandler(object sender, GoToRequestEventArgs e);
+
     public class WrapperContext
     {
         private readonly List<NamespaceViewModel> namespaces = new();
@@ -19,7 +32,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
         }
 
         public void AddNamespace(NamespaceViewModel ns)
-            => namespaces.Add(ns);
+        {
+            if (!namespaces.Any(n => n.NamespaceUri == ns.NamespaceUri))
+                namespaces.Add(ns);
+        }
 
         public void ApplyNamespaces(XmlDocument document, XmlElement rootNode)
         {
@@ -36,29 +52,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
             MovieChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public void Merge(WrapperContext newContext)
+        internal void RequestGoTo(ObjectViewModel objectViewModel)
         {
-            foreach (var newNamespace in newContext.Namespaces) 
-            { 
-                // If the new namespace's URI doesn't exist in the current namespace list
-                if (!namespaces.Exists(ns => ns.NamespaceUri == newNamespace.NamespaceUri))
-                {
-                    // Check if the prefix can be used
-                    if (!namespaces.Exists(ns => ns.Prefix == newNamespace.Prefix))
-                    {
-                        namespaces.Add(newNamespace);
-                    }
-                    else
-                    {
-                        // Generate an unique prefix
-                        int i = 1;
-                        while (namespaces.Exists(ns => ns.Prefix == $"n{i}"))
-                            i++;
-
-                        namespaces.Add(newNamespace.CloneWithPrefix($"n{i}"));
-                    }
-                }
-            }
+            GoToRequest?.Invoke(this, new GoToRequestEventArgs(objectViewModel));
         }
 
         public IReadOnlyList<NamespaceViewModel> Namespaces => namespaces;
@@ -67,5 +63,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers
         public string EngineNamespace { get; }
 
         public event EventHandler MovieChanged;
+
+        public event GoToRequestEventHandler GoToRequest;
     }
 }

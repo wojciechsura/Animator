@@ -77,9 +77,12 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 return string.Compare(strX, strY);
             }
 
-            List<VirtualObjectViewModel> proxyProperties = new();
+            PropertiesProxyViewModel result = new PropertiesProxyViewModel(this, context);
 
-            proxyProperties.Add(new MacrosProxyViewModel(context, this, macros));
+            List<VirtualObjectViewModel> proxyProperties = new() 
+            {
+                new MacrosProxyViewModel(result, context, macros)
+            };
 
             foreach (var property in properties.OrderBy(prop => prop.Name))
             {
@@ -89,7 +92,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
                 if (property is ManagedReferencePropertyViewModel or ManagedCollectionPropertyViewModel ||
                     (property is ManagedSimplePropertyViewModel simple && simple.Value is MarkupExtensionValueViewModel))
                 {
-                    var propertyProxy = new PropertyProxyViewModel(context, (ManagedPropertyViewModel)property);
+                    var propertyProxy = new PropertyProxyViewModel(result, context, (ManagedPropertyViewModel)property);
                     proxyProperties.Add(propertyProxy);
                 }
             }
@@ -97,8 +100,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             if (proxyProperties.Any())
             {
                 proxyProperties.Sort((x, y) => CompareProxyProperties(x, y));
-
-                return new PropertiesProxyViewModel(context, proxyProperties);
+                result.SetChildren(proxyProperties);
+                return result;
             }
             else
                 return null;
@@ -509,6 +512,55 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             return result;
         }
 
+        public override BaseObjectViewModel GetTreeParent(PropertyViewModel propertyViewModel)
+        {
+            // In the special case of content property, this object is its visual parent
+            if (propertyViewModel == contentProperty)
+                return this;
+
+            // Else we need to find property proxy matching requesting property
+            foreach (var propertiesProxyChild in propertiesProxy.DisplayChildren)
+            {
+                if (propertiesProxyChild is PropertyProxyViewModel propProxy)
+                {
+                    if (propProxy.Property == propertyViewModel)
+                        return propProxy;
+                }
+                else if (propertiesProxyChild is MacrosProxyViewModel macrosProxy)
+                {
+                    if (macrosProxy.Property == propertyViewModel)
+                        return macrosProxy;
+                }
+                else
+                    throw new InvalidOperationException("Invalid proxy object in the PropertiesProxy DisplayChildren list!");
+            }
+
+            throw new InvalidOperationException("Failed to find property proxy for given property!");
+        }
+
+        public override void RequestGoToResource(string key)
+        {
+            if (Type.IsAssignableTo(typeof(Animator.Engine.Elements.SceneElement)))
+            {
+                var resources = Property<ManagedCollectionPropertyViewModel>(context.DefaultNamespace, nameof(Animator.Engine.Elements.SceneElement.Resources));
+                if (resources != null && resources.Value is CollectionValueViewModel collection)
+                {
+                    foreach (var resource in collection.Items)
+                    {
+                        var keyProperty = resource.Property<ManagedSimplePropertyViewModel>(context.DefaultNamespace, nameof(Animator.Engine.Elements.Resource.Key));
+                        if (keyProperty.Value is StringValueViewModel strValue && strValue.Value == key)
+                        {
+                            // Found resource
+                            context.RequestGoTo(resource);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            Parent?.RequestGoToResource(key);
+        }
+
         // Public properties --------------------------------------------------
 
         public ICommand AddInstanceCommand => contentProperty?.AddInstanceCommand;
@@ -552,6 +604,9 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
         public ICommand CopyCommand { get; }
 
         public ICommand CutCommand { get; }
+
+        /// <remarks>Parent of ManagedObjectViewModel may be null - for the root object</remarks>
+        public override BaseObjectViewModel VisualParent => Parent != null ? Parent.GetTreeParent() : null;
 
         // Transported from the content property
 

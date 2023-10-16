@@ -26,7 +26,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
         private void SetDefault()
         {
-            Value = new DefaultValueViewModel(null, false);
+            Value = new DefaultValueViewModel(context, null, false);
         }
 
         private void SetValue(ValueViewModel value)
@@ -63,7 +63,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             var ns = type.ToNamespaceDefinition().ToString();
 
             var obj = new ManagedObjectViewModel(context, ns, type.Name, type);
-            Value = new ReferenceValueViewModel(obj);
+            Value = new ReferenceValueViewModel(context, obj);
         }
 
         private void DoPaste()
@@ -75,7 +75,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
             }
 
             if (pasted.Type.IsAssignableTo(baseType))
-                Value = new ReferenceValueViewModel(pasted);
+                Value = new ReferenceValueViewModel(context, pasted);
         }
 
         // Public methods -----------------------------------------------------

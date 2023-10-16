@@ -23,7 +23,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
         {
             var namespaceDefinition = type.ToNamespaceDefinition();
             var markupExtensionViewModel = new MarkupExtensionViewModel(context, namespaceDefinition.ToString(), type.Name, type);
-            var markupExtensionValue = new MarkupExtensionValueViewModel(markupExtensionViewModel);
+            var markupExtensionValue = new MarkupExtensionValueViewModel(context, markupExtensionViewModel);
             Value = markupExtensionValue;
         }
 
@@ -139,10 +139,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
 
             var namespaceDefinition = type.ToNamespaceDefinition();
             var markupExtensionViewModel = new MarkupExtensionViewModel(context, namespaceDefinition.ToString(), type.Name, type);
-            var markupExtensionValue = new MarkupExtensionValueViewModel(markupExtensionViewModel);
+            var markupExtensionValue = new MarkupExtensionValueViewModel(context, markupExtensionViewModel);
 
             var keyProperty = markupExtensionViewModel.Property<ClearableStringPropertyViewModel>(context.DefaultNamespace, nameof(Animator.Engine.Elements.FromResource.Key));
-            keyProperty.Value = new StringValueViewModel(key);
+            keyProperty.Value = new StringValueViewModel(context, key);
 
             Value = markupExtensionValue;
         }
