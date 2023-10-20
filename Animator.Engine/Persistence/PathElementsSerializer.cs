@@ -280,6 +280,8 @@ namespace Animator.Engine.Elements.Persistence
                 else
                     c = ExpectLetter(data, ref index);
 
+                lastC = c;
+
                 switch (c)
                 {
                     case 'M':
