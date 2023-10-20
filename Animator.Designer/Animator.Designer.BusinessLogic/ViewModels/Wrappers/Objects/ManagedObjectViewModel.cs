@@ -226,6 +226,19 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects
             OnPropertyChanged(nameof(DisplayChildren));
         }
 
+        public override void NotifyAvailableTypesChanged()
+        {
+            base.NotifyAvailableTypesChanged();
+
+            // Calling OnPropertyChanged on content property will not
+            // cause this object's properties to be refreshed even
+            // though their values are transported. This needs
+            // to be done manually.
+
+            OnPropertyChanged(nameof(AvailableTypes));
+            OnPropertyChanged(nameof(AvailableMarkupExtensions));
+        }
+
         private string TruncateValue(string value)
         {
             if (value == null)

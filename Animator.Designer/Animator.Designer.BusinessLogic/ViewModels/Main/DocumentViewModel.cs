@@ -422,8 +422,13 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             }            
         }
 
+        public void NotifyAvailableNamespacesChanged()
+        {
+            RootNode.NotifyAvailableTypesChanged();
+        }
+
         // Public properties --------------------------------------------------
-        
+
         public bool Changed
         {
             get => changed;

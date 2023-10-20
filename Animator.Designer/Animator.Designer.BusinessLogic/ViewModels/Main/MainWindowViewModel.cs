@@ -175,7 +175,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 
                 model.Assembly.InitializeStaticTypes(model.Namespace);
 
-                // TODO propagate adding namespace to objects to update available types
+                document.NotifyAvailableNamespacesChanged();
             }
         }
 

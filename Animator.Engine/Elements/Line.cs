@@ -41,7 +41,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty StartProperty = ManagedProperty.Register(typeof(Line),
             nameof(Start),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = 0 });
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0, 0) });
 
         #endregion
 
@@ -59,7 +59,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty EndProperty = ManagedProperty.Register(typeof(Line),
             nameof(End),
             typeof(PointF),
-            new ManagedSimplePropertyMetadata { DefaultValue = 0 });
+            new ManagedSimplePropertyMetadata { DefaultValue = new PointF(0, 0) });
 
         #endregion
 
