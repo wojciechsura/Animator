@@ -470,6 +470,21 @@
             Blur radius of the shadow.
             </summary>
         </member>
+        <member name="P:Animator.Engine.Elements.EasingExpression.Formula">
+            <summary>
+            Function used for easing. It should be a valid formula,
+            using t as a parameter (ranging from 0 to 1). It should 
+            (but not have to) fulfill the following requirements:
+            
+            <ul>
+              <li>f(0) = 0 and f(1) = 1</li>
+              <li>for t in range [0, 1], f(t) should be in range(0, 1)</li>
+            </ul>
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.EasingExpressionResource.Value">
+            <summary>Value of this resource</summary>
+        </member>
         <member name="T:Animator.Engine.Elements.Effect">
             <summary>
             This class serves as an abstract base class for all

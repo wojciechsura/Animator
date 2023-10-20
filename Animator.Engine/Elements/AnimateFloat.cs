@@ -24,7 +24,7 @@ namespace Animator.Engine.Elements
             (var obj, var prop) = AnimatedObject.FindProperty(PropertyRef);
 
             var factor = TimeCalculator.EvalAnimationFactor((float)StartTime.TotalMilliseconds, (float)EndTime.TotalMilliseconds, timeMs);
-            var easedValue = EasingFunctionRepository.Ease(EasingFunction, factor);
+            var easedValue = Ease(factor);
 
             float from = IsPropertySet(FromProperty) ? From : (float)obj.GetBaseValue(prop);
             float to = IsPropertySet(ToProperty) ? To : (float)obj.GetBaseValue(prop);

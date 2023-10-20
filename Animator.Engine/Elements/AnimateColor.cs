@@ -21,7 +21,7 @@ namespace Animator.Engine.Elements
 
             var factor = TimeCalculator.EvalAnimationFactor((float)StartTime.TotalMilliseconds, (float)EndTime.TotalMilliseconds, timeMs);
             
-            var easedValue = EasingFunctionRepository.Ease(EasingFunction, factor);
+            var easedValue = Ease(factor);
 
             Color from = IsPropertySet(FromProperty) ? From : (Color)obj.GetBaseValue(prop);
             Color to = IsPropertySet(ToProperty) ? To : (Color)obj.GetBaseValue(prop);

@@ -1,5 +1,7 @@
-﻿using Animator.Engine.Base;
+﻿using Animator.Engine.Animation.Maths;
+using Animator.Engine.Base;
 using Animator.Engine.Elements.Types;
+using Animator.Engine.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,25 @@ namespace Animator.Engine.Elements
     /// </summary>
     public abstract class AnimateNumericPropertyInTime : AnimatePropertyInTime
     {
+        protected float Ease(float t)
+        {
+            if (IsPropertySet(EasingExpressionProperty) && !IsPropertySet(EasingFunctionProperty))
+            {
+                // If expression is set, use it
+                return EasingExpression.CalculateFactor(t);
+            }
+            else if (IsPropertySet(EasingExpressionProperty) && IsPropertySet(EasingFunctionProperty))
+            {
+                // Both cannot be set at the same time
+                throw new AnimationException($"{nameof(AnimateNumericPropertyInTime.EasingFunction)} and {nameof(AnimateNumericPropertyInTime.EasingExpression)} cannot be set at the same time!", GetPath());
+            }
+            else
+            {
+                // Use EasingFunction regardless of whether it is set or not
+                return EasingFunctionRepository.Ease(EasingFunction, t);
+            }
+        }
+
         #region EasingFunction managed property
 
         /// <summary>
@@ -54,6 +75,21 @@ namespace Animator.Engine.Elements
             nameof(EasingFunction),
             typeof(EasingFunction),
             new ManagedSimplePropertyMetadata { DefaultValue = EasingFunction.Linear, InheritedFromParent = true });
+
+        #endregion
+
+        #region Expression managed property
+
+        public EasingExpression EasingExpression
+        {
+            get => (EasingExpression)GetValue(EasingExpressionProperty);
+            set => SetValue(EasingExpressionProperty, value);
+        }
+
+        public static readonly ManagedProperty EasingExpressionProperty = ManagedProperty.RegisterReference(typeof(AnimateNumericPropertyInTime),
+            nameof(EasingExpression),
+            typeof(EasingExpression),
+            new ManagedReferencePropertyMetadata());
 
         #endregion
     }

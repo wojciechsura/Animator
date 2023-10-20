@@ -1,6 +1,7 @@
 ﻿using Animator.Engine.Base.Persistence;
 using Animator.Engine.Base.Persistence.Types;
 using Animator.Engine.Elements;
+using Animator.Engine.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,8 @@ namespace Animator.Engine.Elements.Persistence
                     typeof(Movie).Namespace),
                 CustomSerializers = new Dictionary<Type, TypeSerializer>
                 {
-                    { typeof(Brush), new BrushSerializer() }
+                    { typeof(Brush), new BrushSerializer() },
+                    { typeof(EasingExpression), new EasingExpressionSerializer() },
                 }
             };
         }

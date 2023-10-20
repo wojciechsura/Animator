@@ -29,6 +29,8 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties
                 matchesCurrentType = managedObj => managedObj.Type == typeof(Animator.Engine.Elements.BrushResource);
             else if (referenceProperty.Type == typeof(Animator.Engine.Elements.Pen))
                 matchesCurrentType = managedObj => managedObj.Type == typeof(Animator.Engine.Elements.PenResource);
+            else if (referenceProperty.Type == typeof(Animator.Engine.Elements.EasingExpression))
+                matchesCurrentType = managedObj => managedObj.Type == typeof(Animator.Engine.Elements.EasingExpressionResource);
             else
                 matchesCurrentType = managedObj => false;
 

@@ -41,8 +41,6 @@ namespace Animator.Engine.Elements
                 if (!ReferenceRegex.IsMatch(externalVariableName))
                     throw new InvalidOperationException($"The reference {externalVariableName} used in expression is not valid.");
 
-                int dotPos = externalVariableName.IndexOf('.');
-
                 (var obj, var prop) = animator.AnimatedObject.FindProperty(externalVariableName);
 
                 object value = obj.GetValue(prop);
@@ -51,29 +49,29 @@ namespace Animator.Engine.Elements
 
                 Type valueType = value.GetType();
 
-                if (value.GetType() == typeof(char))
+                if (valueType == typeof(char))
                     return (true, new IntNumeric((char)value));
-                else if (value.GetType() == typeof(byte))
+                else if (valueType == typeof(byte))
                     return (true, new IntNumeric((byte)value));
-                else if (value.GetType() == typeof(short))
+                else if (valueType == typeof(short))
                     return (true, new IntNumeric((short)value));
-                else if (value.GetType() == typeof(ushort))
+                else if (valueType == typeof(ushort))
                     return (true, new IntNumeric((ushort)value));
-                else if (value.GetType() == typeof(int))
+                else if (valueType == typeof(int))
                     return (true, new IntNumeric((int)value));
-                else if (value.GetType() == typeof(uint))
+                else if (valueType == typeof(uint))
                     return (true, new IntNumeric((uint)value));
-                else if (value.GetType() == typeof(long))
+                else if (valueType == typeof(long))
                     return (true, new IntNumeric((long)value));
-                else if (value.GetType() == typeof(float))
+                else if (valueType == typeof(float))
                     return (true, new FloatNumeric((float)value));
-                else if (value.GetType() == typeof(double))
+                else if (valueType   == typeof(double))
                     return (true, new FloatNumeric((double)value));
-                else if (value.GetType() == typeof(string))
+                else if (valueType == typeof(string))
                     return (true, new StringNumeric((string)value));
-                else if (value.GetType() == typeof(bool))
+                else if (valueType == typeof(bool))
                     return (true, new BoolNumeric((bool)value));
-                else if (value.GetType() == typeof(PointF))
+                else if (valueType == typeof(PointF))
                 {
                     var point = (PointF)value;
                     return (true, new VectorNumeric(new[] { new FloatNumeric(point.X), new FloatNumeric(point.Y) }));
@@ -93,10 +91,11 @@ namespace Animator.Engine.Elements
                     case "CurrentTime":
                         return (true, new FloatNumeric(currentTime));
                     case "EasedFactor":
-                        return (true, new FloatNumeric(EasingFunctionRepository.Ease(animator.EasingFunction,
-                                TimeCalculator.EvalAnimationFactor((float)animator.StartTime.TotalMilliseconds,
-                                    (float)animator.EndTime.TotalMilliseconds,
-                                    currentTime))));
+                        var factor = TimeCalculator.EvalAnimationFactor((float)animator.StartTime.TotalMilliseconds,
+                                (float)animator.EndTime.TotalMilliseconds,
+                                currentTime);
+                        var easedFactor = animator.Ease(factor);
+                        return (true, new FloatNumeric(easedFactor));
                     default:
                         return (false, null);
                 }
@@ -126,7 +125,7 @@ namespace Animator.Engine.Elements
 
         // Private static fields ----------------------------------------------
 
-        private static readonly ProCalcCore proCalc = new ProCalcCore();
+        private readonly ProCalcCore proCalc = new ProCalcCore();
 
         // Private fields -----------------------------------------------------
 
@@ -207,10 +206,9 @@ namespace Animator.Engine.Elements
 
             (var obj, var prop) = AnimatedObject.FindProperty(PropertyRef);
 
-            var result = proCalc.Execute(compiled, null, false, new ExternalVariableResolver(this, timeMs));
+            BaseNumeric result = proCalc.Execute(compiled, null, false, new ExternalVariableResolver(this, timeMs));
 
             var propType = prop.Type;
-
             object value = ValueFromNumeric(result, propType);
 
             var previous = obj.GetValue(prop);
