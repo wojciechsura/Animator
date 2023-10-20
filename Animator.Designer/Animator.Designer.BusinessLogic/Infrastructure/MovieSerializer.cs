@@ -457,7 +457,7 @@ namespace Animator.Designer.BusinessLogic.Infrastructure
 
                 var ns = objectTypeData.Type.ToNamespaceDefinition().ToString();
 
-                deserializedObject = new ManagedObjectViewModel(context.WrapperContext, ns, node.Name, objectTypeData.Type);
+                deserializedObject = new ManagedObjectViewModel(context.WrapperContext, ns, node.LocalName, objectTypeData.Type);
 
                 // 2. Load attributes
 
