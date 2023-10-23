@@ -1,5 +1,6 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Base.Persistence;
+using Animator.Engine.Elements.Rendering;
 using Animator.Engine.Elements.Utilities;
 using Animator.Engine.Tools;
 using System;
@@ -23,14 +24,14 @@ namespace Animator.Engine.Elements
     {
         // Private methods ----------------------------------------------------
 
-        private void DoRender(BitmapBuffer buffer, BitmapBufferRepository buffers, BitmapBuffer itemBuffer)
+        private void DoRender(BitmapBuffer buffer, BitmapBufferRepository buffers, BitmapBuffer itemBuffer, RenderingContext context)
         {
             var bufferData = buffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, buffer.Bitmap.Width, buffer.Bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
             foreach (var item in Items)
             {
                 itemBuffer.Graphics.Clear(Color.Transparent);
-                item.Render(itemBuffer, buffers);
+                item.Render(itemBuffer, buffers, context);
 
                 var itemData = itemBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, itemBuffer.Bitmap.Width, itemBuffer.Bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
                 ImageProcessing.CombineTwo(bufferData.Scan0, bufferData.Stride, itemData.Scan0, itemData.Stride, buffer.Bitmap.Width, buffer.Bitmap.Height);
@@ -40,13 +41,13 @@ namespace Animator.Engine.Elements
             buffer.Bitmap.UnlockBits(bufferData);
         }
 
-        private void RenderNotCloned(BitmapBuffer buffer, BitmapBufferRepository buffers)
+        private void RenderNotCloned(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {
             BitmapBuffer itemBuffer = buffers.Lease(buffer.Graphics.Transform);
 
             try
             {
-                DoRender(buffer, buffers, itemBuffer);
+                DoRender(buffer, buffers, itemBuffer, context);
             }
             finally
             {
@@ -54,7 +55,7 @@ namespace Animator.Engine.Elements
             }
         }
 
-        private void RenderCloned(BitmapBuffer buffer, BitmapBufferRepository buffers)
+        private void RenderCloned(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {
             var originalTransform = buffer.Graphics.Transform;
             BitmapBuffer itemBuffer = buffers.Lease(buffer.Graphics.Transform);
@@ -118,7 +119,7 @@ namespace Animator.Engine.Elements
                     transform.Multiply(originalTransform, MatrixOrder.Append);
 
                     itemBuffer.Graphics.Transform = transform;
-                    DoRender(buffer, buffers, itemBuffer);
+                    DoRender(buffer, buffers, itemBuffer, context);
 
                     finish = Advance();
                 }
@@ -131,12 +132,12 @@ namespace Animator.Engine.Elements
 
         // Protected methods --------------------------------------------------
 
-        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
+        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {
             if (Clone.Count == 0)
-                RenderNotCloned(buffer, buffers);
+                RenderNotCloned(buffer, buffers, context);
             else
-                RenderCloned(buffer, buffers);
+                RenderCloned(buffer, buffers, context);
         }
 
         // Public properites --------------------------------------------------

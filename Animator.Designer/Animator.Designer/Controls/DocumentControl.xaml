@@ -405,7 +405,8 @@
                     </DrawingBrush>
                 </Grid.Background>
 
-                <Image Source="{Binding Frame}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" StretchDirection="DownOnly"/>
+                <Image x:Name="imPreview" Source="{Binding Frame}" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" StretchDirection="DownOnly"
+                       PreviewMouseDown="imPreview_PreviewMouseDown"/>
 
                 <TextBox HorizontalAlignment="Stretch" VerticalContentAlignment="Top" Background="#a0ffffff" Visibility="{Binding ShowError, Converter={StaticResource BoolToVisibilityConverter}}"
                        VerticalAlignment="Stretch" Margin="0" Text="{Binding Error, Mode=OneWay}" IsReadOnly="True" Foreground="#ff0060" FontFamily="Consolas"/>

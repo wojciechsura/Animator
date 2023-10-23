@@ -161,6 +161,21 @@ namespace Animator.Designer.Controls
             viewModel.UpdateMovie();
         }
 
+        private void imPreview_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var image = sender as Image;
+
+            var position = e.GetPosition(image);
+
+            if (image.ActualWidth > 0.0 && image.ActualHeight > 0.0)
+            {
+                float x = (float)(position.X / image.ActualWidth);
+                float y = (float)(position.Y / image.ActualHeight);
+
+                viewModel.NotifyPreviewImageClicked(x, y);
+            }
+        }
+
         // Public methods -----------------------------------------------------
 
         public DocumentControl()

@@ -2,8 +2,12 @@
 using Animator.Designer.BusinessLogic.ViewModels.Base;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers;
 using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Objects;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Properties;
+using Animator.Designer.BusinessLogic.ViewModels.Wrappers.Values;
+using Animator.Engine.Base;
 using Animator.Engine.Base.Exceptions;
 using Animator.Engine.Elements;
+using Animator.Engine.Elements.Rendering;
 using Animator.Engine.Exceptions;
 using Spooksoft.VisualStateManager.Commands;
 using Spooksoft.VisualStateManager.Conditions;
@@ -17,6 +21,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -27,6 +32,10 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 {
     public class DocumentViewModel : BaseViewModel, IDisposable
     {
+        // Private constants --------------------------------------------------
+
+        private static readonly Regex collectionPropertyPathRegex = new Regex("([a-zA-Z_][a-zA-Z0-9_]+)\\[([0-9]+)\\]");
+
         // Private classes ----------------------------------------------------
 
         private sealed record class FrameRenderedResult(Bitmap Frame, TimeSpan Duration);
@@ -142,6 +151,61 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             {
                 WorkerSupportsCancellation = true;
             }
+        }
+
+        private sealed class FindItemContext : RenderingContext
+        {
+            private readonly int x;
+            private readonly int y;
+            private string foundPath = null;
+
+            private bool AnyParentProperty(Element element, Func<ManagedProperty, bool> predicate)
+            {
+                var current = element;
+                while (current != null)
+                {
+                    if (current.ParentInfo != null && predicate(current.ParentInfo.Property))
+                        return true;
+
+                    current = current.ParentInfo?.Parent as Element;
+                }
+
+                return false;
+            }
+
+            public FindItemContext(int x, int y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+
+            public override void AfterRendering(Element element, Bitmap buffer)
+            {
+                if (element is Layer)
+                {
+                    // Do nothing, don't display layer in results
+                    return;
+                }
+                else if (AnyParentProperty(element, prop => prop == Visual.MaskProperty))
+                {
+                    // Masks themselves are not visible, thus we don't display
+                    // them in results.
+                    return;
+                }
+                else if (element is Scene)
+                {
+                    // If nothing was found, return scene as fallback
+                    if (foundPath == null)
+                        foundPath = element.GetPath();
+                }
+                else
+                {
+                    if (buffer.GetPixel(x, y).A > 0)
+                        foundPath = element.GetPath();
+                }
+            }
+
+            public string FoundPath => foundPath;
         }
 
         // Private fields -----------------------------------------------------
@@ -276,10 +340,23 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
             RenderingStatus = Resources.Windows.MainWindow.Strings.Message_RenderingFrame;
 
             // Calculate times
+            (var calculatedMovieTime, var calculatedScene, var calculatedSceneTime) = CalculateCurrentTime();
 
+            MovieTime = calculatedMovieTime.ToString("hh\\:mm\\:ss\\.ff");
+            SceneTime = calculatedSceneTime.ToString("hh\\:mm\\:ss\\.ff");
+            SceneIndex = calculatedScene.ToString();
+
+            // Run worker
+
+            frameRendererWorker = new FrameRendererWorker();
+            frameRendererWorker.RunWorkerCompleted += FrameRendered;
+            frameRendererWorker.RunWorkerAsync(new FrameRenderInput(movie, calculatedScene, calculatedSceneTime));
+        }
+
+        private (TimeSpan movieTime, int scene, TimeSpan sceneTime) CalculateCurrentTime()
+        {
             var framesPerSecond = movie.Config.FramesPerSecond;
             TimeSpan movieTime = TimeSpan.FromSeconds(1 / framesPerSecond * frameIndex);
-
             if (movie.Scenes.Count == 0)
                 throw new InvalidOperationException("No scenes to render!");
 
@@ -297,15 +374,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 
             TimeSpan sceneTime = movieTime - summedTime;
 
-            MovieTime = movieTime.ToString("hh\\:mm\\:ss\\.ff");
-            SceneTime = sceneTime.ToString("hh\\:mm\\:ss\\.ff");
-            SceneIndex = scene.ToString();
-
-            // Run worker
-
-            frameRendererWorker = new FrameRendererWorker();
-            frameRendererWorker.RunWorkerCompleted += FrameRendered;
-            frameRendererWorker.RunWorkerAsync(new FrameRenderInput(movie, scene, sceneTime));
+            return (movieTime, scene, sceneTime);
         }
 
         private void UpdateMovieFinished(object sender, RunWorkerCompletedEventArgs e)
@@ -425,6 +494,95 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
         public void NotifyAvailableNamespacesChanged()
         {
             RootNode.NotifyAvailableTypesChanged();
+        }
+
+        public void NotifyPreviewImageClicked(float relativeX, float relativeY)
+        {
+            // Movie needs to be accurate
+            if (updateMovieWorker != null && updateMovieWorker.IsBusy)
+                return;
+            
+            // Frame needs to be rendered
+            if (frameRendererWorker != null && frameRendererWorker.IsBusy)
+                return;
+
+            var x = Math.Max(0, Math.Min(movie.Config.Width - 1, (int)(relativeX * movie.Config.Width)));
+            var y = Math.Max(0, Math.Min(movie.Config.Height - 1, (int)(relativeY * movie.Config.Height)));
+
+            (_, var calculatedScene, _) = CalculateCurrentTime();
+
+            Bitmap temporary = new Bitmap(movie.Config.Width, movie.Config.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            var context = new FindItemContext(x, y);
+
+            movie.Scenes[calculatedScene].Render(temporary, context);
+
+            System.Diagnostics.Debug.WriteLine(context.FoundPath);
+
+            // Now try to reach the object through the
+            // hierarchy of wrapper objects kept in the
+            // document
+
+            var path = context.FoundPath.Split('.');
+
+            var current = RootNode;
+            int index = 1;
+
+            while (index < path.Length)
+            {
+                // Try to traverse to next object via given property
+
+                string property = path[index];
+
+                var match = collectionPropertyPathRegex.Match(property);
+                if (match.Success)
+                {
+                    // Collection property
+                    string propertyName = match.Groups[1].Value;
+                    int itemIndex = int.Parse(match.Groups[2].Value);
+
+                    var collectionProperty = current.Property<ManagedCollectionPropertyViewModel>(propertyName);
+                    if (collectionProperty == null)
+                        break;
+
+                    var value = collectionProperty.Value as CollectionValueViewModel;
+                    if (value == null)
+                        break;
+
+                    if (itemIndex < 0 || itemIndex >= value.Items.Count)
+                        break;
+
+                    ObjectViewModel next = value.Items[itemIndex];
+                    if (next == null)
+                        break;
+
+                    current = next;
+                }
+                else
+                {
+                    string propertyName = property;
+
+                    var referenceProperty = current.Property<ManagedReferencePropertyViewModel>(propertyName);
+                    if (referenceProperty == null)
+                        break;
+
+                    var value = referenceProperty.Value as ReferenceValueViewModel;
+                    if (value == null)
+                        break;
+
+                    var next = value.Value;
+                    if (next == null)
+                        break;
+
+                    current = next;
+                }
+
+                index++;
+            }
+
+            // Select found object
+
+            WrapperContext.RequestGoTo(current);
         }
 
         // Public properties --------------------------------------------------

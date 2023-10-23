@@ -74,7 +74,7 @@ namespace Animator.Engine.Elements
             if (result is FloatValueNumeric floatNumeric)
                 return (float)floatNumeric.RealValue;
 
-            throw new AnimationException("Expression does not evaluate to single floating-point value!", GetPath());
+            throw new AnimationException("Expression does not evaluate to single floating-point value!", GetHumanReadablePath());
         }
 
         // Public methods -----------------------------------------------------
@@ -87,7 +87,7 @@ namespace Animator.Engine.Elements
         public float CalculateFactor(float t)
         {
             if (compiled == null)
-                throw new AnimationException("No expression provided for EasingExpression or expression is invalid!", GetPath());
+                throw new AnimationException("No expression provided for EasingExpression or expression is invalid!", GetHumanReadablePath());
 
             BaseNumeric result = proCalc.Execute(compiled, null, false, new ExternalVariableResolver(t));
 

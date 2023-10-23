@@ -40,7 +40,7 @@ namespace Animator.Engine.Base
         private readonly Dictionary<int, ManagedCollection> collections = new();
         private readonly Dictionary<int, object> references = new();
 
-        private ManagedObject parent;
+        private ParentInfo parent;
 
         // Private methods ----------------------------------------------------
 
@@ -98,6 +98,15 @@ namespace Animator.Engine.Base
 
             if (refProperty.Metadata.ValueValidationHandler != null && !refProperty.Metadata.ValueValidationHandler.Invoke(this, new ValueValidationEventArgs(value)))
                 throw new ArgumentException($"Value {value} failed validation for property {refProperty.OwnerClassType.Name}{refProperty.Name}");
+
+            if (value is ManagedObject managedObject && managedObject.ParentInfo != null)
+                throw new ArgumentException($"Value {value} is already assigned to property of other object ({managedObject.ParentInfo.Parent.GetType().Name}.{managedObject.ParentInfo.Property.Name}). Animator base engine allows object to be assigned only to a single parent at a time.");
+        }
+
+        private void ValidateCollectionValue(ManagedObject managedObject)
+        {
+            if (managedObject.ParentInfo != null)
+                throw new ArgumentException($"Value {managedObject} is already assigned to property of other object ({managedObject.ParentInfo.Parent.GetType().Name}.{managedObject.ParentInfo.Property.Name}). Animator base engine allows object to be assigned only to a single parent at a time.");
         }
 
         private (object, bool) InternalCoerceValue(ManagedSimpleProperty simpleProperty)
@@ -138,12 +147,12 @@ namespace Animator.Engine.Base
             if (simpleProperty.Metadata.InheritedFromParent &&
                 parent != null)
             {
-                var parentProperty = parent.GetProperty(simpleProperty.Name);
+                var parentProperty = parent.Parent.GetProperty(simpleProperty.Name);
                 if (parentProperty is ManagedSimpleProperty parentSimpleProperty &&
                     parentSimpleProperty.Metadata.Inheritable &&
                     parentProperty.Type == simpleProperty.Type)
                 {
-                    propertyValue.SetBaseValue(parent.GetValue(parentProperty), PropertyValueSource.Inherited);
+                    propertyValue.SetBaseValue(parent.Parent.GetValue(parentProperty), PropertyValueSource.Inherited);
                     return;
                 }
             }
@@ -189,7 +198,7 @@ namespace Animator.Engine.Base
                 InternalPropertyValueChanged(property, oldEffectiveValue, propertyValue.EffectiveValue);
         }
 
-        private void SetParent(ManagedObject newParent)
+        private void SetParent(ParentInfo newParent)
         {
             if (parent != newParent)            
             {
@@ -203,13 +212,19 @@ namespace Animator.Engine.Base
 
         private void InternalCollectionChanged(ManagedCollectionProperty property, ManagedCollection collection, CollectionChangedEventArgs e)
         {
+            if (e.ItemsAdded != null)
+                foreach (ManagedObject addedElement in e.ItemsAdded.OfType<ManagedObject>())
+                {
+                    ValidateCollectionValue(addedElement);
+                }
+
             if (e.ItemsRemoved != null)
                 foreach (ManagedObject removedElement in e.ItemsRemoved.OfType<ManagedObject>())
-                    removedElement.Parent = null;
+                    removedElement.ParentInfo = null;
 
             if (e.ItemsAdded != null)
                 foreach (ManagedObject addedElement in e.ItemsAdded.OfType<ManagedObject>())
-                    addedElement.Parent = this;
+                    addedElement.ParentInfo = new ParentInfo(this, property);
 
             if (property.Metadata.CollectionChangedHandler != null)
                 property.Metadata.CollectionChangedHandler.Invoke(this, new ManagedCollectionChangedEventArgs(collection, e.Change, e.ItemsAdded, e.ItemsRemoved));
@@ -280,7 +295,7 @@ namespace Animator.Engine.Base
                     SetBaseValue(simpleProperty, newValue, PropertyValueSource.Default);                   
                 }
 
-                parent.PropertyValueChanged -= HandleParentPropertyValueChanged;
+                parent.Parent.PropertyValueChanged -= HandleParentPropertyValueChanged;
             }
 
             OnParentDetaching();
@@ -290,7 +305,7 @@ namespace Animator.Engine.Base
         {
             if (parent != null)
             {
-                parent.PropertyValueChanged += HandleParentPropertyValueChanged;
+                parent.Parent.PropertyValueChanged += HandleParentPropertyValueChanged;
 
                 // We convert all PropertyValues, which currently serve the default value
                 // to inherited ones (if it is possible)
@@ -298,12 +313,12 @@ namespace Animator.Engine.Base
                     .OfType<ManagedSimpleProperty>()
                     .Where(sp => sp.Metadata.InheritedFromParent))
                 {
-                    var parentProperty = parent.GetProperty(simpleProperty.Name);
+                    var parentProperty = parent.Parent.GetProperty(simpleProperty.Name);
                     if (parentProperty is ManagedSimpleProperty parentSimpleProperty && 
                         parentSimpleProperty.Metadata.Inheritable &&
                         parentProperty.Type == simpleProperty.Type)
                     {
-                        var inheritedValue = parent.GetValue(parentProperty);
+                        var inheritedValue = parent.Parent.GetValue(parentProperty);
 
                         if (propertyValues.TryGetValue(simpleProperty.GlobalIndex, out PropertyValue propertyValue))                            
                         {
@@ -350,10 +365,10 @@ namespace Animator.Engine.Base
         private void InternalReferenceValueChanged(ManagedReferenceProperty referenceProperty, object oldValue, object newValue)
         {
             if (oldValue is ManagedObject oldBaseElement)
-                oldBaseElement.Parent = null;
+                oldBaseElement.ParentInfo = null;
 
             if (newValue is ManagedObject newBaseElement)
-                newBaseElement.Parent = this;
+                newBaseElement.ParentInfo = new ParentInfo(this, referenceProperty);
 
             if (referenceProperty.Metadata.ValueChangedHandler != null)
                 referenceProperty.Metadata.ValueChangedHandler.Invoke(this, new PropertyValueChangedEventArgs(referenceProperty, oldValue, newValue));
@@ -652,7 +667,7 @@ namespace Animator.Engine.Base
 
         // Public properties --------------------------------------------------
 
-        public ManagedObject Parent
+        public ParentInfo ParentInfo
         {
             get => parent;
             internal set => SetParent(value);

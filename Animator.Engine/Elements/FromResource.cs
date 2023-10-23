@@ -28,10 +28,10 @@ namespace Animator.Engine.Elements
                         return;
                     }
                     else if (res.Count > 1)
-                        throw new AnimationException($"Object contains more than one resource named {Key}!", (current as Element)?.GetPath() ?? String.Empty);
+                        throw new AnimationException($"Object contains more than one resource named {Key}!", (current as Element)?.GetHumanReadablePath() ?? String.Empty);
                 }
 
-                current = current.Parent as Element;
+                current = current.ParentInfo?.Parent as Element;
             }
         }
 

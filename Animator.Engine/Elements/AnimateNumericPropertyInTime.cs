@@ -26,7 +26,7 @@ namespace Animator.Engine.Elements
             else if (IsPropertySet(EasingExpressionProperty) && IsPropertySet(EasingFunctionProperty))
             {
                 // Both cannot be set at the same time
-                throw new AnimationException($"{nameof(AnimateNumericPropertyInTime.EasingFunction)} and {nameof(AnimateNumericPropertyInTime.EasingExpression)} cannot be set at the same time!", GetPath());
+                throw new AnimationException($"{nameof(AnimateNumericPropertyInTime.EasingFunction)} and {nameof(AnimateNumericPropertyInTime.EasingExpression)} cannot be set at the same time!", GetHumanReadablePath());
             }
             else
             {

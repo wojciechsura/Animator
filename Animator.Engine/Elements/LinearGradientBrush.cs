@@ -31,7 +31,7 @@ namespace Animator.Engine.Elements
                 if (Stops.Any())
                 {
                     if (Stops.Count < 2)
-                        throw new AnimationException("You should specify at least two steps.", GetPath());
+                        throw new AnimationException("You should specify at least two steps.", GetHumanReadablePath());
 
                     var gradientBrush = new System.Drawing.Drawing2D.LinearGradientBrush(Point1, Point2, Color.Transparent, Color.Transparent);
 

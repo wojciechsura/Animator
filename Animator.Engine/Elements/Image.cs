@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Elements.Rendering;
 using Animator.Engine.Elements.Types;
 using Animator.Engine.Elements.Utilities;
 using Animator.Engine.Exceptions;
@@ -27,12 +28,12 @@ namespace Animator.Engine.Elements
         private void UpdateImageCache()
         {
             if (String.IsNullOrEmpty(Source))
-                throw new AnimationException("Source property of Image is empty!", GetPath());
+                throw new AnimationException("Source property of Image is empty!", GetHumanReadablePath());
 
             string resolvedPath = ResolvePath(Source);
 
             if (!File.Exists(resolvedPath))
-                throw new AnimationException($"Image {resolvedPath} does not exist!", GetPath());
+                throw new AnimationException($"Image {resolvedPath} does not exist!", GetHumanReadablePath());
 
             if (cachedImagePath != resolvedPath)
             {
@@ -48,7 +49,7 @@ namespace Animator.Engine.Elements
 
         // Protected methods --------------------------------------------------
 
-        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
+        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {
             UpdateImageCache();
 

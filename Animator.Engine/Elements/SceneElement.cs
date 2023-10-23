@@ -73,18 +73,18 @@ namespace Animator.Engine.Elements
 
                     var property = current.GetProperty(collectionAccess.Groups[1].Value);
                     if (property == null)
-                        throw new AnimationException($"{path[i]} is invalid, because {current.GetType().Name} does not contain property {collectionAccess.Groups[1].Value}!", GetPath());
+                        throw new AnimationException($"{path[i]} is invalid, because {current.GetType().Name} does not contain property {collectionAccess.Groups[1].Value}!", GetHumanReadablePath());
                     if (property is not ManagedCollectionProperty)
-                        throw new AnimationException($"{path[i]} is invalid, because {collectionAccess.Groups[1].Value} is not a collection property!", GetPath());
+                        throw new AnimationException($"{path[i]} is invalid, because {collectionAccess.Groups[1].Value} is not a collection property!", GetHumanReadablePath());
 
                     var collection = (ManagedCollection)current.GetValue(property);
 
                     var items = collection.OfType<SceneElement>().Where(e => e.Name == collectionAccess.Groups[2].Value).ToList();
 
                     if (items.Count == 0)
-                        throw new AnimationException($"{path[i]} yielded no elements. There is no element with name {collectionAccess.Groups[2].Value} in the collection.", GetPath());
+                        throw new AnimationException($"{path[i]} yielded no elements. There is no element with name {collectionAccess.Groups[2].Value} in the collection.", GetHumanReadablePath());
                     if (items.Count > 1)
-                        throw new AnimationException($"{path[i]} yielded no elements. There are multiple elements in the collection matching name {collectionAccess.Groups[2].Value} in the collection.", GetPath());
+                        throw new AnimationException($"{path[i]} yielded no elements. There are multiple elements in the collection matching name {collectionAccess.Groups[2].Value} in the collection.", GetHumanReadablePath());
 
                     current = items.Single();
                 }
@@ -98,27 +98,27 @@ namespace Animator.Engine.Elements
 
                     // Erroneus situation
                     if (property != null && (children != null))
-                        throw new AnimationException($"{path[i]} matches both property and child!", GetPath());
+                        throw new AnimationException($"{path[i]} matches both property and child!", GetHumanReadablePath());
                     else if (property == null && children == null)
-                        throw new AnimationException($"{path[i]} doesn't match any property or child!", GetPath());
+                        throw new AnimationException($"{path[i]} doesn't match any property or child!", GetHumanReadablePath());
                     else if (property != null)
                     {
                         object value = current.GetValue(property);
                         if (value == null)
-                            throw new AnimationException($"{path[i]} returns null element!", GetPath());
+                            throw new AnimationException($"{path[i]} returns null element!", GetHumanReadablePath());
 
                         if (value is not SceneElement sceneElement)
-                            throw new AnimationException($"Property {path[i]} yields object of type {value.GetType().Name}, which does not derive from BaseElement!", GetPath());
+                            throw new AnimationException($"Property {path[i]} yields object of type {value.GetType().Name}, which does not derive from BaseElement!", GetHumanReadablePath());
 
                         current = sceneElement;
                     }
                     else if (children != null)
                     {
                         if (children.Count > 1)
-                            throw new AnimationException($"{path[i]} yields more than one child element. Name is not unique.", GetPath());
+                            throw new AnimationException($"{path[i]} yields more than one child element. Name is not unique.", GetHumanReadablePath());
 
                         if (children.Single() is not SceneElement sceneElement)
-                            throw new AnimationException($"Child {path[i]} yields object of type {children.Single().GetType().Name}, which does not derive from BaseElement!", GetPath());
+                            throw new AnimationException($"Child {path[i]} yields object of type {children.Single().GetType().Name}, which does not derive from BaseElement!", GetHumanReadablePath());
 
                         current = sceneElement;
                     }
@@ -136,7 +136,7 @@ namespace Animator.Engine.Elements
 
         protected override void OnParentDetaching()
         {
-            if (Parent is SceneElement baseElement)
+            if (ParentInfo?.Parent is SceneElement baseElement)
             {
                 baseElement.UnregisterName(Name, this);
             }
@@ -148,7 +148,7 @@ namespace Animator.Engine.Elements
         {
             base.OnParentAttached();
 
-            if (Parent is SceneElement baseElement && Name != null)
+            if (ParentInfo?.Parent is SceneElement baseElement && Name != null)
             {
                 baseElement.RegisterName(Name, this);
             }
@@ -168,7 +168,7 @@ namespace Animator.Engine.Elements
             }
             catch (Exception e)
             {
-                throw new AnimationException($"Failed to find element by reference {elementRef}!", GetPath(), e);
+                throw new AnimationException($"Failed to find element by reference {elementRef}!", GetHumanReadablePath(), e);
             }
 
             return finalElement;
@@ -189,12 +189,12 @@ namespace Animator.Engine.Elements
             }
             catch (Exception e)
             {
-                throw new AnimationException($"Failed to process property reference { propertyRef }!", GetPath(), e);
+                throw new AnimationException($"Failed to process property reference { propertyRef }!", GetHumanReadablePath(), e);
             }
 
             var property = finalElement.GetProperty(path.Last());
             if (property == null)
-                throw new AnimationException($"Failed to process property reference {propertyRef}: object {finalElement.GetType().Name} does not have property {path.Last()}!", GetPath());
+                throw new AnimationException($"Failed to process property reference {propertyRef}: object {finalElement.GetType().Name} does not have property {path.Last()}!", GetHumanReadablePath());
 
             return (finalElement, property);
         }
@@ -247,7 +247,8 @@ namespace Animator.Engine.Elements
         private static void HandleNameChanged(ManagedObject sender, PropertyValueChangedEventArgs args)
         {
             // Value is permanent, so the change may be done only once
-            if (sender is SceneElement sceneElement && sender.Parent is SceneElement parentElement)
+            if (sender is SceneElement sceneElement &&                 
+                sender?.ParentInfo?.Parent is SceneElement parentElement)
                 parentElement.RegisterName((string)args.NewValue, sceneElement);
         }
 
@@ -312,9 +313,9 @@ namespace Animator.Engine.Elements
         {
             get
             {
-                if (Parent is Scene scene)
+                if (ParentInfo?.Parent is Scene scene)
                     return scene;
-                else if (Parent is SceneElement baseElement)
+                else if (ParentInfo?.Parent is SceneElement baseElement)
                     return baseElement.Scene;
                 else
                     return null;

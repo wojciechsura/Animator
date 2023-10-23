@@ -1,5 +1,6 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Elements.Persistence;
+using Animator.Engine.Elements.Rendering;
 using Animator.Engine.Elements.Utilities;
 using Animator.Engine.Utils;
 using System;
@@ -36,7 +37,7 @@ namespace Animator.Engine.Elements
 
         // Protected methods --------------------------------------------------
 
-        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
+        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {
             if (!IsPropertySet(CutFromProperty) && !IsPropertySet(CutToProperty))
             {

@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Elements.Rendering;
 using Animator.Engine.Elements.Utilities;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Animator.Engine.Elements
     {
         // Protected methods --------------------------------------------------
 
-        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
+        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {
             if (IsPropertySet(BrushProperty))
             {

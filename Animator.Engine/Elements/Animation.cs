@@ -29,9 +29,9 @@ namespace Animator.Engine.Elements
         {
             get
             {
-                if (Parent is Animation baseAnimation)
+                if (ParentInfo?.Parent is Animation baseAnimation)
                     return baseAnimation.AnimatedObject;
-                else if (Parent is SceneElement animatedObject)
+                else if (ParentInfo?.Parent is SceneElement animatedObject)
                     return animatedObject;
                 else
                     throw new InvalidOperationException("Cannot retrieve animated object!");

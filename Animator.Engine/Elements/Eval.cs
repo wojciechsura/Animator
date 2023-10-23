@@ -54,7 +54,7 @@ namespace Animator.Engine.Elements
                         };
                     }
 
-                    current = current.Parent as SceneElement;
+                    current = current.ParentInfo?.Parent as SceneElement;
                 }
 
                 throw new InvalidOperationException($"Unknown variable: {externalVariableName}!");

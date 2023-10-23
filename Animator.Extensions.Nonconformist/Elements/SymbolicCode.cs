@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Animator.Engine.Base.Persistence.Types;
+using Animator.Engine.Elements.Rendering;
 
 namespace Animator.Extensions.Nonconformist.Elements
 {
@@ -19,7 +20,7 @@ namespace Animator.Extensions.Nonconformist.Elements
         private const float SpecialCharProbability = 0.3f;
         private const float LineToMaxWordLengthRatio = 0.4f;
 
-        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
+        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {
             int lineCount = (int)Math.Floor((Height / CharHeight) / 2);
             int maxLineLength = (int)Math.Floor(Width / CharHeight);

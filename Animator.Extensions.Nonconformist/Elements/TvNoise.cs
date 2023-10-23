@@ -9,13 +9,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using Animator.Engine.Elements.Rendering;
 
 namespace Animator.Extensions.Nonconformist.Elements
 {
     public class TvNoise : Visual
     {
-        protected override void InternalRender(BitmapBuffer buffer, 
-            BitmapBufferRepository buffers)
+        protected override void InternalRender(BitmapBuffer buffer,
+            BitmapBufferRepository buffers, RenderingContext context)
         {
             var temp = buffers.Lease(new System.Drawing.Drawing2D.Matrix());
 

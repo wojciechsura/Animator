@@ -1,5 +1,6 @@
 ﻿using Animator.Engine.Base;
 using Animator.Engine.Base.Persistence;
+using Animator.Engine.Elements.Rendering;
 using Animator.Engine.Elements.Utilities;
 using Animator.Engine.Tools;
 using System;
@@ -23,13 +24,13 @@ namespace Animator.Engine.Elements
     {
         // Public methods -----------------------------------------------------
 
-        public void Render(Bitmap bitmap)
+        public void Render(Bitmap bitmap, RenderingContext context = null)
         {
             using var bufferRepository = new BitmapBufferRepository(bitmap.Width, bitmap.Height, bitmap.PixelFormat);
-            Render(bitmap, bufferRepository);
+            Render(bitmap, bufferRepository, context);
         }
 
-        public void Render(Bitmap bitmap, BitmapBufferRepository buffers)
+        public void Render(Bitmap bitmap, BitmapBufferRepository buffers, RenderingContext context = null)
         {
             if (buffers.Width != bitmap.Width || buffers.Height != bitmap.Height || buffers.PixelFormat != bitmap.PixelFormat)
                 throw new ArgumentException(nameof(buffers), "Buffer repository bitmap parameters doesn't match output bitmap ones!");
@@ -54,7 +55,7 @@ namespace Animator.Engine.Elements
                 foreach (var item in Items)
                 {
                     buffer.Graphics.Clear(Color.Transparent);
-                    item.Render(buffer, buffers);
+                    item.Render(buffer, buffers, context);
 
                     var bufferData = buffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
                     ImageProcessing.CombineTwo(bitmapData.Scan0, bitmapData.Stride, bufferData.Scan0, bufferData.Stride, bitmap.Width, bitmap.Height);
@@ -67,6 +68,8 @@ namespace Animator.Engine.Elements
             {
                 buffers.Return(buffer);
             }
+
+            context?.AfterRendering(this, bitmap);
         }
 
         // Public properties --------------------------------------------------

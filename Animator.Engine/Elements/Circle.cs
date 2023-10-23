@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Elements.Rendering;
 using Animator.Engine.Elements.Utilities;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Animator.Engine.Elements
     /// </summary>
     public class Circle : Shape
     {
-        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
+        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {
             if (IsPropertySet(BrushProperty))
             {

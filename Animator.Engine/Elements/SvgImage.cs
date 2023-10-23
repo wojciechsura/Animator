@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Elements.Rendering;
 using Animator.Engine.Elements.Utilities;
 using Animator.Engine.Exceptions;
 using Svg;
@@ -25,12 +26,12 @@ namespace Animator.Engine.Elements
         private void UpdateDocumentCache()
         {
             if (string.IsNullOrEmpty(Source)) 
-                throw new AnimationException("Source property of SvgImage is empty!", GetPath());
+                throw new AnimationException("Source property of SvgImage is empty!", GetHumanReadablePath());
 
             var resolvedPath = ResolvePath(Source);
 
             if (!File.Exists(resolvedPath))
-                throw new AnimationException($"SVG image {resolvedPath} does not exist!", GetPath());
+                throw new AnimationException($"SVG image {resolvedPath} does not exist!", GetHumanReadablePath());
 
             if (cachedDocumentPath != resolvedPath)
             {
@@ -44,7 +45,7 @@ namespace Animator.Engine.Elements
 
         // Protected methods --------------------------------------------------
 
-        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
+        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {
             UpdateDocumentCache();
 

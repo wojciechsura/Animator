@@ -1,7 +1,9 @@
 ﻿using Animator.Engine.Base;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +21,7 @@ namespace Animator.Engine.Elements
             // Find path relative to movie's location (if set)
             ManagedObject obj = this;
             while (obj != null && obj is not Movie)
-                obj = obj.Parent;
+                obj = obj.ParentInfo?.Parent;
 
             if (obj is Movie movie && !string.IsNullOrEmpty(movie.Path))
             {
@@ -36,15 +38,65 @@ namespace Animator.Engine.Elements
         {
             ManagedObject obj = this;
             List<string> parents = new();
+            while (obj != null)
+            {
+                if (obj.ParentInfo != null)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(obj.ParentInfo.Property.Name);
+                    
+                    if (obj.ParentInfo.Property is ManagedCollectionProperty collectionProperty)
+                    {
+                        IList items = (IList)obj.ParentInfo.Parent.GetValue(collectionProperty);
+                        var index = items.IndexOf(obj);
+                        if (index == -1)
+                            throw new InvalidOperationException("Parenting broken: item is not in its parent's collection property!");
+
+                        sb.Append($"[{index}]");
+                    }
+
+                    parents.Add(sb.ToString());
+                }
+                else
+                {
+                    parents.Add(obj.GetType().Name);
+                }
+
+                obj = obj.ParentInfo?.Parent;
+            }
+
+            parents.Reverse();
+
+            return string.Join(".", parents);
+        }
+
+        public string GetHumanReadablePath()
+        {
+            ManagedObject obj = this;
+            List<string> parents = new();
 
             while (obj != null)
             {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(obj.GetType().Name);
                 if (obj is SceneElement sceneElement)
-                    parents.Add($"{sceneElement.GetType().Name} ({sceneElement.Name})");
-                else
-                    parents.Add($"{obj.GetType().Name}");
+                    sb.Append($"({sceneElement.Name})");
 
-                obj = obj.Parent;
+                sb.Append(obj.ParentInfo.Property.Name);
+
+                if (obj.ParentInfo.Property is ManagedCollectionProperty collectionProperty)
+                {
+                    IList items = (IList)obj.ParentInfo.Parent.GetValue(collectionProperty);
+                    var index = items.IndexOf(obj);
+                    if (index == -1)
+                        throw new InvalidOperationException("Parenting broken: item is not in its parent's collection property!");
+
+                    sb.Append($"[{index}]");
+                }
+
+                parents.Add(sb.ToString());
+
+                obj = obj.ParentInfo?.Parent;
             }
 
             parents.Reverse();

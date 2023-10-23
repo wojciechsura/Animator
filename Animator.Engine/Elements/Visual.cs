@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Elements.Rendering;
 using Animator.Engine.Elements.Types;
 using Animator.Engine.Elements.Utilities;
 using Animator.Engine.Tools;
@@ -59,7 +60,7 @@ namespace Animator.Engine.Elements
 
         // Protected methods --------------------------------------------------
 
-        protected abstract void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers);
+        protected abstract void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context);
 
         protected Matrix BuildTransformMatrix()
         {
@@ -81,7 +82,7 @@ namespace Animator.Engine.Elements
 
         // Internal methods ---------------------------------------------------
 
-        internal void Render(BitmapBuffer buffer, BitmapBufferRepository buffers)
+        internal void Render(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {
             if (!Visible || Alpha.IsZero())
                 return;
@@ -100,7 +101,7 @@ namespace Animator.Engine.Elements
 
             buffer.Graphics.Transform = transform;
 
-            InternalRender(buffer, buffers);
+            InternalRender(buffer, buffers, context);
 
             if (IsPropertySet(AlphaProperty))
                 ApplyAlpha(Alpha, buffer.Bitmap);
@@ -153,7 +154,7 @@ namespace Animator.Engine.Elements
                     foreach (var item in Mask)
                     {
                         itemBuffer.Graphics.Clear(Color.Transparent);
-                        item.Render(itemBuffer, buffers);
+                        item.Render(itemBuffer, buffers, context);
 
                         var itemData = itemBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, itemBuffer.Bitmap.Width, itemBuffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
                         ImageProcessing.CombineTwo(maskData.Scan0, maskData.Stride, itemData.Scan0, itemData.Stride, maskBuffer.Bitmap.Width, maskBuffer.Bitmap.Height);
@@ -175,6 +176,8 @@ namespace Animator.Engine.Elements
             }
 
             buffer.Graphics.Transform = originalTransform;
+
+            context?.AfterRendering(this, buffer.Bitmap);
         }
 
         // Public properties --------------------------------------------------

@@ -1,4 +1,5 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Elements.Rendering;
 using Animator.Engine.Elements.Types;
 using Animator.Engine.Elements.Utilities;
 using Animator.Engine.Exceptions;
@@ -20,7 +21,7 @@ namespace Animator.Engine.Elements
     {
         // Protected properties -----------------------------------------------
 
-        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers)
+        protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {
             if (!IsPropertySet(BrushProperty))
                 return;
@@ -28,7 +29,7 @@ namespace Animator.Engine.Elements
             using System.Drawing.Brush brush = Brush.BuildBrush();
 
             FontFamily fontFamily = System.Drawing.FontFamily.Families.FirstOrDefault(ff => ff.Name == FontFamily)
-                ?? throw new AnimationException($"Cannot find font family {FontFamily}.", GetPath());
+                ?? throw new AnimationException($"Cannot find font family {FontFamily}.", GetHumanReadablePath());
 
             FontStyle fontStyle = 0;
             if (Bold)
@@ -37,7 +38,7 @@ namespace Animator.Engine.Elements
                 fontStyle |= FontStyle.Italic;
             if (Underline)
                 fontStyle |= FontStyle.Underline;
-            
+
             using var font = new Font(fontFamily, FontSize, fontStyle, GraphicsUnit.Pixel);
 
             SizeF size = buffer.Graphics.MeasureString(Text, font);
