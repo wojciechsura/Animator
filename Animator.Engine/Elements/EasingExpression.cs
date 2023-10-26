@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public class EasingExpression : Element
+    public partial class EasingExpression : Element
     {
         // Private types ------------------------------------------------------
 
@@ -32,7 +32,6 @@ namespace Animator.Engine.Elements
 
         private class ExternalVariableResolver : BaseExternalVariableResolver
         {
-            private readonly AnimateWithExpression animator;
             private readonly float factor;
 
             private (bool resolved, BaseNumeric result) KnownVariableToValue(string externalVariableName)

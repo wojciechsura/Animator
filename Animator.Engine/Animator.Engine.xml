@@ -1379,6 +1379,13 @@
             Defines translation distance over X axis
             </summary>
         </member>
+        <member name="M:Animator.Engine.Elements.Utilities.VisualRenderer.BuildMaskBuffer(Animator.Engine.Elements.Utilities.BitmapBuffer,System.Collections.Generic.IList{Animator.Engine.Elements.Visual},Animator.Engine.Elements.Utilities.BitmapBufferRepository,Animator.Engine.Elements.Rendering.RenderingContext)">
+            <remarks>
+            The returned buffer is leased from given bitmap
+            buffer repository. Caller is responsible for
+            returning the buffer.
+            </remarks>
+        </member>
         <member name="P:Animator.Engine.Elements.Variable.Name">
             <summary>Name of this variable</summary>
         </member>
@@ -1395,6 +1402,9 @@
             </summary>
         </member>
         <member name="T:Animator.Engine.Elements.Visual">
+            <summary>
+            Represents basic element, which can be drawn on the scene.
+            </summary>
             <summary>
             Represents basic element, which can be drawn on the scene.
             </summary>
@@ -1465,6 +1475,33 @@
             drawn at all (with all values in between allowing partial 
             drawing). If mask is inverted, this behavior works the other
             way around.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.Visual.BackgroundEffects">
+            <summary>
+            List of effects, which will be applied to
+            background underneath a visual after its rendering
+            and before it is composited with the background.
+            Requires <b>composite rendering</b>.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.BackgroundEffect">
+            <summary>
+            An effect, which is added to the background of
+            an item after its rendering and before compositing
+            with the background.
+            Requires <b>composite rendering</b>.
+            </summary>
+        </member>
+        <member name="T:Animator.Engine.Elements.GaussianBlurBackgroundEffect">
+            <summary>
+            Adds a nice, Gaussian blur to background below
+            a visual. Requires <b>composite rendering</b>.
+            </summary>
+        </member>
+        <member name="P:Animator.Engine.Elements.GaussianBlurBackgroundEffect.Radius">
+            <summary>
+            Radius of the blur.
             </summary>
         </member>
         <member name="F:Animator.Engine.Utils.Bezier.LENGTH_ESTIMATION_ACCURACY">

@@ -13,7 +13,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Draws a line on the scene.
     /// </summary>
-    public class Line : Visual
+    public partial class Line : Visual
     {
         // Protected methods --------------------------------------------------
 

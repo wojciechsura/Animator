@@ -378,6 +378,116 @@ extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,
 		}
 }
 
+extern "C" void __cdecl MaskedGaussianBlur(unsigned char* bitmapData,
+	int stride,
+	unsigned char * maskData,
+	int maskStride,
+	int width,
+	int height,
+	int radius,
+	bool useAlpha)
+{
+	int left = 0;
+	int top = 0;
+	int right = 0;
+	int bottom = 0;
+	findRoiByAlpha(maskData, maskStride, width, height, left, top, right, bottom);
+
+	if (right < left || bottom < top)
+		return;
+
+	// Gaussian kernel
+
+	int diameter = 2 * radius + 1;
+	std::shared_ptr<float[]> kernel = generateGaussKernel(diameter);
+
+	// Blur
+
+	auto copy = std::shared_ptr<unsigned char[]>(new unsigned char[height * stride]);
+
+	int minX = std::min(width - 1, std::max(0, left - radius));
+	int maxX = std::min(width - 1, std::max(0, right + radius));
+	int minY = std::min(height - 1, std::max(0, top - radius));
+	int maxY = std::min(height - 1, std::max(0, bottom + radius));
+
+	// Can be optimized further
+	for (int y = 0; y < height; y++)
+		memcpy(copy.get() + y * stride, bitmapData + y * stride, width * BYTES_PER_PIXEL);
+
+	for (int y = minY; y <= maxY; y++)
+		for (int x = minX; x <= maxX; x++)
+		{
+			// If mask is transparent, skip
+			IntColor maskColor = getIntColor(maskData, maskStride, x, y);
+			if (maskColor.A == 0)
+				continue;
+
+			int maskAlpha = useAlpha ? maskColor.A : 255;
+
+			FloatColor sum;
+			float weight = 0.0f;
+			int count = 0;
+
+			int xStart = x - radius;
+			int xEnd = x + radius;
+			int yStart = y - radius;
+			int yEnd = y + radius;
+
+			for (int x1 = xStart; x1 <= xEnd; x1++)
+				for (int y1 = yStart; y1 <= yEnd; y1++)
+				{
+					// Find weight
+
+					int kernelX = x1 - xStart;
+					int kernelY = y1 - yStart;
+					float kernelValue = kernel[kernelY * diameter + kernelX];
+
+					// Premultiply alpha
+
+					FloatColor color;
+					if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height)
+						color = getFloatColor(copy.get(), stride, x1, y1);
+					else
+						color = FloatColor(0);
+
+					sum.R += (float)(color.R * color.A) * kernelValue;
+					sum.G += (float)(color.G * color.A) * kernelValue;
+					sum.B += (float)(color.B * color.A) * kernelValue;
+					sum.A += color.A * kernelValue;
+
+					weight += kernelValue;
+					count++;
+				}
+
+			if (count > 0)
+			{
+				FloatColor result;
+				result.A = sum.A / weight;
+
+				if (result.A > 0)
+				{
+					result.R = ((sum.R / weight) / result.A);
+					result.G = ((sum.G / weight) / result.A);
+					result.B = ((sum.B / weight) / result.A);
+				}
+
+				if (maskAlpha == 255)
+				{
+					setFloatColor(bitmapData, stride, x, y, result);
+				}
+				else
+				{
+					result.A *= ((float)maskAlpha / 255);
+
+					FloatColor blendedResult = getFloatColor(copy.get(), stride, x, y);
+
+					alphaBlend(blendedResult, result);
+					setFloatColor(bitmapData, stride, x, y, blendedResult);
+				}
+			}
+		}
+}
+
 extern "C" void __cdecl Outline(unsigned char* frameData,
 	int frameStride,
 	unsigned char* backData,

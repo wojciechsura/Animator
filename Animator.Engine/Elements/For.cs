@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Animator.Engine.Elements
 {
     [ContentProperty(nameof(Keyframes))]
-    public class For : StoryboardEntry
+    public partial class For : StoryboardEntry
     {
         internal override void AddKeyframesRecursive(List<Keyframe> keyframes)
         {

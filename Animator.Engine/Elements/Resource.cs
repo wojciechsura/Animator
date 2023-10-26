@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public abstract class Resource : Element
+    public abstract partial class Resource : Element
     {
         public abstract object GetValue();
 

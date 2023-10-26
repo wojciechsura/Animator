@@ -15,7 +15,7 @@ namespace Animator.Engine.Elements
     /// single animation per whole scene. Otherwise, use Storyboard
     /// and FloatKeyframe to define the whole animation.
     /// </summary>
-    public class AnimateFloat : AnimateNumericPropertyInTime
+    public partial class AnimateFloat : AnimateNumericPropertyInTime
     {
         // Public methods -----------------------------------------------------
 

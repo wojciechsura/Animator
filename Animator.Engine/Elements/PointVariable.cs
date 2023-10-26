@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public class PointVariable : Variable
+    public partial class PointVariable : Variable
     {
         #region Value dependency property
 

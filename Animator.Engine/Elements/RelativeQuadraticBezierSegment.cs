@@ -11,7 +11,7 @@ namespace Animator.Engine.Elements
     /// path element. 
     /// All points are expressed in relative coordinates.
     /// </summary>
-    public class RelativeQuadraticBezierSegment : BaseQuadraticBezierSegment
+    public partial class RelativeQuadraticBezierSegment : BaseQuadraticBezierSegment
     {
         // Protected methods --------------------------------------------------
 

@@ -10,7 +10,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Base class for all shapes drawn on the scene.
     /// </summary>
-    public abstract class Shape : Visual
+    public abstract partial class Shape : Visual
     {
 
         #region Brush managed property

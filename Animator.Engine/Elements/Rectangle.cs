@@ -13,7 +13,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Draws rectangle on a scene.
     /// </summary>
-    public class Rectangle : Shape
+    public partial class Rectangle : Shape
     {
         protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {

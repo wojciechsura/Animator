@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// defines fill of a shape. If you need a simple, mono-color
     /// fill, use SolidBrush.
     /// </summary>
-    public abstract class Brush : SceneElement
+    public abstract partial class Brush : SceneElement
     {
         // Internal methods ---------------------------------------------------
 

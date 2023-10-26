@@ -14,7 +14,7 @@ namespace Animator.Engine.Elements
     /// Root element of the movie.
     /// </summary>
     [ContentProperty(nameof(Scenes))]
-    public class Movie : ManagedObject
+    public partial class Movie : ManagedObject
     {
         public Movie()
         {

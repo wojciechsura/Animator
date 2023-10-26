@@ -11,7 +11,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Base class for linear transform definitions
     /// </summary>
-    public abstract class Transform : SceneElement
+    public abstract partial class Transform : SceneElement
     {
         // Internal methods ---------------------------------------------------
 

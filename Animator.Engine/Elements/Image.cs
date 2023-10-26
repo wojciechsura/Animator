@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public class Image : Visual
+    public partial class Image : Visual
     {
         // Private fields -----------------------------------------------------
 

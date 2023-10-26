@@ -13,7 +13,7 @@ namespace Animator.Engine.Elements
     /// endpoint.
     /// All points are expressed in relative coordinates.
     /// </summary>
-    public class RelativeShorthandCubicBezierSegment : BaseCubicBezierBasedSegment
+    public partial class RelativeShorthandCubicBezierSegment : BaseCubicBezierBasedSegment
     {
         // Protected methods --------------------------------------------------
 

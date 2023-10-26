@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Animator.Engine.Elements
 {
     [ContentProperty(nameof(Value))]
-    public class EasingExpressionResource : Resource
+    public partial class EasingExpressionResource : Resource
     {
         public override object GetValue() => Value.Clone();
 

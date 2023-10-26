@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public class RotateTransform : Transform
+    public partial class RotateTransform : Transform
     {
         // Internal methods ---------------------------------------------------
 

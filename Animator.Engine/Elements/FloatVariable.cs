@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public class FloatVariable : Variable
+    public partial class FloatVariable : Variable
     {
         #region Value managed property
 

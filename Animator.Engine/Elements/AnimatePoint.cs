@@ -15,7 +15,7 @@ namespace Animator.Engine.Elements
     /// single animation per whole scene. Otherwise, use Storyboard
     /// and PointKeyframe to define the whole animation.
     /// </summary>
-    public class AnimatePoint : AnimateNumericPropertyInTime
+    public partial class AnimatePoint : AnimateNumericPropertyInTime
     {
         // Public methods -----------------------------------------------------
 

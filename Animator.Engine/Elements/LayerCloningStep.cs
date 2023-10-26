@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Animator.Engine.Elements
 {
     [ContentProperty(nameof(Transforms))]
-    public class LayerCloningStep : SceneElement
+    public partial class LayerCloningStep : SceneElement
     {
         // Internal methods ---------------------------------------------------
         

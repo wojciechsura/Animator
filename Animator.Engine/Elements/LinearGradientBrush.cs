@@ -16,7 +16,7 @@ namespace Animator.Engine.Elements
     /// Brush, which fills shape with a linear gradient.
     /// </summary>
     [ContentProperty(nameof(Stops))]
-    public class LinearGradientBrush : Brush
+    public partial class LinearGradientBrush : Brush
     {
         internal override System.Drawing.Brush BuildBrush()
         {

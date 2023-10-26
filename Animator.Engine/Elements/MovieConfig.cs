@@ -10,7 +10,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Describes animation parameters.
     /// </summary>
-    public class MovieConfig : ManagedObject
+    public partial class MovieConfig : ManagedObject
     {
         #region Width managed property
 

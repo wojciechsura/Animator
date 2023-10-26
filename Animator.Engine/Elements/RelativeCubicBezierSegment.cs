@@ -10,7 +10,7 @@ namespace Animator.Engine.Elements
     /// path element.
     /// All points are expressed in relative coordinates.
     /// </summary>
-    public class RelativeCubicBezierSegment : BaseCubicBezierBasedSegment
+    public partial class RelativeCubicBezierSegment : BaseCubicBezierBasedSegment
     {
         // Protected methods --------------------------------------------------
 

@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// An animation is an object, which animates properties of elements on
     /// the scene.
     /// </summary>
-    public abstract class Animation : Element
+    public abstract partial class Animation : Element
     {
         /// <summary>
         /// Applies animation to property of an element.

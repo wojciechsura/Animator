@@ -20,7 +20,7 @@ namespace Animator.Engine.Elements
     /// Contains description of a single scene in animation.
     /// </summary>
     [ContentProperty(nameof(Items))]
-    public class Scene : SceneElement
+    public partial class Scene : SceneElement
     {
         // Public methods -----------------------------------------------------
 

@@ -8,7 +8,7 @@ namespace Animator.Engine.Elements
     /// Base class for all keyframes, which define animation
     /// of a numeric properties (ie. of type int, float, PointF etc.)
     /// </summary>
-    public abstract class NumericKeyframe : Keyframe
+    public abstract partial class NumericKeyframe : Keyframe
     {
         // Public methods -----------------------------------------------------
 

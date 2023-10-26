@@ -13,7 +13,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Draws a circle on a scene.
     /// </summary>
-    public class Circle : Shape
+    public partial class Circle : Shape
     {
         protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {

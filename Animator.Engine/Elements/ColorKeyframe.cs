@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// A keyframe for a property of type Color.
     /// </summary>
-    public class ColorKeyframe : NumericKeyframe
+    public partial class ColorKeyframe : NumericKeyframe
     {
         // Public methods -----------------------------------------------------
 

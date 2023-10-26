@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public class SvgImage : Visual
+    public partial class SvgImage : Visual
     {
         // Private fields -----------------------------------------------------
 

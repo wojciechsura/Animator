@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// Base class for all animators, which operates on object's
     /// properties.
     /// </summary>
-    public abstract class AnimateProperty : Animation
+    public abstract partial class AnimateProperty : Animation
     {
         // Public methods -----------------------------------------------------
 

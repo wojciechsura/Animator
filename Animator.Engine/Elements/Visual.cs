@@ -20,44 +20,8 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Represents basic element, which can be drawn on the scene.
     /// </summary>
-    public abstract class Visual : SceneElement
+    public abstract partial class Visual : SceneElement
     {
-        // Private methods ----------------------------------------------------
-
-        private void ApplyAlpha(float alpha, Bitmap image)
-        {
-            var data = image.LockBits(new System.Drawing.Rectangle(0, 0, image.Width, image.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-
-            ImageProcessing.ApplyAlpha(data.Scan0, data.Stride, data.Width, data.Height, (byte)(alpha * 255.0f));
-
-            image.UnlockBits(data);
-        }
-
-        private void CopyBitmap(Bitmap source, Bitmap destination)
-        {
-            if (source.Width != destination.Width ||
-                source.Height != destination.Height)
-                throw new ArgumentException(nameof(destination), "Invalid destination bitmap size!");
-
-            if (source.PixelFormat != PixelFormat.Format32bppArgb)
-                throw new ArgumentException(nameof(source), "Invalid source pixel format!");
-
-            if (destination.PixelFormat != PixelFormat.Format32bppArgb)
-                throw new ArgumentException(nameof(destination), "Invalid destination pixel format!");
-
-            BitmapData sourceData = source.LockBits(new System.Drawing.Rectangle(0, 0, source.Width, source.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-            BitmapData destinationData = destination.LockBits(new System.Drawing.Rectangle(0, 0, destination.Width, destination.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-            try
-            {
-                ImageProcessing.CopyData(sourceData.Scan0, sourceData.Stride, destinationData.Scan0, destinationData.Stride, source.Width, source.Height);
-            }
-            finally
-            {
-                source.UnlockBits(sourceData);
-                destination.UnlockBits(destinationData);
-            }
-        }
-
         // Protected methods --------------------------------------------------
 
         protected abstract void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context);
@@ -104,82 +68,17 @@ namespace Animator.Engine.Elements
             InternalRender(buffer, buffers, context);
 
             if (IsPropertySet(AlphaProperty))
-                ApplyAlpha(Alpha, buffer.Bitmap);
+                VisualRenderer.ApplyAlpha(Alpha, buffer);
 
-            if (Effects.Any())
-            {
-                var backBuffer = buffers.Lease(new Matrix());
-                var frontBuffer = buffers.Lease(new Matrix());
-                var frameBuffer = buffers.Lease(new Matrix());
+            VisualRenderer.ApplyEffects(buffer, buffers, Effects);
 
-                try
-                {
-                    CopyBitmap(buffer.Bitmap, frameBuffer.Bitmap);
-
-                    foreach (var effect in Effects)
-                        effect.Apply(frameBuffer, backBuffer, frontBuffer, buffers);
-
-                    // Join buffers
-
-                    var backBufferData = backBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, backBuffer.Bitmap.Width, backBuffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                    var frameBufferData = frameBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, frameBuffer.Bitmap.Width, frameBuffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                    var frontBufferData = frontBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, frontBuffer.Bitmap.Width, frontBuffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                    var bufferData = buffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, buffer.Bitmap.Width, buffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-
-                    ImageProcessing.CombineThree(backBufferData.Scan0, backBufferData.Stride, frameBufferData.Scan0, frameBufferData.Stride, frontBufferData.Scan0, frontBufferData.Stride, backBuffer.Bitmap.Width, backBuffer.Bitmap.Height);
-                    ImageProcessing.CopyData(backBufferData.Scan0, backBufferData.Stride, bufferData.Scan0, bufferData.Stride, frameBuffer.Bitmap.Width, frameBuffer.Bitmap.Height);
-
-                    backBuffer.Bitmap.UnlockBits(backBufferData);
-                    frameBuffer.Bitmap.UnlockBits(frameBufferData);
-                    frontBuffer.Bitmap.UnlockBits(frontBufferData);
-                    buffer.Bitmap.UnlockBits(bufferData);
-                }
-                finally
-                {
-                    buffers.Return(frameBuffer);
-                    buffers.Return(frontBuffer);
-                    buffers.Return(backBuffer);
-                }
-            }
-
-            if (Mask.Any())
-            {
-                var maskBuffer = buffers.Lease(new Matrix());
-                var itemBuffer = buffers.Lease(MaskCoordinateSystem == MaskCoordinateSystem.Local ? transform : originalTransform);
-
-                try
-                {
-                    var maskData = maskBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, maskBuffer.Bitmap.Width, maskBuffer.Bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-
-                    foreach (var item in Mask)
-                    {
-                        itemBuffer.Graphics.Clear(Color.Transparent);
-                        item.Render(itemBuffer, buffers, context);
-
-                        var itemData = itemBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, itemBuffer.Bitmap.Width, itemBuffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                        ImageProcessing.CombineTwo(maskData.Scan0, maskData.Stride, itemData.Scan0, itemData.Stride, maskBuffer.Bitmap.Width, maskBuffer.Bitmap.Height);
-                        itemBuffer.Bitmap.UnlockBits(itemData);
-                    }
-
-                    var bufferData = buffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, buffer.Bitmap.Width, buffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-
-                    ImageProcessing.ApplyMask(bufferData.Scan0, bufferData.Stride, maskData.Scan0, maskData.Stride, buffer.Bitmap.Width, buffer.Bitmap.Height, InvertMask);
-
-                    buffer.Bitmap.UnlockBits(bufferData);
-                    maskBuffer.Bitmap.UnlockBits(maskData);
-                }
-                finally
-                {
-                    buffers.Return(itemBuffer);       
-                    buffers.Return(maskBuffer);
-                }
-            }
+            VisualRenderer.ApplyMask(buffer, originalTransform, transform, Mask, MaskCoordinateSystem, InvertMask, context, buffers);
 
             buffer.Graphics.Transform = originalTransform;
 
             context?.AfterRendering(this, buffer.Bitmap);
         }
-
+       
         // Public properties --------------------------------------------------
 
         #region Visible managed property

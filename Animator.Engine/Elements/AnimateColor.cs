@@ -13,7 +13,7 @@ namespace Animator.Engine.Elements
     /// object. It is meant to be used only if you want to apply
     /// single animation per whole scene. Otherwise, use Storyboard
     /// and ColorKeyframe to define the whole animation.
-    public class AnimateColor : AnimateNumericPropertyInTime
+    public partial class AnimateColor : AnimateNumericPropertyInTime
     {
         public override bool ApplyAnimation(float timeMs)
         {

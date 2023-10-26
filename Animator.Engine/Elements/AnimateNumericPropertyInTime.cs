@@ -14,7 +14,7 @@ namespace Animator.Engine.Elements
     /// Base class for all property animators, which are
     /// modifying a numeric property (ie. int, float, PointF, etc.)
     /// </summary>
-    public abstract class AnimateNumericPropertyInTime : AnimatePropertyInTime
+    public abstract partial class AnimateNumericPropertyInTime : AnimatePropertyInTime
     {
         protected float Ease(float t)
         {

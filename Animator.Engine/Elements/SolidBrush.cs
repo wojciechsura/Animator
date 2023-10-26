@@ -10,7 +10,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Brush, which fills an area with a single color.
     /// </summary>
-    public class SolidBrush : Brush
+    public partial class SolidBrush : Brush
     {
         // Internal methods ---------------------------------------------------
 

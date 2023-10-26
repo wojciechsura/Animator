@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public abstract class StoryboardEntry : Element
+    public abstract partial class StoryboardEntry : Element
     {
         // Internal methods ---------------------------------------------------
 

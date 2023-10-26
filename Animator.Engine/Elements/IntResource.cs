@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Animator.Engine.Elements
 {
     [ContentProperty(nameof(Value))]
-    public class IntResource : Resource
+    public partial class IntResource : Resource
     {
         public override object GetValue() => Value;
 

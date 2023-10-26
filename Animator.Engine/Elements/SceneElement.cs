@@ -18,7 +18,7 @@ namespace Animator.Engine.Elements
     /// Base class for all elements used to describe an
     /// animation.
     /// </summary>
-    public abstract class SceneElement : Element
+    public abstract partial class SceneElement : Element
     {
         // Private fields -----------------------------------------------------
 

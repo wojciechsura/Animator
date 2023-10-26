@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Animator.Engine.Elements
 {
     /// <summary>Add a scanline effect to an image</summary>
-    public class ScanlinesEffect : Effect
+    public partial class ScanlinesEffect : Effect
     {
         internal override void Apply(BitmapBuffer framebuffer, BitmapBuffer backBuffer, BitmapBuffer frontBuffer, BitmapBufferRepository repository)
         {

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace Animator.Engine.Elements
 {
     [DefaultProperty(nameof(Formula))]
-    public class Eval : BaseMarkupExtension
+    public partial class Eval : BaseMarkupExtension
     {
         private class IdentifierResolver : BaseExternalIdentifierResolver
         {

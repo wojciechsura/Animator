@@ -8,7 +8,7 @@ namespace Animator.Engine.Elements
     /// Represents a path part, which is drawn as a line.
     /// All points are expressed in absolute coordinates.
     /// </summary>
-    public class LineSegment : LineBasedSegment
+    public partial class LineSegment : LineBasedSegment
     {
         // Protected methods --------------------------------------------------
 

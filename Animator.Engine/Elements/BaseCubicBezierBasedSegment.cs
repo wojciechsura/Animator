@@ -14,7 +14,7 @@ namespace Animator.Engine.Elements
     /// Base class for all path elements, which are interpolated
     /// by a cubic Bezier curve
     /// </summary>
-    public abstract class BaseCubicBezierBasedSegment : Segment
+    public abstract partial class BaseCubicBezierBasedSegment : Segment
     {
         // Private fields -----------------------------------------------------
 

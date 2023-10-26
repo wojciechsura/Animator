@@ -10,7 +10,7 @@ namespace Animator.Engine.Elements
     /// path element.
     /// Endpoint of the arc is expressed in absolute coordinates.
     /// </summary>
-    public class ArcSegment : BaseArcSegment
+    public partial class ArcSegment : BaseArcSegment
     {
         // Protected methods --------------------------------------------------
 

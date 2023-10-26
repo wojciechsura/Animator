@@ -10,7 +10,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Defines a way in which lines are being drawn.
     /// </summary>
-    public class Pen : SceneElement
+    public partial class Pen : SceneElement
     {
         // Internal methods ---------------------------------------------------
 

@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// Base class for all property animator, which apply
     /// animation to a property in specific period of time.
     /// </summary>
-    public abstract class AnimatePropertyInTime : AnimateProperty
+    public abstract partial class AnimatePropertyInTime : AnimateProperty
     {
         #region StartTime managed property
 

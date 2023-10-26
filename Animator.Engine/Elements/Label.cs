@@ -17,7 +17,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Draws a text on a scene.
     /// </summary>
-    public class Label : Visual
+    public partial class Label : Visual
     {
         // Protected properties -----------------------------------------------
 

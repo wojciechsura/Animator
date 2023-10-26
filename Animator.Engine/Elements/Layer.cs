@@ -20,7 +20,7 @@ namespace Animator.Engine.Elements
     /// add a common effect to all of them at once.
     /// </summary>
     [ContentProperty(nameof(Layer.Items))]
-    public class Layer : Visual
+    public partial class Layer : Visual
     {
         // Private methods ----------------------------------------------------
 

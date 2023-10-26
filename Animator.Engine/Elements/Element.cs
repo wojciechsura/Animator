@@ -1,7 +1,14 @@
 ﻿using Animator.Engine.Base;
+using Animator.Engine.Elements.Rendering;
+using Animator.Engine.Elements.Types;
+using Animator.Engine.Elements.Utilities;
+using Animator.Engine.Tools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.Drawing;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Reflection;
@@ -10,8 +17,10 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public abstract class Element : ManagedObject
+    public abstract partial class Element : ManagedObject
     {
+        // *** Path resolution ***
+
         protected string ResolvePath(string path)
         {
             // If path is rooted, return it without changes

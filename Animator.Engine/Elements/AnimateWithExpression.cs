@@ -17,7 +17,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Allows evaluating animated value of an property basing on a mathematical expression.
     /// </summary>
-    public class AnimateWithExpression : AnimateNumericPropertyInTime
+    public partial class AnimateWithExpression : AnimateNumericPropertyInTime
     {
         // Private types ------------------------------------------------------
 

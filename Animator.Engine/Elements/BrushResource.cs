@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Animator.Engine.Elements
 {
     [ContentProperty(nameof(Value))]
-    public class BrushResource : Resource
+    public partial class BrushResource : Resource
     {
         public override object GetValue() => Value.Clone();
 

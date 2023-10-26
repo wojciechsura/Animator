@@ -11,7 +11,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// A keyframe for a property of type float.
     /// </summary>
-    public class FloatKeyframe : NumericKeyframe
+    public partial class FloatKeyframe : NumericKeyframe
     {
         // Public methods -----------------------------------------------------
 

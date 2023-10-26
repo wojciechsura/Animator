@@ -11,7 +11,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Represents a translation transform
     /// </summary>
-    public class TranslateTransform : Transform
+    public partial class TranslateTransform : Transform
     {
         // Internal methods ---------------------------------------------------
         

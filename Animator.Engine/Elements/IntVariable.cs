@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public class IntVariable : Variable
+    public partial class IntVariable : Variable
     {
         #region Value managed property
 

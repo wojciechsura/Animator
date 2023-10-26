@@ -13,7 +13,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Draws an ellipse on the scene.
     /// </summary>
-    public class Ellipse : Shape
+    public partial class Ellipse : Shape
     {
         // Protected methods --------------------------------------------------
 

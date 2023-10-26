@@ -11,7 +11,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Base abstract class for all quadratic Bezier path elements.
     /// </summary>
-    public abstract class BaseQuadraticBezierSegment : BaseCubicBezierBasedSegment
+    public abstract partial class BaseQuadraticBezierSegment : BaseCubicBezierBasedSegment
     {
         protected (PointF controlPoint1, PointF controlPoint2) EstimateCubicControlPoints(PointF start, PointF controlPoint, PointF end)
         {

@@ -15,7 +15,7 @@ namespace Animator.Engine.Elements
     /// object. The value will be set to a stopwatch started
     /// at StartTime and stopped on EndTime.
     /// </summary>
-    public class AnimateStopwatch : AnimatePropertyInTime
+    public partial class AnimateStopwatch : AnimatePropertyInTime
     {
         public override bool ApplyAnimation(float timeMs)
         {

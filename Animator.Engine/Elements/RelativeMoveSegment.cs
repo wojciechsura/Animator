@@ -8,7 +8,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Begins a new path in specified relative coordinates
     /// </summary>
-    public class RelativeMoveSegment : Segment
+    public partial class RelativeMoveSegment : Segment
     {
         // Internal methods ---------------------------------------------------
 

@@ -9,7 +9,7 @@ namespace Animator.Engine.Elements
     /// Represents a path part, which is drawn as a line.
     /// All points are expressed in relative coordinates.
     /// </summary>
-    public class RelativeLineSegment : LineBasedSegment
+    public partial class RelativeLineSegment : LineBasedSegment
     {
         // Protected methods --------------------------------------------------
 

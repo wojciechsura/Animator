@@ -76,6 +76,16 @@ namespace Animator.Engine.Tools
             int radius);
 
         [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void MaskedGaussianBlur(IntPtr bitmapData,
+            int stride,
+            IntPtr maskData,
+            int maskStride,
+            int width,
+            int height,
+            int radius,
+            bool useAlpha);
+
+        [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void DropShadow(IntPtr frameData,
             int frameStride,
             IntPtr backData,

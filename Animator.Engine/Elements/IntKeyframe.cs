@@ -11,7 +11,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// A keyframe for a property of type int.
     /// </summary>
-    public class IntKeyframe : NumericKeyframe
+    public partial class IntKeyframe : NumericKeyframe
     {
         // Public methods -----------------------------------------------------
 

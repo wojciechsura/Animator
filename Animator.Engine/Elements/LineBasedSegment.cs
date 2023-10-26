@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public abstract class LineBasedSegment : Segment
+    public abstract partial class LineBasedSegment : Segment
     {
         // Private fields -----------------------------------------------------
 

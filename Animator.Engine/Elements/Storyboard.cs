@@ -19,7 +19,7 @@ namespace Animator.Engine.Elements
     /// them.
     /// </summary>
     [ContentProperty(nameof(Storyboard.Keyframes))]
-    public class Storyboard : Animation
+    public partial class Storyboard : Animation
     {
         // Public methods -----------------------------------------------------
 

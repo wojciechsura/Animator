@@ -16,7 +16,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Draws a path on a scene.
     /// </summary>
-    public class Path : Shape
+    public partial class Path : Shape
     {
         // Private methods ----------------------------------------------------
 

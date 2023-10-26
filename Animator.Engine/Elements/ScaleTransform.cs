@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements
 {
-    public class ScaleTransform : Transform
+    public partial class ScaleTransform : Transform
     {
         // Internal methods ---------------------------------------------------
 

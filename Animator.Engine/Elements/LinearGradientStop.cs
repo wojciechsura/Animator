@@ -11,7 +11,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Defines a stop in complex linear gradient.
     /// </summary>
-    public class LinearGradientStop : SceneElement
+    public partial class LinearGradientStop : SceneElement
     {
         // Public properties --------------------------------------------------
 

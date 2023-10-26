@@ -17,7 +17,7 @@ namespace Animator.Engine.Elements
     /// but values of its properties are inherited by animators placed inside.
     /// </summary>
     [ContentProperty(nameof(AnimationGroup.Animations))]
-    public class AnimationGroup : Animation
+    public partial class AnimationGroup : Animation
     {
         // Public methods -----------------------------------------------------
 

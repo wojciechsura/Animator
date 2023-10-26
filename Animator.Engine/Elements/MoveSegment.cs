@@ -7,7 +7,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// Begins a new path in specified absolute coordinates
     /// </summary>
-    public class MoveSegment : Segment
+    public partial class MoveSegment : Segment
     {
         // Internal methods ---------------------------------------------------
 

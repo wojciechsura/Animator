@@ -12,7 +12,7 @@ namespace Animator.Engine.Elements
     /// <summary>
     /// A keyframe for a property of type PointF.
     /// </summary>
-    public class PointKeyframe : NumericKeyframe
+    public partial class PointKeyframe : NumericKeyframe
     {
         // Public methods -----------------------------------------------------
 

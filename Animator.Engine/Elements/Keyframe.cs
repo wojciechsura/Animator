@@ -15,7 +15,7 @@ namespace Animator.Engine.Elements
     /// class describes fixed value for a property in 
     /// specific time.
     /// </summary>
-    public abstract class Keyframe : StoryboardEntry
+    public abstract partial class Keyframe : StoryboardEntry
     {
         // Internal methods ---------------------------------------------------
 

@@ -11,7 +11,7 @@ namespace Animator.Engine.Elements
     /// path element.
     /// All points are expressed in absolute coordinates.
     /// </summary>
-    public class CubicBezierSegment : BaseCubicBezierBasedSegment
+    public partial class CubicBezierSegment : BaseCubicBezierBasedSegment
     {
         // Protected methods --------------------------------------------------
 

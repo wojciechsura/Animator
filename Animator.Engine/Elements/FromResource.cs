@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Animator.Engine.Elements
 {
     [DefaultProperty(nameof(Key))]
-    public class FromResource : BaseMarkupExtension
+    public partial class FromResource : BaseMarkupExtension
     {
         public override void ProvideValue(ManagedObject @object, ManagedProperty property)
         {
