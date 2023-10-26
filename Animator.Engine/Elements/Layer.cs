@@ -26,19 +26,19 @@ namespace Animator.Engine.Elements
 
         private void DoRender(BitmapBuffer buffer, BitmapBufferRepository buffers, BitmapBuffer itemBuffer, RenderingContext context)
         {
-            var bufferData = buffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, buffer.Bitmap.Width, buffer.Bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var bufferData = buffer.Lock();
 
             foreach (var item in Items)
             {
                 itemBuffer.Graphics.Clear(Color.Transparent);
                 item.Render(itemBuffer, buffers, context);
 
-                var itemData = itemBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, itemBuffer.Bitmap.Width, itemBuffer.Bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                var itemData = itemBuffer.Lock();
                 ImageProcessing.CombineTwo(bufferData.Scan0, bufferData.Stride, itemData.Scan0, itemData.Stride, buffer.Bitmap.Width, buffer.Bitmap.Height);
-                itemBuffer.Bitmap.UnlockBits(itemData);
+                itemBuffer.Unlock(itemData);
             }
 
-            buffer.Bitmap.UnlockBits(bufferData);
+            buffer.Unlock(bufferData);
         }
 
         private void RenderNotCloned(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)

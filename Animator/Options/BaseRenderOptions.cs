@@ -14,5 +14,7 @@ namespace Animator.Options
 
         [Option('o', "outfile", Default = null, Required = true, HelpText = "Template for the output file (frame numbers will be appended automatically)")]
         public string OutFile { get; set; }
+        [Option('c', "composite", Default = false, HelpText = "Use composite rendering (enables additional effects, but memory-costly)")]
+        public bool Composite { get; set; }
     }
 }

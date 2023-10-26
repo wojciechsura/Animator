@@ -48,7 +48,7 @@ namespace Animator.Designer.BusinessLogic.ViewModels.Main
 
                 var result = new Bitmap(movie.Config.Width, movie.Config.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-                movie.Scenes[scene].Render(result);
+                movie.Scenes[scene].RenderWithCompositing(result);
 
                 return result;
             }

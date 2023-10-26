@@ -54,7 +54,7 @@ namespace Animator.Engine.Elements
         public static readonly ManagedProperty MaskSourceProperty = ManagedProperty.Register(typeof(BackgroundEffect),
             nameof(MaskSource),
             typeof(BackgroundEffectMaskSource),
-            new ManagedSimplePropertyMetadata { DefaultValue = 0 });
+            new ManagedSimplePropertyMetadata { DefaultValue = BackgroundEffectMaskSource.ImageNonTransparent });
 
         #endregion
     }

@@ -38,18 +38,18 @@ namespace Animator.Engine.Elements.Utilities
 
                     // Join buffers
 
-                    var backBufferData = backBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, backBuffer.Bitmap.Width, backBuffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                    var frameBufferData = frameBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, frameBuffer.Bitmap.Width, frameBuffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                    var frontBufferData = frontBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, frontBuffer.Bitmap.Width, frontBuffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
-                    var bufferData = buffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, buffer.Bitmap.Width, buffer.Bitmap.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb);
+                    var backBufferData = backBuffer.Lock();
+                    var frameBufferData = frameBuffer.Lock();
+                    var frontBufferData = frontBuffer.Lock();
+                    var bufferData = buffer.Lock();
 
                     ImageProcessing.CombineThree(backBufferData.Scan0, backBufferData.Stride, frameBufferData.Scan0, frameBufferData.Stride, frontBufferData.Scan0, frontBufferData.Stride, backBuffer.Bitmap.Width, backBuffer.Bitmap.Height);
                     ImageProcessing.CopyData(backBufferData.Scan0, backBufferData.Stride, bufferData.Scan0, bufferData.Stride, frameBuffer.Bitmap.Width, frameBuffer.Bitmap.Height);
 
-                    backBuffer.Bitmap.UnlockBits(backBufferData);
-                    frameBuffer.Bitmap.UnlockBits(frameBufferData);
-                    frontBuffer.Bitmap.UnlockBits(frontBufferData);
-                    buffer.Bitmap.UnlockBits(bufferData);
+                    backBuffer.Unlock(backBufferData);
+                    frameBuffer.Unlock(frameBufferData);
+                    frontBuffer.Unlock(frontBufferData);
+                    buffer.Unlock(bufferData);
                 }
                 finally
                 {

@@ -156,7 +156,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Document
 
                 var result = new Bitmap(movie.Config.Width, movie.Config.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-                movie.Scenes[i].Render(result);
+                movie.Scenes[i].RenderWithCompositing(result);
 
                 return result;
             }

@@ -27,10 +27,7 @@ namespace Animator.Extensions.Nonconformist.Elements
 
             for (int y = 0; y < height; y++)
             {
-                var bits = temp.Bitmap.LockBits(
-                    new System.Drawing.Rectangle(0, y, width, 1),
-                    ImageLockMode.WriteOnly,
-                    PixelFormat.Format32bppArgb);
+                var bits = temp.Lock();
 
                 var bytes = new byte[width * 4];
                 for (int i = 0; i < width; i++)
@@ -44,7 +41,7 @@ namespace Animator.Extensions.Nonconformist.Elements
 
                 Marshal.Copy(bytes, 0, bits.Scan0, bytes.Length);
 
-                temp.Bitmap.UnlockBits(bits);
+                temp.Unlock(bits);
             }
 
             buffer.Graphics.DrawImage(temp.Bitmap, 
@@ -68,7 +65,6 @@ namespace Animator.Extensions.Nonconformist.Elements
             new ManagedSimplePropertyMetadata { DefaultValue = 0 });
 
         #endregion
-
 
         #region Height managed property
 

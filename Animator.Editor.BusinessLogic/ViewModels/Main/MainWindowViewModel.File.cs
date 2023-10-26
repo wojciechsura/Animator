@@ -163,7 +163,7 @@ namespace Animator.Editor.BusinessLogic.ViewModels.Main
 
                 result = new Bitmap(movie.Config.Width, movie.Config.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
-                movie.Scenes[i].Render(result);
+                movie.Scenes[i].RenderWithCompositing(result);
             }
             catch (Exception e)
             {

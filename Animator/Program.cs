@@ -136,7 +136,7 @@ namespace Animator
             }
         }
 
-        private static Bitmap RenderAnimationAt(Movie animation, TimeSpan time, Bitmap previousFrame, string outFile)
+        private static Bitmap RenderAnimationAt(Movie animation, TimeSpan time, Bitmap previousFrame, string outFile, bool composite)
         {
             // Determine scene
 
@@ -164,7 +164,11 @@ namespace Animator
             else
             {
                 var bitmap = new Bitmap(animation.Config.Width, animation.Config.Height, PixelFormat.Format32bppArgb);
-                animation.Scenes[i].Render(bitmap);
+
+                if (composite)
+                    animation.Scenes[i].RenderWithCompositing(bitmap);
+                else
+                    animation.Scenes[i].Render(bitmap);
                 bitmap.Save(outFile);
 
                 return bitmap;
@@ -185,13 +189,13 @@ namespace Animator
             {
                 TimeSpan time = TimeSpan.FromSeconds(1 / framesPerSecond * options.FrameIndex.Value);
 
-                if (!IsSuccessful(() => RenderAnimationAt(animation, time, null, options.OutFile), () => Write("Rendered single frame")))
+                if (!IsSuccessful(() => RenderAnimationAt(animation, time, null, options.OutFile, options.Composite), () => Write("Rendered single frame")))
                     return;
                 
             }
             else if (options.TimeOffset != null)
             {
-                if (!IsSuccessful(() => RenderAnimationAt(animation, options.TimeOffset.Value, null, options.OutFile), () => Write("Rendered single frame")))
+                if (!IsSuccessful(() => RenderAnimationAt(animation, options.TimeOffset.Value, null, options.OutFile, options.Composite), () => Write("Rendered single frame")))
                     return;
             }
         }
@@ -217,7 +221,7 @@ namespace Animator
 
                 if (!IsSuccessful(() =>
                     {
-                        previousFrame = RenderAnimationAt(animation, time, previousFrame, fileName);
+                        previousFrame = RenderAnimationAt(animation, time, previousFrame, fileName, options.Composite);
                     }, () => 
                     {
                         Write("Rendered frame ", $"{frame + 1}", ConsoleColor.Gray, ConsoleColor.White);
@@ -274,6 +278,9 @@ namespace Animator
                 MaxDegreeOfParallelism = options.Threads
             };
 
+            object logLock = new object();
+            int totalRendered = 0;
+
             Parallel.For(0, frameRanges.Count, parallelOptions, (index, state) =>
                 {
                     Movie animation;
@@ -296,11 +303,15 @@ namespace Animator
 
                         if (!IsSuccessful(() =>
                             {
-                                previousFrame = RenderAnimationAt(animation, time, previousFrame, fileName);
+                                previousFrame = RenderAnimationAt(animation, time, previousFrame, fileName, options.Composite);
                             }, () =>
                             {
-                                Write("Rendered frame ", $"{frame + 1}", ConsoleColor.Gray, ConsoleColor.White);
-                                Write(" from ", $"{totalFrames}", ConsoleColor.Gray, ConsoleColor.White);
+                                lock (logLock)
+                                {
+                                    Write("Rendered frame ", $"{frame + 1}", ConsoleColor.Gray, ConsoleColor.White);
+                                    Write(" from ", $"{totalFrames}", ConsoleColor.Gray, ConsoleColor.White);
+                                    Write($" ({totalRendered}/{totalFrames}, {(100 * totalRendered / totalFrames)}%)");
+                                }
                             }))
                         {
                             Console.WriteLine("Failed to render animation!");

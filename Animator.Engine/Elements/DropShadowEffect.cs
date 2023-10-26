@@ -16,8 +16,8 @@ namespace Animator.Engine.Elements
     {
         internal override void Apply(BitmapBuffer framebuffer, BitmapBuffer backBuffer, BitmapBuffer frontBuffer, BitmapBufferRepository repository)
         {
-            var frameData = framebuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, framebuffer.Bitmap.Width, framebuffer.Bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            var backData = backBuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, frontBuffer.Bitmap.Width, frontBuffer.Bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var frameData = framebuffer.Lock();
+            var backData = backBuffer.Lock();
 
             var colorArgb = (Color.A << 24) + (Color.R << 16) + (Color.G << 8) + Color.B;
 
@@ -32,8 +32,8 @@ namespace Animator.Engine.Elements
                 DY,
                 Radius);
 
-            backBuffer.Bitmap.UnlockBits(backData);
-            framebuffer.Bitmap.UnlockBits(frameData);
+            backBuffer.Unlock(backData);
+            framebuffer.Unlock(frameData);
         }
 
 

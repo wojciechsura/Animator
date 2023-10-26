@@ -16,7 +16,7 @@ namespace Animator.Engine.Elements
     {
         internal override void Apply(BitmapBuffer framebuffer, BitmapBuffer backBuffer, BitmapBuffer frontBuffer, BitmapBufferRepository repository)
         {
-            var data = framebuffer.Bitmap.LockBits(new System.Drawing.Rectangle(0, 0, framebuffer.Bitmap.Width, framebuffer.Bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var data = framebuffer.Lock();
 
             ImageProcessing.GaussianBlur(data.Scan0, 
                 data.Stride, 
@@ -24,7 +24,7 @@ namespace Animator.Engine.Elements
                 data.Height, 
                 Radius);
 
-            framebuffer.Bitmap.UnlockBits(data);
+            framebuffer.Unlock(data);
         }
 
         #region Radius managed property
