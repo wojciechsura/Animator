@@ -10,10 +10,11 @@ namespace Animator.Engine.Elements.Utilities
 {
     public class BitmapBuffer : IDisposable
     {
-        public BitmapBuffer(Bitmap bitmap, Graphics graphics)
+        public BitmapBuffer(Bitmap bitmap, Graphics graphics, BitmapBufferRepository repository)
         {
             Bitmap = bitmap;
             Graphics = graphics;
+            Repository = repository;
         }
 
         public void Dispose()
@@ -29,5 +30,6 @@ namespace Animator.Engine.Elements.Utilities
 
         public Bitmap Bitmap { get; }
         public Graphics Graphics { get; }
+        public BitmapBufferRepository Repository { get; }
     }
 }

@@ -11,74 +11,60 @@ using System.Threading.Tasks;
 using Animator.Engine.Elements.Compositing;
 using System.Drawing.Drawing2D;
 using Animator.Engine.Utils;
+using Animator.Engine.Base;
+using Animator.Engine.Elements.Types;
 
 namespace Animator.Engine.Elements
 {
     public partial class Scene
     {
-        private static void ComposeItem(Stack<BitmapBuffer> backgrounds, CompositingItem item, BitmapBufferRepository buffers)
+        private void Compose(Stack<BitmapBuffer> backgrounds, BaseCompositingItem item, Matrix originalTransform, BitmapBufferRepository buffers)
         {
-            // Apply background effects (if any)
-            if (item.Visual.BackgroundEffects.Any())
-            {
-                foreach (var background in backgrounds)
-                    foreach (var backgroundEffect in item.Visual.BackgroundEffects)
-                        backgroundEffect.Apply(background, item.Foreground, item.Mask, buffers);
-            }
-
-            // Merge item with topmost background
-            var topBackground = backgrounds.Peek();
-
-            var backgroundData = topBackground.Lock();
-            var foregroundData = item.Foreground.Lock();
-
-            ImageProcessing.CombineTwo(backgroundData.Scan0,
-                backgroundData.Stride,
-                foregroundData.Scan0,
-                foregroundData.Stride,
-                topBackground.Bitmap.Width,
-                topBackground.Bitmap.Height);
-
-            topBackground.Unlock(backgroundData);
-            item.Foreground.Unlock(foregroundData);
-        }
-
-        private void ComposeNested(Stack<BitmapBuffer> backgrounds, NestedCompositingItem nested, Matrix originalTransform, BitmapBufferRepository buffers)
-        {
-            var buffer = buffers.Lease(originalTransform);
+            var currentItemBuffer = buffers.Lease(originalTransform);
             try
             {
-                backgrounds.Push(buffer);
+                backgrounds.Push(currentItemBuffer);
 
-                try
+                if (item is LayerCompositingItem nested)
                 {
+                    // Evaluating foreground of layer is deferred, because
+                    // it is needed to apply all effects to evaluate it
+                    // (both foreground and background ones)
+
                     nested.Visual.RenderComposited(originalTransform, (transform, buffers) =>
                     {
                         foreach (var compositingItem in nested.Items)
-                        {
-                            if (compositingItem is CompositingItem item)
-                            {
-                                ComposeItem(backgrounds, item, buffers);
-                            }
-                            else if (compositingItem is NestedCompositingItem recursiveNested)
-                            {
-                                ComposeNested(backgrounds, recursiveNested, transform, buffers);
-                            }
-                        }
+                            Compose(backgrounds, compositingItem, transform, buffers);
 
-                        return buffer;
+                        return currentItemBuffer;
                     }, buffers);
-
                 }
-                finally
+                else if (item is VisualCompositingItem compositingItem)
                 {
-                    backgrounds.Pop();
+                    compositingItem.Visual.RenderComposited(originalTransform, (transform, buffers) => compositingItem.Foreground, buffers);
+
+                    var bgData = currentItemBuffer.Lock();
+                    var fgData = compositingItem.Foreground.Lock();
+
+                    ImageProcessing.CombineTwo(bgData.Scan0, bgData.Stride, fgData.Scan0, fgData.Stride, bgData.Width, bgData.Height);
+
+                    compositingItem.Foreground.Unlock(fgData);
+                    currentItemBuffer.Unlock(bgData);
+                }
+
+                backgrounds.Pop();
+
+                if (item.Visual.BackgroundEffects.Any())
+                {
+                    foreach (var background in backgrounds)
+                        foreach (var backgroundEffect in item.Visual.BackgroundEffects)
+                            backgroundEffect.Apply(background, currentItemBuffer, item.Mask, buffers);
                 }
 
                 var topBackground = backgrounds.Peek();
 
                 var backgroundData = topBackground.Lock();
-                var foregroundData = buffer.Lock();
+                var foregroundData = currentItemBuffer.Lock();
 
                 ImageProcessing.CombineTwo(backgroundData.Scan0,
                     backgroundData.Stride,
@@ -88,11 +74,11 @@ namespace Animator.Engine.Elements
                     topBackground.Bitmap.Height);
 
                 topBackground.Unlock(backgroundData);
-                buffer.Unlock(foregroundData);
+                currentItemBuffer.Unlock(foregroundData);
             }
             finally
             {
-                buffers.Return(buffer);
+                buffers.Return(currentItemBuffer);
             }
         }
 
@@ -118,7 +104,7 @@ namespace Animator.Engine.Elements
                 graphics.FillRectangle(brush, new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height));
             }
 
-            BitmapBuffer backgroundBuffer = new BitmapBuffer(bitmap, graphics);
+            BitmapBuffer backgroundBuffer = new BitmapBuffer(bitmap, graphics, null);
 
             // Build compositing items
 
@@ -136,16 +122,7 @@ namespace Animator.Engine.Elements
             backgrounds.Push(backgroundBuffer);
 
             foreach (var compositingItem in compositingItems)
-            {
-                if (compositingItem is CompositingItem item)
-                {
-                    ComposeItem(backgrounds, item, buffers);
-                }
-                else if (compositingItem is NestedCompositingItem nested)
-                {
-                    ComposeNested(backgrounds, nested, originalTransform, buffers);
-                }
-            }
+                Compose(backgrounds, compositingItem, originalTransform, buffers);
 
             backgrounds.Pop();
 
@@ -156,5 +133,23 @@ namespace Animator.Engine.Elements
             foreach (var compositingItem in compositingItems)
                 compositingItem.Dispose();
         }
+
+        // Public properties --------------------------------------------------
+
+
+        #region UseCompositing managed property
+
+        public bool UseCompositing
+        {
+            get => (bool)GetValue(UseCompositingProperty);
+            set => SetValue(UseCompositingProperty, value);
+        }
+
+        public static readonly ManagedProperty UseCompositingProperty = ManagedProperty.Register(typeof(Scene),
+            nameof(UseCompositing),
+            typeof(bool),
+            new ManagedSimplePropertyMetadata { DefaultValue = false });
+
+        #endregion
     }
 }

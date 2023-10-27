@@ -9,6 +9,7 @@ using CommandLine;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -136,7 +137,7 @@ namespace Animator
             }
         }
 
-        private static Bitmap RenderAnimationAt(Movie animation, TimeSpan time, Bitmap previousFrame, string outFile, bool composite)
+        private static Bitmap RenderAnimationAt(Movie animation, TimeSpan time, Bitmap previousFrame, string outFile)
         {
             // Determine scene
 
@@ -165,7 +166,7 @@ namespace Animator
             {
                 var bitmap = new Bitmap(animation.Config.Width, animation.Config.Height, PixelFormat.Format32bppArgb);
 
-                if (composite)
+                if (animation.Scenes[i].UseCompositing)
                     animation.Scenes[i].RenderWithCompositing(bitmap);
                 else
                     animation.Scenes[i].Render(bitmap);
@@ -189,13 +190,13 @@ namespace Animator
             {
                 TimeSpan time = TimeSpan.FromSeconds(1 / framesPerSecond * options.FrameIndex.Value);
 
-                if (!IsSuccessful(() => RenderAnimationAt(animation, time, null, options.OutFile, options.Composite), () => Write("Rendered single frame")))
+                if (!IsSuccessful(() => RenderAnimationAt(animation, time, null, options.OutFile), () => Write("Rendered single frame")))
                     return;
                 
             }
             else if (options.TimeOffset != null)
             {
-                if (!IsSuccessful(() => RenderAnimationAt(animation, options.TimeOffset.Value, null, options.OutFile, options.Composite), () => Write("Rendered single frame")))
+                if (!IsSuccessful(() => RenderAnimationAt(animation, options.TimeOffset.Value, null, options.OutFile), () => Write("Rendered single frame")))
                     return;
             }
         }
@@ -212,6 +213,8 @@ namespace Animator
             var totalFrames = (int)(totalAnimationTime / 1000.0f * framesPerSecond);
             Bitmap previousFrame = null;
 
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
             for (int frame = 0; frame < totalFrames; frame++)
             {
                 var time = TimeSpan.FromSeconds(1 / framesPerSecond * frame);
@@ -221,16 +224,22 @@ namespace Animator
 
                 if (!IsSuccessful(() =>
                     {
-                        previousFrame = RenderAnimationAt(animation, time, previousFrame, fileName, options.Composite);
+                        previousFrame = RenderAnimationAt(animation, time, previousFrame, fileName);
                     }, () => 
                     {
                         Write("Rendered frame ", $"{frame + 1}", ConsoleColor.Gray, ConsoleColor.White);
                         Write(" from ", $"{totalFrames}", ConsoleColor.Gray, ConsoleColor.White);
+                        Write(" Progress: ", $"{frame}/{totalFrames}, {(100 * frame / totalFrames)}%", ConsoleColor.Gray, ConsoleColor.White);
+                        Write($" Total time: ", stopwatch.Elapsed.ToString("hh\\:mm\\:ss"), ConsoleColor.Gray, ConsoleColor.White);
+                        TimeSpan estimated = TimeSpan.FromMilliseconds((double)stopwatch.ElapsedMilliseconds / totalFrames * (totalFrames - frame));
+                        Write($" Estimated left: ", estimated.ToString("hh\\:mm\\:ss"), ConsoleColor.Gray, ConsoleColor.White);
                     }))
                 {
                     return;
                 }
             }
+
+            stopwatch.Stop();
         }
 
         private static void RenderParallel(RenderParallelOptions options)
@@ -281,6 +290,8 @@ namespace Animator
             object logLock = new object();
             int totalRendered = 0;
 
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
             Parallel.For(0, frameRanges.Count, parallelOptions, (index, state) =>
                 {
                     Movie animation;
@@ -303,14 +314,18 @@ namespace Animator
 
                         if (!IsSuccessful(() =>
                             {
-                                previousFrame = RenderAnimationAt(animation, time, previousFrame, fileName, options.Composite);
+                                previousFrame = RenderAnimationAt(animation, time, previousFrame, fileName);
                             }, () =>
                             {
                                 lock (logLock)
                                 {
+                                    totalRendered++;
                                     Write("Rendered frame ", $"{frame + 1}", ConsoleColor.Gray, ConsoleColor.White);
                                     Write(" from ", $"{totalFrames}", ConsoleColor.Gray, ConsoleColor.White);
-                                    Write($" ({totalRendered}/{totalFrames}, {(100 * totalRendered / totalFrames)}%)");
+                                    Write(" Progress: ", $"{totalRendered}/{totalFrames}, {(100 * totalRendered / totalFrames)}%", ConsoleColor.Gray, ConsoleColor.White);
+                                    Write($" Total time: ", stopwatch.Elapsed.ToString("hh\\:mm\\:ss"), ConsoleColor.Gray, ConsoleColor.White);
+                                    TimeSpan estimated = TimeSpan.FromMilliseconds((double)stopwatch.ElapsedMilliseconds / totalFrames * (totalFrames - totalRendered));
+                                    Write($" Estimated left: ", estimated.ToString("hh\\:mm\\:ss"), ConsoleColor.Gray, ConsoleColor.White);
                                 }
                             }))
                         {
@@ -325,6 +340,9 @@ namespace Animator
                         availableMovies.Push(animation);
                     }
                 });
+
+            stopwatch.Stop();
+
         }
 
         static void Main(string[] args)

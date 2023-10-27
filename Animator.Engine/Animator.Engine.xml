@@ -1379,7 +1379,7 @@
             Defines translation distance over X axis
             </summary>
         </member>
-        <member name="M:Animator.Engine.Elements.Utilities.VisualRenderer.BuildMaskBuffer(Animator.Engine.Elements.Utilities.BitmapBuffer,System.Collections.Generic.IList{Animator.Engine.Elements.Visual},Animator.Engine.Elements.Utilities.BitmapBufferRepository,Animator.Engine.Elements.Rendering.RenderingContext)">
+        <member name="M:Animator.Engine.Elements.Utilities.VisualRenderer.BuildMaskBuffer(System.Collections.Generic.IList{Animator.Engine.Elements.Visual},System.Drawing.Drawing2D.Matrix,Animator.Engine.Elements.Utilities.BitmapBufferRepository,Animator.Engine.Elements.Rendering.RenderingContext)">
             <remarks>
             The returned buffer is leased from given bitmap
             buffer repository. Caller is responsible for

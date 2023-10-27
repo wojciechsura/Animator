@@ -9,11 +9,30 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Animator.Engine.Utils;
 
 namespace Animator.Engine.Elements.Utilities
 {
     internal static class VisualRenderer
     {
+        private static Matrix BuildTransformMatrix(PointF? Origin, float? Rotation, PointF? Scale, PointF Position)
+        {
+            var result = new Matrix();
+
+            if (Origin != null)
+                result.Translate(-Origin.Value.X, -Origin.Value.Y, MatrixOrder.Append);
+
+            if (Rotation != null)
+                result.Rotate(Rotation.Value, MatrixOrder.Append);
+
+            if (Scale != null)
+                result.Scale(Scale.Value.X, Scale.Value.Y, MatrixOrder.Append);
+
+            result.Translate(Position.X, Position.Y, MatrixOrder.Append);
+
+            return result;
+        }
+
         public static void ApplyAlpha(float alpha, BitmapBuffer image)
         {
             var data = image.Lock();
@@ -64,16 +83,13 @@ namespace Animator.Engine.Elements.Utilities
         {
             if (mask.Any())
             {
-                var itemBuffer = buffers.Lease(maskCoordinateSystem == MaskCoordinateSystem.Local ? transform : originalTransform);
-                BitmapBuffer maskBuffer = BuildMaskBuffer(itemBuffer, mask, buffers, context);
-
+                BitmapBuffer maskBuffer = BuildMaskBuffer(mask, maskCoordinateSystem == MaskCoordinateSystem.Local ? transform : originalTransform, buffers, context);
                 try
-                {
+                { 
                     ApplyMask(buffer, maskBuffer, invertMask);
                 }
                 finally
                 {
-                    buffers.Return(itemBuffer);
                     buffers.Return(maskBuffer);
                 }
             }
@@ -90,28 +106,57 @@ namespace Animator.Engine.Elements.Utilities
             maskBuffer.Unlock(maskData);
         }
 
+        public static Matrix EvalCurrentTransform(Matrix originalTransform, bool visible, float alpha, PointF? origin, float? rotation, PointF? scale, PointF position)
+        {
+            if (!visible || alpha.IsZero())
+                return null;
+
+            var transform = originalTransform.Clone();
+            transform.Multiply(VisualRenderer.BuildTransformMatrix(origin, rotation, scale, position), MatrixOrder.Prepend);
+
+            // Scale eqaual to 0 equals to invisible object
+            if (Math.Abs(transform.MatrixElements.M11).IsZero() &&
+                Math.Abs(transform.MatrixElements.M12).IsZero() &&
+                Math.Abs(transform.MatrixElements.M21).IsZero() &&
+                Math.Abs(transform.MatrixElements.M22).IsZero())
+                return null;
+
+            return transform;
+        }
+
         /// <remarks>
         /// The returned buffer is leased from given bitmap
         /// buffer repository. Caller is responsible for
         /// returning the buffer.
         /// </remarks>
-        public static BitmapBuffer BuildMaskBuffer(BitmapBuffer itemBuffer, IList<Visual> mask, BitmapBufferRepository buffers, RenderingContext context)
+        public static BitmapBuffer BuildMaskBuffer(IList<Visual> mask,
+            Matrix transform,
+            BitmapBufferRepository buffers, 
+            RenderingContext context)
         {
-            var maskBuffer = buffers.Lease(new Matrix());
-            var maskData = maskBuffer.Lock();
-            foreach (var item in mask)
+            var itemBuffer = buffers.Lease(transform);
+            try
             {
-                itemBuffer.Graphics.Clear(Color.Transparent);
-                item.Render(itemBuffer, buffers, context);
+                var maskBuffer = buffers.Lease(new Matrix());
+                var maskData = maskBuffer.Lock();
+                foreach (var item in mask)
+                {
+                    itemBuffer.Graphics.Clear(Color.Transparent);
+                    item.Render(itemBuffer, buffers, context);
 
-                var itemData = itemBuffer.Lock();
-                ImageProcessing.CombineTwo(maskData.Scan0, maskData.Stride, itemData.Scan0, itemData.Stride, maskBuffer.Bitmap.Width, maskBuffer.Bitmap.Height);
-                itemBuffer.Unlock(itemData);
+                    var itemData = itemBuffer.Lock();
+                    ImageProcessing.CombineTwo(maskData.Scan0, maskData.Stride, itemData.Scan0, itemData.Stride, maskBuffer.Bitmap.Width, maskBuffer.Bitmap.Height);
+                    itemBuffer.Unlock(itemData);
+                }
+
+                maskBuffer.Unlock(maskData);
+
+                return maskBuffer;
             }
-
-            maskBuffer.Unlock(maskData);
-
-            return maskBuffer;
+            finally
+            {
+                buffers.Return(itemBuffer);
+            }
         }
 
         public static void CopyBitmap(Bitmap source, Bitmap destination)

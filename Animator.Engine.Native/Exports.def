@@ -5,7 +5,9 @@ EXPORTS
 	CombineThree=CombineThree
 	CombineWithMask=CombineWithMask
 	CopyData=CopyData
+	CopyPartialData=CopyPartialData
 	Blur=Blur
+	FindRoi=FindRoi
 	GaussianBlur=GaussianBlur
 	MaskedGaussianBlur=MaskedGaussianBlur
 	DropShadow=DropShadow

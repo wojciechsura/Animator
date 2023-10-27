@@ -40,7 +40,7 @@ namespace Animator.Engine.Elements.Utilities
                 var graphics = Graphics.FromImage(bitmap);
                 GraphicsInitializer.Initialize(graphics);
 
-                buffer = new BitmapBuffer(bitmap, graphics);
+                buffer = new BitmapBuffer(bitmap, graphics, this);
             }
 
             buffer.Graphics.Transform = baseTransform;

@@ -6,6 +6,7 @@ using Animator.Engine.Tools;
 using Animator.Engine.Utils;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
@@ -100,20 +101,18 @@ namespace Animator.Engine.Elements
 
         internal override BaseCompositingItem BuildCompositingItem(Matrix originalTransform, BitmapBufferRepository buffers)
         {
+            var transform = VisualRenderer.EvalCurrentTransform(originalTransform,
+                Visible,
+                Alpha,
+                IsPropertySet(OriginProperty) ? Origin : null,
+                IsPropertySet(RotationProperty) ? Rotation : null,
+                IsPropertySet(ScaleProperty) ? Scale : null,
+                Position);
+
+            if (transform == null)
+                return null;
+
             var results = new List<BaseCompositingItem>();
-
-            if (!Visible || Alpha.IsZero())
-                return null;
-
-            var transform = originalTransform.Clone();
-            transform.Multiply(BuildTransformMatrix(), MatrixOrder.Prepend);
-
-            // Scale eqaual to 0 equals to invisible object
-            if (Math.Abs(transform.MatrixElements.M11).IsZero() &&
-                Math.Abs(transform.MatrixElements.M12).IsZero() &&
-                Math.Abs(transform.MatrixElements.M21).IsZero() &&
-                Math.Abs(transform.MatrixElements.M22).IsZero())
-                return null;
 
             if (Clone.Count == 0)
                 BuildCompositingItemNotCloned(results, transform, buffers);
@@ -122,19 +121,12 @@ namespace Animator.Engine.Elements
 
             // Build mask
 
-            BitmapBuffer maskBuffer;
+            var maskBuffer = VisualRenderer.BuildMaskBuffer(Mask, 
+                MaskCoordinateSystem == MaskCoordinateSystem.Local ? transform : originalTransform,
+                buffers, 
+                null);
 
-            var itemBuffer = buffers.Lease(MaskCoordinateSystem == MaskCoordinateSystem.Local ? transform : originalTransform);
-            try
-            {
-                maskBuffer = VisualRenderer.BuildMaskBuffer(itemBuffer, Mask, buffers, null);
-            }
-            finally
-            {
-                buffers.Return(itemBuffer);
-            }
-
-            return new NestedCompositingItem(results, maskBuffer, this);
+            return new LayerCompositingItem(results, maskBuffer, this);
         }
     }
 }

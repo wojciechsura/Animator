@@ -132,6 +132,28 @@ extern "C" void __cdecl CopyData(unsigned char* sourceData,
 	}
 }
 
+extern "C" void __cdecl CopyPartialData(unsigned char* src,
+	int srcStride,
+	unsigned char* dst,
+	int dstStride,
+	int srcX,
+	int srcY,
+	int dstX,
+	int dstY,
+	int width,
+	int height)
+{
+	for (int y = 0; y < height; y++)
+	{
+		unsigned char* sourceLocation = src + (srcY + y) * srcStride + srcX * BYTES_PER_PIXEL;
+		unsigned char* destinationLocation = dst + (dstY + y) * dstStride + dstX * BYTES_PER_PIXEL;
+		memcpy(destinationLocation,
+			sourceLocation,
+			width * BYTES_PER_PIXEL);
+	}
+}
+
+
 extern "C" void __cdecl CombineThree(unsigned char* base,
 	int baseStride,
 	unsigned char* first,
@@ -162,8 +184,17 @@ extern "C" void __cdecl CombineTwo(unsigned char* base,
 	int width,
 	int height)
 {
-	for (int y = 0; y < height; y++)
-		for (int x = 0; x < width; x++)
+	int left = 0;
+	int top = 0;
+	int right = 0;
+	int bottom = 0;
+	findRoiByAlpha(image, imageStride, width, height, left, top, right, bottom);
+
+	if (right < left || bottom < top)
+		return;
+
+	for (int y = top; y <= bottom; y++)
+		for (int x = left; x <= right; x++)
 		{
 			IntColor baseColor = getIntColor(base, baseStride, x, y);
 			IntColor imageColor = getIntColor(image, imageStride, x, y);
@@ -288,6 +319,18 @@ extern "C" void __cdecl DropShadow(unsigned char* frameData,
 				setFloatColor(backData, backStride, x, y, org);
 			}
 		}
+}
+
+extern "C" void __cdecl FindRoi(unsigned char* bitmap,
+	int bitmapStride,
+	int width,
+	int height,
+	int* left,
+	int* right,
+	int* top,
+	int* bottom) 
+{
+	findRoiByAlpha(bitmap, bitmapStride, width, height, *left, *top, *right, *bottom);
 }
 
 extern "C" void __cdecl GaussianBlur(unsigned char* bitmapData,

@@ -69,6 +69,28 @@ namespace Animator.Engine.Tools
             int radius);
 
         [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void FindRoi(IntPtr bitmap,
+            int bitmapStride,
+            int width,
+            int height,
+            ref int left,
+            ref int right,
+            ref int top,
+            ref int bottom);
+
+        [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void CopyPartialData(IntPtr src,
+            int srcStride,
+            IntPtr dst,
+            int dstStride,
+            int srcX,
+            int srcY,
+            int dstX,
+            int dstY,
+            int width,
+            int height);
+
+        [DllImport("Animator.Engine.Native.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void GaussianBlur(IntPtr bitmapData,
             int stride,
             int width,

@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace Animator.Engine.Elements.Compositing
 {
-    internal class NestedCompositingItem : BaseCompositingItem
+    internal class LayerCompositingItem : BaseCompositingItem
     {
-        public NestedCompositingItem(IReadOnlyList<BaseCompositingItem> items, BitmapBuffer mask, Visual visual)
-            : base(visual)
+        public LayerCompositingItem(IReadOnlyList<BaseCompositingItem> items, BitmapBuffer mask, Visual visual)
+            : base(visual, mask)
         {
             Items = items;
-            Mask = mask;
         }
 
         public override void Dispose()
@@ -23,16 +22,9 @@ namespace Animator.Engine.Elements.Compositing
                 item.Dispose();
             }
 
-            if (Mask != null)
-            {
-                Mask.Dispose();
-                Mask = null;
-            }
-
             Items = null;
         }
 
         public IReadOnlyList<BaseCompositingItem> Items { get; private set; }
-        public BitmapBuffer Mask { get; private set; }
     }
 }

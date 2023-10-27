@@ -26,44 +26,24 @@ namespace Animator.Engine.Elements
 
         protected abstract void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context);
 
-        protected Matrix BuildTransformMatrix()
-        {
-            var result = new Matrix();
-
-            if (IsPropertySet(OriginProperty))
-                result.Translate(-Origin.X, -Origin.Y, MatrixOrder.Append);
-
-            if (IsPropertySet(RotationProperty))
-                result.Rotate(Rotation, MatrixOrder.Append);
-
-            if (IsPropertySet(ScaleProperty))
-                result.Scale(Scale.X, Scale.Y, MatrixOrder.Append);
-
-            result.Translate(Position.X, Position.Y, MatrixOrder.Append);
-
-            return result;
-        }
-
         // Internal methods ---------------------------------------------------
 
         internal void Render(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {
-            if (!Visible || Alpha.IsZero())
-                return;
-
             var originalTransform = buffer.Graphics.Transform;
 
-            var transform = originalTransform.Clone();
-            transform.Multiply(BuildTransformMatrix(), MatrixOrder.Prepend);
+            var currentTransform = VisualRenderer.EvalCurrentTransform(originalTransform,
+                Visible,
+                Alpha,
+                IsPropertySet(OriginProperty) ? Origin : null,
+                IsPropertySet(RotationProperty) ? Rotation : null,
+                IsPropertySet(ScaleProperty) ? Scale : null,
+                Position);
 
-            // Scale eqaual to 0 equals to invisible object
-            if (Math.Abs(transform.MatrixElements.M11).IsZero() &&
-                Math.Abs(transform.MatrixElements.M12).IsZero() &&
-                Math.Abs(transform.MatrixElements.M21).IsZero() &&
-                Math.Abs(transform.MatrixElements.M22).IsZero())
+            if (currentTransform == null)
                 return;
 
-            buffer.Graphics.Transform = transform;
+            buffer.Graphics.Transform = currentTransform;
 
             InternalRender(buffer, buffers, context);
 
@@ -72,7 +52,7 @@ namespace Animator.Engine.Elements
 
             VisualRenderer.ApplyEffects(buffer, buffers, Effects);
 
-            VisualRenderer.ApplyMask(buffer, originalTransform, transform, Mask, MaskCoordinateSystem, InvertMask, context, buffers);
+            VisualRenderer.ApplyMask(buffer, originalTransform, currentTransform, Mask, MaskCoordinateSystem, InvertMask, context, buffers);
 
             buffer.Graphics.Transform = originalTransform;
 

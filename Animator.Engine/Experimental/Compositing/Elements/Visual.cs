@@ -25,21 +25,15 @@ namespace Animator.Engine.Elements
     {
         internal virtual BaseCompositingItem BuildCompositingItem(Matrix originalTransform, BitmapBufferRepository buffers)
         {
-            // Note: This is in 90% copy of the Visual.Render method
-            // Have an idea how to reduce duplicated code? I'm all ears.
-            // But mind the details.
+            var transform = VisualRenderer.EvalCurrentTransform(originalTransform,
+                Visible,
+                Alpha,
+                IsPropertySet(OriginProperty) ? Origin : null,
+                IsPropertySet(RotationProperty) ? Rotation : null,
+                IsPropertySet(ScaleProperty) ? Scale : null,
+                Position);
 
-            if (!Visible || Alpha.IsZero())
-                return null;
-
-            var transform = originalTransform.Clone();
-            transform.Multiply(BuildTransformMatrix(), MatrixOrder.Prepend);
-
-            // Scale eqaual to 0 equals to invisible object
-            if (Math.Abs(transform.MatrixElements.M11).IsZero() &&
-                Math.Abs(transform.MatrixElements.M12).IsZero() &&
-                Math.Abs(transform.MatrixElements.M21).IsZero() &&
-                Math.Abs(transform.MatrixElements.M22).IsZero())
+            if (transform == null)
                 return null;
 
             var buffer = buffers.Lease(originalTransform);
@@ -47,50 +41,37 @@ namespace Animator.Engine.Elements
 
             InternalRender(buffer, buffers, null);
 
-            if (IsPropertySet(AlphaProperty))
-                VisualRenderer.ApplyAlpha(Alpha, buffer);
-
-            VisualRenderer.ApplyEffects(buffer, buffers, Effects);
+            // Build mask
 
             BitmapBuffer maskBuffer = null;
 
             if (Mask.Any())
-            {
-                var itemBuffer = buffers.Lease(MaskCoordinateSystem == MaskCoordinateSystem.Local ? transform : originalTransform);
-                try
-                {
-                    maskBuffer = VisualRenderer.BuildMaskBuffer(itemBuffer, Mask, buffers, null);
-                    VisualRenderer.ApplyMask(buffer, maskBuffer, InvertMask);
-                }
-                finally
-                {
-                    buffers.Return(itemBuffer);
-                }
-            }
+                maskBuffer = VisualRenderer.BuildMaskBuffer(Mask, 
+                    MaskCoordinateSystem == MaskCoordinateSystem.Local ? transform : originalTransform, 
+                    buffers, 
+                    null);
 
             // Note: buffer and maskBuffer were not returned.
             // They will get returned when compositing item
             // gets disposed.
 
-            return new CompositingItem(buffer, maskBuffer, this, buffers);
+            return new VisualCompositingItem(buffer, maskBuffer, this, buffers);
         }
 
         internal void RenderComposited(Matrix originalTransform, Func<Matrix, BitmapBufferRepository, BitmapBuffer> renderFunc, BitmapBufferRepository buffers)
         {
-            if (!Visible || Alpha.IsZero())
+            var transform = VisualRenderer.EvalCurrentTransform(originalTransform,
+                Visible,
+                Alpha,
+                IsPropertySet(OriginProperty) ? Origin : null,
+                IsPropertySet(RotationProperty) ? Rotation : null,
+                IsPropertySet(ScaleProperty) ? Scale : null,
+                Position);
+
+            if (transform == null) 
                 return;
 
-            var transform = originalTransform.Clone();
-            transform.Multiply(BuildTransformMatrix(), MatrixOrder.Prepend);
-
-            // Scale eqaual to 0 equals to invisible object
-            if (Math.Abs(transform.MatrixElements.M11).IsZero() &&
-                Math.Abs(transform.MatrixElements.M12).IsZero() &&
-                Math.Abs(transform.MatrixElements.M21).IsZero() &&
-                Math.Abs(transform.MatrixElements.M22).IsZero())
-                return;
-
-            var buffer = renderFunc(originalTransform, buffers);
+            var buffer = renderFunc(transform, buffers);
 
             if (IsPropertySet(AlphaProperty))
                 VisualRenderer.ApplyAlpha(Alpha, buffer);
