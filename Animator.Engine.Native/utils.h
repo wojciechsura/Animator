@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <algorithm>
 
 const int BYTES_PER_PIXEL = 4;
 const int B_OFFSET = 0;
@@ -237,20 +238,20 @@ inline void alphaBlend(IntColor& baseColor, IntColor targetColor)
     unsigned int tG = targetColor.G;
     unsigned int tB = targetColor.B;
 
-    unsigned int a = (((bA + tA) << 8) - tA * bA) >> 8;
+    unsigned int a = std::max(0u, std::min(255u, (((bA + tA) << 8) - tA * bA) >> 8));
     
     if (a > 0)
     {
         unsigned int divisor = a << 8;
         
         unsigned int baseAR = bA * bR;
-        baseColor.R = (((tA * tR + baseAR) << 8) - (baseAR * tA)) / divisor;
+        baseColor.R = std::max(0u, std::min(255u, (((tA * tR + baseAR) << 8) - (baseAR * tA)) / divisor));
         
         unsigned int baseAG = bA * bG;
-        baseColor.G = (((tA * tG + baseAG) << 8) - (baseAG * tA)) / divisor;
+        baseColor.G = std::max(0u, std::min(255u, (((tA * tG + baseAG) << 8) - (baseAG * tA)) / divisor));
         
         unsigned int baseAB = bA * bB;
-        baseColor.B = (((tA * tB + baseAB) << 8) - (baseAB * tA)) / divisor;
+        baseColor.B = std::max(0u, std::min(255u, (((tA * tB + baseAB) << 8) - (baseAB * tA)) / divisor));
         
         baseColor.A = a;
     }
