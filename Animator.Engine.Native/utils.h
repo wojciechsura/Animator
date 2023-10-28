@@ -221,13 +221,12 @@ inline void alphaBlend(IntColor& baseColor, IntColor targetColor)
     // baseColor.G = ((1 - targetColor.A) * baseColor.A * baseColor.G + targetColor.A * targetColor.G) / newAlpha;
     // baseColor.B = ((1 - targetColor.A) * baseColor.A * baseColor.B + targetColor.A * targetColor.B) / newAlpha;
     //
-    // Adding 254 before dividing by 255 works like adding 0.99 to the result before it is truncated.
-    // Effectively this works as a ceiling applied to integer division. Solves the problem of values
-    // exceeding 255.
+    // The code below represents converting the above to unsigned int RGBA ranging from 0 to 255.
+    // Instances of A were replaced by (A / 255) and then formulas were transformed so that number
+    // of divisions was minimized and operations fit inside unsigned int.
     //
-    // Note that adding 0.99 will matter only in case of small values. If it will cause trouble,
-    // adding 128 (= 0.5) may be considered as well. Needs checking though if it won't still cause
-    // too big values to be achieved.
+    // Binary shift was introduced as a replacement for division/multiplying by 255 (that is *not* 
+    // equivalent, but difference is acceptable)
 
     unsigned int bA = baseColor.A;
     unsigned int bR = baseColor.R;
@@ -239,21 +238,28 @@ inline void alphaBlend(IntColor& baseColor, IntColor targetColor)
     unsigned int tG = targetColor.G;
     unsigned int tB = targetColor.B;
 
-    unsigned int a = ((((bA + tA) * 255) - tA * bA) + 254) / 255;
-    
+    unsigned int a = (((bA + tA) * 255) - tA * bA + 254) / 255;
+
     if (a > 0)
     {
-        baseColor.R = (((255u - tA) * bA * bR + 254) / 255 + tA * tR) / a;
-        baseColor.G = (((255u - tA) * bA * bG + 254) / 255 + tA * tG) / a;
-        baseColor.B = (((255u - tA) * bA * bB + 254) / 255 + tA * tB) / a;
-        
+        unsigned int divisor = a * 255;
+
+        unsigned int baseAR = bA * bR;
+        baseColor.R = (((tA * tR + baseAR) * 255) - (baseAR * tA)) / divisor;
+
+        unsigned int baseAG = bA * bG;
+        baseColor.G = (((tA * tG + baseAG) * 255) - (baseAG * tA)) / divisor;
+
+        unsigned int baseAB = bA * bB;
+        baseColor.B = (((tA * tB + baseAB) * 255) - (baseAB * tA)) / divisor;
+
         baseColor.A = a;
     }
     else
     {
-    	    baseColor.R = 0;
-    	    baseColor.G = 0;
-    	    baseColor.B = 0;
-    	    baseColor.A = 0;
-    }    
+        baseColor.R = 0;
+        baseColor.G = 0;
+        baseColor.B = 0;
+        baseColor.A = 0;
+    }
 }
