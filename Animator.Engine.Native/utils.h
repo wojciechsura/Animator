@@ -238,20 +238,20 @@ inline void alphaBlend(IntColor& baseColor, IntColor targetColor)
     unsigned int tG = targetColor.G;
     unsigned int tB = targetColor.B;
 
-    unsigned int a = ((bA + tA) * 255) - tA * bA;
+    unsigned int a = ((bA + tA) << 8) - tA * bA;
 
     if (a > 0)
     {
         unsigned int baseAR = bA * bR;
-        baseColor.R = (((tA * tR + baseAR) * 255) - (baseAR * tA)) / a;
+        baseColor.R = (((tA * tR + baseAR) << 8) - (baseAR * tA)) / a;
 
         unsigned int baseAG = bA * bG;
-        baseColor.G = (((tA * tG + baseAG) * 255) - (baseAG * tA)) / a;
+        baseColor.G = (((tA * tG + baseAG) << 8) - (baseAG * tA)) / a;
 
         unsigned int baseAB = bA * bB;
-        baseColor.B = (((tA * tB + baseAB) * 255) - (baseAB * tA)) / a;
+        baseColor.B = (((tA * tB + baseAB) << 8) - (baseAB * tA)) / a;
 
-        a /= 255;
+        a >>= 8;
 
         baseColor.A = a;
     }
