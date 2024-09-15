@@ -305,7 +305,7 @@ namespace Animator
 
                     Bitmap previousFrame = null;
 
-                    for (int frame = frameRange.Start; frame < frameRange.End; frame++)
+                    for (int frame = frameRange.Start; frame <= frameRange.End; frame++)
                     {
                         var time = TimeSpan.FromSeconds(1 / framesPerSecond * frame);
 
@@ -320,11 +320,13 @@ namespace Animator
                                 lock (logLock)
                                 {
                                     totalRendered++;
-                                    Write("Rendered frame ", $"{frame + 1}", ConsoleColor.Gray, ConsoleColor.White);
+                                    Write($"Rendered frame ", $"{frame + 1}", ConsoleColor.Gray, ConsoleColor.White);
                                     Write(" from ", $"{totalFrames}", ConsoleColor.Gray, ConsoleColor.White);
+                                    Write($" (Range: {frameRange.Start}-{frameRange.End})");
                                     Write(" Progress: ", $"{totalRendered}/{totalFrames}, {(100 * totalRendered / totalFrames)}%", ConsoleColor.Gray, ConsoleColor.White);
                                     Write($" Total time: ", stopwatch.Elapsed.ToString("hh\\:mm\\:ss"), ConsoleColor.Gray, ConsoleColor.White);
-                                    TimeSpan estimated = TimeSpan.FromMilliseconds((double)stopwatch.ElapsedMilliseconds / totalFrames * (totalFrames - totalRendered));
+                                    
+                                    TimeSpan estimated = stopwatch.Elapsed - TimeSpan.FromMilliseconds((double)stopwatch.ElapsedMilliseconds * totalFrames / totalRendered);
                                     Write($" Estimated left: ", estimated.ToString("hh\\:mm\\:ss"), ConsoleColor.Gray, ConsoleColor.White);
                                 }
                             }))

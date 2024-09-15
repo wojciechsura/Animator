@@ -91,16 +91,19 @@ namespace Animator.Engine.Elements
                 if (obj is SceneElement sceneElement)
                     sb.Append($"({sceneElement.Name})");
 
-                sb.Append(obj.ParentInfo.Property.Name);
-
-                if (obj.ParentInfo.Property is ManagedCollectionProperty collectionProperty)
+                if (obj.ParentInfo != null)
                 {
-                    IList items = (IList)obj.ParentInfo.Parent.GetValue(collectionProperty);
-                    var index = items.IndexOf(obj);
-                    if (index == -1)
-                        throw new InvalidOperationException("Parenting broken: item is not in its parent's collection property!");
+                    sb.Append(obj.ParentInfo.Property.Name);
 
-                    sb.Append($"[{index}]");
+                    if (obj.ParentInfo.Property is ManagedCollectionProperty collectionProperty)
+                    {
+                        IList items = (IList)obj.ParentInfo.Parent.GetValue(collectionProperty);
+                        var index = items.IndexOf(obj);
+                        if (index == -1)
+                            throw new InvalidOperationException("Parenting broken: item is not in its parent's collection property!");
+
+                        sb.Append($"[{index}]");
+                    }
                 }
 
                 parents.Add(sb.ToString());
