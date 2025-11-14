@@ -371,7 +371,7 @@ namespace Animator.Engine.Base.Tests
             // Assert
 
             Assert.IsNotNull(deserialized);
-            Assert.AreEqual(deserialized.Value, 42);
+            Assert.AreEqual(42, deserialized.Value);
         }
 
         [TestMethod]

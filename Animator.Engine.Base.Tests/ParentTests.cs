@@ -42,7 +42,7 @@ namespace Animator.Engine.Base.Tests
             parent.NestedObject = null;
 
             // Assert
-            Assert.AreEqual(null, child.ParentInfo);
+            Assert.IsNull(child.ParentInfo);
         }
 
         [TestMethod]
@@ -78,7 +78,7 @@ namespace Animator.Engine.Base.Tests
 
             // Assert
 
-            Assert.AreEqual(null, child.ParentInfo);
+            Assert.IsNull(child.ParentInfo);
         }
 
         [TestMethod]

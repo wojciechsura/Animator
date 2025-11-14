@@ -21,10 +21,6 @@ namespace Animator.Engine.Exceptions
         {
             Path = path;
         }
-        
-        protected AnimationException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
 
         public string Path { get; }
     }

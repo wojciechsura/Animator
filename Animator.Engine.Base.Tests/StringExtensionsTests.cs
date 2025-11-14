@@ -24,7 +24,7 @@ namespace Animator.Engine.Base.Tests
 
             // Assert
 
-            Assert.AreEqual(3, result.Length);
+            Assert.HasCount(3, result);
             Assert.AreEqual("abc", result[0]);
             Assert.AreEqual("def", result[1]);
             Assert.AreEqual("ghi", result[2]);
@@ -43,7 +43,7 @@ namespace Animator.Engine.Base.Tests
 
             // Assert
 
-            Assert.AreEqual(3, result.Length);
+            Assert.HasCount(3, result);
             Assert.AreEqual("abc", result[0]);
             Assert.AreEqual("'def'", result[1]);
             Assert.AreEqual("ghi", result[2]);
@@ -62,7 +62,7 @@ namespace Animator.Engine.Base.Tests
 
             // Assert
 
-            Assert.AreEqual(2, result.Length);
+            Assert.HasCount(2, result);
             Assert.AreEqual("abc", result[0]);
             Assert.AreEqual("'def,ghi'", result[1]);
         }
@@ -80,7 +80,7 @@ namespace Animator.Engine.Base.Tests
 
             // Assert
 
-            Assert.AreEqual(2, result.Length);
+            Assert.HasCount(2, result);
             Assert.AreEqual("abc", result[0]);
             Assert.AreEqual("'a\\'b'", result[1]);
         }
@@ -98,7 +98,7 @@ namespace Animator.Engine.Base.Tests
 
             // Assert
 
-            Assert.AreEqual(3, result.Length);
+            Assert.HasCount(3, result);
             Assert.AreEqual("abc", result[0]);
             Assert.AreEqual("", result[1]);
             Assert.AreEqual("ghi", result[2]);
@@ -117,36 +117,34 @@ namespace Animator.Engine.Base.Tests
 
             // Assert
 
-            Assert.AreEqual(3, result.Length);
+            Assert.HasCount(3, result);
             Assert.AreEqual("abc", result[0]);
             Assert.AreEqual("''", result[1]);
             Assert.AreEqual("ghi", result[2]);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void SplitUnquotedTest7()
         {
             // Arrange
 
             string s = "abc,'a";
 
-            // Act
+            // Act & Assert
 
-            string[] result = s.SplitUnquoted(',');            
+            Assert.Throws<InvalidOperationException>(() => s.SplitUnquoted(','));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void SplitUnquotedTest8()
         {
             // Arrange
 
             string s = "abc,'a\\";
 
-            // Act
+            // Act & Assert
 
-            string[] result = s.SplitUnquoted(',');
+            Assert.Throws<InvalidOperationException>(() => s.SplitUnquoted(','));
         }
 
         [TestMethod]
@@ -182,29 +180,27 @@ namespace Animator.Engine.Base.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ContainsUnquotedTest3()
         {
             // Arrange
 
             string s = "as'd,fgh";
 
-            // Act
+            // Act & Assert
 
-            bool result = s.ContainsUnquoted(',');
+            Assert.Throws<InvalidOperationException>(() => s.ContainsUnquoted(','));
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ContainsUnquotedTest4()
         {
             // Arrange
 
             string s = "as'd,fgh\\";
 
-            // Act
+            // Act & Assert
 
-            bool result = s.ContainsUnquoted(',');
+            Assert.Throws<InvalidOperationException>(() => s.ContainsUnquoted(','));
         }
 
         [TestMethod]
@@ -272,29 +268,27 @@ namespace Animator.Engine.Base.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ExpandQuotesTest5()
         {
             // Arrange
 
             string s = "'as";
 
-            // Act
+            // Act & Assert
 
-            string result = s.ExpandQuotes();
+            Assert.Throws<InvalidOperationException>(() => s.ExpandQuotes());
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ExpandQuotesTest6()
         {
             // Arrange
 
             string s = "'as\\";
 
-            // Act
+            // Act & Assert
 
-            string result = s.ExpandQuotes();
+            Assert.Throws<InvalidOperationException>(() => s.ExpandQuotes());
         }
 
     }

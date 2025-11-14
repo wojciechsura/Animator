@@ -633,7 +633,7 @@
             Elements on a layer.
             </summary>
         </member>
-        <member name="P:Animator.Engine.Elements.Layer.Clone">
+        <member name="P:Animator.Engine.Elements.Layer.Clones">
             <summary>
             Clones layer contents with given transforms.
             </summary>

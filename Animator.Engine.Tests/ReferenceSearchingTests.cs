@@ -72,7 +72,7 @@ namespace Animator.Engine.Tests
             rectangle.Pen = pen;
 
             // Act & Assert
-            Assert.ThrowsException<AnimationException>(() =>
+            Assert.Throws<AnimationException>(() =>
             {
                 var element = scene.FindElement("Rectangle.Pen");
             });            
@@ -85,7 +85,7 @@ namespace Animator.Engine.Tests
             var scene = new Scene();
 
             // Act & Assert
-            Assert.ThrowsException<AnimationException>(() =>
+            Assert.Throws<AnimationException>(() =>
             {
                 var element = scene.FindElement("Rectangle");
             });
@@ -101,7 +101,7 @@ namespace Animator.Engine.Tests
             scene.Items.Add(rectangle);
 
             // Act & Assert
-            Assert.ThrowsException<AnimationException>(() =>
+            Assert.Throws<AnimationException>(() =>
             {
                 var element = scene.FindProperty("Rectangle._");
             });
@@ -117,7 +117,7 @@ namespace Animator.Engine.Tests
             scene.Items.Add(rectangle);
 
             // Act & Assert
-            Assert.ThrowsException<AnimationException>(() =>
+            Assert.Throws<AnimationException>(() =>
             {
                 var element = scene.FindElement("Duration");
             });

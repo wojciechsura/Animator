@@ -62,20 +62,20 @@ namespace Animator.Engine.Elements
 
             try
             { 
-                List<int> steps = new(Clone.Count);
-                for (int i = 0; i < Clone.Count; i++)
-                    if (!Clone[i].ReverseOrder)
+                List<int> steps = new(Clones.Count);
+                for (int i = 0; i < Clones.Count; i++)
+                    if (!Clones[i].ReverseOrder)
                         steps.Add(0);
                     else
-                        steps.Add(Clone[i].Count - 1);
+                        steps.Add(Clones[i].Count - 1);
 
                 // Advances i-th step. Returns true if it overflowed.
                 bool AdvanceStep(int i)
                 {
-                    if (!Clone[i].ReverseOrder)
+                    if (!Clones[i].ReverseOrder)
                     {
                         steps[i]++;
-                        if (steps[i] >= Clone[i].Count)
+                        if (steps[i] >= Clones[i].Count)
                         {
                             steps[i] = 0;
                             return true;
@@ -88,7 +88,7 @@ namespace Animator.Engine.Elements
                         steps[i]--;
                         if (steps[i] < 0)
                         {
-                            steps[i] = Clone[i].Count - 1;
+                            steps[i] = Clones[i].Count - 1;
                             return true;
                         }
                         else
@@ -103,18 +103,18 @@ namespace Animator.Engine.Elements
                 {
                     int i = 0;
 
-                    while (i < Clone.Count && AdvanceStep(i))
+                    while (i < Clones.Count && AdvanceStep(i))
                         i++;
 
-                    return i >= Clone.Count;
+                    return i >= Clones.Count;
                 }
 
                 bool finish = false;
                 while (!finish)
                 {
                     Matrix transform = new();
-                    for (int i = 0; i < Clone.Count; i++)
-                        Clone[i].ApplyTransforms(transform, steps[i]);
+                    for (int i = 0; i < Clones.Count; i++)
+                        Clones[i].ApplyTransforms(transform, steps[i]);
 
                     transform.Multiply(originalTransform, MatrixOrder.Append);
 
@@ -134,7 +134,7 @@ namespace Animator.Engine.Elements
 
         protected override void InternalRender(BitmapBuffer buffer, BitmapBufferRepository buffers, RenderingContext context)
         {
-            if (Clone.Count == 0)
+            if (Clones.Count == 0)
                 RenderNotCloned(buffer, buffers, context);
             else
                 RenderCloned(buffer, buffers, context);
@@ -165,13 +165,13 @@ namespace Animator.Engine.Elements
         /// <summary>
         /// Clones layer contents with given transforms.
         /// </summary>
-        public ManagedCollection<LayerCloningStep> Clone
+        public ManagedCollection<LayerCloningStep> Clones
         {
             get => (ManagedCollection<LayerCloningStep>)GetValue(CloneProperty);
         }
 
         public static readonly ManagedProperty CloneProperty = ManagedProperty.RegisterCollection(typeof(Layer),
-            nameof(Clone),
+            nameof(Clones),
             typeof(ManagedCollection<LayerCloningStep>));
 
         #endregion

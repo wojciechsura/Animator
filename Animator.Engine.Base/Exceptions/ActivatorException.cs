@@ -13,8 +13,5 @@ namespace Animator.Engine.Base.Exceptions
         public ActivatorException() { }
         public ActivatorException(string message) : base(message) { }
         public ActivatorException(string message, Exception inner) : base(message, inner) { }
-        protected ActivatorException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 }

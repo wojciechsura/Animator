@@ -35,7 +35,7 @@ namespace Animator.Engine.Base.Tests
 
             // Act
 
-            Assert.ThrowsException<ArgumentException>(() => cls.SetValue(SimplePropertyClass.IntValueProperty, "Ala ma kota"));
+            Assert.Throws<ArgumentException>(() => cls.SetValue(SimplePropertyClass.IntValueProperty, "Ala ma kota"));
         }
 
         [TestMethod]
@@ -244,9 +244,9 @@ namespace Animator.Engine.Base.Tests
 
             // Assert
 
-            Assert.AreEqual(1, changes.Count);
+            Assert.HasCount(1, changes);
             Assert.AreEqual(CollectionChange.ItemsAdded, changes[0].Change);
-            Assert.AreEqual(1, changes[0].ItemsAdded.Count);
+            Assert.HasCount(1, changes[0].ItemsAdded);
             Assert.AreEqual(42, changes[0].ItemsAdded[0]);
         }
 
@@ -267,9 +267,9 @@ namespace Animator.Engine.Base.Tests
 
             // Assert
 
-            Assert.AreEqual(2, changes.Count);
+            Assert.HasCount(2, changes);
             Assert.AreEqual(CollectionChange.ItemsRemoved, changes[1].Change);
-            Assert.AreEqual(1, changes[1].ItemsRemoved.Count);
+            Assert.HasCount(1, changes[1].ItemsRemoved);
             Assert.AreEqual(42, changes[1].ItemsRemoved[0]);
         }
 
@@ -290,9 +290,9 @@ namespace Animator.Engine.Base.Tests
 
             // Assert
 
-            Assert.AreEqual(2, changes.Count);
+            Assert.HasCount(2, changes);
             Assert.AreEqual(CollectionChange.ItemsRemoved, changes[1].Change);
-            Assert.AreEqual(1, changes[1].ItemsRemoved.Count);
+            Assert.HasCount(1, changes[1].ItemsRemoved);
             Assert.AreEqual(42, changes[1].ItemsRemoved[0]);
         }
 
@@ -313,11 +313,11 @@ namespace Animator.Engine.Base.Tests
 
             // Assert
 
-            Assert.AreEqual(2, changes.Count);
+            Assert.HasCount(2, changes);
             Assert.AreEqual(CollectionChange.ItemsReplaced, changes[1].Change);
-            Assert.AreEqual(1, changes[1].ItemsRemoved.Count);
+            Assert.HasCount(1, changes[1].ItemsRemoved);
             Assert.AreEqual(42, changes[1].ItemsRemoved[0]);
-            Assert.AreEqual(1, changes[1].ItemsAdded.Count);
+            Assert.HasCount(1, changes[1].ItemsAdded);
             Assert.AreEqual(12, changes[1].ItemsAdded[0]);
         }
 
@@ -340,9 +340,9 @@ namespace Animator.Engine.Base.Tests
 
             // Assert
 
-            Assert.AreEqual(4, changes.Count);
+            Assert.HasCount(4, changes);
             Assert.AreEqual(CollectionChange.ItemsRemoved, changes[3].Change);
-            Assert.AreEqual(3, changes[3].ItemsRemoved.Count);
+            Assert.HasCount(3, changes[3].ItemsRemoved);
             Assert.AreEqual(42, changes[3].ItemsRemoved[0]);
             Assert.AreEqual(12, changes[3].ItemsRemoved[1]);
             Assert.AreEqual(12000, changes[3].ItemsRemoved[2]);
@@ -369,8 +369,8 @@ namespace Animator.Engine.Base.Tests
 
             // Assert
 
-            Assert.AreEqual(2, changes.Count);
-            Assert.AreEqual(null, changes[0].OldValue);
+            Assert.HasCount(2, changes);
+            Assert.IsNull(changes[0].OldValue);
             Assert.AreEqual(value1, changes[0].NewValue);
             Assert.AreEqual(value1, changes[1].OldValue);
             Assert.AreEqual(value2, changes[1].NewValue);
@@ -587,7 +587,7 @@ namespace Animator.Engine.Base.Tests
             // Assert
 
             Assert.AreEqual(50, child.Value);
-            Assert.AreEqual(1, changeRegister.Count);
+            Assert.HasCount(1, changeRegister);
             Assert.AreEqual(10, changeRegister[0].oldValue);
             Assert.AreEqual(50, changeRegister[0].newValue);
         }
@@ -612,7 +612,7 @@ namespace Animator.Engine.Base.Tests
             // Assert
 
             Assert.AreEqual(50, child.Value);
-            Assert.AreEqual(1, changeRegister.Count);
+            Assert.HasCount(1, changeRegister);
             Assert.AreEqual(10, changeRegister[0].oldValue);
             Assert.AreEqual(50, changeRegister[0].newValue);
         }
@@ -639,7 +639,6 @@ namespace Animator.Engine.Base.Tests
             Assert.AreEqual(20, child.Value);
 
             var valueChangeRegistry = changeRegister.FirstOrDefault(x => x.property == InheritanceChildClass.ValueProperty);
-            Assert.IsNotNull(valueChangeRegistry);
             Assert.AreEqual(50, valueChangeRegistry.oldValue);
             Assert.AreEqual(20, valueChangeRegistry.newValue);
         }

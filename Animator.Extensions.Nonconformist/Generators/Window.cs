@@ -244,10 +244,31 @@ namespace Animator.Extensions.Nonconformist.Generators
                     Color = System.Drawing.Color.FromArgb(0xe0, 0x60, 0xeb, 0xf2),
                     Width = config.ContentBorderThickness
                 },
-                Brush = new SolidBrush
+                Brush = new LinearGradientBrush
                 {
-                    Color = System.Drawing.Color.FromArgb(0x80, 0xba, 0xec, 0xef)
-                },
+                    Stops = {
+                        new LinearGradientStop
+                        {
+                            Color = System.Drawing.Color.FromArgb(0x60, 0xb0, 0xdc, 0xf7),
+                            Position = 0.0f
+                        },
+                        new LinearGradientStop
+                        {
+                            Color = System.Drawing.Color.FromArgb(0x60, 0xd5, 0xea, 0xf7),
+                            Position = 0.3f
+                        },
+                        new LinearGradientStop
+                        {
+                            Color = System.Drawing.Color.FromArgb(0x60, 0x53, 0x81, 0x9d),
+                            Position = 0.31f
+                        },
+                        new LinearGradientStop
+                        {
+                            Color = System.Drawing.Color.FromArgb(0x60, 0xb0, 0xdc, 0xf7),
+                            Position = 1.0f
+                        }
+                    }
+                },                
                 Animations =
                 {
                     new AnimatePoint
@@ -282,6 +303,13 @@ namespace Animator.Extensions.Nonconformist.Generators
                         StartTime = animationTimes.ContentStart,
                         EndTime = animationTimes.ContentEnd,
                         EasingFunction = Engine.Elements.Types.EasingFunction.QuadSlowDown
+                    }
+                },
+                BackgroundEffects =
+                {
+                    new GaussianBlurBackgroundEffect
+                    {
+                        Radius = 15
                     }
                 }
             };

@@ -9,10 +9,6 @@ namespace Animator.Engine.Base.Exceptions
     [Serializable]
     public class SerializerException : Exception
     {
-        protected SerializerException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
-
         public SerializerException() { }
         public SerializerException(string message, string xPath) : base(message)
         {

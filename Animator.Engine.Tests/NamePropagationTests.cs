@@ -63,7 +63,17 @@ namespace Animator.Engine.Tests
 
             // Assert
 
-            Assert.ThrowsException<AnimationException>(() => scene.FindElement("Rectangle"));
+            bool exceptionThrown = false;
+            try
+            {
+                scene.FindElement("Rectangle");
+            }
+            catch (AnimationException)
+            {
+                exceptionThrown = true;
+            }
+
+            Assert.IsTrue(exceptionThrown, "Expected AnimationException was not thrown");
         }
 
         [TestMethod]
@@ -107,11 +117,20 @@ namespace Animator.Engine.Tests
 
             // Assert
 
-            Assert.ThrowsException<AnimationException>(() => scene.FindElement("Rectangle.MyPen"));
+            bool exceptionThrown = false;
+            try
+            {
+                scene.FindElement("Rectangle.MyPen");
+            }
+            catch (AnimationException)
+            {
+                exceptionThrown = true;
+            }
+
+            Assert.IsTrue(exceptionThrown, "Expected AnimationException was not thrown");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void AttemptToSetNameTwiceTest()
         {
             // Arrange
@@ -121,7 +140,20 @@ namespace Animator.Engine.Tests
             // Act
 
             rectangle.Name = "Test1";
-            rectangle.Name = "Test2";
+
+            // Assert
+
+            bool exceptionThrown = false;
+            try
+            {
+                rectangle.Name = "Test2";
+            }
+            catch (InvalidOperationException)
+            {
+                exceptionThrown = true;
+            }
+
+            Assert.IsTrue(exceptionThrown, "Expected InvalidOperationException was not thrown");
         }
     }
 }
