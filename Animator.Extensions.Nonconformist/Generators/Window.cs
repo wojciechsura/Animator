@@ -246,6 +246,19 @@ namespace Animator.Extensions.Nonconformist.Generators
                 },
                 Brush = new LinearGradientBrush
                 {
+                    Animations =
+                    {
+                        new AnimatePoint
+                        {
+                            PropertyRef = nameof(LinearGradientBrush.Point2),
+                            From = new(0.0f, 0.0f),
+                            StartTime = animationTimes.ContentStart,
+                            EndTime = animationTimes.ContentEnd,
+                            EasingFunction = Engine.Elements.Types.EasingFunction.QuadSlowDown
+                        },
+                    },
+                    Point1 = new(0.0f, 0.0f),
+                    Point2 = new(0.0f, contentHeight),
                     Stops = {
                         new LinearGradientStop
                         {
@@ -268,7 +281,7 @@ namespace Animator.Extensions.Nonconformist.Generators
                             Position = 1.0f
                         }
                     }
-                },                
+                },
                 Animations =
                 {
                     new AnimatePoint
@@ -366,6 +379,13 @@ namespace Animator.Extensions.Nonconformist.Generators
                         StartTime = animationTimes.HeaderShowStart,
                         EndTime = animationTimes.HeaderShowEnd,
                         EasingFunction = Engine.Elements.Types.EasingFunction.QuadSlowDown
+                    }
+                },
+                BackgroundEffects =
+                {
+                    new GaussianBlurBackgroundEffect
+                    {
+                        Radius = 15
                     }
                 }
             };
@@ -474,6 +494,13 @@ namespace Animator.Extensions.Nonconformist.Generators
                         StartTime = animationTimes.HeaderShowStart,
                         EndTime = animationTimes.HeaderShowEnd,
                         EasingFunction = Engine.Elements.Types.EasingFunction.QuadSlowDown
+                    }
+                },
+                BackgroundEffects =
+                {
+                    new GaussianBlurBackgroundEffect
+                    {
+                        Radius = 15
                     }
                 }
             };
